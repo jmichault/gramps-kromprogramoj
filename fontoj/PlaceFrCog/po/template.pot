@@ -1,0 +1,96 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-16 22:32+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: PlaceFrCog/placefrcog.gpr.py:30
+msgid "Lokoj : Franca Oficiala Geografia Kodo"
+msgstr ""
+
+#: PlaceFrCog/placefrcog.gpr.py:31
+msgid "Gramplet por preni municipojn de la datumbazo Insee"
+msgstr ""
+
+#: PlaceFrCog/placefrcog.gpr.py:41
+msgid "Fr COG"
+msgstr ""
+
+#: PlaceFrCog/placefrcog.py:94
+msgid ""
+"Enigu la INSEE-numeron de la komunumo: (aŭ plurajn nombrojn apartigitajn per "
+"spacoj)"
+msgstr ""
+
+#: PlaceFrCog/placefrcog.py:99
+msgid "Ŝargi per kodo"
+msgstr ""
+
+#: PlaceFrCog/placefrcog.py:106
+msgid "Enigu la nomon de la komunumo:"
+msgstr ""
+
+#: PlaceFrCog/placefrcog.py:111
+msgid "Ŝarĝi per nomo"
+msgstr ""
+
+#: PlaceFrCog/placefrcog.py:135
+msgid "Nekonato nomo"
+msgstr ""
+
+#: PlaceFrCog/placefrcog.py:135
+msgid "Ĉi tiu nomo ne estis trovita en la INSEE-datumbazo: "
+msgstr ""
+
+#: PlaceFrCog/placefrcog.py:141
+#, python-format
+msgid "%d rezultoj"
+msgstr ""
+
+#: PlaceFrCog/placefrcog.py:141
+#, python-format
+msgid ""
+"Unua rezulto :\n"
+"\t%s ; kodo=%s. \n"
+"\n"
+"\t\tImporti ?\n"
+msgstr ""
+
+#: PlaceFrCog/placefrcog.py:142
+msgid "Ies, Importi"
+msgstr ""
+
+#: PlaceFrCog/placefrcog.py:142
+msgid "Ne, dankon"
+msgstr ""
+
+#: PlaceFrCog/placefrcog.py:148
+#, python-format
+msgid "Aldono de loko kun INSEE-id %s"
+msgstr ""
+
+#: PlaceFrCog/placefrcog.py:180
+#, python-format
+msgid "Aldono de loko %s"
+msgstr ""
+
+#: PlaceFrCog/placefrcog.py:268
+msgid "Nekonata kodo"
+msgstr ""
+
+#: PlaceFrCog/placefrcog.py:268
+msgid "Ĉi tiu kodo ne estis trovita en la INSEE-datumbazo: "
+msgstr ""

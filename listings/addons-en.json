@@ -28,5 +28,15 @@
 "g": "5.2",
 "s": 3,
 "z": "PersonFS.addon.tgz"
+},
+{
+"n": "Lokoj : Franca Oficiala Geografia Kodo",
+"i": "PlaceFrCog Gramplet",
+"t": 10,
+"d": "Gramplet por preni municipojn de la datumbazo Insee",
+"v": "1.0.18",
+"g": "5.1",
+"s": 3,
+"z": "PlaceFrCog.addon.tgz"
 }
 ]
