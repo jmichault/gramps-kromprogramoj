@@ -1,0 +1,98 @@
+# French translations for PACKAGE package.
+# Copyright (C) 2023 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-16 22:32+0200\n"
+"PO-Revision-Date: 2023-10-16 22:32+0200\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: placefrcog.gpr.py:30
+msgid "Lokoj : Franca Oficiala Geografia Kodo"
+msgstr "Lieux : Code Officiel Géographique français"
+
+#: placefrcog.gpr.py:31
+msgid "Gramplet por preni municipojn de la datumbazo Insee"
+msgstr "Gramplet pour récupérer les communes de la base Insee"
+
+#: placefrcog.gpr.py:41
+msgid "Fr COG"
+msgstr ""
+
+#: placefrcog.py:94
+msgid "Enigu la INSEE-numeron de la komunumo: (aŭ plurajn nombrojn apartigitajn per spacoj)"
+msgstr "Entrez le numéro INSEE de la commune : (ou plusieurs nombres séparés par des espaces)"
+
+#: placefrcog.py:99
+msgid "Ŝargi per kodo"
+msgstr "Charger par code"
+
+#: placefrcog.py:106
+msgid "Enigu la nomon de la komunumo:"
+msgstr "Entrez le nom de la commune :"
+
+#: placefrcog.py:111
+msgid "Ŝarĝi per nomo"
+msgstr "Charger par nom"
+
+#: placefrcog.py:135
+msgid "Nekonato nomo"
+msgstr "Nom inconnu"
+
+#: placefrcog.py:135
+msgid "Ĉi tiu nomo ne estis trovita en la INSEE-datumbazo: "
+msgstr "Ce nom n'a pas été trouvé dans la base INSEE : "
+
+#: placefrcog.py:141
+#, python-format
+msgid "%d rezultoj"
+msgstr "%d résultats"
+
+#: placefrcog.py:141
+#, python-format
+msgid ""
+"Unua rezulto :\n"
+"\t%s ; kodo=%s. \n"
+"\n"
+"\t\tImporti ?\n"
+msgstr ""
+"Premier résultat :\n"
+"\t%s ; code=%s. \n"
+"\n"
+"\t\tImporter ?\n"
+
+#: placefrcog.py:142
+msgid "Ies, Importi"
+msgstr "Oui, importer"
+
+#: placefrcog.py:142
+msgid "Ne, dankon"
+msgstr "Non merci"
+
+#: placefrcog.py:148
+#, python-format
+msgid "Aldono de loko kun INSEE-id %s"
+msgstr "Ajout du lieu de code INSEE %s"
+
+#: placefrcog.py:180
+#, python-format
+msgid "Aldono de loko %s"
+msgstr "Ajout du lieu %s"
+
+#: placefrcog.py:268
+msgid "Nekonata kodo"
+msgstr "Code inconnu"
+
+#: placefrcog.py:268
+msgid "Ĉi tiu kodo ne estis trovita en la INSEE-datumbazo: "
+msgstr "Ce code n'a pas été trouvé dans la base INSEE : "

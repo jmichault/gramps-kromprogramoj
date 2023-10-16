@@ -28,5 +28,15 @@
 "g": "5.2",
 "s": 3,
 "z": "PersonFS.addon.tgz"
+},
+{
+"n": "Lieux : Code Officiel G\u00e9ographique fran\u00e7ais",
+"i": "PlaceFrCog Gramplet",
+"t": 10,
+"d": "Gramplet pour r\u00e9cup\u00e9rer les communes de la base Insee",
+"v": "1.0.20",
+"g": "5.2",
+"s": 3,
+"z": "PlaceFrCog.addon.tgz"
 }
 ]
