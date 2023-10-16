@@ -1,20 +1,20 @@
 [
 {
-"n": "FamilySearch : kompari",
+"n": "FamilySearch: Compare",
 "i": "FamilySearch komparo",
 "t": 2,
-"d": "FamilySearch : kompari gramps personojn kun FS personojn.",
-"v": "ERSI.0.1",
+"d": "FamilySearch: Compare Gramps people with FS people.",
+"v": "ERSI.0.3",
 "g": "5.2",
 "s": 3,
 "z": "PersonFS.addon.tgz"
 },
 {
-"n": "Importo de FamilySearch datumoj",
+"n": "Import of FamilySearch Data",
 "i": "Importo de FamilySearch",
 "t": 2,
 "d": "FamilySearch.",
-"v": "ERSI.0.1",
+"v": "ERSI.0.3",
 "g": "5.2",
 "s": 3,
 "z": "PersonFS.addon.tgz"
@@ -23,8 +23,8 @@
 "n": "PersonFS",
 "i": "FS Gramplet",
 "t": 10,
-"d": "interfaco por FamilySearch",
-"v": "ERSI.0.1",
+"d": "interface for FamilySearch",
+"v": "ERSI.0.3",
 "g": "5.2",
 "s": 3,
 "z": "PersonFS.addon.tgz"
