@@ -1,0 +1,635 @@
+# Dutch translations for PACKAGE package.
+# Copyright (C) 2023 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# jean <noreply@github.com>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-16 18:41+0200\n"
+"PO-Revision-Date: 2023-10-16 18:41+0200\n"
+"Last-Translator: jean <noreply@github.com>\n"
+"Language-Team: Dutch <vertaling@vrijschrift.org>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: PersonFS/Importo.py:189
+msgid "Konstrui FSID listo por lokoj"
+msgstr ""
+
+#: PersonFS/Importo.py:434
+msgid "FamilySearch Importo"
+msgstr ""
+
+#: PersonFS/Importo.py:434 PersonFS/komparo.py:109
+msgid "Starting"
+msgstr ""
+
+#: PersonFS/Importo.py:443
+msgid "Konstrui FSID listo (1/11)"
+msgstr ""
+
+#: PersonFS/Importo.py:449
+msgid "«FamilySearch» ekzistanta ID"
+msgstr ""
+
+#: PersonFS/Importo.py:451 PersonFS/Importo.py:455
+#, python-format
+msgid "«FamilySearch» duplikata ID : %s "
+msgstr ""
+
+#: PersonFS/Importo.py:454
+msgid "Duplikata FSFTID"
+msgstr ""
+
+#: PersonFS/Importo.py:456
+msgid "_Daŭru averton"
+msgstr ""
+
+#: PersonFS/Importo.py:456
+msgid "_Ĉesu averton"
+msgstr ""
+
+#: PersonFS/Importo.py:464
+msgid "Ne konekta al FamilySearch"
+msgstr ""
+
+#: PersonFS/Importo.py:466
+msgid "Konstrui FSID listo por lokoj (2/11)"
+msgstr ""
+
+#: PersonFS/Importo.py:518
+msgid "Elŝutante personojn… (3/11)"
+msgstr ""
+
+#: PersonFS/Importo.py:519
+msgid "Elŝutante personon…"
+msgstr ""
+
+#: PersonFS/Importo.py:523
+msgid "Elŝutante ascendantojn… (4/11)"
+msgstr ""
+
+#: PersonFS/Importo.py:532
+#, python-format
+msgid "Elŝutante %d generaciojn de ascendantojn…"
+msgstr ""
+
+#: PersonFS/Importo.py:535
+msgid "Elŝutante posteulojn… (5/11)"
+msgstr ""
+
+#: PersonFS/Importo.py:543
+#, python-format
+msgid "Elŝutante %d generaciojn de posteulojn…"
+msgstr ""
+
+#: PersonFS/Importo.py:550
+msgid "Elŝutante edzojn… (6/11)"
+msgstr ""
+
+#: PersonFS/Importo.py:551
+msgid "Elŝutante edzojn…"
+msgstr ""
+
+#: PersonFS/Importo.py:556
+msgid "Elŝutante notojn… (7/11)"
+msgstr ""
+
+#: PersonFS/Importo.py:557
+msgid "Elŝutante notojn…"
+msgstr ""
+
+#: PersonFS/Importo.py:574
+msgid "Importado…"
+msgstr ""
+
+#: PersonFS/Importo.py:584
+msgid "Importado de lokoj… (8/11)"
+msgstr ""
+
+#: PersonFS/Importo.py:585
+msgid "Importado de lokoj…"
+msgstr ""
+
+#: PersonFS/Importo.py:589
+msgid "Importado de personoj… (9/11)"
+msgstr ""
+
+#: PersonFS/Importo.py:590
+msgid "Importado de personoj…"
+msgstr ""
+
+#: PersonFS/Importo.py:595
+msgid "Importado de familioj… (10/11)"
+msgstr ""
+
+#: PersonFS/Importo.py:596
+msgid "Importado de familioj…"
+msgstr ""
+
+#: PersonFS/Importo.py:602
+msgid "Importado de infanoj… (11/11)"
+msgstr ""
+
+#: PersonFS/Importo.py:603
+msgid "Importado de infanoj…"
+msgstr ""
+
+#: PersonFS/Importo.py:648 PersonFS/Importo.py:706
+msgid "sengepatra familio ???"
+msgstr ""
+
+#: PersonFS/Importo.py:821
+msgid "Kromprogramoj"
+msgstr ""
+
+#: PersonFS/Importo.py:828 PersonFS/Importo.py:883
+msgid "FamilySearch Importo Opcionoj"
+msgstr ""
+
+#: PersonFS/Importo.py:829
+msgid "FamilySearch ID"
+msgstr ""
+
+#: PersonFS/Importo.py:830
+msgid "identiga numero por esti prenita de FamilySearch retejo"
+msgstr ""
+
+#: PersonFS/Importo.py:832
+msgid "Nombro ascentontaj"
+msgstr ""
+
+#: PersonFS/Importo.py:833
+msgid "Nombro de generacioj por supreniri"
+msgstr ""
+
+#: PersonFS/Importo.py:835
+msgid "Nombro descendontaj"
+msgstr ""
+
+#: PersonFS/Importo.py:836
+msgid "Nombro de generacioj descendontaj"
+msgstr ""
+
+#: PersonFS/Importo.py:838
+msgid "Ne reimporti ekzistantajn personojn"
+msgstr ""
+
+#: PersonFS/Importo.py:839
+msgid "Importi nur neekzistantajn personojn"
+msgstr ""
+
+#: PersonFS/Importo.py:841
+msgid "Aldoni geedzoj"
+msgstr ""
+
+#: PersonFS/Importo.py:842
+msgid "Aldoni informojn pri geedzoj"
+msgstr ""
+
+#: PersonFS/Importo.py:844 PersonFS/Importo.py:845
+msgid "Aldoni fontoj"
+msgstr ""
+
+#: PersonFS/Importo.py:847 PersonFS/Importo.py:848
+msgid "Aldoni notoj"
+msgstr ""
+
+#: PersonFS/Importo.py:850
+msgid "Vorteco"
+msgstr ""
+
+#: PersonFS/Importo.py:851
+msgid "Vorteca nivelo de 0 (minimuma) ĝis 3 (tre vorta)"
+msgstr ""
+
+#: PersonFS/Importo.py:855
+msgid "Menuo Aldonita"
+msgstr ""
+
+#: PersonFS/Importo.py:877
+msgid "FamilySearch Import Tool"
+msgstr ""
+
+#: PersonFS/PersonFS.gpr.py:32
+msgid "PersonFS"
+msgstr ""
+
+#: PersonFS/PersonFS.gpr.py:33
+msgid "interfaco por FamilySearch"
+msgstr ""
+
+#: PersonFS/PersonFS.gpr.py:39
+msgid "FS"
+msgstr ""
+
+#: PersonFS/PersonFS.gpr.py:49
+msgid "Importo de FamilySearch datumoj"
+msgstr ""
+
+#: PersonFS/PersonFS.gpr.py:50
+msgid "FamilySearch."
+msgstr ""
+
+#: PersonFS/PersonFS.gpr.py:63
+msgid "FamilySearch : kompari"
+msgstr ""
+
+#: PersonFS/PersonFS.gpr.py:64
+msgid "FamilySearch : kompari gramps personojn kun FS personojn."
+msgstr ""
+
+#: PersonFS/PersonFS.py:76
+#, python-format
+msgid "gedcomx ne trovita aŭ < %s"
+msgstr ""
+
+#: PersonFS/PersonFS.py:196
+msgid "Pasvorta erraro. La funkcioj de FamilySearch ne estos disponeblaj."
+msgstr ""
+
+#: PersonFS/PersonFS.py:198 PersonFS/PersonFS.py:228
+msgid "Malsukcesa konekto. La funkcioj de FamilySearch ne estos disponeblaj."
+msgstr ""
+
+#: PersonFS/PersonFS.py:225
+msgid "Pasvorta eraro. La funkcioj de FamilySearch ne estos disponeblaj."
+msgstr ""
+
+#: PersonFS/PersonFS.py:443
+msgid "kopii al gramps"
+msgstr ""
+
+#: PersonFS/PersonFS.py:524
+msgid "Kopii elekton de gramps al FS"
+msgstr ""
+
+#: PersonFS/PersonFS.py:529
+msgid "Kopii elekton de FS al gramps"
+msgstr ""
+
+#: PersonFS/PersonFS.py:562
+msgid "Koloro"
+msgstr ""
+
+#: PersonFS/PersonFS.py:563
+msgid "Propreco"
+msgstr ""
+
+#: PersonFS/PersonFS.py:564
+msgid "Dato"
+msgstr ""
+
+#: PersonFS/PersonFS.py:565
+msgid "Gramps Valoro"
+msgstr ""
+
+#: PersonFS/PersonFS.py:566
+msgid "FS Dato"
+msgstr ""
+
+#: PersonFS/PersonFS.py:567
+msgid "FS Valoro"
+msgstr ""
+
+#: PersonFS/PersonFS.py:569
+msgid "xTipo"
+msgstr ""
+
+#: PersonFS/PersonFS.py:570
+msgid "xGr"
+msgstr ""
+
+#: PersonFS/PersonFS.py:571
+msgid "xFs"
+msgstr ""
+
+#: PersonFS/PersonFS.py:572
+msgid "xGr2"
+msgstr ""
+
+#: PersonFS/PersonFS.py:573
+msgid "xFs2"
+msgstr ""
+
+#: PersonFS/PersonFS.py:600
+msgid "Pardonu, nur edzaj, eventaj or nomaj linioj povas esti elektitaj."
+msgstr ""
+
+#: PersonFS/PersonFS.py:605 PersonFS/komparo.py:1009
+msgid "FamilySearch etikedoj"
+msgstr ""
+
+#: PersonFS/PersonFS.py:804 PersonFS/PersonFS.py:848
+msgid "score"
+msgstr ""
+
+#: PersonFS/PersonFS.py:805 PersonFS/PersonFS.py:849
+msgid "FS Id"
+msgstr ""
+
+#: PersonFS/PersonFS.py:806 PersonFS/PersonFS.py:850
+msgid "Nomo, antaŭnomo"
+msgstr ""
+
+#: PersonFS/PersonFS.py:807 PersonFS/PersonFS.py:851
+msgid "Birth"
+msgstr ""
+
+#: PersonFS/PersonFS.py:808 PersonFS/PersonFS.py:852
+msgid "Death"
+msgstr ""
+
+#: PersonFS/PersonFS.py:809 PersonFS/PersonFS.py:853
+msgid "Parents"
+msgstr ""
+
+#: PersonFS/PersonFS.py:810 PersonFS/PersonFS.py:854
+msgid "Spouses"
+msgstr ""
+
+#: PersonFS/PersonFS.py:828
+msgid "Eraro: neniuj datumoj."
+msgstr ""
+
+#: PersonFS/PersonFS.py:836
+#, python-format
+msgid ""
+"Neniuj verŝajnaj duplikatoj por la persono %s trovita de la retejo "
+"\"FamilySearch\"."
+msgstr ""
+
+#: PersonFS/constants.py:61
+msgid "Vivskizo"
+msgstr ""
+
+#: PersonFS/constants.py:62 PersonFS/constants.py:63
+msgid "Deklaro de naskiĝo"
+msgstr ""
+
+#: PersonFS/constants.py:64
+msgid "Deklaro de morto"
+msgstr ""
+
+#: PersonFS/fs_db.py:68
+msgid "FamilySearch : krei etikadojn"
+msgstr ""
+
+#: PersonFS/komparo.py:66
+msgid "FamilySearch Komparo Opcionoj"
+msgstr ""
+
+#: PersonFS/komparo.py:67
+msgid "Nombro tagoj"
+msgstr ""
+
+#: PersonFS/komparo.py:68
+msgid "Nombro da tagoj inter du komparoj"
+msgstr ""
+
+#: PersonFS/komparo.py:71
+msgid "Devigi komparo"
+msgstr ""
+
+#: PersonFS/komparo.py:72
+msgid "Kompari sendepende de la nombro da tagoj."
+msgstr ""
+
+#: PersonFS/komparo.py:76
+msgid "Person Filter"
+msgstr ""
+
+#: PersonFS/komparo.py:83
+#, python-format
+msgid "All %s"
+msgstr ""
+
+#: PersonFS/komparo.py:83
+msgid "Persons"
+msgstr ""
+
+#: PersonFS/komparo.py:98
+msgid "FamilySearch Komparo"
+msgstr ""
+
+#: PersonFS/komparo.py:102
+msgid "Options"
+msgstr ""
+
+#: PersonFS/komparo.py:107 PersonFS/komparo.py:872
+msgid "Ne konektita al FamilySearch"
+msgstr ""
+
+#: PersonFS/komparo.py:109
+msgid "FamilySearch : Komparo"
+msgstr ""
+
+#: PersonFS/komparo.py:127
+msgid "Konstruante la ordigitan liston (1/2)"
+msgstr ""
+
+#: PersonFS/komparo.py:151
+msgid "Procesante la liston (2/2)"
+msgstr ""
+
+#: PersonFS/komparo.py:179 PersonFS/komparo.py:198
+#, python-format
+msgid "FS ID %s ne trovita"
+msgstr ""
+
+#: PersonFS/komparo.py:234 PersonFS/komparo.py:240
+msgid "male"
+msgstr ""
+
+#: PersonFS/komparo.py:236 PersonFS/komparo.py:242
+msgid "female"
+msgstr ""
+
+#: PersonFS/komparo.py:238 PersonFS/komparo.py:244
+msgid "unknown"
+msgstr ""
+
+#: PersonFS/komparo.py:248
+msgid "Sekso:"
+msgstr ""
+
+#: PersonFS/komparo.py:308 PersonFS/komparo.py:324 PersonFS/komparo.py:331
+msgid "Name"
+msgstr ""
+
+#: PersonFS/komparo.py:481
+msgid "Father"
+msgstr ""
+
+#: PersonFS/komparo.py:494
+msgid "Mother"
+msgstr ""
+
+#: PersonFS/komparo.py:553 PersonFS/komparo.py:699
+msgid "Spouse"
+msgstr ""
+
+#: PersonFS/komparo.py:663 PersonFS/komparo.py:680 PersonFS/komparo.py:715
+#: PersonFS/komparo.py:730
+msgid "Child"
+msgstr ""
+
+#: PersonFS/komparo.py:879 PersonFS/komparo.py:881 PersonFS/komparo.py:883
+msgid "Esenco"
+msgstr ""
+
+#: PersonFS/komparo.py:893 PersonFS/komparo.py:895 PersonFS/komparo.py:897
+msgid "Aliaj nomoj"
+msgstr ""
+
+#: PersonFS/komparo.py:908 PersonFS/komparo.py:910 PersonFS/komparo.py:912
+msgid "Gepatroj"
+msgstr ""
+
+#: PersonFS/komparo.py:922 PersonFS/komparo.py:924 PersonFS/komparo.py:926
+msgid "Familioj"
+msgstr ""
+
+#: PersonFS/komparo.py:936 PersonFS/komparo.py:938 PersonFS/komparo.py:940
+msgid "Faktoj"
+msgstr ""
+
+#: PersonFS/utila.py:131
+msgid "Aldoni FamilySearch ID"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:19 PersonFS/PersonFS.glade:252
+#: PersonFS/PersonFS.glade:767
+msgid "xxxx-xxx"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:36
+msgid "………"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:128
+msgid "PersonFS Preferoj"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:154
+msgid ""
+"Alklakante la Apliki-Butonon, mi konsentas\n"
+"PersonFS ŝatus scii viajn bazajn FamilySearch-profilinformojn kaj "
+"alirdatenojn pri viaj prapatroj de la FamilySearch genealogia arbo.\n"
+"PersonFS uzos ĉi tiujn informojn konforme al iliaj respektivaj servokondiĉoj "
+"kaj privatecaj politikoj.\n"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:171
+msgid "FamilySearch identeco :"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:194
+msgid "FamilySearch pasvorto :"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:218
+msgid "ŝalti aŭtomatan etikedadon"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:222
+msgid ""
+"Se ĉi tiu skatolo estas nemarkita, la etikedoj ne estos kreitaj per la "
+"«gramplet», nek per la importo. Nur la ilo \"FamilySearch : Komparo\" "
+"difinos la etikedojn."
+msgstr ""
+
+#: PersonFS/PersonFS.glade:269
+msgid "Ligi"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:305
+msgid "Nomo :"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:326
+msgid "Antaŭnomo :"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:347
+msgid "Sekso :"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:368
+msgid "Nasko :"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:389
+msgid "Loko :"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:408
+msgid "Lanĉi"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:423
+msgid "Morto :"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:519
+msgid "Aldoni mian personon al FamilySearch"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:576
+msgid "Gramps Individuo/FamilySearch Individuo"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:666
+msgid "Serĉi"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:691
+msgid "refreŝigi"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:715
+msgid "1-klaka importo"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:719
+msgid "Importas edzoj, gepatroj kaj infanoj kun unu kliko"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:740
+msgid "importi"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:794
+msgid "Vidi FS duplikatojn"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:807
+msgid "markita kiel konforma"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:831
+msgid ""
+"Statuso de esencaj informoj (precipa nomo/antaŭnomo, sekso, datoj de naskiĝo "
+"kaj morto)"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:852
+msgid "Statuso de familiaj ligoj (gepatroj, geedzoj, infanoj)"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:871
+msgid "Statuso de eventoj"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:890
+msgid "FamilySearch Identiga N° :"
+msgstr ""
+
+#: PersonFS/PersonFS.glade:894
+msgid "Klaku min por kopii FSFTID al tondujo"
+msgstr ""
