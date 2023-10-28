@@ -10,27 +10,20 @@ Pour pouvoir utiliser l'extension il vous faut un compte _familysearch_, celui-c
 
 # installation
 ## prérequis
+Cette extension est prévue pour gramps version 5.2.
 Le gramplet utilise les modules python «requests» et «gedcomx-v1» (>=1.0.12).  
-De ce fait ce plugin ne peut pas être utilisé avec la distribution officielle AIO de gramps.  
+Vous pouvez installer «requests» et «gedcomx-v1» manuellement, ou laisser le gramplet les installer automatiquement (nécessite pip).
 
-Vous pouvez installer «requests» et «gedcomx-v1» manuellement, ou laisser le gramplet les installer automatiquement (nécessite pip).  
-
-Pour windows, vous pouvez tester la version AIO expérimentale qui se trouve [ici](https://github.com/jmichault/gramps-aio/releases).
-
-
-## en chargeant le zip
-Sur la [page d'accueil du projet](https://github.com/jmichault/PersonFS), cliquez «Releases» (à droite), et dans «Assets» choisissez le fichier PersonFS.zip).  
-Puis extrayez le zip dans le dossier des plugins de Gramps (~/.gramps/gramps51/plugins pour la version 5.1 de gramps)
-(ou %APPDATA%\gramps\gramps51\plugins sous windows).
-
-## avec git
-Dans un terminal, exécutez les commandes suivantes :
-
-```
-cd ~/.gramps/gramps51/plugins
-git clone https://github.com/jmichault/PersonFS.git
-```
-(note : à adapter si gramps n'est pas en version 5.1)
+## ajout du projet dans le gestionnaire de greffons
+* ouvrez le gestionnaire de greffons (icône «puzzle», ou menu Édition-->Gestionnaire de greffons)
+* allez à l'onglet «Projets»
+  * cliquez sur «+»
+    * Nom du Projet : jmichault (ou ce que vous voulez)
+    * URL : https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps52
+    * cliquez sur «Valider»
+* allez à l'onglet «Greffons»
+  * cherchez PersonFS
+  * cliquez sur «Installer»
 
 # le gramplet
 ## activation

@@ -4,7 +4,7 @@
 "i": "FamilySearch komparo",
 "t": 2,
 "d": "FamilySearch : comparer les personnes de gramps avec celles de FamilySearch.",
-"v": "ERSI.0.3",
+"v": "ERSI.0.5",
 "g": "5.2",
 "s": 3,
 "z": "PersonFS.addon.tgz"
@@ -14,7 +14,7 @@
 "i": "Importo de FamilySearch",
 "t": 2,
 "d": "FamilySearch.",
-"v": "ERSI.0.3",
+"v": "ERSI.0.5",
 "g": "5.2",
 "s": 3,
 "z": "PersonFS.addon.tgz"
@@ -24,7 +24,7 @@
 "i": "FS Gramplet",
 "t": 10,
 "d": "interface pour FamilySearch",
-"v": "ERSI.0.3",
+"v": "ERSI.0.5",
 "g": "5.2",
 "s": 3,
 "z": "PersonFS.addon.tgz"
@@ -34,7 +34,7 @@
 "i": "PlaceFrCog Gramplet",
 "t": 10,
 "d": "Gramplet pour r\u00e9cup\u00e9rer les communes de la base Insee",
-"v": "1.0.20",
+"v": "1.0.21",
 "g": "5.2",
 "s": 3,
 "z": "PlaceFrCog.addon.tgz"

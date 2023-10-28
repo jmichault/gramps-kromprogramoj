@@ -364,6 +364,7 @@ class FsAlGr:
   notoj = False
   fontoj = False
   vorteco = 0
+  aldonaPersono = False
   def aldPersono(self, db, txn, fsPersono):
     fsid = fsPersono.id
     grPersonoHandle = self.fs_gr.get(fsid)
@@ -384,6 +385,7 @@ class FsAlGr:
       grPerson.add_attribute(attr)
   
       db.add_person(grPerson,txn)
+      self.aldonaPersono = True
       db.commit_person(grPerson,txn)
       self.fs_gr[fsid] = grPerson.handle
     else :
@@ -590,6 +592,7 @@ class FsAlGr:
     fs_db.create_schema(vokanto.dbstate.db)
     if PersonFS.PersonFS.fs_etikedado :
       fs_db.create_tags(self.dbstate.db)
+    self.aldonaPersono = False
     with DbTxn("FamilySearch import", vokanto.dbstate.db) as txn:
       self.txn = txn
       # importi lokoj
@@ -623,8 +626,9 @@ class FsAlGr:
     vokanto.uistate.set_busy_cursor(False)
     progress.close()
     vokanto.dbstate.db.enable_signals()
-#   FARINDAĴO : se neniu filtrilo :
-#    vokanto.dbstate.db.request_rebuild()
+#   FARINDAĴO : 
+    if self.aldonaPersono :
+      vokanto.dbstate.db.request_rebuild()
 
   def aldInfano(self,fsCpr):
     if fsCpr.parent1:
