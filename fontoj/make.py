@@ -62,7 +62,10 @@ if(("LANGUAGE" not in os.environ) or
 else:
     print("make.py: LANGUAGE is %s... good!" % os.environ["LANGUAGE"])
 
-command = sys.argv[1]
+if len(sys.argv) >= 2:
+    command = sys.argv[1]
+else:
+    command = "as-needed"
 if len(sys.argv) >= 3:
     addon = sys.argv[2]
 
