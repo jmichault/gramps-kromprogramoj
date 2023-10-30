@@ -15,5 +15,5 @@ greffons pour gramps 5.2
   * cliquez sur «Installer»
 
 # greffons :
-  * PersonFS : une interface avec FamilySearch.
-  * PlaceFrCog : un gramplet pour récupérer les communes française depuis la base INSEE (base COG : Code Officiel Géographique).
+  * [PersonFS](fontoj/PersonFS/LisezMoi.md) : une interface avec FamilySearch.
+  * [PlaceFrCog](fontoj/PlaceFrCog/LisezMoi.md) : un gramplet pour récupérer les communes française depuis la base INSEE (base COG : Code Officiel Géographique).
