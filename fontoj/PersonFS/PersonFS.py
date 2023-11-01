@@ -63,7 +63,7 @@ except ValueError:
 _ = _trans.gettext
 
 # gedcomx biblioteko. Instalu kun `pip install --user --upgrade --break-system-packages gedcomx-v1`
-mingedcomx="1.0.15"
+mingedcomx="1.0.16"
 import importlib
 from importlib.metadata import version
 try:
@@ -1303,7 +1303,44 @@ class PersonFS(Gramplet):
         PersonFS.fs_Tree.add_children([fsid])
     regximo = self.cbReg.get_active_id()
     if regximo == 'REG_fontoj' :
-      pass
+      datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/persons/%s/sources" % fsPerso.id)
+      gedcomx.maljsonigi(PersonFS.fs_Tree,datumoj)
+      if not PersonFS.fs_Tree:
+        colFS = _('Ne konektita al FamilySearch')
+      else :
+        colFS = '===================='
+      cl = grPersono.get_citation_list()
+      persono_id = self.modelKomp.add(['white',_('Persono'),'','============================','',colFS,False,'Persono',None,None,None,None]  )
+      fsFontoj = fsPerso.sources.copy()
+      for ch in cl :
+        c = self.dbstate.db.get_citation_from_handle(ch)
+        titolo = ""
+        teksto = ""
+        dato = utila.grdato_al_formal(c.date)
+        koloro = "white"
+        fsTeksto = colFS
+        #for x in fsFontoj :
+        #  if x.Date == dato :
+        #    fsTeksto = x.value
+        #    if fsTeksto == teksto :
+        #      koloro = "green"
+        #    else :
+        #      koloro = "yellow"
+        #    fsFontoj.remove(x)
+        #    break
+        self.modelKomp.add([koloro,titolo,dato,teksto,'==========',fsTeksto,False,'FontoP',None,None,None,None] 
+                , node=persono_id )
+      for fsFonto in fsFontoj :
+        sd =  gedcomx.SourceDescription._indekso.get(fsFonto.descriptionId) or gedcomx.SourceDescription()
+        titolo = ""
+        for x in sd.titles :
+          titolo += x.value
+        teksto=""
+        fsTeksto = ""
+        dato = ""
+        koloro = "white"
+        self.modelKomp.add([koloro,titolo,dato,teksto,'==========',fsTeksto,False,'FontoP',None,None,None,None] 
+                , node=persono_id )
     elif regximo == 'REG_notoj' :
       datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/persons/%s/notes" % fsPerso.id)
       gedcomx.maljsonigi(PersonFS.fs_Tree,datumoj)
