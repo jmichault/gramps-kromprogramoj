@@ -25,8 +25,6 @@
 #
 #------------------------------------------------------------------------
 
-VERSIO='1.4.9'
-
 register(GRAMPLET,
          id = "FS Gramplet",
          name = _("PersonFS"),
@@ -39,7 +37,7 @@ register(GRAMPLET,
          gramplet_title=_("FS"),
          detached_width = 500,
          detached_height = 500,
-         version = 'ERSI.0.9',
+         version = 'beta 2.0.1',
          gramps_target_version= '5.2',
          navtypes=["Person"],
          )
@@ -48,7 +46,7 @@ register(TOOL,
     id    = 'Importo de FamilySearch',
     name  = _("Importo de FamilySearch datumoj"),
     description =  _("FamilySearch."),
-    version = 'ERSI.0.9',
+    version = 'beta 2.0.1',
     gramps_target_version = '5.2',
     status = STABLE,
     fname = 'Importo.py',
@@ -62,7 +60,7 @@ register(TOOL,
     id    = 'FamilySearch komparo',
     name  = _("FamilySearch : kompari"),
     description =  _("FamilySearch : kompari gramps personojn kun FS personojn."),
-    version = 'ERSI.0.9',
+    version = 'beta 2.0.1',
     gramps_target_version = '5.2',
     status = STABLE,
     fname = 'komparo.py',
