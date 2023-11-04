@@ -64,6 +64,7 @@ GEDCOMX_GRAMPS_FAKTOJ = {
   "data:,Death Registration": _('Deklaro de morto'),
   "data:,Death+Registration": _('Deklaro de morto'),
   "data:,Obituary": _('Nekrologo'),
+  "data:,Citizenship": _('Civitaneco'),
 
 }
 

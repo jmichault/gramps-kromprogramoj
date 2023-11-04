@@ -43,7 +43,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-04 13:52+0100\n"
+"POT-Creation-Date: 2023-11-04 15:25+0100\n"
 "PO-Revision-Date: 2023-08-26 20:29+0000\n"
 "Last-Translator: Jean-Marc <m.balthazar@posteo.net>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gramps-project/gramps/fr/>\n"
@@ -258,31 +258,31 @@ msgstr "Menu ajouté"
 msgid "FamilySearch Import Tool"
 msgstr "Outil d'import FamilySearch"
 
-#: PersonFS/PersonFS.gpr.py:32
+#: PersonFS/PersonFS.gpr.py:30
 msgid "PersonFS"
 msgstr "PersonFS"
 
-#: PersonFS/PersonFS.gpr.py:33
+#: PersonFS/PersonFS.gpr.py:31
 msgid "interfaco por FamilySearch"
 msgstr "interface pour FamilySearch"
 
-#: PersonFS/PersonFS.gpr.py:39
+#: PersonFS/PersonFS.gpr.py:37
 msgid "FS"
 msgstr "FS"
 
-#: PersonFS/PersonFS.gpr.py:49
+#: PersonFS/PersonFS.gpr.py:47
 msgid "Importo de FamilySearch datumoj"
 msgstr "Import de données FamilySearch"
 
-#: PersonFS/PersonFS.gpr.py:50
+#: PersonFS/PersonFS.gpr.py:48
 msgid "FamilySearch."
 msgstr "FamilySearch."
 
-#: PersonFS/PersonFS.gpr.py:63
+#: PersonFS/PersonFS.gpr.py:61
 msgid "FamilySearch : kompari"
 msgstr "FamilySearch : comparer"
 
-#: PersonFS/PersonFS.gpr.py:64
+#: PersonFS/PersonFS.gpr.py:62
 msgid "FamilySearch : kompari gramps personojn kun FS personojn."
 msgstr "FamilySearch : comparer les personnes de gramps avec celles de FamilySearch."
 
@@ -438,6 +438,10 @@ msgstr "Déclaration de décès"
 #: PersonFS/constants.py:66
 msgid "Nekrologo"
 msgstr "Nécrologie"
+
+#: PersonFS/constants.py:67
+msgid "Civitaneco"
+msgstr "Citoyenneté"
 
 #: PersonFS/fs_db.py:68
 msgid "FamilySearch : krei etikadojn"
