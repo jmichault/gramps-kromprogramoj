@@ -45,7 +45,7 @@ from gramps.gen.datehandler import get_date
 from gramps.gen.display.name import displayer as name_displayer
 from gramps.gen.display.place import displayer as _pd
 from gramps.gen.errors import WindowActiveError
-from gramps.gen.lib import Date, EventRef, EventType, EventRoleType, Name, NameType, Person, StyledText, StyledTextTag, StyledTextTagType, Tag, Note
+from gramps.gen.lib import Date, EventRef, EventType, EventRoleType, Name, NameType, NoteType, Person, StyledText, StyledTextTag, StyledTextTagType, Tag, Note
 from gramps.gen.plug import Gramplet, PluginRegister
 from gramps.gen.utils.db import get_birth_or_fallback, get_death_or_fallback
 
@@ -63,7 +63,7 @@ except ValueError:
 _ = _trans.gettext
 
 # gedcomx biblioteko. Instalu kun `pip install --user --upgrade --break-system-packages gedcomx-v1`
-mingedcomx="1.0.16"
+mingedcomx="1.0.17"
 import importlib
 from importlib.metadata import version
 try:
@@ -186,10 +186,11 @@ class PersonFS(Gramplet):
         else :
           print("Vi devas enigi la ID kaj pasvorton")
       else:
-        #if self.vorteco >= 3:
-        tree._FsSeanco = gedcomx.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, True, False, 2, PersonFS.lingvo)
-        #else :
-        #tree._FsSeanco = gedcomx.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, False, False, 2, PersonFS.lingvo)
+        if self.vorteco >= 3:
+          tree._FsSeanco = gedcomx.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, True, False, 2, PersonFS.lingvo)
+        else :
+          tree._FsSeanco = gedcomx.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, False, False, 2, PersonFS.lingvo)
+        tree._FsSeanco.login()
       print(" langage session FS = "+tree._FsSeanco.lingvo);
       if tree._FsSeanco.stato == gedcomx.fs_session.STATO_PASVORTA_ERARO :
          WarningDialog(_('Pasvorta erraro. La funkcioj de FamilySearch ne estos disponeblaj.'))
@@ -210,16 +211,15 @@ class PersonFS(Gramplet):
     self.gui.get_container_widget().add_with_viewport(self.gui.WIDGET)
     self.gui.WIDGET.show_all()
 
-    if PersonFS.fs_sn == '' or PersonFS.fs_pasvorto == '':
-      self.pref_clicked(None)
-    else:
-      self.konekti_FS()
 
   def konekti_FS(self):
+    if PersonFS.fs_sn == '' or PersonFS.fs_pasvorto == '':
+      self.pref_clicked(None)
     if not tree._FsSeanco:
       print("konektas al FS")
       #tree._FsSeanco = gedcomx.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, True, False, 2, PersonFS.lingvo)
       tree._FsSeanco = gedcomx.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, False, False, 2, PersonFS.lingvo)
+      tree._FsSeanco.login()
     if tree._FsSeanco.stato == gedcomx.fs_session.STATO_PASVORTA_ERARO :
       WarningDialog(_('Pasvorta eraro. La funkcioj de FamilySearch ne estos disponeblaj.'))
       return
@@ -517,7 +517,7 @@ class PersonFS(Gramplet):
           fsP.notes.add(fsNoto)
           fsP.id = self.FSID
           fsTP.persons.add(fsP)
-      # FARINDAĴO : gepatroj, infanoj,…
+     # FARINDAĴO : gepatroj, infanoj,…
 
     if len(fsTP.persons) >0 :
       peto = gedcomx.jsonigi(fsTP)
@@ -1231,6 +1231,8 @@ class PersonFS(Gramplet):
       self.set_has_data(False)
 
   def main(self):
+    if not tree._FsSeanco:
+      self.konekti_FS()
     active_handle = self.get_active('Person')
     self.modelKomp.cid=None
     self.modelKomp.model.set_sort_column_id(-2,0)
@@ -1312,11 +1314,51 @@ class PersonFS(Gramplet):
       cl = grPersono.get_citation_list()
       persono_id = self.modelKomp.add(['white',_('Persono'),'','============================','',colFS,False,'Persono',None,None,None,None]  )
       fsFontoj = fsPerso.sources.copy()
+      # récupère les dates des sources
+      for fsFonto in fsFontoj :
+        sd =  gedcomx.SourceDescription._indekso.get(fsFonto.descriptionId) or gedcomx.SourceDescription()
+        if hasattr(sd,'_date'):
+          continue
+        # on aimerait charger la description avec l'API, malheureusement celle-ci ne retourne pas la date de la source.
+        #r = tree._FsSeanco.get_url("/platform/sources/descriptions/%s" % fsFonto.descriptionId)
+        # on charge donc sur le site, malheureusement celui-ci ne sait pas renvoyer du json, que du xml
+        r = tree._FsSeanco.get_url("/service/tree/links/sources/%s" % fsFonto.descriptionId,{"Accept": "application/xml"})
+        if r and r.text :
+          # arrivé ici, on se dit qu'on va utiliser un analyseur xml pour extraire les informations. Mauvaise idée !
+          # En effet FamilySearch ne respecte pas la norme XML (sans déconner, ils ne respectent pas leur propre norme (le gedcom)
+          # , tu ne t'attendais quand même pas à ce qu'ils respectent une norme païenne), on perdrait notamment les retours à la
+          # ligne dans les zones de texte. On va se contenter de chercher les balises.
+          posDebEvent = r.text.find("<event>")
+          posFinEvent = r.text.find("</event>")
+          if posDebEvent>=0 and posFinEvent>posDebEvent :
+            strEvent = r.text[posDebEvent+7:posFinEvent]
+            posDebFormal = strEvent.find("<eventDate>")
+            posFinFormal = strEvent.find("</eventDate>")
+            if posDebFormal>=0 and posFinFormal>posDebFormal :
+              strFormal = strEvent[posDebFormal+11:posFinFormal]
+              print(strFormal)
+              sd._date = strFormal
       for ch in cl :
         c = self.dbstate.db.get_citation_from_handle(ch)
         titolo = ""
+        # on cherche la première note de type Citation,
+        #   le titre sera la première ligne de cette note.
+        for nh in c.note_list :
+          n = self.dbstate.db.get_note_from_handle(nh)
+          if n.type == NoteType.CITATION :
+            titolo = n.get()
+            posRet = titolo.find("\n")
+            if(posRet>0) :
+              titolo = titolo[:posRet-1]
+            break
         teksto = ""
+        # le texte sera la concaténation des notes
+        for nh in c.note_list :
+          n = self.dbstate.db.get_note_from_handle(nh)
+          teksto += n.get()
         dato = utila.grdato_al_formal(c.date)
+        referenco = ""
+        # la référence sera : titre dépôt + titre source + volume/page --> référence
         koloro = "white"
         fsTeksto = colFS
         #for x in fsFontoj :
@@ -1337,7 +1379,10 @@ class PersonFS(Gramplet):
           titolo += x.value
         teksto=""
         fsTeksto = ""
-        dato = ""
+        if hasattr(sd,'_date'):
+          dato = sd._date
+        else :
+          dato = ""
         koloro = "white"
         self.modelKomp.add([koloro,titolo,dato,teksto,'==========',fsTeksto,False,'FontoP',None,None,None,None] 
                 , node=persono_id )

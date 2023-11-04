@@ -2,14 +2,14 @@
 #################################################################
 # skripto por aŭtomate traduki frazojn sen traduko en po-dosieron
 #################################################################
+BASEDIR=$(dirname $(readlink -f $0))
 
 src=eo
 
-#FIC=locale/en/LC_MESSAGES/PersonFS.po
 FIC=$1
 dst=$(grep '^"Language: .*\n"$' "$FIC" | sed 's/^"Language: //;s/.n"$//')
 
-awk -v "src=$src" -v "dst=$dst" '{
+awk -v "BASEDIR=$BASEDIR" -v "src=$src" -v "dst=$dst" '{
   if (CONTMSG==1 && substr($1,1,1) != "\"")
   {
     CONTMSG=0;
@@ -38,7 +38,7 @@ awk -v "src=$src" -v "dst=$dst" '{
       {
         print ("msgid " MSGID);
         printf("msgstr \"");
-        MSG=system("locale/traduko.sh " src " " dst " " MSGID)
+        MSG=system(BASEDIR"/traduko.sh " src " " dst " " MSGID)
         printf("\"\n\n");
       }
       else

@@ -54,7 +54,7 @@ GEDCOMX_GRAMPS_FAKTOJ = {
   "http://gedcomx.org/Religion": EventType.RELIGION,
   "http://gedcomx.org/Residence": EventType.RESIDENCE,
   "http://gedcomx.org/Retirement": EventType.RETIREMENT,
-# gramps 5.2 :  "http://gedcomx.org/Stillbirth": EventType.STILLBIRTH,
+  "http://gedcomx.org/Stillbirth": EventType.STILLBIRTH,
   "data:,http://gedcomx.org/Will": EventType.WILL,
   "http://familysearch.org/v1/TitleOfNobility": EventType.NOB_TITLE,
 #
@@ -63,6 +63,7 @@ GEDCOMX_GRAMPS_FAKTOJ = {
   "data:,Birth+Registration": _('Deklaro de naskiĝo'),
   "data:,Death Registration": _('Deklaro de morto'),
   "data:,Death+Registration": _('Deklaro de morto'),
+  "data:,Obituary": _('Nekrologo'),
 
 }
 
