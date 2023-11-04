@@ -14,6 +14,7 @@ from gramps.gen.lib import EventType
 from gramps.gen.lib import PlaceType
 
 GEDCOMX_GRAMPS_FAKTOJ = {
+# traduction vers les types prédéfinis dans gramps
   "http://gedcomx.org/Adoption": EventType.ADOPT,
   "http://gedcomx.org/AdultChristening": EventType.ADULT_CHRISTEN,
   "http://gedcomx.org/Annulment": EventType.ANNULMENT,
@@ -24,6 +25,7 @@ GEDCOMX_GRAMPS_FAKTOJ = {
   "http://gedcomx.org/Blessing": EventType.BLESS,
   "http://gedcomx.org/Burial": EventType.BURIAL,
   "http://gedcomx.org/Census": EventType.CENSUS,
+  "data:,Census": EventType.CENSUS,
   "data:,http://gedcomx.org/Census": EventType.CENSUS,
   "http://gedcomx.org/Christening": EventType.CHRISTEN,
   "http://gedcomx.org/CommonLawMarriage": EventType.MARR_ALT,
@@ -57,7 +59,7 @@ GEDCOMX_GRAMPS_FAKTOJ = {
   "http://gedcomx.org/Stillbirth": EventType.STILLBIRTH,
   "data:,http://gedcomx.org/Will": EventType.WILL,
   "http://familysearch.org/v1/TitleOfNobility": EventType.NOB_TITLE,
-#
+# traductions sans types prédéfinis correspondants
   "http://familysearch.org/v1/LifeSketch": _('Vivskizo'),
   "data:,Birth Registration": _('Deklaro de naskiĝo'),
   "data:,Birth+Registration": _('Deklaro de naskiĝo'),
