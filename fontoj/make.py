@@ -57,8 +57,8 @@ else:
 
 if(("LANGUAGE" not in os.environ) or
    (not os.environ["LANGUAGE"].startswith("eo"))):
-    raise ValueError("LANGUAGE should explicitly be english; Use "
-                     "'LANGUAGE=eo.UTF-8 python3 make.py...' or similar")
+    raise ValueError("LANGUAGE devus eksplicite esti esperanta; Uzu "
+                     "'LANGUAGE=eo.UTF-8 python3 make.py...' aŭ simile")
 else:
     print("make.py: LANGUAGE is %s... good!" % os.environ["LANGUAGE"])
 
