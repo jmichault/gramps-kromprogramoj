@@ -927,6 +927,7 @@ PersonFS uzos ĉi tiujn informojn konforme al iliaj respektivaj servokondiĉoj k
                 <property name="halign">start</property>
                 <property name="active">0</property>
                 <property name="active-id">REG_cxefa</property>
+                <signal name="changed" handler="on_CB_Regximo_changed" swapped="no"/>
                 <items>
                   <item id="REG_cxefa" translatable="yes">Ĉefa</item>
                   <item id="REG_notoj" translatable="yes">Notoj</item>

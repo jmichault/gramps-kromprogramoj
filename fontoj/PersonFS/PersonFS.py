@@ -63,7 +63,7 @@ except ValueError:
 _ = _trans.gettext
 
 # gedcomx biblioteko. Instalu kun `pip install --user --upgrade --break-system-packages gedcomx-v1`
-mingedcomx="1.0.17"
+mingedcomx="1.0.18"
 import importlib
 from importlib.metadata import version
 try:
@@ -106,6 +106,7 @@ CONFIG = config.register_manager(GRAMPLET_CONFIG_NAME)
 CONFIG.register("preferences.fs_sn", '')
 CONFIG.register("preferences.fs_pasvorto", '') #
 CONFIG.register("preferences.fs_etikedado", '') #
+CONFIG.register("preferences.fs_client_id", '') #
 CONFIG.load()
 
 
@@ -116,6 +117,7 @@ class PersonFS(Gramplet):
   fs_sn = CONFIG.get("preferences.fs_sn")
   fs_pasvorto = ''
   fs_pasvorto = CONFIG.get("preferences.fs_pasvorto") #
+  fs_client_id = CONFIG.get("preferences.fs_client_id") #
   # fs_etikedado = True se ne definita
   fs_etikedado = not CONFIG.get("preferences.fs_etikedado") == 'False'
   print("fs_etikedado="+str(fs_etikedado))
@@ -181,6 +183,8 @@ class PersonFS(Gramplet):
           CONFIG.save()
           #if self.vorteco >= 3:
           tree._FsSeanco = gedcomx.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, True, False, 2, PersonFS.lingvo)
+          if PersonFS.fs_client_id != '':
+            tree._FsSeanco.client_id=PersonFS.fs_client_id
           #else :
           #tree._FsSeanco = gedcomx.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, False, False, 2, PersonFS.lingvo)
         else :
@@ -190,6 +194,8 @@ class PersonFS(Gramplet):
           tree._FsSeanco = gedcomx.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, True, False, 2, PersonFS.lingvo)
         else :
           tree._FsSeanco = gedcomx.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, False, False, 2, PersonFS.lingvo)
+          if PersonFS.fs_client_id != '':
+            tree._FsSeanco.client_id=PersonFS.fs_client_id
         tree._FsSeanco.login()
       print(" langage session FS = "+tree._FsSeanco.lingvo);
       if tree._FsSeanco.stato == gedcomx.fs_session.STATO_PASVORTA_ERARO :
@@ -219,6 +225,8 @@ class PersonFS(Gramplet):
       print("konektas al FS")
       #tree._FsSeanco = gedcomx.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, True, False, 2, PersonFS.lingvo)
       tree._FsSeanco = gedcomx.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, False, False, 2, PersonFS.lingvo)
+      if PersonFS.fs_client_id != '':
+        tree._FsSeanco.client_id=PersonFS.fs_client_id
       tree._FsSeanco.login()
     if tree._FsSeanco.stato == gedcomx.fs_session.STATO_PASVORTA_ERARO :
       WarningDialog(_('Pasvorta eraro. La funkcioj de FamilySearch ne estos disponeblaj.'))
@@ -690,23 +698,7 @@ class PersonFS(Gramplet):
     self.res = self.top.get_object("PersonFSTop")
     self.propKomp = self.top.get_object("propKomp")
     self.cbReg = self.top.get_object("CB_Regximo")
-    titles = [  
-                (_('Koloro'), 1, 40,COLOR),
-		( _('Propreco'), 2, 100),
-		( _('Dato'), 3, 120),
-                (_('Gramps Valoro'), 4, 300),
-                (_('FS Dato'), 5, 120),
-                (_('FS Valoro'), 6, 300),
-                ('x', 7, 20, TOGGLE,True,self.toggled),
-                (_('xTipo'), NOSORT, 0),
-                (_('xGr'), NOSORT, 0),
-                (_('xFs'), NOSORT, 0),
-                (_('xGr2'), NOSORT, 0),
-                (_('xFs2'), NOSORT, 0),
-             ]
-    self.modelKomp = ListModel(self.propKomp, titles, list_mode="tree"
-                 ,event_func=self.l_duobla_klako
-                 ,right_click=self.l_dekstra_klako)
+    self.CB_Regximo_changed(None)
     self.top.connect_signals({
             "on_pref_clicked"      : self.pref_clicked,
             "on_ButImp1K_clicked"      : self.ButImp1K_clicked,
@@ -719,11 +711,12 @@ class PersonFS(Gramplet):
             "on_ButRefresxigi_clicked"      : self.ButRefresxigi_clicked,
             "on_ButImporti_clicked"      : self.ButImporti_clicked,
             "on_ButBaskKonf_toggled"      : self.ButBaskKonf_toggled,
+            "on_CB_Regximo_changed"      : self.CB_Regximo_changed,
 	})
 
     return self.res
 
-  def toggled(self, path, val):
+  def toggled(self, path, val=None):
     row = self.modelKomp.model.get_iter((path,))
     tipo=self.modelKomp.model.get_value(row, 7)
     #if tipo != 'fakto' and tipo != 'edzoFakto' :
@@ -735,6 +728,51 @@ class PersonFS(Gramplet):
       OkDialog(_('Pardonu, nur edzaj, eventaj or nomaj linioj povas esti elektitaj.'))
       print("  toggled:tipo="+tipo)
 
+
+  def CB_Regximo_changed(self, dummy):
+    titles_komp_cxefa = [  
+        (_('Koloro'), 1, 40,COLOR),
+        ( _('Propreco'), 2, 100),
+        ( _('Dato'), 3, 120),
+        (_('Gramps Valoro'), 4, 300),
+        (_('FS Dato'), 5, 120),
+        (_('FS Valoro'), 6, 300),
+        ('x', 7, 20, TOGGLE,True,self.toggled),
+        (_('xTipo'), NOSORT, 0),
+        (_('xGr'), NOSORT, 0),
+        (_('xFs'), NOSORT, 0),
+        (_('xGr2'), NOSORT, 0),
+        (_('xFs2'), NOSORT, 0),
+     ]
+    titles_komp_fontoj = [  
+        (_('Koloro'), 1, 40,COLOR),
+        ( _('Dato'), 2, 100),
+        ( _('Titolo'), 3, 120),
+        (_('Gramps Referenco'), 4, 300),
+        (_('FS Dato'), 5, 120),
+        (_('FS Valoro'), 6, 300),
+        ('x', 7, 20, TOGGLE,True,self.toggled),
+        (_('xTipo'), NOSORT, 0),
+        (_('xGr'), NOSORT, 0),
+        (_('xFs'), NOSORT, 0),
+        (_('xGr2'), NOSORT, 0),
+        (_('xFs2'), NOSORT, 0),
+     ]
+    regximo = self.cbReg.get_active_id()
+    self.propKomp.set_model(None)
+    if hasattr(self,'modelKomp') :
+      del self.modelKomp
+    for col in self.propKomp.get_columns() :
+      self.propKomp.remove_column(col)
+    if regximo == 'REG_fontoj' :
+      self.modelKomp = ListModel(self.propKomp, titles_komp_fontoj, list_mode="tree"
+                 ,event_func=self.l_duobla_klako
+                 ,right_click=self.l_dekstra_klako)
+    else :
+      self.modelKomp = ListModel(self.propKomp, titles_komp_cxefa, list_mode="tree"
+                 ,event_func=self.l_duobla_klako
+                 ,right_click=self.l_dekstra_klako)
+    self.ButRefresxigi_clicked(dummy)
 
   def ButBaskKonf_toggled(self, dummy):
    with DbTxn(_("FamilySearch etikedoj"), self.dbstate.db) as txn:
@@ -1357,8 +1395,16 @@ class PersonFS(Gramplet):
           n = self.dbstate.db.get_note_from_handle(nh)
           teksto += n.get()
         dato = utila.grdato_al_formal(c.date)
-        referenco = ""
+        referenco = c.page
         # la référence sera : titre dépôt + titre source + volume/page --> référence
+        s = self.dbstate.db.get_source_from_handle(c.source_handle)
+        if s :
+          referenco = s.title + '\n' + referenco
+          if len(s.reporef_list)>0 :
+            dh = s.reporef_list[0].ref
+            d = self.dbstate.db.get_repository_from_handle(dh)
+            if d :
+              referenco = d.name + '\n' + referenco
         koloro = "white"
         fsTeksto = colFS
         #for x in fsFontoj :
