@@ -11,9 +11,10 @@ greffons pour gramps 5.2
     * cochez la case à gauche du nouveau projet pour l'activer.
       Les greffons du projet sont maintenant disponibles dans l'onglet «Greffons»
 * allez à l'onglet «Greffons»
-  * cherchez PersonFS
+  * cherchez le greffon qui vous intéresse.
   * cliquez sur «Installer»
 
 # greffons :
   * PersonFS : une interface avec FamilySearch.
   * PlaceFrCog : un gramplet pour récupérer les communes française depuis la base INSEE (base COG : Code Officiel Géographique).
+  * Lokpurigado : une version modifiée de PlaceCleanup qui utilise openstreetmap au lieu de geonames, et qui récupère les codes INSEE au lieu du code postal.

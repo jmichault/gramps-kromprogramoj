@@ -347,6 +347,7 @@ elif command == "update":
     os.remove(r("%(addon)s/po/%(locale)s-local.po"))
     os.rename(r("%(addon)s/po/%(locale)s-local.po.2"),
               r("%(addon)s/po/%(locale)s-local.po"))
+    os.remove(r("%(addon)s/po/%(locale)s.po"))
     # # Done!
     echo('''\nYou can edit "%(addon)s/po/%(locale)s-local.po"''')
 

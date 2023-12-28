@@ -1,0 +1,497 @@
+# French translation for Gramps
+# This file is distributed under the same license as the Gramps package.
+# Copyright (C) 2001-2017 Free Software Foundation, Inc.
+#
+# Quelques variables pour la cohérence:
+# ancestor : ascendant
+# descendant : descendant
+# person, individual, people : individu(s)
+# remove (context) : enlever une référence ou supprimer de la base
+# home : souche
+# active person : individu actif
+# media : media (pas de 's' ou accent) : un medium
+# les médias : journaux, tv
+# call name : prénom usuel
+# unknown (context) : inconnu ou non-connu (individu)
+# log : journal
+# addon : greffon
+# regular expressions : expressions rationnelles
+# Gramps ID = Identifiant Gramps
+# Please... = Veuillez...
+#
+# Traits d'union:
+# non-substantif
+# non adjectif
+#
+#
+# Laurent Protois <laurent.protois@free.fr>, 2001-2004.
+# Matthieu Pupat <tieum.tieum@free.fr>, 2004, 2005.
+# Guillaume Pratte <guillaumep@soireevideo.org>, 2005.
+# Frederic Chateaux, 2007-2008.
+# Jérôme Rapinat <romjerome@yahoo.fr>, 2005-2017.
+# Mathieu MD <mathieu.md@gmail.com>, 2012.
+# Christophe <khrys63@gmail.com>, 2018, 2022.
+# Gil da Costa <gdacosta@sommier-colas.fr>, 2019.
+# Jean-Marc <m.balthazar@posteo.net>, 2021, 2023.
+# msansm1 <ronanbarbot@dizalch.fr>, 2021.
+# Translator <kvb@tuta.io>, 2022.
+# Olivier Berten <olivier.berten@gmail.com>, 2023.
+# jmichault <jmt.2000@free.fr>, 2023.
+# Nick Hall <nick-h@gramps-project.org>, 2023.
+# Patrice Legoux <patrice.legoux.perso@gmail.com>, 2023.
+msgid ""
+msgstr ""
+"Project-Id-Version: 5.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-12-28 16:46+0100\n"
+"PO-Revision-Date: 2023-08-26 20:29+0000\n"
+"Last-Translator: Jean-Marc <m.balthazar@posteo.net>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/gramps-project/"
+"gramps/fr/>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Generator: Weblate 5.0.1-dev\n"
+
+#: Lokpurigado/lokpurigado.gpr.py:28 Lokpurigado/lokpurigado.gpr.py:40
+msgid "Lokpurigado"
+msgstr "Amélioration des lieux"
+
+#: Lokpurigado/lokpurigado.gpr.py:29
+msgid "Lokpurigado helpas kompletigi lokojn uzante OpenStreetMap."
+msgstr ""
+"Le nettoyage du lieu aide à compléter les emplacements à l'aide "
+"d'OpenStreetMap."
+
+#: Lokpurigado/lokpurigado.py:247
+msgid ""
+"\n"
+"Neniu kongruo\n"
+"trovita"
+msgstr ""
+"\n"
+"Pas de correspondance \n"
+"trouvée"
+
+#: Lokpurigado/lokpurigado.py:248
+msgid "Trovi"
+msgstr "Trouver"
+
+#: Lokpurigado/lokpurigado.py:274
+#, python-format
+msgid ""
+"%s\n"
+"Lokaj\n"
+"kongruecoj"
+msgstr ""
+"%s\n"
+"Correspondances \n"
+"locales"
+
+#: Lokpurigado/lokpurigado.py:276
+msgid "Serĉi en OpenStreetMap"
+msgstr "Chercher dans OpenStreetMap"
+
+#: Lokpurigado/lokpurigado.py:298
+msgid "Neniuj kongruoj estis trovitaj"
+msgstr "Aucune correspondance n'a été trouvée"
+
+#: Lokpurigado/lokpurigado.py:299
+msgid ""
+"Provu ŝanĝi la titolon aŭ uzu la butonon \"Redakti\" por permane kompletigi "
+"ĉi tiun nivelon."
+msgstr ""
+"Essayez de modifier le titre ou utilisez le bouton \"Modifier\" pour "
+"terminer manuellement ce niveau."
+
+#: Lokpurigado/lokpurigado.py:307
+#, python-format
+msgid ""
+"\n"
+"%s\n"
+"OpenStreetMap\n"
+"Kongruecoj"
+msgstr ""
+"\n"
+"%s\n"
+"Correspondances\n"
+"OpenStreetMap"
+
+#: Lokpurigado/lokpurigado.py:313
+#, python-format
+msgid "%s kongruoj trovitaj"
+msgstr "%s correspondances trouvés"
+
+#: Lokpurigado/lokpurigado.py:314
+msgid ""
+"Nur 10 kongruecoj estas montritaj.\n"
+"Por vidi pliajn rezultojn, premu la serĉbutonon denove.\n"
+"Aŭ provu ŝanĝi la Titolo kun pli da detaloj, kiel lando."
+msgstr ""
+"Seules 10 correspondances sont affichées. \n"
+"Pour afficher plus de résultats, appuyez à nouveau sur le bouton de "
+"recherche. \n"
+"Ou essayez de modifier le titre avec plus de détails, comme le pays."
+
+#: Lokpurigado/lokpurigado.py:347 Lokpurigado/lokpurigado.py:352
+msgid "Problemo akiri datumojn de retejo"
+msgstr "Problème pour obtenir des données sur le site Web"
+
+#: Lokpurigado/lokpurigado.py:353
+msgid "TTT-peto elĉerpita, vi povas provi denove…"
+msgstr "Demande Web périmée, vous pouvez réessayer ..."
+
+#: Lokpurigado/lokpurigado.py:398
+msgid "Lokciklo detektita"
+msgstr "Cycle de lieu détecté"
+
+#: Lokpurigado/lokpurigado.py:399
+msgid ""
+"Unu el la lokoj, kiujn vi kunfandas, enfermas la alian!\n"
+"Bonvolu elekti alian lokon."
+msgstr "L'un des endroits que vous fusionnez est inclus dans l'autre!"
+
+#: Lokpurigado/lokpurigado.py:479
+msgid "INSEE Kodo"
+msgstr "Code INSEE"
+
+#: Lokpurigado/lokpurigado.py:487 Lokpurigado/lokpurigado.glade:65
+msgid "Poŝtkodo"
+msgstr "Code postal"
+
+#: Lokpurigado/lokpurigado.py:607
+#, python-format
+msgid "Redakti Lokon (%s)"
+msgstr "Modifier l'emplacement (%s)"
+
+#: Lokpurigado/lokpurigado.py:617
+msgid ", "
+msgstr ", "
+
+#: Lokpurigado/lokpurigado.py:829
+msgid "Ĉi tiu Loko ne estas uzata!"
+msgstr "Cet endroit n'est pas utilisé!"
+
+#: Lokpurigado/lokpurigado.py:830
+msgid ""
+"Vi devus forigi ĝin aŭ, se ĝi enhavas utilajn notojn aŭ aliajn datumojn, uzu "
+"serĉon por kunfandi ĝin kun valida loko."
+msgstr ""
+"Vous devriez le supprimer ou, s'il contient des notes utiles ou d'autres "
+"données, utilisez une recherche pour le fusionner avec un emplacement valide."
+
+#: Lokpurigado/lokpurigado.glade:27
+msgid "Urbo, Graflando, Ŝtato, Lando"
+msgstr "Ville, comté, État, pays"
+
+#: Lokpurigado/lokpurigado.glade:52
+msgid "Ĉefa Nomo"
+msgstr "Nom principal"
+
+#: Lokpurigado/lokpurigado.glade:78 Lokpurigado/lokpurigado.glade:958
+msgid "Tipo"
+msgstr "Type"
+
+#: Lokpurigado/lokpurigado.glade:89
+msgid "La nuna ĉefnomo."
+msgstr "Le nom actuel."
+
+#: Lokpurigado/lokpurigado.glade:102
+msgid "La poŝtkodo por la loko, se ekzistas."
+msgstr "Le code postal pour l'endroit s'il y en a."
+
+#: Lokpurigado/lokpurigado.glade:114
+msgid "La speco de loko ĝi estas. Ekzemple: 'Urbo', 'lando', …"
+msgstr "Le genre d'endroit où c'est. Par exemple: «ville», «pays», ..."
+
+#: Lokpurigado/lokpurigado.glade:133
+msgid "Marku ĉi tiun skatolon se vi volas konservi la originalan poŝtkodon."
+msgstr ""
+"Cochez cette case si vous souhaitez conserver le code postal d'origine."
+
+#: Lokpurigado/lokpurigado.glade:148
+msgid "Marku ĉi tiun skatolon se vi volas konservi la originan LokTipon."
+msgstr ""
+"Cochez cette case si vous souhaitez conserver le type d'emplacement "
+"d'origine."
+
+#: Lokpurigado/lokpurigado.glade:166 Lokpurigado/lokpurigado.glade:180
+#: Lokpurigado/lokpurigado.glade:339 Lokpurigado/lokpurigado.glade:353
+msgid "Orig"
+msgstr "Orig"
+
+#: Lokpurigado/lokpurigado.glade:244
+msgid "Longitudo"
+msgstr "Longitude"
+
+#: Lokpurigado/lokpurigado.glade:268
+msgid "Latitudo"
+msgstr "Latitude"
+
+#: Lokpurigado/lokpurigado.glade:280
+msgid "Check this box if you want to keep the original Latitude and Longitude."
+msgstr ""
+"Cochez cette case si vous souhaitez conserver la latitude et la longitude "
+"d'origine."
+
+#: Lokpurigado/lokpurigado.glade:295
+msgid "The Gramps ID.."
+msgstr "L'ID Gramps .."
+
+#: Lokpurigado/lokpurigado.glade:310
+msgid "ID"
+msgstr "Identifiant"
+
+#: Lokpurigado/lokpurigado.glade:322
+msgid "Check this box if you want to keep the original Gramps ID."
+msgstr "Cochez cette case si vous souhaitez conserver l'ID Gramps d'origine."
+
+#: Lokpurigado/lokpurigado.glade:391
+msgid ""
+"Alterative Names\n"
+"Select one or more rows and press 'Keep' button to toggle the 'include into "
+"place' status ."
+msgstr ""
+"Noms alternatifs \n"
+"Select une ou plusieurs lignes et appuyez sur le bouton «Keep» pour basculer "
+"l'état «Inclure en place»."
+
+#: Lokpurigado/lokpurigado.glade:406
+msgid "Inc"
+msgstr "Inc"
+
+# L'espace finale est pour précéder le « : » codé en dur dans certains contextes.
+#: Lokpurigado/lokpurigado.glade:426
+msgid "Name"
+msgstr "Nom"
+
+#: Lokpurigado/lokpurigado.glade:446
+msgid "Lang"
+msgstr "Langue"
+
+#: Lokpurigado/lokpurigado.glade:465
+msgid "Date"
+msgstr "Date"
+
+# master
+#: Lokpurigado/lokpurigado.glade:516
+msgid "Keep"
+msgstr "Conserver"
+
+#: Lokpurigado/lokpurigado.glade:520
+msgid ""
+"Select one or more rows and use this button to keep the alternative names."
+msgstr ""
+"Sélectionnez une ou plusieurs lignes et utilisez ce bouton pour conserver "
+"les noms alternatifs."
+
+# /!\ utilisé pour le nom et le type de rôle
+#: Lokpurigado/lokpurigado.glade:532
+msgid "Primary"
+msgstr "Principal"
+
+#: Lokpurigado/lokpurigado.glade:536
+msgid "Select one row and use this button to make the row the primary name."
+msgstr ""
+"Sélectionnez une ligne et utilisez ce bouton pour faire de la ligne le nom "
+"principal."
+
+#: Lokpurigado/lokpurigado.glade:548
+msgid "Discard"
+msgstr "Jeter"
+
+#: Lokpurigado/lokpurigado.glade:552
+msgid ""
+"Select one or more rows and use this button to discard the alternative names."
+msgstr ""
+"Sélectionnez une ou plusieurs lignes et utilisez ce bouton pour éliminer les "
+"noms alternatifs."
+
+#: Lokpurigado/lokpurigado.glade:576
+msgid "Cancel"
+msgstr "Annuler"
+
+#: Lokpurigado/lokpurigado.glade:580
+msgid "Cancel the operation, no changes are made to your Place."
+msgstr "Annuler l'opération, aucune modification n'est apportée à votre place."
+
+#: Lokpurigado/lokpurigado.glade:591 Lokpurigado/lokpurigado.glade:640
+msgid "Ok"
+msgstr "Ok"
+
+#: Lokpurigado/lokpurigado.glade:595
+msgid "Store the values in your Place."
+msgstr "Stockez les valeurs dans votre lieu."
+
+#: Lokpurigado/lokpurigado.glade:654
+msgid "Help"
+msgstr "Aide"
+
+#: Lokpurigado/lokpurigado.glade:677
+msgid "Keep Web Links"
+msgstr "Garder les liens Web"
+
+#: Lokpurigado/lokpurigado.glade:681
+msgid "Puts web links (typically wikipedia) into your place."
+msgstr "Mettre les liens Web (ex. Wikipedia) avec votre lieu."
+
+#: Lokpurigado/lokpurigado.glade:695
+msgid "Alternative Names Languages to keep"
+msgstr "Langues à conserver"
+
+#: Lokpurigado/lokpurigado.glade:707
+msgid ""
+"Enter the two or three letter codes for the languages you wish to keep, "
+"seperated by spaces.\n"
+"For example \"fr oc eo\".\n"
+"These languages will initially be checked off on the Names result display.\n"
+"If you often see an un-checked name in a specific language you want, add the "
+"language code here."
+msgstr ""
+
+#: Lokpurigado/lokpurigado.glade:743
+msgid "Titolo"
+msgstr "Titre"
+
+#: Lokpurigado/lokpurigado.glade:754
+msgid ""
+"Current Place title.\n"
+"You can edit this to help find other places, particularly to reduce the "
+"number of results."
+msgstr ""
+"Titre de lieu actuel. \n"
+"YOU peut le modifier pour aider à trouver d'autres endroits, en particulier "
+"pour réduire le nombre de résultats."
+
+#: Lokpurigado/lokpurigado.glade:770
+msgid "Helpo"
+msgstr "Aide"
+
+#: Lokpurigado/lokpurigado.glade:798
+msgid "Find"
+msgstr "Trouver"
+
+#: Lokpurigado/lokpurigado.glade:802
+msgid "Search your local places and OSM for a match."
+msgstr ""
+
+#: Lokpurigado/lokpurigado.glade:814
+msgid "Elekti"
+msgstr "Choisir"
+
+#: Lokpurigado/lokpurigado.glade:818
+msgid "Continue to merge (for local places), or to complete a place (for OSM)."
+msgstr ""
+"Continuez à fusionner (pour le lieu en cours) ou pour terminer un lieu."
+
+#: Lokpurigado/lokpurigado.glade:831
+msgid "Redakti"
+msgstr "Modifier"
+
+#: Lokpurigado/lokpurigado.glade:835
+msgid ""
+"Split up Title, Edit manually, and enclose with next level of hierarchy.  "
+"For use when the initial component of the Title is too detailed to be found "
+"in the gazetteer."
+msgstr ""
+"Divisez le titre, modifiez manuellement et enfermez le niveau supérieur de "
+"hiérarchie. À utiliser lorsque le composant initial du titre est trop "
+"détaillé pour être trouvé."
+
+#: Lokpurigado/lokpurigado.glade:861
+msgid "Sekva loko"
+msgstr "Lieu suivant"
+
+#: Lokpurigado/lokpurigado.glade:865
+msgid "Find an incomplete place."
+msgstr "Trouver un lieu incomplet."
+
+#: Lokpurigado/lokpurigado.glade:888
+msgid "Set preferences"
+msgstr "Éditer les préférences"
+
+#: Lokpurigado/lokpurigado.glade:911
+msgid "Select one of these places to continue the cleanup process."
+msgstr ""
+"Sélectionnez l'un de ces endroits pour poursuivre le processus de nettoyage."
+
+#: Lokpurigado/lokpurigado.glade:938
+msgid "Serĉrezultaj lokoj"
+msgstr "Lieux trouvés"
+
+#: Lokpurigado/lokpurigado.glade:991
+msgid ""
+"No\n"
+"Matches"
+msgstr ""
+"Pas de\n"
+"correspondance"
+
+#~ msgid "Currently Enclosed Places"
+#~ msgstr "Places actuellement fermées"
+
+#~ msgid ""
+#~ "When cleaning a place that is already enclosed, this affects what is "
+#~ "done.\n"
+#~ "If '<b>Keep current Enclosure</b>' is selected, no changes to the "
+#~ "enclosing place is made.\n"
+#~ "If '<b>Replace with GeoNames Enclosure</b>' is selected, the enclosed "
+#~ "place is changed to the next level GeoNames place.  This may result in "
+#~ "some unused places remaining in your database."
+#~ msgstr ""
+#~ "Lors du nettoyage d'un lieu qui est déjà enfermé, cela affecte ce qui est "
+#~ "fait. \n"
+#~ "if '<b> garder le boîtier actuel </b>' n'est sélectionné, aucune "
+#~ "modification du lieu d'enclosage n'est effectuée. L'enceinte </b> 'n'est "
+#~ "sélectionnée, L'endroit fermé est changé au niveau suivant Geonames "
+#~ "Place. Cela peut entraîner des endroits inutilisés dans votre base de "
+#~ "données."
+
+#~ msgid "Keep current Enclosure"
+#~ msgstr "Garder le contenant"
+
+#~ msgid "Replace with GeoNames Enclosure"
+#~ msgstr "Remplacer par un boîtier Geonames"
+
+#, python-format
+#~ msgid "Aldoni Lokon (%s)"
+#~ msgstr "Ajouter le lieu (%s)"
+
+#~ msgid ""
+#~ "La loko, kiun vi elektis, estas enfermita en la loko, pri kiu vi "
+#~ "laboras!\n"
+#~ "Bonvolu nuligi kaj elekti alian lokon."
+#~ msgstr ""
+#~ "L'endroit que vous avez choisi est inclus dans l'endroit initial! "
+#~ "Veuillez annuler et choiser un autre lieu."
+
+#~ msgid "Add citation and source to Place"
+#~ msgstr "Ajouter la citation et la source au lieu"
+
+#~ msgid "This Adds a Citation to your place, citing GeoNames."
+#~ msgstr "Cela ajoute une citation à votre lieu, citant des géonmes."
+
+#~ msgid "GeoNames User ID"
+#~ msgstr "ID utilisateur Geonames"
+
+#~ msgid "Enter you Geonames user ID here."
+#~ msgstr "Entrez ID utilisateur Geonames ici."
+
+#~ msgid ""
+#~ "Enter the two or three letter codes for the languages you wish to keep, "
+#~ "seperated by spaces.\n"
+#~ "For example \"en fr ru\".\n"
+#~ "These languages will initially be checked off on the Names result "
+#~ "display.\n"
+#~ "If you often see an un-checked name in a specific language you want, add "
+#~ "the language code here."
+#~ msgstr ""
+#~ "Entrez les codes de deux ou trois lettres pour les langues que vous "
+#~ "souhaitez conserver, séparées par des espaces. \n"
+#~ "for Exemple \"Dans FR RU\". Nom vérifié dans une langue spécifique que "
+#~ "vous souhaitez, ajoutez le code de la langue ici."
+
+#~ msgid "Search your local places and GeoNames for a match."
+#~ msgstr "Recherchez un match local et Geonames."
