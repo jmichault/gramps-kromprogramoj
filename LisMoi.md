@@ -15,6 +15,6 @@ greffons pour gramps 5.2
   * cliquez sur «Installer»
 
 # greffons :
-  * PersonFS : une interface avec FamilySearch.
-  * PlaceFrCog : un gramplet pour récupérer les communes française depuis la base INSEE (base COG : Code Officiel Géographique).
-  * Lokpurigado : une version modifiée de PlaceCleanup qui utilise openstreetmap au lieu de geonames, et qui récupère les codes INSEE au lieu du code postal.
+  * [PersonFS](fontoj/PersonFS/LisezMoi.md) : une interface avec FamilySearch.
+  * [PlaceFrCog](fontoj/PlaceFrCog/README.md) : un gramplet pour récupérer les communes française depuis la base INSEE (base COG : Code Officiel Géographique).
+  * [Lokpurigado](fontoj/Lokpurigado/LisMoi.md) : une version modifiée de PlaceCleanup qui utilise openstreetmap au lieu de geonames, et qui récupère les codes INSEE au lieu du code postal.
