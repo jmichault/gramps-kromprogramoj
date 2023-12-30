@@ -1109,7 +1109,8 @@ def kompariFsGr(fsPersono,grPersono,db,model=None,dupdok=False):
   else :
     FS_FS = False
   ret = list() 
-  if PersonFS.PersonFS.fs_etikedado :
+  fsid = utila.get_fsftid(grPersono)
+  if fsid != '' and PersonFS.PersonFS.fs_etikedado :
     if db.transaction :
       intr = True
       txn=db.transaction
