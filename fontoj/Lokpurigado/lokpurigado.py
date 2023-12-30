@@ -95,96 +95,95 @@ CONFIG.load()
 #------------------------------------------------------------------------
 class Lokpurigado(Gramplet):
   """
-  Gramplet to cleanup places.
-  Can Look for place that needs attention, or work on current place.
-  Can search your own places, and merge current with another
-  Can search OpenStreetMap data on web and load data to a place.
-  Data includes, Lat/Lon, enclosed by, type, postal code, and alternate
-  names.
+  Gramplet por purigi la lokojn.
+     Povas serĉi lokon, kiu bezonas atenton aŭ labori pri nuna loko.
+     Povas serĉi viajn proprajn lokojn kaj kunfandi aktualan kun alia.
+     Povas serĉi OpenStreetMap-datumojn kaj alŝuti datumojn al loko.
+     Datumoj inkluzivas Lat/Lon, tipon, INSEE aŭ poŝtkodon kaj
+     alternativaj nomoj.
   """
   def init(self):
-      """
-      Initialise the gramplet.
-      """
-      self.keepweb = CONFIG.get("preferences.web_links")
-      allowed_languages = CONFIG.get("preferences.keep_lang")
-      self.allowed_languages = allowed_languages.split()
-      self.incomp_hndl = ''  # a last used handle for incomplete places
-      self.matches_warn = True  # Display the 'too many matches' warning?
-      root = self.__create_gui()
-      self.gui.get_container_widget().remove(self.gui.textview)
-      self.gui.get_container_widget().add(root)
-      root.show_all()
+    """
+    Komencu la gramplet.
+    """
+    self.keepweb = CONFIG.get("preferences.web_links")
+    allowed_languages = CONFIG.get("preferences.keep_lang")
+    self.allowed_languages = allowed_languages.split()
+    self.incomp_hndl = ''  # lasta uzata tenilo por nekompletaj lokoj
+    self.matches_warn = True  # Ĉu mi montru la averton 'tro da kongruoj'?
+    root = self.__create_gui()
+    self.gui.get_container_widget().remove(self.gui.textview)
+    self.gui.get_container_widget().add(root)
+    root.show_all()
 
   def __create_gui(self):
-      """
-      Create and display the GUI components of the gramplet.
-      """
-      self.top = Gtk.Builder()  # IGNORE:W0201
-      # Found out that Glade does not support translations for plugins, so
-      # have to do it manually.
-      base = os.path.dirname(__file__)
-      glade_file = base + os.sep + "lokpurigado.glade"
-      # This is needed to make gtk.Builder work by specifying the
-      # translations directory in a separate 'domain'
-      try:
-          localedomain = "addon"
-          localepath = base + os.sep + "locale"
-          if hasattr(locale, 'bindtextdomain'):
-              libintl = locale
-          elif win():  # apparently wants strings in bytes
-              localedomain = localedomain.encode('utf-8')
-              localepath = localepath.encode('utf-8')
-              libintl = ctypes.cdll.LoadLibrary('libintl-8.dll')
-          else:  # mac, No way for author to test this
-              libintl = ctypes.cdll.LoadLibrary('libintl.dylib')
+    """
+    Kreu kaj montru la GUI-komponentojn de la gramplet.
+    """
+    self.top = Gtk.Builder()
+    # Glade ne subtenas tradukojn por kromaĵojn, do devas fari ĝin permane.
+    base = os.path.dirname(__file__)
+    glade_file = base + os.sep + "lokpurigado.glade"
+    # Ĉi tio estas bezonata por ke gtk.Builder funkciu
+    #specifante la tradukdosierujon en aparta "domajno".
+    try:
+      localedomain = "addon"
+      localepath = base + os.sep + "locale"
+      if hasattr(locale, 'bindtextdomain'):
+        libintl = locale
+      elif win():  # win ŝajne volas bajtajn ĉenojn
+        localedomain = localedomain.encode('utf-8')
+        localepath = localepath.encode('utf-8')
+        libintl = ctypes.cdll.LoadLibrary('libintl-8.dll')
+      else:  # mac
+        libintl = ctypes.cdll.LoadLibrary('libintl.dylib')
 
-          libintl.bindtextdomain(localedomain, localepath)
-          libintl.textdomain(localedomain)
-          libintl.bind_textdomain_codeset(localedomain, "UTF-8")
-          # and finally, tell Gtk Builder to use that domain
-          self.top.set_translation_domain("addon")
-      except (OSError, AttributeError):
-          # Will leave it in English
-          print("Localization of Lokpurigado failed!")
+      libintl.bindtextdomain(localedomain, localepath)
+      libintl.textdomain(localedomain)
+      libintl.bind_textdomain_codeset(localedomain, "UTF-8")
+      # kaj fine, diru al Gtk Builder uzi tiun domajnon
+      self.top.set_translation_domain("addon")
+    except (OSError, AttributeError):
+      # Lasos ĝin en la esperanta
+      print("Localization of Lokpurigado failed!")
 
-      self.top.add_from_file(glade_file)
-      # the results screen items
-      self.results_win = self.top.get_object("results")
-      self.alt_store = self.top.get_object("alt_names_liststore")
-      self.alt_selection = self.top.get_object("alt_names_selection")
-      self.res_lbl = self.top.get_object("res_label")
-      self.postal_lbl = self.top.get_object("postal_label")
-      self.find_but = self.top.get_object("find_but")
-      self.top.connect_signals({
-          # for results screen
-          "on_res_ok_clicked"      : self.on_res_ok_clicked,
-          "on_res_cancel_clicked"  : self.on_res_cancel_clicked,
-          "on_keep_clicked"        : self.on_keep_clicked,
-          "on_prim_clicked"        : self.on_prim_clicked,
-          "on_disc_clicked"        : self.on_disc_clicked,
-          "on_alt_row_activated"   : self.on_alt_row_activated,
-          "on_latloncheck"         : self.on_latloncheck,
-          "on_postalcheck"         : self.on_postalcheck,
-          "on_typecheck"           : self.on_typecheck,
-          "on_idcheck"             : self.on_idcheck,
-          # Preferences screen item
-          "on_pref_help_clicked"   : self.on_pref_help_clicked,
-          # main screen items
-          "on_find_clicked"        : self.on_find_clicked,
-          "on_prefs_clicked"       : self.on_prefs_clicked,
-          "on_select_clicked"      : self.on_select_clicked,
-          "on_edit_clicked"        : self.on_edit_clicked,
-          "on_next_clicked"        : self.on_next_clicked,
-          "on_res_row_activated"   : self.on_select_clicked,
-          "on_res_sel_changed"     : self.on_res_sel_changed,
-          "on_title_entry_changed" : self.on_title_entry_changed,
-          "on_help_clicked"        : self.on_help_clicked})
-      # main screen items
-      self.res_store = self.top.get_object("res_names_liststore")
-      self.res_selection = self.top.get_object("res_selection")
-      self.mainwin = self.top.get_object("main")
-      return self.mainwin
+    self.top.add_from_file(glade_file)
+    # the results screen items
+    self.results_win = self.top.get_object("results")
+    self.alt_store = self.top.get_object("alt_names_liststore")
+    self.alt_selection = self.top.get_object("alt_names_selection")
+    self.res_lbl = self.top.get_object("res_label")
+    self.postal_lbl = self.top.get_object("postal_label")
+    self.find_but = self.top.get_object("find_but")
+    self.top.connect_signals({
+        # for results screen
+        "on_res_ok_clicked"      : self.on_res_ok_clicked,
+        "on_res_cancel_clicked"  : self.on_res_cancel_clicked,
+        "on_keep_clicked"        : self.on_keep_clicked,
+        "on_prim_clicked"        : self.on_prim_clicked,
+        "on_disc_clicked"        : self.on_disc_clicked,
+        "on_alt_row_activated"   : self.on_alt_row_activated,
+        "on_latloncheck"         : self.on_latloncheck,
+        "on_postalcheck"         : self.on_postalcheck,
+        "on_typecheck"           : self.on_typecheck,
+        "on_idcheck"             : self.on_idcheck,
+        # Preferences screen item
+        "on_pref_help_clicked"   : self.on_pref_help_clicked,
+        # main screen items
+        "on_find_clicked"        : self.on_find_clicked,
+        "on_prefs_clicked"       : self.on_prefs_clicked,
+        "on_select_clicked"      : self.on_select_clicked,
+        "on_edit_clicked"        : self.on_edit_clicked,
+        "on_next_clicked"        : self.on_next_clicked,
+        "on_res_row_activated"   : self.on_select_clicked,
+        "on_res_sel_changed"     : self.on_res_sel_changed,
+        "on_title_entry_changed" : self.on_title_entry_changed,
+        "on_help_clicked"        : self.on_help_clicked})
+    # main screen items
+    self.res_store = self.top.get_object("res_names_liststore")
+    self.res_selection = self.top.get_object("res_selection")
+    self.mainwin = self.top.get_object("main")
+    return self.mainwin
 
   # ======================================================
   # gramplet event handlers
@@ -273,6 +272,7 @@ class Lokpurigado(Gramplet):
           if len(self.res_store) > 0:
               self.res_lbl.set_text(_('%s\nLokaj\nkongruecoj') %
                                     len(self.res_store))
+              self.top.get_object("select_but").set_label(_("Kunfandi"))
               self.find_but.set_label(_("Serĉi en OpenStreetMap"))
           else:
               self.search_osm()
@@ -305,6 +305,7 @@ class Lokpurigado(Gramplet):
       nbRez = len(rezultoj)
       if nbRez:
           self.res_lbl.set_text(_("\n%s\nOpenStreetMap\nKongruecoj") % nbRez)
+          self.top.get_object("select_but").set_label(_("Elekti"))
           if nbRez > 10:
               self.start_row += 10
               if self.matches_warn:
@@ -439,6 +440,8 @@ class Lokpurigado(Gramplet):
           self.newplace.place_type = PlaceType(PlaceType.MUNICIPALITY)
         elif value == 'town' :
           self.newplace.place_type = PlaceType(PlaceType.MUNICIPALITY)
+        elif value == 'suburb' :
+          self.newplace.place_type = PlaceType(PlaceType.BOROUGH)
       if not self.newplace.place_type :
         if value == 'country' :
           self.newplace.place_type = PlaceType(PlaceType.COUNTRY)
@@ -464,6 +467,10 @@ class Lokpurigado(Gramplet):
       osm_url = ('https://overpass-api.de/api/interpreter')
       if osm_tipo == 'relation' :
         osm_datoj= 'data='+quote('[out:json][timeout:25];rel('+str(osm_id)+');out center tags;')
+      elif osm_tipo == 'way' :
+        osm_datoj= 'data='+quote('[out:json][timeout:25];way('+str(osm_id)+');out center tags;')
+      elif osm_tipo == 'node' :
+        osm_datoj= 'data='+quote('[out:json][timeout:25];node('+str(osm_id)+');out center tags;')
       res = self.get_osm_data(osm_url,bytes(osm_datoj,'utf-8'))
       if res and len(res) :
         rezultoj=res.get("elements")
@@ -706,7 +713,8 @@ class Lokpurigado(Gramplet):
           obj.set_sensitive(True)
       else:
           obj.set_sensitive(False)
-      self.top.get_object('postal').set_text(place.code)
+      if place.code :
+        self.top.get_object('postal').set_text(place.code)
 
   def on_typecheck(self, *dummy):
       """ Check toggled; if active, load type from original place, else

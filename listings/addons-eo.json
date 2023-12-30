@@ -4,7 +4,7 @@
 "i": "FamilySearch komparo",
 "t": 2,
 "d": "FamilySearch: Compare Gramps people with FS people.",
-"v": "beta 2.0.6",
+"v": "beta 2.0.7",
 "g": "5.2",
 "s": 3,
 "z": "PersonFS.addon.tgz"
@@ -14,7 +14,7 @@
 "i": "Importo de FamilySearch",
 "t": 2,
 "d": "FamilySearch.",
-"v": "beta 2.0.6",
+"v": "beta 2.0.7",
 "g": "5.2",
 "s": 3,
 "z": "PersonFS.addon.tgz"
@@ -24,7 +24,7 @@
 "i": "FS Gramplet",
 "t": 10,
 "d": "interface for FamilySearch",
-"v": "beta 2.0.6",
+"v": "beta 2.0.7",
 "g": "5.2",
 "s": 3,
 "z": "PersonFS.addon.tgz"
@@ -34,7 +34,7 @@
 "i": "Lokpurigado",
 "t": 10,
 "d": "Lokpurigado helpas kompletigi lokojn uzante OpenStreetMap.",
-"v": "1.0.10",
+"v": "1.0.13",
 "g": "5.2",
 "s": 3,
 "z": "Lokpurigado.addon.tgz",

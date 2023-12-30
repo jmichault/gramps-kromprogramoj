@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-28 16:46+0100\n"
+"POT-Creation-Date: 2023-12-30 10:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,23 +25,27 @@ msgstr ""
 msgid "Lokpurigado helpas kompletigi lokojn uzante OpenStreetMap."
 msgstr ""
 
-#: Lokpurigado/lokpurigado.py:247
+#: Lokpurigado/lokpurigado.py:246
 msgid ""
 "\n"
 "Neniu kongruo\n"
 "trovita"
 msgstr ""
 
-#: Lokpurigado/lokpurigado.py:248
+#: Lokpurigado/lokpurigado.py:247
 msgid "Trovi"
 msgstr ""
 
-#: Lokpurigado/lokpurigado.py:274
+#: Lokpurigado/lokpurigado.py:273
 #, python-format
 msgid ""
 "%s\n"
 "Lokaj\n"
 "kongruecoj"
+msgstr ""
+
+#: Lokpurigado/lokpurigado.py:275
+msgid "Kunfandi"
 msgstr ""
 
 #: Lokpurigado/lokpurigado.py:276
@@ -67,58 +71,62 @@ msgid ""
 "Kongruecoj"
 msgstr ""
 
-#: Lokpurigado/lokpurigado.py:313
+#: Lokpurigado/lokpurigado.py:308 Lokpurigado/lokpurigado.glade:814
+msgid "Elekti"
+msgstr ""
+
+#: Lokpurigado/lokpurigado.py:314
 #, python-format
 msgid "%s kongruoj trovitaj"
 msgstr ""
 
-#: Lokpurigado/lokpurigado.py:314
+#: Lokpurigado/lokpurigado.py:315
 msgid ""
 "Nur 10 kongruecoj estas montritaj.\n"
 "Por vidi pliajn rezultojn, premu la serĉbutonon denove.\n"
 "Aŭ provu ŝanĝi la Titolo kun pli da detaloj, kiel lando."
 msgstr ""
 
-#: Lokpurigado/lokpurigado.py:347 Lokpurigado/lokpurigado.py:352
+#: Lokpurigado/lokpurigado.py:348 Lokpurigado/lokpurigado.py:353
 msgid "Problemo akiri datumojn de retejo"
 msgstr ""
 
-#: Lokpurigado/lokpurigado.py:353
+#: Lokpurigado/lokpurigado.py:354
 msgid "TTT-peto elĉerpita, vi povas provi denove…"
 msgstr ""
 
-#: Lokpurigado/lokpurigado.py:398
+#: Lokpurigado/lokpurigado.py:399
 msgid "Lokciklo detektita"
 msgstr ""
 
-#: Lokpurigado/lokpurigado.py:399
+#: Lokpurigado/lokpurigado.py:400
 msgid ""
 "Unu el la lokoj, kiujn vi kunfandas, enfermas la alian!\n"
 "Bonvolu elekti alian lokon."
 msgstr ""
 
-#: Lokpurigado/lokpurigado.py:479
+#: Lokpurigado/lokpurigado.py:486
 msgid "INSEE Kodo"
 msgstr ""
 
-#: Lokpurigado/lokpurigado.py:487 Lokpurigado/lokpurigado.glade:65
+#: Lokpurigado/lokpurigado.py:494 Lokpurigado/lokpurigado.glade:65
 msgid "Poŝtkodo"
 msgstr ""
 
-#: Lokpurigado/lokpurigado.py:607
+#: Lokpurigado/lokpurigado.py:614
 #, python-format
 msgid "Redakti Lokon (%s)"
 msgstr ""
 
-#: Lokpurigado/lokpurigado.py:617
+#: Lokpurigado/lokpurigado.py:624
 msgid ", "
 msgstr ""
 
-#: Lokpurigado/lokpurigado.py:829
+#: Lokpurigado/lokpurigado.py:837
 msgid "Ĉi tiu Loko ne estas uzata!"
 msgstr ""
 
-#: Lokpurigado/lokpurigado.py:830
+#: Lokpurigado/lokpurigado.py:838
 msgid ""
 "Vi devus forigi ĝin aŭ, se ĝi enhavas utilajn notojn aŭ aliajn datumojn, uzu "
 "serĉon por kunfandi ĝin kun valida loko."
@@ -297,10 +305,6 @@ msgstr ""
 
 #: Lokpurigado/lokpurigado.glade:802
 msgid "Search your local places and OSM for a match."
-msgstr ""
-
-#: Lokpurigado/lokpurigado.glade:814
-msgid "Elekti"
 msgstr ""
 
 #: Lokpurigado/lokpurigado.glade:818
