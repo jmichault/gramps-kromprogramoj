@@ -32,6 +32,9 @@
   * transfert d'une date «vers xxxx» devient «abt xxxx-00-00» au lieu de "abt xxxx»
   * positionner la langue lors des transferts vers FS. Notamment pour les noms.
 * gramplet :
+  * copie d'un contrat de mariage vers FS : plutôt q'un mariage, mettre un mariage de droit coutumier  
+     (Mariage alternatif dans gramps)
+  * copie d'un ban de mariage vers FS : faire comme pour les contrats et fiançailles.
   * lors de la création dans FS : une fois la personne créée, faire le transfert de ses évènements.
   * renseigner le FSFTID des évènements lors de la comparaison s'il n'y est pas.
   * transfert d'un enfant de gramps vers FS.

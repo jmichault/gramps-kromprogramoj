@@ -1,30 +1,32 @@
+# *Comment transférer au mieux les sources saisies dans gramps vers FS ?*  
 
-
-Comment transférer au mieux les sources saisies dans gramps vers FS ?  
-
+Première différence :  
 Dans gramps, on a une hiérarchie dépôt --> source --> citation 
 , rien de tel dans FS pour les sources saisies manuellement : il n'existe que l'équivalent de la citation.
 
+## les sources FS saisies par l'utilisateur
 dans FS, on a pour les sources saisies manuellement :
   * des dossiers personnels pour regrouper les sources, invisibles des autres utilisateurs.
   * des sources qui ont comme propriétés :
-    * date
-    * titre (texte monoligne)
-    * une url, ou un souvenir
-    * référence (texte multiligne)
-    * note (texte multiligne)
+    * date (absente de la norme gedcomx !)
+    * titre (texte monoligne) (SourceDescription.titles)
+    * une url, ou un souvenir (SourceDescription.about)
+    * référence (texte multiligne) (SourceDescription.citations)
+    * note (texte multiligne) (SourceDescription.notes)
     * raison de la modification (texte multiligne)
   * des références de source, qui ont comme propriétés :
-    * la source
+    * la source (SourceReference.descriptionId)
     * le référent : individu, couple, …
-    * des signets
+    * des signets (SourceReference.tags), équivalents d'une référence
       * pour une référence vers un individu : nom, sexe, naissance, baptême, décès, enterrement, service militaire, ….
     * raison de la référence (texte multiligne)
     note : les sources peuvent être référencées par :
       * un individu
       * un couple
+      * un évènement
       …
 
+## les sources FS fournies par FS
 Dans le cas des sources fournies par FS, c'est beaucoup plus riche , on a :
   * des lieux (dépôts ou lieux des évènements)
   * des auteurs
@@ -89,6 +91,7 @@ Dans le cas des sources fournies par FS, c'est beaucoup plus riche , on a :
   * des sources comme ci-dessus, seule différence : l'url et la référence sont ceux du document et ne sont pas modifiables.
   * des références, comme ci-dessus.
 
+## les sources gramps
 Dans gramps, on a :
 * des dépôts, qui ont comme propriétés :
   * nom
@@ -128,18 +131,26 @@ exemple de saisie typique dans gramps : gestion de la source «Famille (DE) BASS
 
 
 
+## comparaison
 
 On voit que le traitement des sources est très différent dans gramps et FS. Du coup l'interface entre les deux ne pourra être que très partielle : on perdra énormément d'informations dans un sens comme dans l'autre.
-similitudes entre les deux façons de gérer les sources :
-* lieu FS ~ dépôt
-* collection : ~ dépôt, mais pas de hiérarchie possible dans gramps…
-* dossier numérique (film) FS ~ source
-* document FS ~ citation gramps
-* source FS ~ citation gramps
+* différences majeures :
+  * pas de titre pour les citations gramps!
+  * pas de hiérarchie dans les dépôts gramps.
+  * pas de possibilité de lister les personnes citées dans un document dans gramps.
+  * pas de personne principale dans gramps.
+  * pas de type d'évènement dans gramps.
+  * pas de lieu dans gramps.
+  * dans gramps, on peut mettre plusieurs notes de différents types, pas dans FS.
+  * dans gramps, on peut mettre des étiquettes et des attributs, pas dans FS.
+* similitudes entre les deux façons de gérer les sources :
+  * lieu FS ~ dépôt
+  * collection : ~ dépôt, mais pas de hiérarchie possible dans gramps…
+  * dossier numérique (film) FS ~ source
+  * document FS ~ citation gramps
+  * source FS ~ citation gramps
 
-il faudrait arriver à ne pas dupliquer les sources dans FS.
-
-incompatibilités (à compléter) :
+## pertes d'informations difficilement évitables (à compléter) :
 * dans le sens FS-->gramps pour les documents fournis par FS :
   * perte de la notion de collections contenant d'autres collections
   * perte de la notion de la raison de la référence.
@@ -149,10 +160,40 @@ incompatibilités (à compléter) :
   * perte de la notion de la raison de la référence.
 
 * dans le sens gramps-->FS :
-  * pas de notion de dépôt dans FS.
+  * pas de notion de dépôt dans FS (pour les sources saisies).
     * il va falloir recopier les infos du dépôt dans chaque source FS. À mettre dans la zone référence.
   * on ne peut pas créer de film dans FS, donc on perd la notion de source.
-    * il va falloir recopier les infos de la source dans chaque source FS. À mettre dans la zone référence.
+    * il va falloir recopier les infos de la source dans chaque source FS. À mettre aussi dans la zone référence.
   * dans FS, il n'y a qu'une seule note par source, dans gramps on peut en metttre plusieurs
     * il va falloir regrouper toutes les notes source+citation dans la zone notes.
+
+
+## Transfert dans le sens gramps --> FS :
+### citation gramps --> source FS  
+  * le titre  
+    un titre classique est : nom personne principale [x nom épouse], type d'évènement. lieu.  
+    problème : pas de personne principale dans gramps, ni d'évènement principal. Pas de lieu principal non plus.  
+    décision : on prend la première ligne de la note de type «Citation» --> titre  
+      --> risque de donner des choses bizarres pour des citations qui n'ont pas été pensées pour le transfert.  
+      --> contrainte importante pour les citations saisies dans gramps…  
+  * la date  
+    pas de problème, elle existe des deux cotés.
+  * l'url  
+    pas de problème : attribut «lien internet» --> url
+  * la référence  
+    prévue dans FS pour contenir l'équivalent de la source gramps.  
+    décision : titre dépôt + titre source + volume/page --> référence
+  * la note  
+    décision : niveau de confiance + concaténation des notes --> note
+### référence par un individu
+  pas de problème : existe comme tel des deux cotés.
+### référence par un évènement
+  naissance, baptême, décès, inhumation --> mettre un signet sur la référence individu
+  mariage ???  
+  autre ???  
+
+il faudrait arriver à ne pas faire de doublons de sources dans FS quand on transfère.
+
+## Transfert dans le sens FS --> gramps :
+
 

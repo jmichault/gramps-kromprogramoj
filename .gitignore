@@ -1,0 +1,6 @@
+*.po~
+*.pot~
+*.jar
+toto*
+*-global.po
+*-temp.po
