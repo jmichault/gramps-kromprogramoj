@@ -428,6 +428,7 @@ class Lokpurigado(Gramplet):
       # primary
       self.newplace.add_name(new_place)
       self.newplace.name = new_place
+      self.newplace.place_type = None
       value = json_datoj['addresstype']
       if json_datoj['display_name'].endswith('France') :
         if value == 'state' :
@@ -472,6 +473,7 @@ class Lokpurigado(Gramplet):
       elif osm_tipo == 'node' :
         osm_datoj= 'data='+quote('[out:json][timeout:25];node('+str(osm_id)+');out center tags;')
       res = self.get_osm_data(osm_url,bytes(osm_datoj,'utf-8'))
+      self.newplace.code = ''
       if res and len(res) :
         rezultoj=res.get("elements")
         for lingvo in self.allowed_languages :
@@ -715,6 +717,8 @@ class Lokpurigado(Gramplet):
           obj.set_sensitive(False)
       if place.code :
         self.top.get_object('postal').set_text(place.code)
+      else :
+        self.top.get_object('postal').set_text('')
 
   def on_typecheck(self, *dummy):
       """ Check toggled; if active, load type from original place, else
