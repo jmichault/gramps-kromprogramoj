@@ -717,6 +717,8 @@ class Lokpurigado(Gramplet):
           obj.set_sensitive(False)
       if place.code :
         self.top.get_object('postal').set_text(place.code)
+      else :
+        self.top.get_object('postal').set_text('')
 
   def on_typecheck(self, *dummy):
       """ Check toggled; if active, load type from original place, else
