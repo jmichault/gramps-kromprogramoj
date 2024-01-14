@@ -158,7 +158,7 @@ class PlaceFrCog(Gramplet):
 
     with DbTxn(_('Ĝisdatigo de loko kun INSEE-id %s') % insee_id, self.dbstate.db) as trans:
       place = self.dbstate.db.get_place_from_gramps_id('FrCogCom'+insee_id)
-      if place is None:
+      if place is None or place.handle == self.place.handle :
         handle = self.get_active('Place')
         if handle:
           self.place = self.dbstate.db.get_place_from_handle(handle)
@@ -243,7 +243,7 @@ class PlaceFrCog(Gramplet):
   def __get_places_a(self, obj):
     insee_id = self.entry.get_text()
     place = self.dbstate.db.get_place_from_gramps_id('FrCogCom'+insee_id)
-    if place is not None:
+    if place is not None and place.handle != self.place.handle :
       WarningDialog(_("Ekzistanta kodo"), _("Ĉi tiu kodo jam ekzistas en la datumbazo."), parent=self.uistate.window)
       return
     geo_url = 'http://geo.api.gouv.fr/communes?fields=nom,code,centre,codeDepartement,codeRegion&format=json&geometry=centre&code=' + insee_id
