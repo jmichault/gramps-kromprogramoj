@@ -1,0 +1,127 @@
+# Dutch translation of Gramps
+# Copyright (C) 2020 Gramps project
+# This file is distributed under the same license as the Gramps package.
+#
+# Tino Meinen <a.t.meinen@chello.nl>, 2003, 2004, 2005.
+# Kees Bakker <kees.bakker@xs4all.nl>, 2005, 2006, 2007.
+# Erik De Richter <frederik.de.richter@gmail.com>, 2006, 2007, 2008, 2009, 2010 , 2011, 2012, 2013.
+# Harmen Huizinga <harmenhuizinga@sigmo.nl>, 2013
+# Jan Sparreboom <jan@sparreboom.net>, 2020, 2021.
+# Nick Hall <nick-h@gramps-project.org>, 2021.
+# Milan <mobrcian@hotmail.com>, 2021.
+# Freek Olgers <freek@olgers.com>, 2022.
+# Niko Strijbol <strijbol.niko@gmail.com>, 2022.
+# Stephan Paternotte <s.paternotte@outlook.com>, 2022.
+# Stephan Paternotte <stephan@paternottes.net>, 2023.
+msgid ""
+msgstr ""
+"Project-Id-Version: Gramps 5.x\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-14 12:05+0100\n"
+"PO-Revision-Date: 2023-09-12 11:02+0000\n"
+"Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/gramps-project/"
+"gramps/nl/>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.0.1-dev\n"
+
+#: PlaceFrCog/placefrcog.gpr.py:30
+msgid "Lokoj : Franca Oficiala Geografia Kodo"
+msgstr "Plaatsen: Franse officiële geografische code"
+
+#: PlaceFrCog/placefrcog.gpr.py:31
+msgid "Gramplet por preni municipojn de la datumbazo Insee"
+msgstr "Grampet om gemeenten uit de Insee -database te nemen"
+
+#: PlaceFrCog/placefrcog.gpr.py:37
+msgid "Fr COG"
+msgstr "Fr COG"
+
+#: PlaceFrCog/placefrcog.py:96
+msgid "Enigu la INSEE-numeron de la komunumo: (aŭ plurajn nombrojn apartigitajn per spacoj)"
+msgstr ""
+"Voer het insege nummer van de gemeenschap in: (of verschillende nummers "
+"gescheiden door spaties)"
+
+#: PlaceFrCog/placefrcog.py:101
+msgid "Ŝargi per kodo"
+msgstr "Laad met code"
+
+#: PlaceFrCog/placefrcog.py:108
+msgid "Enigu la nomon de la komunumo:"
+msgstr "Voer de naam van de gemeenschap in:"
+
+#: PlaceFrCog/placefrcog.py:113
+msgid "Ŝarĝi per nomo"
+msgstr "Laden bij naam"
+
+#: PlaceFrCog/placefrcog.py:151
+msgid "Nekonato nomo"
+msgstr "Onbekende naam"
+
+#: PlaceFrCog/placefrcog.py:151
+msgid "Ĉi tiu nomo ne estis trovita en la INSEE-datumbazo: "
+msgstr "Deze naam is niet gevonden in de Insee -database:"
+
+#: PlaceFrCog/placefrcog.py:158
+#, python-format
+msgid "%d rezultoj"
+msgstr "%d resultaten"
+
+#: PlaceFrCog/placefrcog.py:158
+#, python-format
+msgid "Unua rezulto :\n\t%s ; kodo=%s. \n\n\t\tImporti ?\n"
+msgstr ""
+"Eerste resultaat:\n"
+"\t%s ; code=%s. \n"
+"\n"
+"\t\tImporteren?\n"
+
+#: PlaceFrCog/placefrcog.py:159
+msgid "Ies, Importi"
+msgstr "IES, importeren"
+
+#: PlaceFrCog/placefrcog.py:159
+msgid "Venonta"
+msgstr "Volgende"
+
+#: PlaceFrCog/placefrcog.py:171
+#, python-format
+msgid "Aldono de loko kun INSEE-id %s"
+msgstr "Plaats toevoegen met insee id %s"
+
+#: PlaceFrCog/placefrcog.py:203
+#, python-format
+msgid "Aldono de loko %s"
+msgstr "Place %s toevoegen"
+
+#: PlaceFrCog/placefrcog.py:295
+msgid "Nekonata kodo"
+msgstr "Onbekende code"
+
+#: PlaceFrCog/placefrcog.py:295
+msgid "Ĉi tiu kodo ne estis trovita en la INSEE-datumbazo: "
+msgstr "Deze code werd niet gevonden in de Insee -database:"
+
+#~ msgid ""
+#~ "Enigu la INSEE-numeron de la komunumo: (a plurajn nombrojn apartigitajn "
+#~ "per spacoj)"
+#~ msgstr ""
+#~ "Voer het insege nummer van de gemeenschap in: (of verschillende nummers "
+#~ "gescheiden door spaties)"
+
+#~ msgid "argi per kodo"
+#~ msgstr "Argi per code"
+
+#~ msgid "ari per nomo"
+#~ msgstr "Ari bij naam"
+
+#~ msgid "i tiu nomo ne estis trovita en la INSEE-datumbazo: "
+#~ msgstr "Deze naam is niet gevonden in de Insee -database:"
+
+#~ msgid "i tiu kodo ne estis trovita en la INSEE-datumbazo: "
+#~ msgstr "Deze code werd niet gevonden in de Insee -database:"

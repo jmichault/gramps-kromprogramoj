@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-30 10:41+0100\n"
+"POT-Creation-Date: 2024-01-14 12:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -105,28 +105,28 @@ msgid ""
 "Bonvolu elekti alian lokon."
 msgstr ""
 
-#: Lokpurigado/lokpurigado.py:486
+#: Lokpurigado/lokpurigado.py:488
 msgid "INSEE Kodo"
 msgstr ""
 
-#: Lokpurigado/lokpurigado.py:494 Lokpurigado/lokpurigado.glade:65
+#: Lokpurigado/lokpurigado.py:496 Lokpurigado/lokpurigado.glade:65
 msgid "Poŝtkodo"
 msgstr ""
 
-#: Lokpurigado/lokpurigado.py:614
+#: Lokpurigado/lokpurigado.py:616
 #, python-format
 msgid "Redakti Lokon (%s)"
 msgstr ""
 
-#: Lokpurigado/lokpurigado.py:624
+#: Lokpurigado/lokpurigado.py:626
 msgid ", "
 msgstr ""
 
-#: Lokpurigado/lokpurigado.py:837
+#: Lokpurigado/lokpurigado.py:841
 msgid "Ĉi tiu Loko ne estas uzata!"
 msgstr ""
 
-#: Lokpurigado/lokpurigado.py:838
+#: Lokpurigado/lokpurigado.py:842
 msgid ""
 "Vi devus forigi ĝin aŭ, se ĝi enhavas utilajn notojn aŭ aliajn datumojn, uzu "
 "serĉon por kunfandi ĝin kun valida loko."

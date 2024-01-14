@@ -708,8 +708,8 @@ elif command == "check":
         # need to take care of translated types
         kwargs["ptype"] = ptype
         plugins.append(kwargs)
-    # get current build numbers from English listing
-    fp_in = open(r("../listings/addons-en.txt"),
+    # get current build numbers from Esperanto listing
+    fp_in = open(r("../listings/addons-eo.txt"),
                  "r", encoding="utf-8")
     addons = {}
     for line in fp_in:
