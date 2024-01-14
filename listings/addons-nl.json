@@ -4,7 +4,7 @@
 "i": "FamilySearch komparo",
 "t": 2,
 "d": "FamilySearch: vergelijk gramps mensen met FS -mensen.",
-"v": "beta 2.0.8",
+"v": "beta 2.0.15",
 "g": "5.2",
 "s": 3,
 "z": "PersonFS.addon.tgz"
@@ -14,7 +14,7 @@
 "i": "Importo de FamilySearch",
 "t": 2,
 "d": "FamilySearch.",
-"v": "beta 2.0.8",
+"v": "beta 2.0.15",
 "g": "5.2",
 "s": 3,
 "z": "PersonFS.addon.tgz"
@@ -24,28 +24,28 @@
 "i": "FS Gramplet",
 "t": 10,
 "d": "interface voor gezinsopdracht",
-"v": "beta 2.0.8",
+"v": "beta 2.0.15",
 "g": "5.2",
 "s": 3,
 "z": "PersonFS.addon.tgz"
 },
 {
-"n": "Lokpurigado",
+"n": "Plaats schoonmaken",
 "i": "Lokpurigado",
 "t": 10,
-"d": "Lokpurigado helpas kompletigi lokojn uzante OpenStreetMap.",
-"v": "1.0.13",
+"d": "Plaats schoonmaken helpt locaties te complete locaties met OpenStreetMap.",
+"v": "1.0.18",
 "g": "5.2",
 "s": 3,
 "z": "Lokpurigado.addon.tgz",
 "h": "Addon:Lokpurigado"
 },
 {
-"n": "Lokoj : Franca Oficiala Geografia Kodo",
+"n": "Plaatsen: Franse offici\u00eble geografische code",
 "i": "PlaceFrCog Gramplet",
 "t": 10,
-"d": "Gramplet por preni municipojn de la datumbazo Insee",
-"v": "1.0.22",
+"d": "Grampet om gemeenten uit de Insee -database te nemen",
+"v": "1.0.30",
 "g": "5.2",
 "s": 3,
 "z": "PlaceFrCog.addon.tgz"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-16 22:48+0200\n"
+"POT-Creation-Date: 2024-01-14 12:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,38 +29,38 @@ msgstr ""
 msgid "Fr COG"
 msgstr ""
 
-#: PlaceFrCog/placefrcog.py:94
+#: PlaceFrCog/placefrcog.py:96
 msgid ""
 "Enigu la INSEE-numeron de la komunumo: (aŭ plurajn nombrojn apartigitajn per "
 "spacoj)"
 msgstr ""
 
-#: PlaceFrCog/placefrcog.py:99
+#: PlaceFrCog/placefrcog.py:101
 msgid "Ŝargi per kodo"
 msgstr ""
 
-#: PlaceFrCog/placefrcog.py:106
+#: PlaceFrCog/placefrcog.py:108
 msgid "Enigu la nomon de la komunumo:"
 msgstr ""
 
-#: PlaceFrCog/placefrcog.py:111
+#: PlaceFrCog/placefrcog.py:113
 msgid "Ŝarĝi per nomo"
 msgstr ""
 
-#: PlaceFrCog/placefrcog.py:135
+#: PlaceFrCog/placefrcog.py:151
 msgid "Nekonato nomo"
 msgstr ""
 
-#: PlaceFrCog/placefrcog.py:135
+#: PlaceFrCog/placefrcog.py:151
 msgid "Ĉi tiu nomo ne estis trovita en la INSEE-datumbazo: "
 msgstr ""
 
-#: PlaceFrCog/placefrcog.py:141
+#: PlaceFrCog/placefrcog.py:158
 #, python-format
 msgid "%d rezultoj"
 msgstr ""
 
-#: PlaceFrCog/placefrcog.py:141
+#: PlaceFrCog/placefrcog.py:158
 #, python-format
 msgid ""
 "Unua rezulto :\n"
@@ -69,28 +69,28 @@ msgid ""
 "\t\tImporti ?\n"
 msgstr ""
 
-#: PlaceFrCog/placefrcog.py:142
+#: PlaceFrCog/placefrcog.py:159
 msgid "Ies, Importi"
 msgstr ""
 
-#: PlaceFrCog/placefrcog.py:142
-msgid "Ne, dankon"
+#: PlaceFrCog/placefrcog.py:159
+msgid "Venonta"
 msgstr ""
 
-#: PlaceFrCog/placefrcog.py:148
+#: PlaceFrCog/placefrcog.py:171
 #, python-format
 msgid "Aldono de loko kun INSEE-id %s"
 msgstr ""
 
-#: PlaceFrCog/placefrcog.py:180
+#: PlaceFrCog/placefrcog.py:203
 #, python-format
 msgid "Aldono de loko %s"
 msgstr ""
 
-#: PlaceFrCog/placefrcog.py:268
+#: PlaceFrCog/placefrcog.py:295
 msgid "Nekonata kodo"
 msgstr ""
 
-#: PlaceFrCog/placefrcog.py:268
+#: PlaceFrCog/placefrcog.py:295
 msgid "Ĉi tiu kodo ne estis trovita en la INSEE-datumbazo: "
 msgstr ""

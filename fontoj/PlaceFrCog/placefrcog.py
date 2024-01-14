@@ -23,12 +23,14 @@
 PlaceFrCog Gramplet.
 """
 
+#from objbrowser import browse ;browse(locals())
+#import pdb; pdb.set_trace()
 #------------------------------------------------------------------------
 #
 # Python modules
 #
 #------------------------------------------------------------------------
-import requests
+import requests, re
 from requests.exceptions import HTTPError
 
 #------------------------------------------------------------------------
@@ -49,7 +51,7 @@ from gramps.gen.lib import Place, PlaceName, PlaceType, PlaceRef, Url, UrlType
 from gramps.gen.datehandler import parser
 from gramps.gen.config import config
 from gramps.gen.display.place import displayer as _pd
-from gramps.gui.dialog import (DBErrorDialog, ErrorDialog, QuestionDialog2, 
+from gramps.gui.dialog import (DBErrorDialog, ErrorDialog, QuestionDialog2, QuestionDialog3,
                             WarningDialog)
 
 
@@ -117,11 +119,25 @@ class PlaceFrCog(Gramplet):
 
     return vbox
 
+  def db_changed(self):
+    self.dbstate.db.connect('place-update', self.update)
+    if not self.dbstate.db.readonly:
+      self.connect_signal('Place', self.update)
+    self.update()
+
+  def active_changed(self, handle):
+    self.update()
+
   def main(self):
     """
     Called to update the display.
     """
-    pass
+    handle = self.get_active('Place')
+    if handle:
+      self.place = self.dbstate.db.get_place_from_handle(handle)
+      if self.place:
+        title = self.place.get_title()
+        self.entry2.set_text( re.sub(',.*','',title))
 
   def __get_places2(self, obj):
     lokonomo = self.entry2.get_text()
@@ -134,16 +150,23 @@ class PlaceFrCog(Gramplet):
     if json == []:
       WarningDialog(_("Nekonato nomo"), _("Ĉi tiu nomo ne estis trovita en la INSEE-datumbazo: ")+lokonomo, parent=self.uistate.window)
       return 
-    codDep = json[0]['codeDepartement']
-    insee_id = json[0]['code']
     nb = len(json)
-    if nb >1 :
-      d = QuestionDialog2(_("%d rezultoj") % (nb), _("Unua rezulto :\n\t%s ; kodo=%s. \n\n\t\tImporti ?\n") % ( json[0]['nom'] , insee_id )
-                 ,_("Ies, Importi"),_("Ne, dankon")
+    pos = 0
+    while pos < nb :
+      codDep = json[pos]['codeDepartement']
+      insee_id = json[pos]['code']
+      d = QuestionDialog3(_("%d rezultoj") % (nb-pos), _("Unua rezulto :\n\t%s ; kodo=%s. \n\n\t\tImporti ?\n") % ( json[pos]['nom'] , insee_id )
+                 ,_("Ies, Importi"),_("Venonta")
                  , parent=self.uistate.window)
       res = d.run()
-      if not res :
+      if res == -1 :
         return
+      elif res == 1 :
+        nb=pos
+      else  :
+        pos = pos + 1
+        if pos >= nb :
+          return
 
     with DbTxn(_('Aldono de loko kun INSEE-id %s') % insee_id, self.dbstate.db) as trans:
       place = self.dbstate.db.get_place_from_gramps_id('FrCogCom'+insee_id)
@@ -152,12 +175,12 @@ class PlaceFrCog(Gramplet):
         place = Place()
         place.gramps_id = 'FrCogCom' + insee_id
         place_name = PlaceName()
-        place_name.set_value( json[0]['nom'])
+        place_name.set_value( json[pos]['nom'])
         place.set_name(place_name)
         place.set_code(insee_id)
-        place.set_title(json[0]['nom'])
-        place.set_longitude(str(json[0]['centre']['coordinates'][0]))
-        place.set_latitude(str(json[0]['centre']['coordinates'][1]))
+        place.set_title(json[pos]['nom'])
+        place.set_longitude(str(json[pos]['centre']['coordinates'][0]))
+        place.set_latitude(str(json[pos]['centre']['coordinates'][1]))
         place_type = PlaceType(14)
         place.set_type(place_type)
         placeref = PlaceRef()
@@ -208,7 +231,8 @@ class PlaceFrCog(Gramplet):
     if reg is not None:
       return reg
 
-    geo_url = 'http://geo.api.gouv.fr/regions?fields=nom,code&format=json&code=' + insee_id
+    #geo_url = 'http://geo.api.gouv.fr/regions?fields=nom,code&format=json&code=' + insee_id
+    geo_url = 'http://geo.api.gouv.fr/regions/' + insee_id
 
     response = requests.get(geo_url)
     response.raise_for_status()
@@ -217,10 +241,10 @@ class PlaceFrCog(Gramplet):
     place = Place()
     place.gramps_id = 'FrCogReg' + insee_id
     place_name = PlaceName()
-    place_name.set_value( json[0]['nom'])
+    place_name.set_value( json['nom'])
     place.set_name(place_name)
     place.set_code(insee_id)
-    place.set_title(json[0]['nom'])
+    place.set_title(json['nom'])
     place_type = PlaceType(9)
     place.set_type(place_type)
     placeref = PlaceRef()
@@ -235,21 +259,24 @@ class PlaceFrCog(Gramplet):
     if dep is not None:
       return dep
 
-    geo_url = 'http://geo.api.gouv.fr/departements?fields=nom,code,codeRegion&format=json&code=' + insee_id
+    #geo_url = 'http://geo.api.gouv.fr/departements?fields=nom,code,codeRegion&format=json&code=' + insee_id
+    geo_url = 'http://geo.api.gouv.fr/departements/' + insee_id
 
     response = requests.get(geo_url)
     response.raise_for_status()
     json = response.json()
-    codReg = json[0]['codeRegion']
+    if not len(json) :
+      return None
+    codReg = json['codeRegion']
     reg = self.__get_reg(codReg , trans)
 
     place = Place()
     place.gramps_id = 'FrCogDep' + insee_id
     place_name = PlaceName()
-    place_name.set_value( json[0]['nom'])
+    place_name.set_value( json['nom'])
     place.set_name(place_name)
     place.set_code(insee_id)
-    place.set_title(json[0]['nom'])
+    place.set_title(json['nom'])
     place_type = PlaceType(10)
     place.set_type(place_type)
     placeref = PlaceRef()
@@ -282,7 +309,8 @@ class PlaceFrCog(Gramplet):
     place_type = PlaceType(14)
     place.set_type(place_type)
     placeref = PlaceRef()
-    placeref.ref = dep.handle
+    if dep :
+      placeref.ref = dep.handle
     place.add_placeref(placeref)
     self.dbstate.db.add_place(place, trans)
     return place

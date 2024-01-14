@@ -1,0 +1,365 @@
+# Dutch translation of Gramps
+# Copyright (C) 2020 Gramps project
+# This file is distributed under the same license as the Gramps package.
+#
+# Tino Meinen <a.t.meinen@chello.nl>, 2003, 2004, 2005.
+# Kees Bakker <kees.bakker@xs4all.nl>, 2005, 2006, 2007.
+# Erik De Richter <frederik.de.richter@gmail.com>, 2006, 2007, 2008, 2009, 2010 , 2011, 2012, 2013.
+# Harmen Huizinga <harmenhuizinga@sigmo.nl>, 2013
+# Jan Sparreboom <jan@sparreboom.net>, 2020, 2021.
+# Nick Hall <nick-h@gramps-project.org>, 2021.
+# Milan <mobrcian@hotmail.com>, 2021.
+# Freek Olgers <freek@olgers.com>, 2022.
+# Niko Strijbol <strijbol.niko@gmail.com>, 2022.
+# Stephan Paternotte <s.paternotte@outlook.com>, 2022.
+# Stephan Paternotte <stephan@paternottes.net>, 2023.
+msgid ""
+msgstr ""
+"Project-Id-Version: Gramps 5.x\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-14 12:04+0100\n"
+"PO-Revision-Date: 2023-09-12 11:02+0000\n"
+"Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/gramps-project/"
+"gramps/nl/>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.0.1-dev\n"
+
+#: Lokpurigado/lokpurigado.gpr.py:28 Lokpurigado/lokpurigado.gpr.py:40
+msgid "Lokpurigado"
+msgstr "Plaats schoonmaken"
+
+#: Lokpurigado/lokpurigado.gpr.py:29
+msgid "Lokpurigado helpas kompletigi lokojn uzante OpenStreetMap."
+msgstr ""
+"Plaats schoonmaken helpt locaties te complete locaties met OpenStreetMap."
+
+#: Lokpurigado/lokpurigado.py:246
+msgid "\nNeniu kongruo\ntrovita"
+msgstr ""
+"\n"
+"Nene compatibiliteit \n"
+"crovita"
+
+#: Lokpurigado/lokpurigado.py:247
+msgid "Trovi"
+msgstr "Vinden"
+
+#: Lokpurigado/lokpurigado.py:273
+#, python-format
+msgid "%s\nLokaj\nkongruecoj"
+msgstr ""
+"%s \n"
+"lok \n"
+" compatibiliteit"
+
+#: Lokpurigado/lokpurigado.py:275
+msgid "Kunfandi"
+msgstr "Samenvoegen"
+
+#: Lokpurigado/lokpurigado.py:276
+msgid "Serĉi en OpenStreetMap"
+msgstr "Zoek in OpenStreetMap"
+
+#: Lokpurigado/lokpurigado.py:298
+msgid "Neniuj kongruoj estis trovitaj"
+msgstr "Er zijn geen overeenkomsten gevonden"
+
+#: Lokpurigado/lokpurigado.py:299
+msgid "Provu ŝanĝi la titolon aŭ uzu la butonon \"Redakti\" por permane kompletigi ĉi tiun nivelon."
+msgstr ""
+"Probeer de titel te wijzigen of gebruik de knop \"Bewerken\" om dit niveau "
+"handmatig te voltooien."
+
+#: Lokpurigado/lokpurigado.py:307
+#, python-format
+msgid "\n%s\nOpenStreetMap\nKongruecoj"
+msgstr ""
+"\n"
+"%s \n"
+"OpenStreetMap \n"
+" compatibiliteit"
+
+#: Lokpurigado/lokpurigado.py:308 Lokpurigado/lokpurigado.glade:814
+msgid "Elekti"
+msgstr "Kiezen"
+
+#: Lokpurigado/lokpurigado.py:314
+#, python-format
+msgid "%s kongruoj trovitaj"
+msgstr "%s -wedstrijden gevonden"
+
+#: Lokpurigado/lokpurigado.py:315
+msgid "Nur 10 kongruecoj estas montritaj.\nPor vidi pliajn rezultojn, premu la serĉbutonon denove.\nAŭ provu ŝanĝi la Titolo kun pli da detaloj, kiel lando."
+msgstr ""
+"Slechts 10 compatibiliteit wordt getoond. \n"
+" Om meer resultaten te bekijken, drukt u opnieuw op de zoekknop. \n"
+"egen Probeer de titel te wijzigen met meer details, als een land."
+
+#: Lokpurigado/lokpurigado.py:348 Lokpurigado/lokpurigado.py:353
+msgid "Problemo akiri datumojn de retejo"
+msgstr "Probleem om gegevens van de website te krijgen"
+
+#: Lokpurigado/lokpurigado.py:354
+msgid "TTT-peto elĉerpita, vi povas provi denove…"
+msgstr "Webaanvraag uitgeput, u kunt het opnieuw proberen ..."
+
+#: Lokpurigado/lokpurigado.py:399
+msgid "Lokciklo detektita"
+msgstr "Lokale cyclus gedetecteerd"
+
+#: Lokpurigado/lokpurigado.py:400
+msgid "Unu el la lokoj, kiujn vi kunfandas, enfermas la alian!\nBonvolu elekti alian lokon."
+msgstr "Een van de plaatsen die u samenvoegt, is opgesloten in de andere!"
+
+#: Lokpurigado/lokpurigado.py:488
+msgid "INSEE Kodo"
+msgstr "Insee code"
+
+#: Lokpurigado/lokpurigado.py:496 Lokpurigado/lokpurigado.glade:65
+msgid "Poŝtkodo"
+msgstr "Postcode"
+
+#: Lokpurigado/lokpurigado.py:616
+#, python-format
+msgid "Redakti Lokon (%s)"
+msgstr "Locatie bewerken (%s)"
+
+#: Lokpurigado/lokpurigado.py:626
+msgid ", "
+msgstr ", "
+
+#: Lokpurigado/lokpurigado.py:841
+msgid "Ĉi tiu Loko ne estas uzata!"
+msgstr "Deze plek wordt niet gebruikt!"
+
+#: Lokpurigado/lokpurigado.py:842
+msgid "Vi devus forigi ĝin aŭ, se ĝi enhavas utilajn notojn aŭ aliajn datumojn, uzu serĉon por kunfandi ĝin kun valida loko."
+msgstr ""
+"U moet het verwijderen of, als het nuttige opmerkingen of andere gegevens "
+"bevat, een zoekopdracht gebruiken om deze samen te voegen met een geldige "
+"locatie."
+
+#: Lokpurigado/lokpurigado.glade:27
+msgid "Urbo, Graflando, Ŝtato, Lando"
+msgstr "Stad, provincie, staat, land"
+
+#: Lokpurigado/lokpurigado.glade:52
+msgid "Ĉefa Nomo"
+msgstr "Voornaam"
+
+#: Lokpurigado/lokpurigado.glade:78 Lokpurigado/lokpurigado.glade:958
+msgid "Tipo"
+msgstr "Type"
+
+#: Lokpurigado/lokpurigado.glade:89
+msgid "La nuna ĉefnomo."
+msgstr "De huidige naam."
+
+#: Lokpurigado/lokpurigado.glade:102
+msgid "La poŝtkodo por la loko, se ekzistas."
+msgstr "De postcode voor de plaats als dat is."
+
+#: Lokpurigado/lokpurigado.glade:114
+msgid "La speco de loko ĝi estas. Ekzemple: 'Urbo', 'lando', …"
+msgstr "Het soort plek dat het is. Bijvoorbeeld: 'City', 'Country', ..."
+
+#: Lokpurigado/lokpurigado.glade:133
+msgid "Marku ĉi tiun skatolon se vi volas konservi la originalan poŝtkodon."
+msgstr "Markeer dit vak als u de originele postcode wilt behouden."
+
+#: Lokpurigado/lokpurigado.glade:148
+msgid "Marku ĉi tiun skatolon se vi volas konservi la originan LokTipon."
+msgstr "Markeer dit vak als u het oorspronkelijke locatietype wilt behouden."
+
+#: Lokpurigado/lokpurigado.glade:166 Lokpurigado/lokpurigado.glade:180
+#: Lokpurigado/lokpurigado.glade:339 Lokpurigado/lokpurigado.glade:353
+msgid "Orig"
+msgstr "Originel"
+
+#: Lokpurigado/lokpurigado.glade:244
+msgid "Longitudo"
+msgstr "Lengtegraad"
+
+#: Lokpurigado/lokpurigado.glade:268
+msgid "Latitudo"
+msgstr "Breedtegraad"
+
+#: Lokpurigado/lokpurigado.glade:280
+msgid "Check this box if you want to keep the original Latitude and Longitude."
+msgstr ""
+"Vink dit vakje aan als u de originele breedtegraad en lengtegraad wilt "
+"behouden."
+
+#: Lokpurigado/lokpurigado.glade:295
+msgid "The Gramps ID.."
+msgstr "De gramps id .."
+
+#: Lokpurigado/lokpurigado.glade:310
+msgid "ID"
+msgstr "ID"
+
+#: Lokpurigado/lokpurigado.glade:322
+msgid "Check this box if you want to keep the original Gramps ID."
+msgstr "Vink dit vakje aan als u de originele Gramps -ID wilt behouden."
+
+#: Lokpurigado/lokpurigado.glade:391
+msgid "Alterative Names\nSelect one or more rows and press 'Keep' button to toggle the 'include into place' status ."
+msgstr ""
+"Alteratieve namen \n"
+"sselect een of meer rijen en druk op de knop 'Keep' om de status 'Inclusief' "
+"in te schakelen '."
+
+#: Lokpurigado/lokpurigado.glade:406
+msgid "Inc"
+msgstr "Inc"
+
+#: Lokpurigado/lokpurigado.glade:426
+msgid "Name"
+msgstr "Naam"
+
+#: Lokpurigado/lokpurigado.glade:446
+msgid "Lang"
+msgstr "Lang"
+
+#: Lokpurigado/lokpurigado.glade:465
+msgid "Date"
+msgstr "Datum"
+
+#: Lokpurigado/lokpurigado.glade:516
+msgid "Keep"
+msgstr "Behouden"
+
+#: Lokpurigado/lokpurigado.glade:520
+msgid "Select one or more rows and use this button to keep the alternative names."
+msgstr ""
+"Selecteer een of meer rijen en gebruik deze knop om de alternatieve namen te "
+"behouden."
+
+#: Lokpurigado/lokpurigado.glade:532
+msgid "Primary"
+msgstr "Primair"
+
+#: Lokpurigado/lokpurigado.glade:536
+msgid "Select one row and use this button to make the row the primary name."
+msgstr ""
+"Selecteer een rij en gebruik deze knop om de rij de primaire naam te maken."
+
+#: Lokpurigado/lokpurigado.glade:548
+msgid "Discard"
+msgstr "Weggooien"
+
+#: Lokpurigado/lokpurigado.glade:552
+msgid "Select one or more rows and use this button to discard the alternative names."
+msgstr ""
+"Selecteer een of meer rijen en gebruik deze knop om de alternatieve namen "
+"weg te gooien."
+
+#: Lokpurigado/lokpurigado.glade:576
+msgid "Cancel"
+msgstr "Annuleren"
+
+#: Lokpurigado/lokpurigado.glade:580
+msgid "Cancel the operation, no changes are made to your Place."
+msgstr ""
+"Annuleer de bewerking, er worden geen wijzigingen in uw plaats aangebracht."
+
+#: Lokpurigado/lokpurigado.glade:591 Lokpurigado/lokpurigado.glade:640
+msgid "Ok"
+msgstr "Ok"
+
+#: Lokpurigado/lokpurigado.glade:595
+msgid "Store the values in your Place."
+msgstr "Bewaar de waarden in uw plaats."
+
+#: Lokpurigado/lokpurigado.glade:654
+msgid "Help"
+msgstr "Help"
+
+#: Lokpurigado/lokpurigado.glade:677
+msgid "Keep Web Links"
+msgstr "Bewaar weblinks"
+
+#: Lokpurigado/lokpurigado.glade:681
+msgid "Puts web links (typically wikipedia) into your place."
+msgstr "Zet weblinks (meestal Wikipedia) in uw plaats."
+
+#: Lokpurigado/lokpurigado.glade:695
+msgid "Alternative Names Languages to keep"
+msgstr "Als alternatief benoemt talen om te bewaren"
+
+#: Lokpurigado/lokpurigado.glade:707
+msgid "Enter the two or three letter codes for the languages you wish to keep, seperated by spaces.\nFor example \"fr oc eo\".\nThese languages will initially be checked off on the Names result display.\nIf you often see an un-checked name in a specific language you want, add the language code here."
+msgstr ""
+"Voer de twee of drie lettercodes in voor de talen die u wilt behouden, "
+"gescheiden door spaties. \n"
+" Fod \"fr oc eo\". Gecontroleerde naam in een specifieke taal die u wilt, "
+"voeg hier de taalcode toe."
+
+#: Lokpurigado/lokpurigado.glade:743
+msgid "Titolo"
+msgstr "Titel"
+
+#: Lokpurigado/lokpurigado.glade:754
+msgid "Current Place title.\nYou can edit this to help find other places, particularly to reduce the number of results."
+msgstr ""
+"Huidige plaatstitel. \n"
+"YOU kan dit bewerken om andere plaatsen te vinden, met name om het aantal "
+"resultaten te verminderen."
+
+#: Lokpurigado/lokpurigado.glade:770
+msgid "Helpo"
+msgstr "Hulp"
+
+#: Lokpurigado/lokpurigado.glade:798
+msgid "Find"
+msgstr "Vinden"
+
+#: Lokpurigado/lokpurigado.glade:802
+msgid "Search your local places and OSM for a match."
+msgstr "Zoek op uw lokale plaatsen en OSM voor een wedstrijd."
+
+#: Lokpurigado/lokpurigado.glade:818
+msgid "Continue to merge (for local places), or to complete a place (for OSM)."
+msgstr "Blijf fuseren of een plaats voltooien."
+
+#: Lokpurigado/lokpurigado.glade:831
+msgid "Redakti"
+msgstr "Bewerking"
+
+#: Lokpurigado/lokpurigado.glade:835
+msgid "Split up Title, Edit manually, and enclose with next level of hierarchy.  For use when the initial component of the Title is too detailed to be found in the gazetteer."
+msgstr ""
+"Titel opsplitsen, handmatig bewerken en omsluiten met het volgende niveau "
+"van hiërarchie. Voor gebruik wanneer de eerste component van de titel te "
+"gedetailleerd is om in de krant te worden gevonden."
+
+#: Lokpurigado/lokpurigado.glade:861
+msgid "Sekva loko"
+msgstr "Volgende plaats"
+
+#: Lokpurigado/lokpurigado.glade:865
+msgid "Find an incomplete place."
+msgstr "Zoek een onvolledige plek."
+
+#: Lokpurigado/lokpurigado.glade:888
+msgid "Set preferences"
+msgstr "Stel voorkeuren in"
+
+#: Lokpurigado/lokpurigado.glade:911
+msgid "Select one of these places to continue the cleanup process."
+msgstr "Selecteer een van deze plaatsen om het opruimproces voort te zetten."
+
+#: Lokpurigado/lokpurigado.glade:938
+msgid "Serĉrezultaj lokoj"
+msgstr "Zoekresultaat plaatsen"
+
+#: Lokpurigado/lokpurigado.glade:991
+msgid "No\nMatches"
+msgstr ""
+"Geen \n"
+"Matches"
