@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GRAMPS 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-14 12:05+0100\n"
+"POT-Creation-Date: 2024-01-14 12:16+0100\n"
 "PO-Revision-Date: 2023-08-05 19:36+0000\n"
 "Last-Translator: Nick Hall <nick-h@gramps-project.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
@@ -272,128 +272,135 @@ msgstr "Conexão com falha. As funções do FamilySearch não estarão disponív
 msgid "Pasvorta eraro. La funkcioj de FamilySearch ne estos disponeblaj."
 msgstr "Erro de senha. As funções do FamilySearch não estarão disponíveis."
 
-#: PersonFS/PersonFS.py:560
+#: PersonFS/PersonFS.py:562
 msgid "kopii al gramps"
 msgstr "Copie para Gramps"
 
-#: PersonFS/PersonFS.py:664
+#: PersonFS/PersonFS.py:684
 #, python-format
 msgid "Redakti : %s - %s - %s"
 msgstr "Editar: %s - %s - %s"
 
-#: PersonFS/PersonFS.py:669
+#: PersonFS/PersonFS.py:689
 msgid "Kopii elekton de gramps al FS"
 msgstr "Copie uma seleção de Gramps para FS"
 
-#: PersonFS/PersonFS.py:674
+#: PersonFS/PersonFS.py:694
 msgid "Kopii elekton de FS al gramps"
 msgstr "Copie uma opção de FS para Gramps"
 
-#: PersonFS/PersonFS.py:734
-msgid "Pardonu, nur edzaj, eventaj or nomaj linioj povas esti elektitaj."
-msgstr ""
-"Desculpe, apenas o marido, o evento ou as linhas de nome podem ser "
-"escolhidos."
+#: PersonFS/PersonFS.py:754
+msgid "Pardonu, nur edzaj, eventaj, nomaj aŭ notaj linioj povas esti elektitaj."
+msgstr "Desculpe, apenas o marido, o evento, o nome ou as linhas de anotações podem ser escolhidos."
 
-#: PersonFS/PersonFS.py:740 PersonFS/PersonFS.py:754
+#: PersonFS/PersonFS.py:760 PersonFS/PersonFS.py:774
 msgid "Koloro"
 msgstr "Cor"
 
-#: PersonFS/PersonFS.py:741
+#: PersonFS/PersonFS.py:761
 msgid "Propreco"
 msgstr "Peculiaridade"
 
-#: PersonFS/PersonFS.py:742 PersonFS/PersonFS.py:755
+#: PersonFS/PersonFS.py:762 PersonFS/PersonFS.py:775
 msgid "Dato"
 msgstr "Data"
 
-#: PersonFS/PersonFS.py:743
+#: PersonFS/PersonFS.py:763
 msgid "Gramps Valoro"
 msgstr "Valor de Gramps"
 
-#: PersonFS/PersonFS.py:744 PersonFS/PersonFS.py:758
+#: PersonFS/PersonFS.py:764 PersonFS/PersonFS.py:778
 msgid "FS Dato"
 msgstr "Data do FS"
 
-#: PersonFS/PersonFS.py:745 PersonFS/PersonFS.py:759
+#: PersonFS/PersonFS.py:765 PersonFS/PersonFS.py:779
 msgid "FS Valoro"
 msgstr "Valor FS"
 
-#: PersonFS/PersonFS.py:747 PersonFS/PersonFS.py:761
+#: PersonFS/PersonFS.py:767 PersonFS/PersonFS.py:781
 msgid "xTipo"
 msgstr "Xtipo"
 
-#: PersonFS/PersonFS.py:748 PersonFS/PersonFS.py:762
+#: PersonFS/PersonFS.py:768 PersonFS/PersonFS.py:782
 msgid "xGr"
 msgstr "xgr"
 
-#: PersonFS/PersonFS.py:749 PersonFS/PersonFS.py:763
+#: PersonFS/PersonFS.py:769 PersonFS/PersonFS.py:783
 msgid "xFs"
 msgstr "XFS"
 
-#: PersonFS/PersonFS.py:750 PersonFS/PersonFS.py:764
+#: PersonFS/PersonFS.py:770 PersonFS/PersonFS.py:784
 msgid "xGr2"
 msgstr "xgr2"
 
-#: PersonFS/PersonFS.py:751 PersonFS/PersonFS.py:765
+#: PersonFS/PersonFS.py:771 PersonFS/PersonFS.py:785
 msgid "xFs2"
 msgstr "XFS2"
 
-#: PersonFS/PersonFS.py:756
+#: PersonFS/PersonFS.py:776
 msgid "Titolo"
 msgstr "Título"
 
-#: PersonFS/PersonFS.py:757
+#: PersonFS/PersonFS.py:777
 msgid "Gramps Referenco"
 msgstr "Referência de Gramps"
 
-#: PersonFS/PersonFS.py:784 PersonFS/komparo.py:1119 PersonFS/utila.py:136
+#: PersonFS/PersonFS.py:804 PersonFS/komparo.py:1119 PersonFS/utila.py:136
 msgid "FamilySearch etikedoj"
 msgstr "Tags de pesquisa em família"
 
-#: PersonFS/PersonFS.py:984 PersonFS/PersonFS.py:1028
+#: PersonFS/PersonFS.py:1004 PersonFS/PersonFS.py:1048
 msgid "score"
 msgstr "pontuação"
 
-#: PersonFS/PersonFS.py:985 PersonFS/PersonFS.py:1029
+#: PersonFS/PersonFS.py:1005 PersonFS/PersonFS.py:1049
 msgid "FS Id"
 msgstr "Fs id"
 
-#: PersonFS/PersonFS.py:986 PersonFS/PersonFS.py:1030
+#: PersonFS/PersonFS.py:1006 PersonFS/PersonFS.py:1050
 msgid "Nomo, antaŭnomo"
 msgstr "Primeiro nome"
 
-#: PersonFS/PersonFS.py:987 PersonFS/PersonFS.py:1031
+#: PersonFS/PersonFS.py:1007 PersonFS/PersonFS.py:1051
 msgid "Birth"
 msgstr "Nascimento"
 
-#: PersonFS/PersonFS.py:988 PersonFS/PersonFS.py:1032
+#: PersonFS/PersonFS.py:1008 PersonFS/PersonFS.py:1052
 msgid "Death"
 msgstr "Falecimento"
 
-#: PersonFS/PersonFS.py:989 PersonFS/PersonFS.py:1033
+#: PersonFS/PersonFS.py:1009 PersonFS/PersonFS.py:1053
 msgid "Parents"
 msgstr "Pais"
 
-#: PersonFS/PersonFS.py:990 PersonFS/PersonFS.py:1034
+#: PersonFS/PersonFS.py:1010 PersonFS/PersonFS.py:1054
 msgid "Spouses"
 msgstr "Cônjuges"
 
-#: PersonFS/PersonFS.py:1008
+#: PersonFS/PersonFS.py:1028
 msgid "Eraro: neniuj datumoj."
 msgstr "Erro: sem dados."
 
-#: PersonFS/PersonFS.py:1016
+#: PersonFS/PersonFS.py:1036
 #, python-format
 msgid "Neniuj verŝajnaj duplikatoj por la persono %s trovita de la retejo \"FamilySearch\"."
 msgstr ""
 "Não há duplicações prováveis para a pessoa que %s encontrou no site "
 "\"FamilySearch\"."
 
-#: PersonFS/PersonFS.py:1356 PersonFS/PersonFS.py:1443 PersonFS/komparo.py:109
+#: PersonFS/PersonFS.py:1376 PersonFS/PersonFS.py:1463 PersonFS/komparo.py:109
 #: PersonFS/komparo.py:981
 msgid "Ne konektita al FamilySearch"
 msgstr "Não conectado ao FamilySearch"
+
+#: PersonFS/PersonFS.py:1486 PersonFS/PersonFS.py:1492
+msgid "Persono"
+msgstr "Uma pessoa"
+
+#: PersonFS/PersonFS.py:1554 PersonFS/PersonFS.py:1556
+#: PersonFS/PersonFS.py:1564
+msgid "Familio"
+msgstr "Família"
 
 #: PersonFS/constants.py:63
 msgid "Vivskizo"
@@ -688,3 +695,8 @@ msgstr "Fontes"
 #: PersonFS/PersonFS.glade:949
 msgid "Reĝimo :  "
 msgstr "Regime:"
+
+#~ msgid "Pardonu, nur edzaj, eventaj or nomaj linioj povas esti elektitaj."
+#~ msgstr ""
+#~ "Desculpe, apenas o marido, o evento ou as linhas de nome podem ser "
+#~ "escolhidos."
