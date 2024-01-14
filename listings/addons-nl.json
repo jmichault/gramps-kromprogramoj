@@ -45,7 +45,7 @@
 "i": "PlaceFrCog Gramplet",
 "t": 10,
 "d": "Grampet om gemeenten uit de Insee -database te nemen",
-"v": "1.0.30",
+"v": "1.0.31",
 "g": "5.2",
 "s": 3,
 "z": "PlaceFrCog.addon.tgz"

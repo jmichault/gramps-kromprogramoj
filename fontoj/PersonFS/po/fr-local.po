@@ -43,7 +43,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-14 12:16+0100\n"
+"POT-Creation-Date: 2024-01-14 14:58+0100\n"
 "PO-Revision-Date: 2023-08-26 20:29+0000\n"
 "Last-Translator: Jean-Marc <m.balthazar@posteo.net>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gramps-project/"
@@ -324,7 +324,9 @@ msgstr "Copier la sélection vers gramps"
 
 #: PersonFS/PersonFS.py:754
 msgid "Pardonu, nur edzaj, eventaj, nomaj aŭ notaj linioj povas esti elektitaj."
-msgstr "Désolé, seuls les lignes de mari, d'événements, de noms ou de notes peuvent être choisies."
+msgstr ""
+"Désolé, seuls les lignes de mari, d'événements, de noms ou de notes peuvent "
+"être choisies."
 
 #: PersonFS/PersonFS.py:760 PersonFS/PersonFS.py:774
 msgid "Koloro"

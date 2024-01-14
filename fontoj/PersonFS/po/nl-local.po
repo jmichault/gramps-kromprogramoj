@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gramps 5.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-14 12:16+0100\n"
+"POT-Creation-Date: 2024-01-14 14:58+0100\n"
 "PO-Revision-Date: 2023-09-12 11:02+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gramps-project/"
@@ -294,7 +294,9 @@ msgstr "Kopieer een keuze van FS naar Gramps"
 
 #: PersonFS/PersonFS.py:754
 msgid "Pardonu, nur edzaj, eventaj, nomaj aŭ notaj linioj povas esti elektitaj."
-msgstr "Sorry, alleen echtgenoot, gebeurtenis, naam of notitielijnen kunnen worden gekozen."
+msgstr ""
+"Sorry, alleen echtgenoot, gebeurtenis, naam of notitielijnen kunnen worden "
+"gekozen."
 
 #: PersonFS/PersonFS.py:760 PersonFS/PersonFS.py:774
 msgid "Koloro"

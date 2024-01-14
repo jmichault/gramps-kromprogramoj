@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GRAMPS 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-14 12:16+0100\n"
+"POT-Creation-Date: 2024-01-14 14:58+0100\n"
 "PO-Revision-Date: 2023-08-05 19:36+0000\n"
 "Last-Translator: Nick Hall <nick-h@gramps-project.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
@@ -291,7 +291,9 @@ msgstr "Copie uma opção de FS para Gramps"
 
 #: PersonFS/PersonFS.py:754
 msgid "Pardonu, nur edzaj, eventaj, nomaj aŭ notaj linioj povas esti elektitaj."
-msgstr "Desculpe, apenas o marido, o evento, o nome ou as linhas de anotações podem ser escolhidos."
+msgstr ""
+"Desculpe, apenas o marido, o evento, o nome ou as linhas de anotações podem "
+"ser escolhidos."
 
 #: PersonFS/PersonFS.py:760 PersonFS/PersonFS.py:774
 msgid "Koloro"

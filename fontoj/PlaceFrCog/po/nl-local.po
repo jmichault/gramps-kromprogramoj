@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gramps 5.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-14 12:16+0100\n"
+"POT-Creation-Date: 2024-01-14 14:58+0100\n"
 "PO-Revision-Date: 2023-09-12 11:02+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gramps-project/"
@@ -51,28 +51,54 @@ msgstr ""
 msgid "Ŝargi per kodo"
 msgstr "Laad met code"
 
-#: PlaceFrCog/placefrcog.py:108
+#: PlaceFrCog/placefrcog.py:106
+msgid "Ŝargi per kodo (anstataŭe)"
+msgstr "Laad met code (in plaats daarvan)"
+
+#: PlaceFrCog/placefrcog.py:113
 msgid "Enigu la nomon de la komunumo:"
 msgstr "Voer de naam van de gemeenschap in:"
 
-#: PlaceFrCog/placefrcog.py:113
+#: PlaceFrCog/placefrcog.py:118
 msgid "Ŝarĝi per nomo"
 msgstr "Laden bij naam"
 
-#: PlaceFrCog/placefrcog.py:151
+#: PlaceFrCog/placefrcog.py:123
+msgid "Ŝarĝi per nomo (anstataŭe)"
+msgstr "Laden op naam (in plaats daarvan)"
+
+#: PlaceFrCog/placefrcog.py:159 PlaceFrCog/placefrcog.py:258
+#, python-format
+msgid "Ĝisdatigo de loko kun INSEE-id %s"
+msgstr "Update van plaats met Insee id %s"
+
+#: PlaceFrCog/placefrcog.py:183 PlaceFrCog/placefrcog.py:247
+msgid "Ekzistanta kodo"
+msgstr "Bestaande code"
+
+#: PlaceFrCog/placefrcog.py:183 PlaceFrCog/placefrcog.py:247
+msgid "Ĉi tiu kodo jam ekzistas en la datumbazo."
+msgstr "Deze code bestaat al in de database."
+
+#: PlaceFrCog/placefrcog.py:193
+#, python-format
+msgid "Aldono de loko kun INSEE-id %s"
+msgstr "Plaats toevoegen met insee id %s"
+
+#: PlaceFrCog/placefrcog.py:222
 msgid "Nekonato nomo"
 msgstr "Onbekende naam"
 
-#: PlaceFrCog/placefrcog.py:151
+#: PlaceFrCog/placefrcog.py:222
 msgid "Ĉi tiu nomo ne estis trovita en la INSEE-datumbazo: "
 msgstr "Deze naam is niet gevonden in de Insee -database:"
 
-#: PlaceFrCog/placefrcog.py:158
+#: PlaceFrCog/placefrcog.py:229
 #, python-format
 msgid "%d rezultoj"
 msgstr "%d resultaten"
 
-#: PlaceFrCog/placefrcog.py:158
+#: PlaceFrCog/placefrcog.py:229
 #, python-format
 msgid "Unua rezulto :\n\t%s ; kodo=%s. \n\n\t\tImporti ?\n"
 msgstr ""
@@ -81,31 +107,26 @@ msgstr ""
 "\n"
 "\t\tImporteren?\n"
 
-#: PlaceFrCog/placefrcog.py:159
+#: PlaceFrCog/placefrcog.py:230
 msgid "Ies, Importi"
 msgstr "IES, importeren"
 
-#: PlaceFrCog/placefrcog.py:159
+#: PlaceFrCog/placefrcog.py:230
 msgid "Venonta"
 msgstr "Volgende"
 
-#: PlaceFrCog/placefrcog.py:171
-#, python-format
-msgid "Aldono de loko kun INSEE-id %s"
-msgstr "Plaats toevoegen met insee id %s"
-
-#: PlaceFrCog/placefrcog.py:203
-#, python-format
-msgid "Aldono de loko %s"
-msgstr "Place %s toevoegen"
-
-#: PlaceFrCog/placefrcog.py:295
+#: PlaceFrCog/placefrcog.py:254 PlaceFrCog/placefrcog.py:384
 msgid "Nekonata kodo"
 msgstr "Onbekende code"
 
-#: PlaceFrCog/placefrcog.py:295
+#: PlaceFrCog/placefrcog.py:254 PlaceFrCog/placefrcog.py:384
 msgid "Ĉi tiu kodo ne estis trovita en la INSEE-datumbazo: "
 msgstr "Deze code werd niet gevonden in de Insee -database:"
+
+#: PlaceFrCog/placefrcog.py:293
+#, python-format
+msgid "Aldono de loko %s"
+msgstr "Place %s toevoegen"
 
 #~ msgid ""
 #~ "Enigu la INSEE-numeron de la komunumo: (a plurajn nombrojn apartigitajn "

@@ -101,6 +101,11 @@ class PlaceFrCog(Gramplet):
     get = Gtk.Button(label=_('Ŝargi per kodo'))
     get.connect("clicked", self.__get_places)
     button_box.add(get)
+    button_box_a = Gtk.ButtonBox()
+    button_box_a.set_layout(Gtk.ButtonBoxStyle.START)
+    get_a = Gtk.Button(label=_('Ŝargi per kodo (anstataŭe)'))
+    get_a.connect("clicked", self.__get_places_a)
+    button_box.add(get_a)
     vbox.pack_start(label, False, True, 0)
     vbox.pack_start(self.entry, False, True, 0)
     vbox.pack_start(button_box, False, True, 0)
@@ -113,6 +118,11 @@ class PlaceFrCog(Gramplet):
     get2 = Gtk.Button(label=_('Ŝarĝi per nomo'))
     get2.connect("clicked", self.__get_places2)
     button_box2.add(get2)
+    button_box2_a = Gtk.ButtonBox()
+    button_box2_a.set_layout(Gtk.ButtonBoxStyle.START)
+    get2_a = Gtk.Button(label=_('Ŝarĝi per nomo (anstataŭe)'))
+    get2_a.connect("clicked", self.__get_places2_a)
+    button_box2.add(get2_a)
     vbox.pack_start(label2, False, True, 0)
     vbox.pack_start(self.entry2, False, True, 0)
     vbox.pack_start(button_box2, False, True, 0)
@@ -139,7 +149,68 @@ class PlaceFrCog(Gramplet):
         title = self.place.get_title()
         self.entry2.set_text( re.sub(',.*','',title))
 
+  def __get_places2_a(self, obj):
+    js_loko = self.__get_places_nomo()
+    if not js_loko :
+      return
+    codDep = js_loko['codeDepartement']
+    insee_id = js_loko['code']
+
+    with DbTxn(_('Ĝisdatigo de loko kun INSEE-id %s') % insee_id, self.dbstate.db) as trans:
+      place = self.dbstate.db.get_place_from_gramps_id('FrCogCom'+insee_id)
+      if place is None:
+        handle = self.get_active('Place')
+        if handle:
+          self.place = self.dbstate.db.get_place_from_handle(handle)
+          if self.place:
+            dep = self.__get_dep(codDep , trans)
+            self.place.gramps_id = 'FrCogCom' + insee_id
+            place_name = PlaceName()
+            place_name.set_value( js_loko['nom'])
+            self.place.set_name(place_name)
+            self.place.set_code(insee_id)
+            self.place.set_title(js_loko['nom'])
+            self.place.set_longitude(str(js_loko['centre']['coordinates'][0]))
+            self.place.set_latitude(str(js_loko['centre']['coordinates'][1]))
+            place_type = PlaceType(14)
+            self.place.set_type(place_type)
+            if not self.place._has_handle_reference("Place",dep.handle) :
+              placeref = PlaceRef()
+              placeref.ref = dep.handle
+              self.place.add_placeref(placeref)
+            self.dbstate.db.commit_place(self.place, trans)
+      else :
+        WarningDialog(_("Ekzistanta kodo"), _("Ĉi tiu kodo jam ekzistas en la datumbazo."), parent=self.uistate.window)
+
+
   def __get_places2(self, obj):
+    js_loko = self.__get_places_nomo()
+    if not js_loko :
+      return
+    codDep = js_loko['codeDepartement']
+    insee_id = js_loko['code']
+
+    with DbTxn(_('Aldono de loko kun INSEE-id %s') % insee_id, self.dbstate.db) as trans:
+      place = self.dbstate.db.get_place_from_gramps_id('FrCogCom'+insee_id)
+      if place is None:
+        dep = self.__get_dep(codDep , trans)
+        place = Place()
+        place.gramps_id = 'FrCogCom' + insee_id
+        place_name = PlaceName()
+        place_name.set_value( js_loko['nom'])
+        place.set_name(place_name)
+        place.set_code(insee_id)
+        place.set_title(js_loko['nom'])
+        place.set_longitude(str(js_loko['centre']['coordinates'][0]))
+        place.set_latitude(str(js_loko['centre']['coordinates'][1]))
+        place_type = PlaceType(14)
+        place.set_type(place_type)
+        placeref = PlaceRef()
+        placeref.ref = dep.handle
+        place.add_placeref(placeref)
+        self.dbstate.db.add_place(place, trans)
+
+  def __get_places_nomo(self):
     lokonomo = self.entry2.get_text()
     #place = self.dbstate.db.get_place_from_gramps_id('FrCogCom'+insee_id)
     geo_url = 'http://geo.api.gouv.fr/communes?fields=nom,code,centre,codeDepartement,codeRegion&format=json&geometry=centre&nom=' + lokonomo
@@ -160,33 +231,52 @@ class PlaceFrCog(Gramplet):
                  , parent=self.uistate.window)
       res = d.run()
       if res == -1 :
-        return
+        return None
       elif res == 1 :
         nb=pos
       else  :
         pos = pos + 1
         if pos >= nb :
-          return
+          return None
+    return json[pos]
 
-    with DbTxn(_('Aldono de loko kun INSEE-id %s') % insee_id, self.dbstate.db) as trans:
-      place = self.dbstate.db.get_place_from_gramps_id('FrCogCom'+insee_id)
-      if place is None:
-        dep = self.__get_dep(codDep , trans)
-        place = Place()
-        place.gramps_id = 'FrCogCom' + insee_id
-        place_name = PlaceName()
-        place_name.set_value( json[pos]['nom'])
-        place.set_name(place_name)
-        place.set_code(insee_id)
-        place.set_title(json[pos]['nom'])
-        place.set_longitude(str(json[pos]['centre']['coordinates'][0]))
-        place.set_latitude(str(json[pos]['centre']['coordinates'][1]))
-        place_type = PlaceType(14)
-        place.set_type(place_type)
-        placeref = PlaceRef()
-        placeref.ref = dep.handle
-        place.add_placeref(placeref)
-        self.dbstate.db.add_place(place, trans)
+  def __get_places_a(self, obj):
+    insee_id = self.entry.get_text()
+    place = self.dbstate.db.get_place_from_gramps_id('FrCogCom'+insee_id)
+    if place is not None:
+      WarningDialog(_("Ekzistanta kodo"), _("Ĉi tiu kodo jam ekzistas en la datumbazo."), parent=self.uistate.window)
+      return
+    geo_url = 'http://geo.api.gouv.fr/communes?fields=nom,code,centre,codeDepartement,codeRegion&format=json&geometry=centre&code=' + insee_id
+    response = requests.get(geo_url)
+    response.raise_for_status()
+    json = response.json()
+    if json == []:
+      WarningDialog(_("Nekonata kodo"), _("Ĉi tiu kodo ne estis trovita en la INSEE-datumbazo: ")+insee_id, parent=self.uistate.window)
+      return 
+    codDep = json[0]['codeDepartement']
+
+    with DbTxn(_('Ĝisdatigo de loko kun INSEE-id %s') % insee_id, self.dbstate.db) as trans:
+      dep = self.__get_dep(codDep , trans)
+      handle = self.get_active('Place')
+      if handle:
+        self.place = self.dbstate.db.get_place_from_handle(handle)
+        if self.place:
+          dep = self.__get_dep(codDep , trans)
+          self.place.gramps_id = 'FrCogCom' + insee_id
+          place_name = PlaceName()
+          place_name.set_value( json[0]['nom'])
+          self.place.set_name(place_name)
+          self.place.set_code(insee_id)
+          self.place.set_title(json[0]['nom'])
+          self.place.set_longitude(str(json[0]['centre']['coordinates'][0]))
+          self.place.set_latitude(str(json[0]['centre']['coordinates'][1]))
+          place_type = PlaceType(14)
+          self.place.set_type(place_type)
+          if not self.place._has_handle_reference("Place",dep.handle) :
+            placeref = PlaceRef()
+            placeref.ref = dep.handle
+            self.place.add_placeref(placeref)
+          self.dbstate.db.commit_place(self.place, trans)
 
   def __get_places(self, obj):
     insee_id = self.entry.get_text()
@@ -287,7 +377,6 @@ class PlaceFrCog(Gramplet):
 
   def __get_commune(self, insee_id , trans):
     geo_url = 'http://geo.api.gouv.fr/communes?fields=nom,code,centre,codeDepartement,codeRegion&format=json&geometry=centre&code=' + insee_id
-
     response = requests.get(geo_url)
     response.raise_for_status()
     json = response.json()
