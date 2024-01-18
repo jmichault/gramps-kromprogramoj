@@ -4,7 +4,7 @@
 "i": "FamilySearch komparo",
 "t": 2,
 "d": "FamilySearch: Compare Gramps people with FS people.",
-"v": "beta 2.0.16",
+"v": "beta 2.0.17",
 "g": "5.2",
 "s": 3,
 "z": "PersonFS.addon.tgz"
@@ -14,7 +14,7 @@
 "i": "Importo de FamilySearch",
 "t": 2,
 "d": "FamilySearch.",
-"v": "beta 2.0.16",
+"v": "beta 2.0.17",
 "g": "5.2",
 "s": 3,
 "z": "PersonFS.addon.tgz"
@@ -24,7 +24,7 @@
 "i": "FS Gramplet",
 "t": 10,
 "d": "Interface for FamilySearch",
-"v": "beta 2.0.16",
+"v": "beta 2.0.17",
 "g": "5.2",
 "s": 3,
 "z": "PersonFS.addon.tgz"
@@ -45,7 +45,7 @@
 "i": "PlaceFrCog Gramplet",
 "t": 10,
 "d": "Gramplet to take municipalities from the INSEE database",
-"v": "1.0.31",
+"v": "1.0.32",
 "g": "5.2",
 "s": 3,
 "z": "PlaceFrCog.addon.tgz"
