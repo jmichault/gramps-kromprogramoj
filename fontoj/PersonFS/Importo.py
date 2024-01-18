@@ -31,7 +31,7 @@ from gi.repository import Gtk
 from gramps.gen.db import DbTxn
 from gramps.gen.config import config
 from gramps.gen.const import GRAMPS_LOCALE as glocale
-from gramps.gen.lib import Attribute, ChildRef, Citation, Date, Event, EventRef, EventType, EventRoleType, Family, Media, Name, NameType, Note
+from gramps.gen.lib import Attribute, ChildRef, Citation, Date, Event, EventRef, EventType, EventRoleType, Family, Media, Name, NameType, Note, NoteType
 from gramps.gen.lib import Person, Place, PlaceName, PlaceRef, PlaceType, Source, SrcAttribute, StyledText, StyledTextTag, StyledTextTagType, Url, UrlType
 from gramps.gen.plug.menu import StringOption, PersonOption, BooleanOption, NumberOption, FilterOption, MediaOption
 from gramps.gui.dialog import WarningDialog, QuestionDialog2
@@ -213,27 +213,24 @@ def aldNoto(db, txn, fsNoto,EkzNotoj):
   # sercxi ekzistantan
   for nh in EkzNotoj:
     n = db.get_note_from_handle(nh)
-    for t in n.text.get_tags():
-      if t.name == "fs_sn" :
-        titolo = n.get()[t.ranges[0][0]:t.ranges[0][1]]
-        if titolo == fsNoto.subject:
-          return n
-  note = Note()
-  note.set_format(Note.FORMATTED)
-  if fsNoto.subject :
-    lenSub = len(fsNoto.subject)
-    tags = [  StyledTextTag("fs_sn", fsNoto.id,[(0, lenSub)])
-          , StyledTextTag(StyledTextTagType.BOLD, True,[(0, lenSub)])
-          , StyledTextTag(StyledTextTagType.FONTSIZE, 16,[(0, lenSub)])  ]
-    note.set_styledtext(StyledText(fsNoto.subject, tags))
-  note.append("\n\n"+(fsNoto.text or ''))
-  #note_type = NoteType()
-  #note_type.set((note_type, note_cust))
-  #if fsNoto.id :
-  # FARINDAĴO : FSID
-  db.add_note(note, txn)
-  db.commit_note(note, txn)
-  return note
+    titolo = _(n.type.xml_str())
+    if titolo == fsNoto.subject:
+      for t in n.text.get_tags():
+        if t.name == StyledTextTagType.LINK :
+          fsNotoId = t.value
+          if titolo == fsNoto.subject and fsNotoId=="_fsftid="+fsNoto.id :
+            return n
+  grNoto = Note()
+  grNoto.set_format(Note.FORMATTED)
+  grNoto.set_type(NoteType(fsNoto.subject))
+  if fsNoto.id :
+    # on met un tag de type lien sur le premier caractère pour mémoriser l'ID FamilySearch :
+    tags = [  StyledTextTag(StyledTextTagType.LINK,"_fsftid="+ fsNoto.id,[(0, 1)])]
+    # on ajoute un caractère invisible en début de texte :
+    grNoto.set_styledtext(StyledText("\ufeff"+fsNoto.text, tags))
+  db.add_note(grNoto, txn)
+  db.commit_note(grNoto, txn)
+  return grNoto
   
 def updFakto(db, txn, fsFakto, grFakto):
   if fsFakto.place :
@@ -474,7 +471,7 @@ class FsAlGr:
 
       elif fsid != '' :
         self.fs_gr[fsid] = person_handle
-    if not PersonFS.PersonFS.aki_sesio(vokanto):
+    if not PersonFS.PersonFS.aki_sesio(vokanto,self.vorteco):
       WarningDialog(_('Ne konekta al FamilySearch'))
       return
     progress.set_pass(_('Konstrui FSID listo por lokoj (2/11)'), vokanto.dbstate.db.get_number_of_places())
@@ -577,8 +574,9 @@ class FsAlGr:
         gedcomx.maljsonigi(self.fs_TreeImp,datumoj)
         datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/persons/%s/memories" % fsPersono.id)
         gedcomx.maljsonigi(self.fs_TreeImp,datumoj)
-    #for fsFam in self.fs_TreeImp._fam.values() :
-    #  fsFam.get_notes()
+      for fsFam in self.fs_TreeImp.relationships :
+        datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/couple-relationships/%s/notes" % fsFam.id)
+        gedcomx.maljsonigi(self.fs_TreeImp,datumoj)
     if self.vorteco >= 3:
       rezulto = gedcomx.jsonigi(self.fs_TreeImp)
       f = open('importo.out.json','w')

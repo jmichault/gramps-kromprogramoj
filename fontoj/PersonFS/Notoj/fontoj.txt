@@ -8,7 +8,7 @@ Dans gramps, on a une hiérarchie dépôt --> source --> citation
 dans FS, on a pour les sources saisies manuellement :
   * des dossiers personnels pour regrouper les sources, invisibles des autres utilisateurs.
   * des sources qui ont comme propriétés :
-    * date (absente de la norme gedcomx !)
+    * date (absente de la norme gedcomx !) (SourceDescription._date)
     * titre (texte monoligne) (SourceDescription.titles)
     * une url, ou un souvenir (SourceDescription.about)
     * référence (texte multiligne) (SourceDescription.citations)
