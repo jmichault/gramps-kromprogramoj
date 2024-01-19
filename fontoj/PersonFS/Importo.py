@@ -80,7 +80,13 @@ def kreiLoko(db, txn, fsPlace, parent):
   url = Url()
   url.path = 'https://api.familysearch.org/platform/places/description/'+fsPlace.id
   url.type = UrlType('FamilySearch')
-  place.add_url(url)
+  url2 = Url()
+  url2.path = fsPlace.links['place'].href.removesuffix('?flag=fsh')
+  url2.type = UrlType('FamilySearch')
+  tp = Place()
+  tp.add_url(url)
+  tp.add_url(url2)
+  place._merge_url_list(tp)
   nomo = fsPlace.display.name
   place_name = PlaceName()
   place_name.set_value( nomo )
@@ -115,6 +121,7 @@ def kreiLoko(db, txn, fsPlace, parent):
   fsPlace._handle = place.handle
   if FsAlGr.fs_gr_lokoj :
     FsAlGr.fs_gr_lokoj[url.path] = place.handle
+    FsAlGr.fs_gr_lokoj[url2.path] = place.handle
   return place
 
 
@@ -153,6 +160,7 @@ def aldLoko(db, txn, pl):
   t = gedcomx.Gedcomx()
   gedcomx.maljsonigi(t,datumoj)
   fsPlaceId = datumoj['places'][0]['id']
+  # FARINDAĴO : charger le lien place, et récupérer toutes les descriptions
   fsPlace = gedcomx.PlaceDescription._indekso.get(fsPlaceId)
   if fsPlace.jurisdiction :
     fsParentId = fsPlace.jurisdiction.resourceId
@@ -168,9 +176,16 @@ def aldLoko(db, txn, pl):
     url = Url()
     url.path = 'https://api.familysearch.org/platform/places/description/'+pl.id
     url.type = UrlType('FamilySearch')
-    grLoko2.add_url(url)
+    url2 = Url()
+    url2.path = fsPlace.links['place'].href.removesuffix('?flag=fsh')
+    url2.type = UrlType('FamilySearch')
+    tp = Place()
+    tp.add_url(url)
+    tp.add_url(url2)
+    grLoko2._merge_url_list(tp)
     if FsAlGr.fs_gr_lokoj :
       FsAlGr.fs_gr_lokoj[url.path] = grLoko2.handle
+      FsAlGr.fs_gr_lokoj[url2.path] = grLoko2.handle
     db.commit_place(grLoko2, txn)
     return grLoko2
 
@@ -184,8 +199,14 @@ def akiriLokoPerId(db, fsLoko):
   if not fsLoko.id:
     return None
   s_url = 'https://api.familysearch.org/platform/places/description/'+fsLoko.id
+  if hasattr(fsLoko,'links') and fsLoko.links and fsLoko.links.get('place') :
+    s_url2 = fsLoko.links['place'].href.removesuffix('?flag=fsh')
+  else :
+    s_url2 = None
   if FsAlGr.fs_gr_lokoj :
     place_handle=FsAlGr.fs_gr_lokoj.get(s_url)
+    if not place_handle :
+      place_handle=FsAlGr.fs_gr_lokoj.get(s_url2)
     if place_handle :
       try :
         return db.get_place_from_handle(place_handle)
@@ -227,7 +248,7 @@ def aldNoto(db, txn, fsNoto,EkzNotoj):
     # on met un tag de type lien sur le premier caractère pour mémoriser l'ID FamilySearch :
     tags = [  StyledTextTag(StyledTextTagType.LINK,"_fsftid="+ fsNoto.id,[(0, 1)])]
     # on ajoute un caractère invisible en début de texte :
-    grNoto.set_styledtext(StyledText("\ufeff"+fsNoto.text, tags))
+    grNoto.set_styledtext(StyledText("\ufeff"+(fsNoto.text or ''), tags))
   db.add_note(grNoto, txn)
   db.commit_note(grNoto, txn)
   return grNoto
