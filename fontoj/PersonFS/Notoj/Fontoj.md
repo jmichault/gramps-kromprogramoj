@@ -50,7 +50,7 @@
   * date=1721-11-21
   * titre=«Claude Dumas x Marie Barjat et Jean Dumas x Bénigne Meunier. France, Loire, Juré.»
   * url=«https://archives.loire.fr/ark:/51302/vta54d46fa1795267c1/daogrp/0/6»
-  * référence=«France, Loire : archives départementales.\ncôte : 2NUM9_117_2 - Juré.- Baptêmes, mariages, sépultures - 1720 - 1745\nvue 6/78.»
+  * référence=«France, Loire : archives départementales.\ncote : 2NUM9_117_2 - Juré.- Baptêmes, mariages, sépultures - 1720 - 1745\nvue 6/78.»
   * note=«note : deux mariages en …»
   * date de modification
   * raison de la modification
@@ -65,3 +65,14 @@
 
 
 # Exemple 2 : acte trouvé dans FS.
+* source = https://www.familysearch.org/platform/sources/descriptions/S1JY-V39
+  propriétés :
+  * id = descriptionId = S1JY-V39 
+    * = identifiant de la référence de citation, unique sur le site.
+  * about = "https://familysearch.org/ark:/61903/1:1:CP7Q-8PN2"
+    * = url de la citation
+  * title = Paul Gabriel Libaros, décès. "France, Index des décès enregistrés par l'Insee, 1970-2022"
+    * = titre de la référence de citation, modifiable.
+  * citation.value = "France, Index des décès enregistrés par l'Insee, 1970-2022", , &amp;lt;i&amp;gt;FamilySearch&amp;lt;/i&amp;gt; (https://familysearch.org/ark:/61903/1:1:CP7Q-8PN2 : 13 November 2022), Paul Gabriel Libaros, 1982.
+    * titre de la citation, généré par FS, non modifiable.
+

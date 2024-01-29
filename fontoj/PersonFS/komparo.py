@@ -296,7 +296,7 @@ def FaktoKomp(db, person, fsPerso, grEvent , fsFact ) :
     koloro = "yellow3"
   return ( koloro , titolo
         , grFaktoDato , grFaktoLoko
-        , fsFaktoDato , fsFaktoLoko
+        , fsFaktoDato , fsFaktoLoko , ''
         , False, 'fakto', grFakto_handle, fsFakto_id
         )
 
@@ -309,7 +309,7 @@ def NomojKomp(grPersono, fsPerso ) :
     res = list()
     res.append ( ( koloro , _trans.gettext('Name')
         , '', grNomo.get_surname() + ', ' + grNomo.first_name 
-        , '', fsNomo.akSurname() +  ', ' + fsNomo.akGiven()
+        , '', fsNomo.akSurname() +  ', ' + fsNomo.akGiven() , ''
         , False, 'nomo1', str(grNomo), fsNomo.id, grNomo.get_surname(), grNomo.first_name
         ))
     fsNomoj = fsPerso.names.copy()
@@ -325,14 +325,14 @@ def NomojKomp(grPersono, fsPerso ) :
           break
       res.append (( koloro , '  ' + _trans.gettext('Name')
         , '', grNomo.get_surname() + ', ' + grNomo.first_name 
-        , '', fsNomo.akSurname() +  ', ' + fsNomo.akGiven()
+        , '', fsNomo.akSurname() +  ', ' + fsNomo.akGiven() , ''
         , False, 'nomo', str(grNomo), fsNomo.id, grNomo.get_surname(), grNomo.first_name
         ))
     koloro = "yellow3"
     for fsN in fsNomoj :
       res.append (( koloro , '  ' + _trans.gettext('Name')
         , '', ''
-        , '', fsN.akSurname() +  ', ' + fsN.akGiven()
+        , '', fsN.akSurname() +  ', ' + fsN.akGiven() , ''
         , False, 'nomo', None, fsN.id
         ))
     return res
@@ -482,7 +482,7 @@ def aldGepKomp(db, grPersono, fsPersono ) :
   if father or fsFather :
     res.append ( ( koloro , _trans.gettext('Father')
         , grperso_datoj(db, father) , ' ' + father_name + ' [' + fatherFsid  + ']'
-        , fsperso_datoj(db, fsFather) , fs_father_name + ' [' + fsfather_id + ']'
+        , fsperso_datoj(db, fsFather) , fs_father_name + ' [' + fsfather_id + ']' , ''
         , False, 'patro', father_handle ,fatherFsid
         ) )
   koloro = "orange"
@@ -495,7 +495,7 @@ def aldGepKomp(db, grPersono, fsPersono ) :
   if mother or fsMother :
     res.append( ( koloro , _trans.gettext('Mother')
         , grperso_datoj(db, mother) , ' ' + mother_name + ' [' + motherFsid + ']'
-        , fsperso_datoj(db, fsMother) , fs_mother_name + ' [' + fsmother_id + ']'
+        , fsperso_datoj(db, fsMother) , fs_mother_name + ' [' + fsmother_id + ']' , ''
         , False, 'patrino', mother_handle ,motherFsid
         ) )
   return res
@@ -553,7 +553,7 @@ def aldEdzKompNotoj(db, grPersono, fsPerso) :
       fsNomo = fsEdzo.akPrefNomo()
       res.append( ( koloro , _trans.gettext('Spouse')
                 , grperso_datoj(db, edzo) , edzoNomo.get_surname() + ', ' + edzoNomo.first_name + ' [' + edzoFsid + ']'
-          , fsperso_datoj(db, fsEdzo) , fsNomo.akSurname() +  ', ' + fsNomo.akGiven()  + ' [' + fsEdzoId  + ']'
+          , fsperso_datoj(db, fsEdzo) , fsNomo.akSurname() +  ', ' + fsNomo.akGiven()  + ' [' + fsEdzoId  + ']' , ''
           , False, 'edzo', edzo_handle ,fsEdzoId , family.handle, fsParoId
            ) )
       # familiaj notoj
@@ -572,7 +572,7 @@ def aldEdzKompNotoj(db, grPersono, fsPerso) :
       fsNomo = gedcomx.Name()
     res.append( ( koloro , _trans.gettext('Spouse')
                 , '', ''
-          , fsperso_datoj(db, fsEdzo) , fsNomo.akSurname() +  ', ' + fsNomo.akGiven()  + ' [' + str(fsEdzoId)  + ']'
+          , fsperso_datoj(db, fsEdzo) , fsNomo.akSurname() +  ', ' + fsNomo.akGiven()  + ' [' + str(fsEdzoId)  + ']' , ''
                 , False, 'edzo', None  ,fsEdzoId , None, paro.id
            ) )
   return res
@@ -634,7 +634,7 @@ def aldEdzKomp(db, grPersono, fsPerso) :
       fsNomo = fsEdzo.akPrefNomo()
       res.append( ( koloro , _trans.gettext('Spouse')
                 , grperso_datoj(db, edzo) , edzoNomo.get_surname() + ', ' + edzoNomo.first_name + ' [' + edzoFsid + ']'
-          , fsperso_datoj(db, fsEdzo) , fsNomo.akSurname() +  ', ' + fsNomo.akGiven()  + ' [' + fsEdzoId  + ']'
+          , fsperso_datoj(db, fsEdzo) , fsNomo.akSurname() +  ', ' + fsNomo.akGiven()  + ' [' + fsEdzoId  + ']' , ''
           , False, 'edzo', edzo_handle ,fsEdzoId , family.handle, fsParoId
            ) )
       # familiaj eventoj (edziĝo, …)
@@ -695,7 +695,7 @@ def aldEdzKomp(db, grPersono, fsPerso) :
           fsValoro = fsFaktoPriskribo +' @ '+ fsFaktoLoko
         res.append( ( koloro , ' '+titolo
           , grFaktoDato , grValoro
-          , fsFaktoDato , fsValoro
+          , fsFaktoDato , fsValoro , ''
         , False, 'edzoFakto', eventref.ref ,fsFakto_id, family.handle, fsParo_id
             ) )
       # faktoj en FS, ne en GR :
@@ -719,7 +719,7 @@ def aldEdzKomp(db, grPersono, fsPerso) :
           fsValoro = fsFaktoPriskribo +' @ '+ fsFaktoLoko
         res.append( ( koloro , ' '+titolo
           , '' , ''
-          , fsFaktoDato , fsValoro
+          , fsFaktoDato , fsValoro , ''
           , False, 'edzoFakto', None ,fsFakto.id, family.handle, fsParo.id
          ) )
         
@@ -749,7 +749,7 @@ def aldEdzKomp(db, grPersono, fsPerso) :
         fsNomo = fsInfano.akPrefNomo()
         res.append( ( koloro ,'    '+ _trans.gettext('Child')
                 , grperso_datoj(db, infano) , infanoNomo.get_surname() + ', ' + infanoNomo.first_name + ' [' + infanoFsid + ']'
-                , fsperso_datoj(db, fsInfano), fsNomo.akSurname() +  ', ' + fsNomo.akGiven() + ' [' + fsInfanoId + ']'
+                , fsperso_datoj(db, fsInfano), fsNomo.akSurname() +  ', ' + fsNomo.akGiven() + ' [' + fsInfanoId + ']' , ''
           , False, 'infano', child_ref.ref  ,fsInfanoId, family.handle, fsParoId
            ) )
       toRemove=set()
@@ -766,7 +766,7 @@ def aldEdzKomp(db, grPersono, fsPerso) :
               fsNomo = gedcomx.Name()
             res.append( ( koloro ,'    '+ _trans.gettext('Child')
                 , '', ''
-                , fsperso_datoj(db, fsInfano), fsNomo.akSurname() +  ', ' + fsNomo.akGiven() + ' [' + fsInfanoId + ']'
+                , fsperso_datoj(db, fsInfano), fsNomo.akSurname() +  ', ' + fsNomo.akGiven() + ' [' + fsInfanoId + ']' , ''
                 , False, 'infano', None  ,fsInfanoId, family.handle, fsParoId
                ) )
             toRemove.add(triopo)
@@ -787,7 +787,7 @@ def aldEdzKomp(db, grPersono, fsPerso) :
       fsNomo = gedcomx.Name()
     res.append( ( koloro , _trans.gettext('Spouse')
                 , '', ''
-          , fsperso_datoj(db, fsEdzo) , fsNomo.akSurname() +  ', ' + fsNomo.akGiven()  + ' [' + str(fsEdzoId)  + ']'
+          , fsperso_datoj(db, fsEdzo) , fsNomo.akSurname() +  ', ' + fsNomo.akGiven()  + ' [' + str(fsEdzoId)  + ']' , ''
                 , False, 'edzo', None  ,fsEdzoId , None, paro.id
            ) )
     toRemove=set()
@@ -803,7 +803,7 @@ def aldEdzKomp(db, grPersono, fsPerso) :
           fsNomo = gedcomx.Name()
         res.append( ( koloro ,'    '+ _trans.gettext('Child')
                 , '', ''
-                , fsperso_datoj(db, fsInfano), fsNomo.akSurname() +  ', ' + fsNomo.akGiven() + ' [' + fsInfanoId + ']'
+                , fsperso_datoj(db, fsInfano), fsNomo.akSurname() +  ', ' + fsNomo.akGiven() + ' [' + fsInfanoId + ']' , ''
                 , False, 'infano', None  ,fsInfanoId, None, paro.id
               ) )
         toRemove.add(triopo)
@@ -818,7 +818,7 @@ def aldEdzKomp(db, grPersono, fsPerso) :
       fsNomo = gedcomx.Name()
     res.append( ( koloro ,_trans.gettext('Child')
                 , '', ''
-                , fsperso_datoj(db, fsInfano), fsNomo.akSurname() +  ', ' + fsNomo.akGiven() + ' [' + fsInfanoId + ']'
+                , fsperso_datoj(db, fsInfano), fsNomo.akSurname() +  ', ' + fsNomo.akGiven() + ' [' + fsInfanoId + ']' , ''
                 , False, 'infano', None  ,fsInfanoId, None, None
            ) )
   return res
@@ -902,7 +902,7 @@ def aldAliajFaktojKomp(db, person, fsPerso ) :
       utila.ligi_gr_fs(db,event,fsFakto_id)
     res.append( [ koloro , titolo
         , grFaktoDato , grValoro
-        , fsFaktoDato , fsValoro
+        , fsFaktoDato , fsValoro , ''
         , False, 'fakto', grFakto.ref  ,fsFakto_id
         ] )
   koloro = "yellow3"
@@ -934,7 +934,7 @@ def aldAliajFaktojKomp(db, person, fsPerso ) :
       fsValoro = fsFaktoPriskribo +' @ '+ fsFaktoLoko
     res.append( [ koloro , titolo
         , '' , ''
-        , fsFaktoDato , fsValoro
+        , fsFaktoDato , fsValoro , ''
         , False, 'fakto', None  ,fsFakto.id
         ] )
   return res
@@ -985,11 +985,11 @@ def kompariFsGr(fsPersono,grPersono,db,model=None,dupdok=False):
 
   if(model and len(listres)) :
     if not PersonFS.PersonFS.fs_Tree:
-      esenco_id = model.add(['white',_('Esenco'),'==========','============================','==========',colFS,False,'Esenco',None,None,None,None]  )
+      esenco_id = model.add(['white',_('Esenco'),'==========','============================','==========',colFS,'',False,'Esenco',None,None,None,None]  )
     elif FS_Esenco:
-      esenco_id = model.add(['red',_('Esenco'),'==========','============================','==========',colFS,False,'Esenco',None,None,None,None]  )
+      esenco_id = model.add(['red',_('Esenco'),'==========','============================','==========',colFS,'',False,'Esenco',None,None,None,None]  )
     else:
-      esenco_id = model.add(['green',_('Esenco'),'==========','============================','==========',colFS,False,'Esenco',None,None,None,None]  )
+      esenco_id = model.add(['green',_('Esenco'),'==========','============================','==========',colFS,'',False,'Esenco',None,None,None,None]  )
     for linio in listres:
       model.add( linio,node=esenco_id)
 
@@ -999,11 +999,11 @@ def kompariFsGr(fsPersono,grPersono,db,model=None,dupdok=False):
       if linio[0] != "green" : FS_Nomo = True
     if model :
       if not PersonFS.PersonFS.fs_Tree:
-        nomo_id = model.add(['white',_('Aliaj nomoj'),'==========','============================','==========',colFS,False,'Aliaj nomoj',None,None,None,None]  )
+        nomo_id = model.add(['white',_('Aliaj nomoj'),'==========','============================','==========',colFS,'',False,'Aliaj nomoj',None,None,None,None]  )
       elif FS_Nomo:
-        nomo_id = model.add(['red',_('Aliaj nomoj'),'==========','============================','==========',colFS,False,'Aliaj nomoj',None,None,None,None]  )
+        nomo_id = model.add(['red',_('Aliaj nomoj'),'==========','============================','==========',colFS,'',False,'Aliaj nomoj',None,None,None,None]  )
       else:
-        nomo_id = model.add(['green',_('Aliaj nomoj'),'==========','============================','==========',colFS,False,'Aliaj nomoj',None,None,None,None]  )
+        nomo_id = model.add(['green',_('Aliaj nomoj'),'==========','============================','==========',colFS,'',False,'Aliaj nomoj',None,None,None,None]  )
       for linio in resNomoj:
         model.add( linio,node=nomo_id)
 
@@ -1014,11 +1014,11 @@ def kompariFsGr(fsPersono,grPersono,db,model=None,dupdok=False):
     if linio[0] != "green" : FS_Gepatro = True
   if(model and len(res)) :
     if not PersonFS.PersonFS.fs_Tree:
-      gepatro_id = model.add(['white',_('Gepatroj'),'==========','============================','==========',colFS,False,'Gepatroj',None,None,None,None]  )
+      gepatro_id = model.add(['white',_('Gepatroj'),'==========','============================','==========',colFS,'',False,'Gepatroj',None,None,None,None]  )
     elif FS_Gepatro:
-      gepatro_id = model.add(['red',_('Gepatroj'),'==========','============================','==========',colFS,False,'Gepatroj',None,None,None,None]  )
+      gepatro_id = model.add(['red',_('Gepatroj'),'==========','============================','==========',colFS,'',False,'Gepatroj',None,None,None,None]  )
     else:
-      gepatro_id = model.add(['green',_('Gepatroj'),'==========','============================','==========',colFS,False,'Gepatroj',None,None,None,None]  )
+      gepatro_id = model.add(['green',_('Gepatroj'),'==========','============================','==========',colFS,'',False,'Gepatroj',None,None,None,None]  )
     for linio in res:
       model.add( linio,node=gepatro_id)
 
@@ -1028,11 +1028,11 @@ def kompariFsGr(fsPersono,grPersono,db,model=None,dupdok=False):
     if linio[0] != "green" : FS_Familio = True
   if(model and len(res)) :
     if not PersonFS.PersonFS.fs_Tree:
-      familio_id = model.add(['white',_('Familioj'),'==========','============================','==========',colFS,False,'Familioj',None,None,None,None]  )
+      familio_id = model.add(['white',_('Familioj'),'==========','============================','==========',colFS,'',False,'Familioj',None,None,None,None]  )
     elif FS_Familio:
-      familio_id = model.add(['red',_('Familioj'),'==========','============================','==========',colFS,False,'Familioj',None,None,None,None]  )
+      familio_id = model.add(['red',_('Familioj'),'==========','============================','==========',colFS,'',False,'Familioj',None,None,None,None]  )
     else:
-      familio_id = model.add(['green',_('Familioj'),'==========','============================','==========',colFS,False,'Familioj',None,None,None,None]  )
+      familio_id = model.add(['green',_('Familioj'),'==========','============================','==========',colFS,'',False,'Familioj',None,None,None,None]  )
     for linio in res:
        model.add( linio,node=familio_id)
 
@@ -1042,11 +1042,11 @@ def kompariFsGr(fsPersono,grPersono,db,model=None,dupdok=False):
     if linio[0] != "green" : FS_Fakto = True
   if model and len(res):
     if not PersonFS.PersonFS.fs_Tree:
-      fakto_id = model.add(['white',_('Faktoj'),'==========','============================','==========',colFS,False,'Faktoj',None,None,None,None]  )
+      fakto_id = model.add(['white',_('Faktoj'),'==========','============================','==========',colFS,'',False,'Faktoj',None,None,None,None]  )
     elif FS_Fakto:
-      fakto_id = model.add(['red',_('Faktoj'),'==========','============================','==========',colFS,False,'Faktoj',None,None,None,None]  )
+      fakto_id = model.add(['red',_('Faktoj'),'==========','============================','==========',colFS,'',False,'Faktoj',None,None,None,None]  )
     else:
-      fakto_id = model.add(['green',_('Faktoj'),'==========','============================','==========',colFS,False,'Faktoj',None,None,None,None]  )
+      fakto_id = model.add(['green',_('Faktoj'),'==========','============================','==========',colFS,'',False,'Faktoj',None,None,None,None]  )
     for linio in res:
       model.add( linio,node=fakto_id)
 

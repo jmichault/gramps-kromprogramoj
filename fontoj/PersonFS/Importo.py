@@ -32,7 +32,7 @@ from gramps.gen.db import DbTxn
 from gramps.gen.config import config
 from gramps.gen.const import GRAMPS_LOCALE as glocale
 from gramps.gen.lib import Attribute, ChildRef, Citation, Date, Event, EventRef, EventType, EventRoleType, Family, Media, Name, NameType, Note, NoteType
-from gramps.gen.lib import Person, Place, PlaceName, PlaceRef, PlaceType, Source, SrcAttribute, StyledText, StyledTextTag, StyledTextTagType, Url, UrlType
+from gramps.gen.lib import Person, Place, PlaceName, PlaceRef, PlaceType, RepoRef, Repository, RepositoryType, Source, SourceMediaType, SrcAttribute, StyledText, StyledTextTag, StyledTextTagType, Url, UrlType
 from gramps.gen.plug.menu import StringOption, PersonOption, BooleanOption, NumberOption, FilterOption, MediaOption
 from gramps.gui.dialog import WarningDialog, QuestionDialog2
 from gramps.gui.plug import MenuToolOptions, PluginWindows
@@ -136,7 +136,6 @@ def aldLoko(db, txn, pl):
     except:
       pass
   # sercxi por loko 
-  #import pdb; pdb.set_trace()
   grLoko = akiriLokoPerId(db, pl)
   if grLoko:
     pl._handle = grLoko.handle
@@ -256,7 +255,7 @@ def aldNoto(db, txn, fsNoto,EkzNotoj):
 def updFakto(db, txn, fsFakto, grFakto):
   if fsFakto.place :
     if not hasattr(fsFakto.place,'normalized') :
-      from objbrowser import browse ;browse(locals())
+      #from objbrowser import browse ;browse(locals())
       print("lieu pas normalisé : "+fsFakto.place.original)
       plantage()
     grLoko = akiriLokoPerId(db, fsFakto.place)
@@ -284,7 +283,7 @@ def aldFakto(db, txn, fsFakto, obj):
   grLokoHandle = None
   if fsFakto.place :
     if not hasattr(fsFakto.place,'normalized') :
-      from objbrowser import browse ;browse(locals())
+      #from objbrowser import browse ;browse(locals())
       print("lieu par normalisé : "+fsFakto.place.original)
       plantage()
     grLoko = akiriLokoPerId(db, fsFakto.place)
@@ -367,6 +366,30 @@ def aldNomo(db, txn, fsNomo, grPerson):
 def aldNomoj(db, txn, fsPersono, grPerson):
   for fsNomo in fsPersono.names :
     aldNomo(db, txn, fsNomo, grPerson)
+
+def akFontDatoj(fsTree):
+  # récupère les dates des sources, qui sont absentes des API
+  for sd in fsTree.sourceDescriptions :
+    if hasattr(sd,'_date'):
+      continue
+    sd._date = None
+    sd._collectionUri = None
+    sd._collection = None
+    
+    r = tree._FsSeanco.get_url("/service/tree/links/source/%s" % sd.id,{"Accept": "application/json"})
+    if r and r.text :
+      datumoj = r.json()
+      #gedcomx.maljsonigi(fsTree,datumoj)
+      e = datumoj.get('event')
+      if e:
+        strFormal = e.get('eventDate')
+        d= gedcomx.Date()
+        d.original=strFormal
+        d.formal = gedcomx.dateformal.DateFormal(strFormal)
+        sd._date = d
+      sd._collectionUri = datumoj.get('fsCollectionUri')
+      if sd._collectionUri:
+        sd._collection = sd._collectionUri.removeprefix('https://www.familysearch.org/platform/records/collections/')
 
 class FsAlGr:
   # 
@@ -586,7 +609,7 @@ class FsAlGr:
     # notoj , fontoj kaj memoroj
     if self.notoj or self.fontoj:
       progress.set_pass(_('Elŝutante notojn… (7/11)'),len(self.fs_TreeImp.persons))
-      print(_("Elŝutante notojn…"))
+      print(_("Elŝutante notojn kaj fontojn…"))
       for fsPersono in self.fs_TreeImp.persons :
         progress.step()
         datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/persons/%s/notes" % fsPersono.id)
@@ -598,6 +621,9 @@ class FsAlGr:
       for fsFam in self.fs_TreeImp.relationships :
         datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/couple-relationships/%s/notes" % fsFam.id)
         gedcomx.maljsonigi(self.fs_TreeImp,datumoj)
+        datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/couple-relationships/%s/sources" % fsFam.id)
+        gedcomx.maljsonigi(self.fs_TreeImp,datumoj)
+      akFontDatoj(self.fs_TreeImp)
     if self.vorteco >= 3:
       rezulto = gedcomx.jsonigi(self.fs_TreeImp)
       f = open('importo.out.json','w')
@@ -794,50 +820,161 @@ class FsAlGr:
     if not sourceDescription : return
     # sercxi ekzistantan
     trovita = False
-    #for s in self.dbstate.db.iter_sources():
-    for sh in self.dbstate.db.get_source_handles() :
-      s = self.dbstate.db.get_source_from_handle(sh)
-      if s.abbrev == "FamilySearch " + sourceDescription.id :
-        trovita = True
-        break
-      for attr in s.get_attribute_list():
+    # sercxi ekzistantan kun id
+    for ch in self.dbstate.db.get_citation_handles() :
+      c = self.dbstate.db.get_citation_from_handle(ch)
+      for attr in c.get_attribute_list():
         if attr.get_type() == '_FSFTID' and attr.get_value() == sourceDescription.id :
           trovita = True
-      if trovita: break
-    if not trovita :
+          print(" citation trouvée _FSFTID="+sourceDescription.id)
+          return c
+    print(" citation pas trouvée _FSFTID="+sourceDescription.id)
+    deponejo = None
+    sTitolo = None
+    cTitolo = None
+    komNoto = '\n'
+    posizio = None
+    konfido = None
+    #import pdb; pdb.set_trace()
+    if len(sourceDescription.titles):
+      cTitolo = next(iter(sourceDescription.titles)).value
+    if len(sourceDescription.citations):
+      sTitolo = next(iter(sourceDescription.citations)).value
+    if sourceDescription.resourceType == 'FSREADONLY':
+      deponejo = 'FamilySearch'
+      linioj = sTitolo.split("\"") 
+      if len(linioj) >=3 :
+        sTitolo = linioj[1]
+        komNoto = komNoto + '\n'.join(linioj[2:])
+    if cTitolo and sourceDescription.resourceType == 'DEFAULT':
+      linioj = sTitolo.split("\n") 
+      if len(linioj) >= 3 : #and linioj[0].find(_('Repository')+" :")==0 :
+        deponejo = linioj[0].removeprefix(_('Repository')+" :").strip()
+        # FARINDAĴO : essayer d'autres langues ?
+        sTitolo = linioj[1].removeprefix(_('Source:')).strip()
+        posizio = linioj[2].removeprefix(_('Volume/Page:')).strip()
+        if len(linioj) >= 4 :
+          konfido = linioj[3].removeprefix(_('Confidence:')).strip()
+      elif len(linioj) >=1 :
+        sTitolo = linioj[0]
+    r = None
+    if deponejo :
+      self.dbstate.db.dbapi.execute("select handle from repository where name=?",[deponejo])
+      datumoj = self.dbstate.db.dbapi.fetchone()
+      if datumoj and datumoj[0] :
+        rh = datumoj[0]
+      else :
+        r = Repository()
+        r.set_name(deponejo)
+        rtype = RepositoryType()
+        rtype.set((RepositoryType.WEBSITE))
+        r.set_type(rtype)
+        if deponejo == 'FamilySearch' :
+          url = Url()
+          url.path = 'https://www.familysearch.org/'
+          url.set_type(UrlType.WEB_HOME)
+          r.add_url(url)
+        self.dbstate.db.add_repository(r, self.txn)
+        rh = r.handle
+    #  repo_ref = RepoRef()
+    #  repo_ref.set_reference_handle(rh)
+    #  repo_ref.set_media_type(SourceMediaType.ELECTRONIC)
+    #  s.add_repo_reference(repo_ref)
+    s = None
+    if sTitolo and not s and hasattr(sourceDescription,'_collection') and sourceDescription._collection:
+      # recherche de la source par son numéro de collection
+      s = self.dbstate.db.get_source_from_gramps_id('FS_coll_'+sourceDescription._collection)
+    if sTitolo :
+      # recherche de la source par son titre
+      self.dbstate.db.dbapi.execute("select handle from source where title=?",[sTitolo])
+      datumoj = self.dbstate.db.dbapi.fetchone()
+      if datumoj and datumoj[0] :
+        sTmp = self.dbstate.db.get_source_from_handle(datumoj[0])
+        if deponejo :
+          # FARINDAĴO
+          s = sTmp
+        else:
+          s = sTmp
+    if sTitolo and not s :
+      # on crée la source
       s = Source()
+      if hasattr(sourceDescription,'_collection') and sourceDescription._collection:
+        s.gramps_id = 'FS_coll_'+sourceDescription._collection
+      if r :
+        rr = RepoRef()
+        rr.ref = r.handle
+        rr.set_media_type( SourceMediaType.ELECTRONIC)
+        s.add_repo_reference(rr)
       if len(sourceDescription.descriptions):
         description = next(iter(sourceDescription.descriptions))
         if description and description.value:
           s.set_description(description.value)
-      if len(sourceDescription.titles):
-        title = next(iter(sourceDescription.titles))
-        if title and title.value:
-          s.set_title(title.value)
+      s.set_title(sTitolo)
+      if hasattr(sourceDescription,'_collectionUri') and sourceDescription._collectionUri:
+        attr = SrcAttribute()
+        attr.set_type(_('Internet Address'))
+        attr.set_value('https://www.familysearch.org/search/collection/'+sourceDescription._collection)
+        s.add_attribute(attr)
       # FARINDAĴO : Elekti aŭtoro de SourceDescriptionId
       if len(sourceDescription.authors):
         s.set_author(next(iter(sourceDescription.authors)))
       #if len(sourceDescription.links) and 'source-reference' in sourceDescription.links:
       #  link = sourceDescription.links['source-reference']
       #  s.set_publication_info(link.href)
-      if sourceDescription.about:
-        s.set_publication_info(sourceDescription.about)
-      # FS ID
-      s.abbrev = "FamilySearch " + sourceDescription.id
-      attr = SrcAttribute()
-      attr.set_type('_FSFTID')
-      attr.set_value(sourceDescription.id)
-      s.add_attribute(attr)
+      #s.abbrev = "FamilySearch " + ???
       self.dbstate.db.add_source(s,self.txn)
       self.dbstate.db.commit_source(s,self.txn)
     # sercxi ekzistantan citaĵon
     for ch in obj.citation_list :
       c = self.dbstate.db.get_citation_from_handle(ch)
-      if c.get_reference_handle() == s.handle :
+      if get_fsftid(c) == sourceDescription.id :
         return c
     citation = Citation()
-    citation.set_reference_handle(s.get_handle())
+    if posizio :
+      citation.set_page(posizio)
+    if konfido :
+      if konfido == _('Very High') :
+        citation.set_confidence_level(Citation.CONF_VERY_HIGH)
+      elif konfido == _('High') :
+        citation.set_confidence_level(Citation.CONF_HIGH)
+      elif konfido == _('Normal') :
+        citation.set_confidence_level(Citation.CONF_NORMAL)
+      elif konfido == _('Low') :
+        citation.set_confidence_level(Citation.CONF_LOW)
+      elif konfido == _('Very Low') :
+        citation.set_confidence_level(Citation.CONF_VERY_LOW)
+    if hasattr(sourceDescription,'_date') and sourceDescription._date:
+      citation.date = fsdato_al_gr(sourceDescription._date)
+    if s :
+      citation.set_reference_handle(s.get_handle())
     self.dbstate.db.add_citation(citation,self.txn)
+    self.dbstate.db.commit_citation(citation,self.txn)
+    attr = SrcAttribute()
+    attr.set_type('_FSFTID')
+    attr.set_value(sourceDescription.id)
+    citation.add_attribute(attr)
+    if sourceDescription.about :
+      attr = SrcAttribute()
+      attr.set_type(_("Internet Address"))
+      attr.set_value(sourceDescription.about)
+      citation.add_attribute(attr)
+    if cTitolo or len(sourceDescription.notes) :
+      n = Note()
+      tags=[]
+      n.set_type(NoteType(NoteType.CITATION))
+      n.append(cTitolo)
+      tags.append(StyledTextTag(StyledTextTagType.BOLD, True,[(0, len(cTitolo))]))
+      n.append(komNoto)
+      for fsN in sourceDescription.notes :
+        if fsN.subject :
+          n.append(fsN.subject)
+          tags.append(StyledTextTag(StyledTextTagType.BOLD, True,[(len(str(n.text)),len(str(n.text))+ len(fsN.subject))]))
+        if fsN.text :
+          n.append(fsN.text)
+      n.text.set_tags(tags)
+      self.dbstate.db.add_note(n, self.txn)
+      self.dbstate.db.commit_note(n, self.txn)
+      citation.add_note(n.handle)
     self.dbstate.db.commit_citation(citation,self.txn)
     obj.add_citation(citation.handle)
     
