@@ -29,7 +29,7 @@ register(
     description = _("Lokpurigado helpas kompletigi lokojn uzante OpenStreetMap."),
     status = STABLE,
     version = '1.0.18',
-    gramps_target_version = '5.2',
+    gramps_target_version = '5.1',
     fname = "lokpurigado.py",
     gramplet = 'Lokpurigado',
     navtypes=["Place"],

@@ -38,6 +38,6 @@ register(GRAMPLET,
          detached_width = 510,
          detached_height = 480,
          version = '1.0.32',
-         gramps_target_version = '5.2',
+         gramps_target_version = '5.1',
          include_in_listing = True,
         )
