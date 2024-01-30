@@ -775,15 +775,15 @@ class PersonFS(Gramplet):
     row = self.modelKomp.model.get_iter((path,))
     regximo = self.cbReg.get_active_id()
     if regximo != 'REG_fontoj' :
-      tipo=self.modelKomp.model.get_value(row, 7)
+      tipo=self.modelKomp.model.get_value(row, 8)
       #if tipo != 'fakto' and tipo != 'edzoFakto' :
       if (     tipo != 'fakto' and tipo != 'edzoFakto' and tipo != 'nomo' and tipo != 'nomo1' and tipo != 'edzo' 
          and tipo != 'NotoP' and tipo != 'NotoF'
          and tipo != 'infano'
          ) :
-        self.modelKomp.model.set_value(row, 6, False)
+        self.modelKomp.model.set_value(row, 7, False)
         OkDialog(_('Pardonu, nur edzaj, eventaj, nomaj aŭ notaj linioj povas esti elektitaj.'))
-        print("  toggled:tipo="+tipo)
+        print("  toggled:tipo="+str(tipo))
 
 
   def CB_Regximo_changed(self, dummy):
@@ -794,8 +794,8 @@ class PersonFS(Gramplet):
         (_('Gramps Valoro'), 4, 300),
         (_('FS Dato'), 5, 120),
         (_('FS Valoro'), 6, 300),
-        (_('x'), NOSORT, 0),
-        ('x', 8, 20, TOGGLE,True,self.toggled),
+        (' ', NOSORT, 1),
+        ('x', 8, 5, TOGGLE,True,self.toggled),
         (_('xTipo'), NOSORT, 0),
         (_('xGr'), NOSORT, 0),
         (_('xFs'), NOSORT, 0),
@@ -809,8 +809,8 @@ class PersonFS(Gramplet):
         (_('Gramps Valoro'), 4, 300),
         (_('FS Titolo'), 5, 120),
         (_('FS Valoro'), 6, 300),
-        (_('x'), NOSORT, 0),
-        ('x', 8, 20, TOGGLE,True,self.toggled),
+        (' ', NOSORT, 1),
+        ('x', 8, 10, TOGGLE,True,self.toggled),
         (_('xTipo'), NOSORT, 0),
         (_('xGr'), NOSORT, 0),
         (_('xFs'), NOSORT, 0),
@@ -825,7 +825,7 @@ class PersonFS(Gramplet):
         (_('FS Dato'), 5, 100),
         (_('FS Titolo'), 6, 120),
         (_('FS URL'), 7, 200),
-        ('x', 8, 20, TOGGLE,True,self.toggled),
+        ('x', 8, 10, TOGGLE,True,self.toggled),
         (_('xTipo'), NOSORT, 0),
         (_('xGr'), NOSORT, 0),
         (_('xFs'), NOSORT, 0),
@@ -1484,11 +1484,13 @@ class PersonFS(Gramplet):
               referenco = d.name + '\n' + referenco
         koloro = "white"
         fsTeksto = colFS
+        fsURL = ""
+        fsDato = ""
+        fsTitolo = ""
         fsid = utila.get_fsftid(c)
         for x in fsFontoj :
           if x.descriptionId == fsid :
             sd =  gedcomx.SourceDescription._indekso.get(x.descriptionId) or gedcomx.SourceDescription()
-            fsTitolo = ""
             for y in sd.titles :
               fsTitolo += y.value
             if len(sd.titles):
@@ -1507,11 +1509,8 @@ class PersonFS(Gramplet):
                 fsTeksto = fsTeksto+fsN.subject
               if fsN.text :
                 fsTeksto = fsTeksto+fsN.text
-            fsURL = ""
             if hasattr(sd,'_date'):
               fsDato = str(sd._date)
-            else :
-              fsDato = ""
             if hasattr(sd,'about'):
               fsURL=sd.about
             koloro = "orange"

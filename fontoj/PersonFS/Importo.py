@@ -842,10 +842,11 @@ class FsAlGr:
       sTitolo = next(iter(sourceDescription.citations)).value
     if sourceDescription.resourceType == 'FSREADONLY':
       deponejo = 'FamilySearch'
-      linioj = sTitolo.split("\"") 
-      if len(linioj) >=3 :
-        sTitolo = linioj[1]
-        komNoto = komNoto + '\n'.join(linioj[2:])
+      if sTitolo :
+        linioj = sTitolo.split("\"") 
+        if len(linioj) >=3 :
+          sTitolo = linioj[1]
+          komNoto = komNoto + '\n'.join(linioj[2:])
     if cTitolo and sourceDescription.resourceType == 'DEFAULT':
       linioj = sTitolo.split("\n") 
       if len(linioj) >= 3 : #and linioj[0].find(_('Repository')+" :")==0 :

@@ -249,8 +249,8 @@ def SeksoKomp(grPersono, fsPersono ) :
     koloro = "green"
   return ( koloro , _('Sekso:')
         , '', grSekso
-        , '', fsSekso
-        , None, 'sekso', None, None
+        , '', fsSekso, ''
+        , False, 'sekso', None, None
         ) 
 
 def FaktoKomp(db, person, fsPerso, grEvent , fsFact ) :
