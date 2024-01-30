@@ -1,17 +1,12 @@
-plugins for gramps 5.2
+plugins for gramps 5.1 ( >= 5.1.6)
 
 # install :
-* open the plugin manager («puzzle» icon, or Edit menu-->Plugin manager)
-* go to the «Projects» tab
-  * click on the + button (bottom left), and enter:
-    * «Project name:»: «jmichault» (or whatever you want)
-    * «URL:»: «<https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps52>»
-    * click on «Validate»
-  * check the box to the left of the new project to activate it.  
-  The project plugins are now available in the «Plugins» tab
-* go to the «Plugins» tab
-  * search for PersonFS
-  * click «Install»
+* open Preferences
+* In «Where to check:», put :
+  «<https://github.com/jmichault/gramps-kromprogramoj/raw/gramps51>»
+* click on «Close»
+* open menu «Help» --> «Plugin Manager»
+* plugins appears in the list.
 
 # content :
 * PersonFS: an interface with FamilySearch.

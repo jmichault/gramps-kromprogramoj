@@ -1,18 +1,12 @@
-iuj kromprogramoj por "gramps" 5.2
+iuj kromprogramoj por "gramps" 5.1
 
 # instalado :
-* Malfermu la aldonaĵadministranton ("puzlo" ikono aŭ Redakti menuon --> Aldonaĵadministrilon)
-* iru al la langeto "Projektoj".
-  * alklaku la butonon + (maldekstre malsupre), kaj enigu:
-    * "Nomo de la projekto:": "jmichault" (aŭ kion ajn vi volas)
-    * "URL:": "<https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps52>"
-    * «URL :» : «<https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps52>»
-    * alklaku "Valigiti"
-    * marku la skatolon maldekstre de la nova projekto por aktivigi ĝin.
-       La projektaj kromaĵoj nun haveblas en la langeto "Kromaĵoj".
-* iru al la langeto "Kromaĵoj".
-  * serĉu la kromprogramon, kiu interesas vin.
-  * alklaku "Instali"
+* malfermi Agordojn
+* En "Kie kontroli:", metu:
+    "<https://github.com/jmichault/gramps-kromprogramoj/raw/gramps51>"
+* alklaku "Fermu"
+* malfermu la menuon "Helpo" --> "Kromprograma administranto"
+* Kromprogramoj aperas en la listo.
 
 # kromoj:
   * PersonFS: interfaco kun FamilySearch.

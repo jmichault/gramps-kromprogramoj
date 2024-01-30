@@ -1,18 +1,13 @@
 
-greffons pour gramps 5.2
+greffons pour gramps 5.1 ( >= 5.1.6)
 
 # installation :
-* ouvrez le gestionnaire de greffons (icône «puzzle», ou menu Édition-->Gestionnaire de greffons)
-* allez à l'onglet «Projets»
-  * cliquez sur le bouton + (en bas à gauche), et entrez :
-    * «Nom du projet :» : «jmichault» (ou ce que vous voulez)
-    * «URL :» : «<https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps52>»
-    * cliquez sur «Valider»
-    * cochez la case à gauche du nouveau projet pour l'activer.
-      Les greffons du projet sont maintenant disponibles dans l'onglet «Greffons»
-* allez à l'onglet «Greffons»
-  * cherchez le greffon qui vous intéresse.
-  * cliquez sur «Installer»
+* ouvrez les préférences
+* Dans «Où rechercher :», mettre :
+  «<https://github.com/jmichault/gramps-kromprogramoj/raw/gramps51>»
+* cliquez sur «Fermer»
+* allez au menu «Aide» --> «Gestionnaire de greffons»
+* les greffons apparaissent dans la liste.
 
 # greffons :
   * [PersonFS](fontoj/PersonFS/LisezMoi.md) : une interface avec FamilySearch.
