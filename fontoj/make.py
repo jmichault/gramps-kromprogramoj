@@ -1,44 +1,44 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-make.py por Gramps kromprogramoj.
+make.py for Gramps addons.
 
 Examples:
-   python3 make.py init AddonDirectory
+   python3 make.py gramps42 init AddonDirectory
 
       Creates the initial directories for the addon.
 
-   python3 make.py init AddonDirectory fr
+   python3 make.py gramps42 init AddonDirectory fr
 
       Creates the initial empty AddonDirectory/po/fr-local.po file
       for the addon.
 
-   python3 make.py update AddonDirectory fr
+   python3 make.py gramps42 update AddonDirectory fr
 
       Updates AddonDirectory/po/fr-local.po with the latest
       translations.
 
-   python3 make.py build AddonDirectory
+   python3 make.py gramps42 build AddonDirectory
 
       Build ../download/AddonDirectory.addon.tgz
 
-   python3 make.py build all
+   python3 make.py gramps42 build all
 
       Build ../download/*.addon.tgz
 
-   python3 make.py compile AddonDirectory
-   python3 make.py compile all
+   python3 make.py gramps42 compile AddonDirectory
+   python3 make.py gramps42 compile all
 
       Compiles AddonDirectory/po/*-local.po and puts the resulting
       .mo file in AddonDirectory/locale/*/LC_MESSAGES/addon.mo
 
-   python3 make.py listing AddonDirectory
-   python3 make.py listing all
+   python3 make.py gramps42 listing AddonDirectory
+   python3 make.py gramps42 listing all
 
-   python3 make.py clean
-   python3 make.py clean AddonDirectory
+   python3 make.py gramps42 clean
+   python3 make.py gramps42 clean AddonDirectory
 
-   python3 make.py as-needed
+   python3 make.py gramps42 as-needed
        Builds the tgz for only addons that have changed, then recreates
        the listings and does cleanup
 """
@@ -47,7 +47,7 @@ import glob
 import sys
 import os
 import tarfile
-import json
+from zipfile import ZipFile
 from xml.etree import ElementTree
 
 if "GRAMPSPATH" in os.environ:
@@ -56,18 +56,17 @@ else:
     GRAMPSPATH = "../../.."
 
 if(("LANGUAGE" not in os.environ) or
-   (not os.environ["LANGUAGE"].startswith("eo"))):
-    raise ValueError("LANGUAGE devus eksplicite esti esperanta; Uzu "
-                     "'LANGUAGE=eo.UTF-8 python3 make.py...' aŭ simile")
+   (not os.environ["LANGUAGE"].startswith("en"))):
+    raise ValueError("LANGUAGE should explicitly be english; Use "
+                     "'LANGUAGE=en_US.UTF-8 python3 make.py...' or similar")
 else:
     print("make.py: LANGUAGE is %s... good!" % os.environ["LANGUAGE"])
 
-if len(sys.argv) >= 2:
-    command = sys.argv[1]
-else:
-    command = "as-needed"
-if len(sys.argv) >= 3:
-    addon = sys.argv[2]
+gramps_version = sys.argv[1]
+
+command = sys.argv[2]
+if len(sys.argv) >= 4:
+    addon = sys.argv[3]
 
 
 def system(scmd, **kwargs):
@@ -196,9 +195,24 @@ def do_tar(inc_files):
         tar.add(inc_fil, filter=tar_filt)
     tar.close()
 
+def do_zip(inc_files):
+    """
+    An OS agnostic tar creation that uses only Python libs
+    inc_files is a list of filenames
+    """
+    if not inc_files:
+        print("***Nothing to build! %s" % addon)
+        exit()
+
+    mkdir(r("../download"))
+    increment_target(glob.glob(r('''%(addon)s/*gpr.py''')))
+    with ZipFile(r("../download/%(addon)s.zip"),'w') as zip:
+        # writing each file one by one
+        for inc_fil in inc_files:
+            zip.write(inc_fil)
 
 if command == "clean":
-    if len(sys.argv) == 2:
+    if len(sys.argv) == 3:
         for addon in [name for name in os.listdir(".")
                       if os.path.isdir(name) and not name.startswith(".")]:
             cleanup(addon)
@@ -211,13 +225,13 @@ elif command == "init":
         dirs = [file for file in glob.glob("*") if os.path.isdir(file)]
     else:
         dirs = [addon]
-    if len(sys.argv) == 3:
+    if len(sys.argv) == 4:
         from gramps.gen.plug import make_environment, PTYPE_STR
 
         def register(ptype, **kwargs):
             global plugins
             # need to take care of translated types
-            kwargs["ptype"] = ptype
+            kwargs["ptype"] = PTYPE_STR[ptype]
             plugins.append(kwargs)
 
         for addon in dirs:
@@ -278,13 +292,13 @@ elif command == "init":
             with open("%s/po/template.pot" % addon, 'w',
                       encoding='utf-8', newline='\n') as file:
                 file.write(contents)
-    elif len(sys.argv) > 3:
-        locale = sys.argv[3]
+    elif len(sys.argv) > 4:
+        locale = sys.argv[4]
         # make a copy for locale
         if os.path.isfile(r('''%(addon)s/po/%(locale)s-local.po''')):
             raise ValueError(r('''%(addon)s/po/%(locale)s-local.po''') +
                              " already exists!")
-        system('''msginit --no-translator --locale=%(locale)s '''
+        system('''msginit --locale=%(locale)s '''
                '''--input="%(addon)s/po/template.pot" '''
                '''--output="%(addon)s/po/%(locale)s-local.po"''')
         echo('''You can now edit "%(addon)s/po/%(locale)s-local.po"''')
@@ -292,19 +306,19 @@ elif command == "init":
         raise AttributeError("init what?")
 
 elif command == "update":
-    locale = sys.argv[3]
+    locale = sys.argv[4]
     # Update the template file:
     if not os.path.isfile(r('''%(addon)s/po/template.pot''')):
         raise ValueError(r('''%(addon)s/po/template.pot'''
                            ''' is missing!\n  run '''
-                           '''./make.py init %(addon)s'''))
+                           '''./make.py %(gramps_version)s init %(addon)s'''))
     # Check existing translation
     if not os.path.isfile(r('''%(addon)s/po/%(locale)s-local.po''')):
         raise ValueError(r('''%(addon)s/po/%(locale)s-local.po'''
                            ''' is missing!\n run ./make.py '''
-                           ''' init %(addon)s %(locale)s'''))
+                           '''%(gramps_version)s init %(addon)s %(locale)s'''))
     # Retrieve updated data for locale:
-    system('''msginit --no-translator --locale=%(locale)s '''
+    system('''msginit --locale=%(locale)s '''
            '''--input="%(addon)s/po/template.pot" '''
            '''--output="%(addon)s/po/%(locale)s.po"''')
     # Merge existing local translation with last data:
@@ -314,8 +328,8 @@ elif command == "update":
     # Start with Gramps main PO file:
     if not os.path.isdir(GRAMPSPATH + "/po"):
         raise ValueError("Where is GRAMPSPATH/po: '%s/po'? Use"
-                         " 'GRAMPSPATH=path python3 make.py update'" %
-                         (GRAMPSPATH))
+                         " 'GRAMPSPATH=path python3 make.py %s update'" %
+                         (GRAMPSPATH, gramps_version))
     locale_po_files = [r("%(GRAMPSPATH)s/po/%(locale)s.po")]
     # Next, get all of the translations from other addons:
     for module in [name for name in os.listdir(".") if os.path.isdir(name)]:
@@ -347,7 +361,6 @@ elif command == "update":
     os.remove(r("%(addon)s/po/%(locale)s-local.po"))
     os.rename(r("%(addon)s/po/%(locale)s-local.po.2"),
               r("%(addon)s/po/%(locale)s-local.po"))
-    os.remove(r("%(addon)s/po/%(locale)s.po"))
     # # Done!
     echo('''\nYou can edit "%(addon)s/po/%(locale)s-local.po"''')
 
@@ -394,6 +407,7 @@ elif command == "build":
                 # git doesn't remove empty folders when switching branchs
                 continue
             do_tar(files)
+            do_zip(files)
     else:
         for po in glob.glob(r('''%(addon)s/po/*.po''')):
             locale = os.path.basename(po[:-9])
@@ -410,6 +424,7 @@ elif command == "build":
         for patt in patts:
             files.extend(glob.glob(patt))
         do_tar(files)
+        do_zip(files)
 
 elif command == "as-needed":
     import tempfile
@@ -421,19 +436,19 @@ elif command == "as-needed":
         from gramps.gen.plug import make_environment, PTYPE_STR
     except ImportError:
         print("Where is Gramps: '%s'? Use "
-              "'GRAMPSPATH=path python3 make.py as_needed'" %
-              (os.path.abspath(GRAMPSPATH)))
+              "'GRAMPSPATH=path python3 make.py %s as_needed'" %
+              (os.path.abspath(GRAMPSPATH), gramps_version))
         exit()
 
     def register(ptype, **kwargs):
         global plugins
         # need to take care of translated types
-        kwargs["ptype"] = ptype
+        kwargs["ptype"] = PTYPE_STR[ptype]
         plugins.append(kwargs)
 
     from filecmp import cmp
     # Get all languages from all addons:
-    languages = set(['eo'])
+    languages = set(['en'])
     for addon in [file for file in glob.glob("*") if os.path.isdir(file)]:
         for po in glob.glob(r('''%(addon)s/po/*-local.po''')):
             length = len(po)
@@ -450,7 +465,7 @@ elif command == "as-needed":
             mkdir("%(addon)s/locale/%(locale)s/LC_MESSAGES/")
             system('''msgfmt %(po)s '''
                    '''-o "%(addon)s/locale/%(locale)s/LC_MESSAGES/addon.mo"''')
-        tgz = os.path.join("..", "download",
+        tgz = os.path.join("..", "addons", gramps_version, "download",
                            addon + ".addon.tgz")
         patts = [r('''%(addon)s/*.py'''), r('''%(addon)s/*.glade'''),
                  r('''%(addon)s/*.xml'''), r('''%(addon)s/*.txt'''),
@@ -520,6 +535,7 @@ elif command == "as-needed":
         if todo:
             # Build it.
             do_tar(sfiles)
+            do_zip(sfiles)
             print("***Rebuilt:      %s" % addon)
 
         # Add addon to newly created listing (equivalent to 'listing all')
@@ -546,26 +562,16 @@ elif command == "as-needed":
                     if p.get("include_in_listing", True):
                         do_list = True  # got at least one listable plugin
                         plugin = {
-                            "n": p["name"],
-                            "i": p["id"],
-                            "t": p["ptype"],
-                            "d": p["description"],
-                            "v": p["version"],
-                            "g": p["gramps_target_version"],
-                            "s": p["status"],
+                            "n": p["name"].replace("'", "\\'"),
+                            "i": p["id"].replace("'", "\\'"),
+                            "t": p["ptype"].replace("'", "\\'"),
+                            "d": p["description"].replace("'", "\\'"),
+                            "v": p["version"].replace("'", "\\'"),
+                            "g": p["gramps_target_version"].replace("'",
+                                                                    "\\'"),
                             "z": ("%s.addon.tgz" % addon)}
-                        if "requires_mod" in p:
-                            plugin["rm"] = p["requires_mod"]
-                        if "requires_gi" in p:
-                            plugin["rg"] = p["requires_gi"]
-                        if "requires_exe" in p:
-                            plugin["re"] = p["requires_exe"]
-                        if "help_url" in p:
-                            plugin["h"] = p["help_url"]
-                        if "audience" in p:
-                            plugin["a"] = p["audience"]
                         listings[lang].append(plugin)
-                        if lang == 'eo':
+                        if lang == 'en':
                             print("Listed:          %s" % p["name"])
                     else:
                         print("***Not Listed:   %s" % p["name"])
@@ -613,13 +619,13 @@ elif command == "as-needed":
                           r('''%(addon)s/po/template.pot'''))
     # write out the listings
     for lang in languages:
-        output = []
+        fp = open(r("../listings/") +
+                  ("addons-%s.txt" % lang), "w", encoding="utf-8",
+                  newline='')
         for plugin in sorted(listings[lang], key=lambda p: (p["t"], p["i"])):
-            output.append(plugin)
-        with open(r("../listings/") +
-                      ("addons-%s.json" % lang), "w", encoding="utf-8",
-                      newline='') as fp_out:
-            json.dump(output, fp_out, indent=0)
+            print("""{"t":'%(t)s',"i":'%(i)s',"n":'%(n)s',"v":'%(v)s',"""
+                  """"g":'%(g)s',"d":'%(d)s',"z":'%(z)s'}""" % plugin, file=fp)
+        fp.close()
 
 elif command == "manifest-check":
     import re
@@ -636,7 +642,7 @@ elif command == "manifest-check":
 elif command == "unlist":
     # Get all languages from all addons:
     cmd_arg = addon
-    languages = set(['eo'])
+    languages = set(['en'])
     for addon in [file for file in glob.glob("*") if os.path.isdir(file)]:
         for po in glob.glob(r('''%(addon)s/po/*-local.po''')):
             length = len(po)
@@ -646,7 +652,7 @@ elif command == "unlist":
     for lang in languages:
         lines = []
         fp = open(r("../listings/") +
-                  ("addons-%s.json" % lang), "r", encoding="utf-8")
+                  ("addons-%s.txt" % lang), "r", encoding="utf-8")
         for line in fp:
             if cmd_arg + ".addon.tgz" not in line:
                 lines.append(line)
@@ -654,14 +660,14 @@ elif command == "unlist":
                 print("unlisting", line)
         fp.close()
         fp = open(r("../listings/") +
-                  ("addons-%s.json" % lang), "w", encoding="utf-8", newline='')
+                  ("addons-%s.txt" % lang), "w", encoding="utf-8", newline='')
         for line in lines:
             fp.write(line)
         fp.close()
 
 elif command == "fix":
     # Get all languages from all addons:
-    languages = set(['eo'])
+    languages = set(['en'])
     for addon in [file for file in glob.glob("*") if os.path.isdir(file)]:
         for po in glob.glob(r('''%(addon)s/po/*-local.po''')):
             length = len(po)
@@ -671,7 +677,7 @@ elif command == "fix":
     for lang in languages:
         addons = {}
         fp = open(r("../listings/") +
-                  ("addons-%s.json" % lang), "r", encoding="utf-8")
+                  ("addons-%s.txt" % lang), "r", encoding="utf-8")
         for line in fp:
             dictionary = eval(line)
             if dictionary["i"] in addons:
@@ -679,17 +685,20 @@ elif command == "fix":
             else:
                 addons[dictionary["i"]] = dictionary
         fp.close()
-        output = []
+        fp = open(r("../listings/") +
+                  ("addons-%s.txt" % lang), "w", encoding="utf-8", newline='')
         for p in sorted(addons.values(), key=lambda p: (p["t"], p["i"])):
-            plugin = {}
-            for key, val in p:
-                plugin[key] = val  # .replace("'", "\\'")
-            output.append(plugin)
+            plugin = {"n": p["n"].replace("'", "\\'"),
+                      "i": p["i"].replace("'", "\\'"),
+                      "t": p["t"].replace("'", "\\'"),
+                      "d": p["d"].replace("'", "\\'"),
+                      "v": p["v"].replace("'", "\\'"),
+                      "g": p["g"].replace("'", "\\'"),
+                      "z": p["z"].replace("'", "\\'"),
+                      }
+            print("""{"t":'%(t)s',"i":'%(i)s',"n":'%(n)s',"v":'%(v)s',"""
+                  """"g":'%(g)s',"d":'%(d)s',"z":'%(z)s'}""" % plugin, file=fp)
         fp.close()
-        fp_out = open(r("../listings/") +
-                      ("addons-%s.json" % lang), "w", encoding="utf-8",
-                      newline='')
-        json.dump(output, fp_out, indent=0)
 
 elif command == "check":
     try:
@@ -699,17 +708,17 @@ elif command == "check":
         from gramps.gen.plug import make_environment, PTYPE_STR
     except ImportError:
         print("Where is Gramps: '%s'? Use "
-              "'GRAMPSPATH=path python3 make.py check'" %
-              (os.path.abspath(GRAMPSPATH)))
+              "'GRAMPSPATH=path python3 make.py %s check'" %
+              (os.path.abspath(GRAMPSPATH), gramps_version))
         exit()
 
     def register(ptype, **kwargs):
         global plugins
         # need to take care of translated types
-        kwargs["ptype"] = ptype
+        kwargs["ptype"] = PTYPE_STR[ptype]
         plugins.append(kwargs)
-    # get current build numbers from Esperanto listing
-    fp_in = open(r("../listings/addons-eo.txt"),
+    # get current build numbers from English listing
+    fp_in = open(r("../listings/addons-en.txt"),
                  "r", encoding="utf-8")
     addons = {}
     for line in fp_in:
@@ -748,14 +757,14 @@ elif command == "listing":
         from gramps.gen.plug import make_environment, PTYPE_STR
     except ImportError:
         print("Where is Gramps: '%s'? Use "
-              "'GRAMPSPATH=path python3 make.py listing'" %
-              (os.path.abspath(GRAMPSPATH)))
+              "'GRAMPSPATH=path python3 make.py %s listing'" %
+              (os.path.abspath(GRAMPSPATH), gramps_version))
         exit()
 
     def register(ptype, **kwargs):
         global plugins
         # need to take care of translated types
-        kwargs["ptype"] = ptype
+        kwargs["ptype"] = PTYPE_STR[ptype]
         plugins.append(kwargs)
     cmd_arg = addon
     # first, get a list of all of the possible languages
@@ -772,7 +781,7 @@ elif command == "listing":
             system('''msgfmt %(po)s '''
                    '''-o "%(addon)s/locale/%(locale)s/LC_MESSAGES/addon.mo"''')
     # Get all languages from all addons:
-    languages = set(['eo'])
+    languages = set(['en'])
     for addon in [file for file in glob.glob("*") if os.path.isdir(file)]:
         for po in glob.glob(r('''%(addon)s/po/*-local.po''')):
             length = len(po)
@@ -801,72 +810,91 @@ elif command == "listing":
                     tgz_exists = os.path.isfile(
                         r("../download/") + tgz_file)
                     if p.get("include_in_listing", True) and tgz_exists:
-                        plugin = {"n": p["name"],
-                                  "i": p["id"],
-                                  "t": p["ptype"],
-                                  "d": p["description"],
-                                  "v": p["version"],
-                                  "g": p["gramps_target_version"],
-                                  "s": p["status"],
+                        plugin = {"n": p["name"].replace("'", "\\'"),
+                                  "i": p["id"].replace("'", "\\'"),
+                                  "t": p["ptype"].replace("'", "\\'"),
+                                  "d": p["description"].replace("'", "\\'"),
+                                  "v": p["version"].replace("'", "\\'"),
+                                  "g": p["gramps_target_version"].replace(
+                                      "'", "\\'"),
                                   "z": (tgz_file),
                                   }
-                        if "requires_mod" in p:
-                            plugin["rm"] = p["requires_mod"]
-                        if "requires_gi" in p:
-                            plugin["rg"] = p["requires_gi"]
-                        if "requires_exe" in p:
-                            plugin["re"] = p["requires_exe"]
-                        if "help_url" in p:
-                            plugin["h"] = p["help_url"]
-                        if "audience" in p:
-                            plugin["a"] = p["audience"]
                         listings.append(plugin)
                     else:
                         print("   ignoring '%s'" % (p["name"]))
         # Write out new listing:
-        output = []
         if cmd_arg == "all":
             # Replace it!
+            fp = open(r("../listings/") +
+                      ("addons-%s.txt" % lang), "w", encoding="utf-8",
+                      newline='')
             for plugin in sorted(listings, key=lambda p: (p["t"], p["i"])):
-                output.append(plugin)
+                print("""{"t":'%(t)s',"i":'%(i)s',"n":'%(n)s',"v":'%(v)s',"""
+                      """"g":'%(g)s',"d":'%(d)s',"z":'%(z)s'}""" % plugin,
+                      file=fp)
+            fp.close()
         elif not os.path.isfile(r("../listings/") +
-                                ("addons-%s.json" % lang)):
+                                ("addons-%s.txt" % lang)):
+            fp_out = open(r("../listings/") +
+                          ("addons-%s.txt" % lang), "w", encoding="utf-8",
+                          newline='')
             for plugin in sorted(listings, key=lambda p: (p["t"], p["i"])):
-                output.append(plugin)
+                print("""{"t":'%(t)s',"i":'%(i)s',"n":'%(n)s',"v":'%(v)s',"""
+                      """"g":'%(g)s',"d":'%(d)s',"z":'%(z)s'}""" % plugin,
+                      file=fp_out)
+            fp_out.close()
         else:
             # just update the lines from these addons:
             for plugin in sorted(listings, key=lambda p: (p["t"], p["i"])):
                 already_added = []
                 fp_in = open(r("../listings/") +
-                             ("addons-%s.json" % lang), "r", encoding="utf-8")
+                             ("addons-%s.txt" % lang), "r", encoding="utf-8")
+                fp_out = open(r("../listings/") +
+                              ("addons-%s.new" % lang), "w", encoding="utf-8",
+                              newline='')
                 added = False
-                for line in json.load(fp_in):
-                    if line["i"] in already_added:
+                for line in fp_in:
+                    dictionary = eval(line)
+                    if("""{"t":'%(t)s',"i":'%(i)s',"n":'%(n)s'}""" %
+                       dictionary) in already_added:
                         continue
-                    if (cmd_arg + ".addon.tgz" == line["z"] and
-                        plugin["t"] == line["t"] and not added):
+                    if(cmd_arg + ".addon.tgz" in line and
+                       plugin["t"] == dictionary["t"] and not added):
                         #print("UPDATED")
-                        output.append(plugin)
+                        print("""{"t":'%(t)s',"i":'%(i)s',"n":'%(n)s',"""
+                              """"v":'%(v)s',"g":'%(g)s',"d":'%(d)s',"""
+                              """"z":'%(z)s'}""" % plugin, file=fp_out)
                         added = True
-                        already_added.append(line["i"])
+                        already_added.append("""{"t":'%(t)s',"i":'%(i)s',"""
+                                             """"n":'%(n)s'}""" % plugin)
                     elif ((plugin["t"], plugin["i"]) <
-                          (line["t"], line["i"])) and not added:
+                          (dictionary["t"], dictionary["i"])) and not added:
                         #print("ADDED in middle")
-                        output.append(plugin)
+                        print("""{"t":'%(t)s',"i":'%(i)s',"n":'%(n)s',"""
+                              """"v":'%(v)s',"g":'%(g)s',"d":'%(d)s',"""
+                              """"z":'%(z)s'}""" % plugin, file=fp_out)
                         added = True
-                        output.append(line)
-                        already_added.append(line["i"])
+                        print(line, end="", file=fp_out)
+                        already_added.append("""{"t":'%(t)s',"i":'%(i)s',"""
+                                             """"n":'%(n)s'}""" % plugin)
                     else:
-                        output.append(line)
-                        already_added.append(line["i"])
+                        print(line, end="", file=fp_out)
+                        already_added.append("""{"t":'%(t)s',"i":'%(i)s',"""
+                                             """"n":'%(n)s'}""" % dictionary)
                 if not added:
-                    if plugin["i"] not in already_added:
+                    if("""{"t":'%(t)s',"i":'%(i)s',"n":'%(n)s',"v":'%(v)s',"""
+                       """"g":'%(g)s',"d":'%(d)s',"z":'%(z)s'}""" %
+                       plugin) not in already_added:
                         #print("ADDED at end")
-                        output.append(plugin)
-        fp_out = open(r("../listings/") +
-                      ("addons-%s.json" % lang), "w", encoding="utf-8",
-                      newline='')
-        json.dump(output, fp_out, indent=0)
+                        print("""{"t":'%(t)s',"i":'%(i)s',"n":'%(n)s',"""
+                              """"v":'%(v)s',"g":'%(g)s',"d":'%(d)s',"""
+                              """"z":'%(z)s'}""" % plugin, file=fp_out)
+                fp_in.close()
+                fp_out.close()
+                shutil.move(r("../listings/") +
+                            ("addons-%s.new" % lang),
+                            r("../listings/") +
+                            ("addons-%s.txt" % lang))
 
 else:
     raise AttributeError("unknown command")

@@ -2,20 +2,21 @@ GREFFONS="Lokpurigado  PersonFS  PlaceFrCog"
 LINGVOJ="fr nl en pt_BR"
 GRPATH="../../gramps-5.2.0rc1"
 
-for G in $GREFFONS ; do
- # met à jour les fichiers .pot
- GRAMPSPATH="$GRPATH" LANGUAGE=eo.UTF-8 python3 make.py init "$G"
- for L in $LINGVOJ ; do
-   if [ ! -f "$G"/po/$L-local.po ] ; then
-     # crée le fichier .po
-     GRAMPSPATH="$GRPATH" LANGUAGE=eo.UTF-8 python3 make.py init "$G" $L
-   fi
-   # met à jour le fichier .po
-   GRAMPSPATH="$GRPATH" LANGUAGE=eo.UTF-8 python3 make.py update "$G" $L
-   # traduction google du fichier .po
-   lib/traduki_po.sh "$G"/po/$L-local.po
- done
-done
+#for G in $GREFFONS ; do
+# # met à jour les fichiers .pot
+# GRAMPSPATH="$GRPATH" LANGUAGE=eo.UTF-8 python3 make.py init "$G"
+# for L in $LINGVOJ ; do
+#   if [ ! -f "$G"/po/$L-local.po ] ; then
+#     # crée le fichier .po
+#     GRAMPSPATH="$GRPATH" LANGUAGE=eo.UTF-8 python3 make.py init "$G" $L
+#   fi
+#   # met à jour le fichier .po
+#   GRAMPSPATH="$GRPATH" LANGUAGE=eo.UTF-8 python3 make.py update "$G" $L
+#   # traduction google du fichier .po
+#   lib/traduki_po.sh "$G"/po/$L-local.po
+# done
+#done
 
 # mise à jour des fichiers tgz et des listes
 RESOURCEPATH="$GRPATH" LANGUAGE=eo.UTF-8 python3 make.py
+
