@@ -8,7 +8,7 @@ peuvent être de deux classes :
 * PlaceDescription : attribut «places» de la classe gedcomx.
 	décrit les lieux normalisés.
   * l'id permet de récupérer la description complète sur <https://api.familysearch.org/platform/places/description/ID>
-    * de là, on peut récupérer le lien vers la place familysearch : <https://api.familysearch.org/platforme/places/ID2>
+    * de là, on peut récupérer le lien vers la place familysearch : <https://api.familysearch.org/platform/places/ID2>
   * names : noms localisés.
 * PlaceReference : partout ailleurs. Par exemple attribut place de la classe Fact.
 	attributs importants :
@@ -64,10 +64,11 @@ Quelques-uns des types pertinents en France :
 
 
 Attention : il y a deux types d'ID :
- * l' ID place-description = celui utilisé pour  https://api.familysearch.org/platforme/places/description/ID. C'est celui utilisé dans les classes «Gedcomx» et «Fact»
- * l' ID place = celui utilisé pour https://api.familysearch.org/platforme/places/ID
+ * l' ID place-description = celui utilisé pour  https://api.familysearch.org/platform/places/description/ID. C'est celui utilisé dans les classes «Gedcomx» et «Fact». Il correspond à la classe gedcomx.PlaceDescription.
+ * l' ID place = celui utilisé pour https://api.familysearch.org/platform/places/ID
    * plusieurs ID place-description peuvent pointer vers le même ID place.
-   * sur <https://api.familysearch.org/platforme/places/ID>, on récupère la liste des «place-description», qui peuvent nottament être des variantes temporelles.
+   * sur <https://api.familysearch.org/platform/places/ID>, on récupère la liste des «place-description», qui peuvent notamment être des variantes temporelles.
+   * je n'ai pas trouvé de correspondance dans les classes gedcomx.
 
 
 Un lieu peut avoir des doublons. Exemple pour Angoulême, on a :

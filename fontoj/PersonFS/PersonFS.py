@@ -50,7 +50,7 @@ from gramps.gen.plug import Gramplet, PluginRegister
 from gramps.gen.utils.db import get_birth_or_fallback, get_death_or_fallback
 
 from gramps.gui.dialog import OptionDialog, OkDialog , WarningDialog
-from gramps.gui.editors import EditPerson, EditEvent
+from gramps.gui.editors import EditCitation, EditPerson, EditEvent
 from gramps.gui.listmodel import ListModel, NOSORT, COLOR, TOGGLE
 from gramps.gui.viewmanager import run_plugin
 from gramps.gui.widgets.buttons import IconButton
@@ -138,7 +138,7 @@ class PersonFS(Gramplet):
   if not lingvo :
     lingvo = glocale.language[0]
 
-  def aki_sesio(vokanto):
+  def aki_sesio(vokanto,vorteco=0):
     if not tree._FsSeanco:
       if PersonFS.fs_sn == '' or PersonFS.fs_pasvorto == '':
         import locale, os
@@ -181,8 +181,10 @@ class PersonFS(Gramplet):
           #CONFIG.set("preferences.fs_pasvorto", PersonFS.fs_pasvorto) #
           CONFIG.set("preferences.fs_etikedado", str(PersonFS.fs_etikedado))
           CONFIG.save()
-          #if self.vorteco >= 3:
-          tree._FsSeanco = gedcomx.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, True, False, 2, PersonFS.lingvo)
+          if vorteco >= 3:
+            tree._FsSeanco = gedcomx.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, True, False, 2, PersonFS.lingvo)
+          else :
+            tree._FsSeanco = gedcomx.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, False, False, 2, PersonFS.lingvo)
           if PersonFS.fs_client_id != '':
             tree._FsSeanco.client_id=PersonFS.fs_client_id
           #else :
@@ -190,7 +192,7 @@ class PersonFS(Gramplet):
         else :
           print("Vi devas enigi la ID kaj pasvorton")
       else:
-        if self.vorteco >= 3:
+        if vorteco >= 3:
           tree._FsSeanco = gedcomx.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, True, False, 2, PersonFS.lingvo)
         else :
           tree._FsSeanco = gedcomx.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, False, False, 2, PersonFS.lingvo)
@@ -242,8 +244,8 @@ class PersonFS(Gramplet):
     (model, iter_) = treeview.get_selection().get_selected()
     if not iter_:
       return
-    tipo=model.get_value(iter_, 7)
-    handle = model.get_value(iter_, 8)
+    tipo=model.get_value(iter_, 8)
+    handle = model.get_value(iter_, 9)
     if ( handle
          and ( tipo == 'infano' or tipo == 'patro'
             or tipo == 'patrino' or tipo == 'edzo')) :
@@ -255,6 +257,13 @@ class PersonFS(Gramplet):
         EditEvent(self.dbstate, self.uistate, [], event)
       except WindowActiveError:
         pass
+    elif ( handle
+         and (tipo == 'Fonto' )) :
+      cit = self.dbstate.db.get_citation_from_handle(handle)
+      try:
+        EditCitation(self.dbstate, self.uistate, [], cit)
+      except WindowActiveError:
+        pass
 
 
 
@@ -262,8 +271,8 @@ class PersonFS(Gramplet):
     (model, iter_) = treeview.get_selection().get_selected()
     if not iter_:
       return
-    tipo=model.get_value(iter_, 7)
-    handle = model.get_value(iter_, 8)
+    tipo=model.get_value(iter_, 8)
+    handle = model.get_value(iter_, 9)
     if ( handle
          and ( tipo == 'infano' or tipo == 'patro'
             or tipo == 'patrino' or tipo == 'edzo')) :
@@ -296,11 +305,11 @@ class PersonFS(Gramplet):
      l = [x]
      l.extend(x.iterchildren())
      for linio in l :
-      if linio[6] : 
-        tipolinio = linio[7]
+      if linio[7] : 
+        tipolinio = linio[8]
         if ( (tipolinio == 'fakto' or tipolinio == 'edzoFakto')
-             and linio[8] ) :
-          grHandle = linio[8]
+             and linio[9] ) :
+          grHandle = linio[9]
           event = self.dbstate.db.get_event_from_handle(grHandle)
           titolo = str(EventType(event.type))
           grFaktoPriskribo = event.description or ''
@@ -351,8 +360,8 @@ class PersonFS(Gramplet):
               fsFakto.attribution = gedcomx.Attribution()
               fsFakto.attribution.changeMessage = GRAMPS_GEDCOMX_FAKTOJ.get(grTag) + '\n' + str(event)
             fsTR = gedcomx.Gedcomx()
-            grFamilyHandle = linio[10]
-            RSfsid = linio[11]
+            grFamilyHandle = linio[11]
+            RSfsid = linio[12]
             grFamily = self.dbstate.db.get_family_from_handle(grFamilyHandle)
             fsRS = gedcomx.Relationship()
             fsRS.id = RSfsid
@@ -372,11 +381,11 @@ class PersonFS(Gramplet):
                 print (res.text)
             #else : FARINDAĴO
         elif ( (tipolinio == 'nomo' or tipolinio == 'nomo1')
-             and linio[8] ) :
-          strNomo = linio[8]
-          grSurname = linio[10]
-          grGiven = linio[11]
-          fsNomoId = linio[9]
+             and linio[9] ) :
+          strNomo = linio[9]
+          grSurname = linio[11]
+          grGiven = linio[12]
+          fsNomoId = linio[10]
           if tipolinio == 'nomo1' :
             grNomo = grPersono.primary_name
           else :
@@ -419,11 +428,11 @@ class PersonFS(Gramplet):
           fsP.id = self.FSID
           fsTP.persons.add(fsP)
         elif ( (tipolinio == 'edzo' )
-             and linio[8] ) :
+             and linio[9] ) :
           grEdzo = self.dbstate.db.get_person_from_handle(linio[8])
           fsTR = gedcomx.Gedcomx()
-          grFamilyHandle = linio[10]
-          RSfsid = linio[11]
+          grFamilyHandle = linio[11]
+          RSfsid = linio[12]
           grFamily = self.dbstate.db.get_family_from_handle(grFamilyHandle)
           fsRS = gedcomx.Relationship()
           fsRS.person1 = gedcomx.ResourceReference()
@@ -454,10 +463,10 @@ class PersonFS(Gramplet):
             print (res.headers)
             print (res.text)
         elif ( (tipolinio == 'infano' )
-             and linio[8] and linio[9] == '') : # infano estas en gramps, ne en FS.
-          grFamilyHandle = linio[10]
-          fsFamId = linio[11]
-          child_ref = linio[8]
+             and linio[9] and linio[10] == '') : # infano estas en gramps, ne en FS.
+          grFamilyHandle = linio[11]
+          fsFamId = linio[12]
+          child_ref = linio[9]
           fsTR = gedcomx.Gedcomx()
           fsCPRS = gedcomx.ChildAndParentsRelationship()
           grFamily = self.dbstate.db.get_family_from_handle(grFamilyHandle)
@@ -490,12 +499,16 @@ class PersonFS(Gramplet):
             print (res.headers)
             print (res.text)
         elif ( (tipolinio == 'NotoF' )
-             and linio[11] ) :
-          print("NotoF")
-          #  self.modelKomp.add(['white',titolo,'',teksto,'',colFS,False,'NotoF',None,None,None,None] 
+             and linio[9] ) :
+          print("NotoF gramps-->FS")
+          # self.modelKomp.add(['white',titolo,_('Familio'),teksto,'',fsTeksto,'',False,'NotoF',nh,family_handle,fsParoId,fsNoto.id] )
           fsNoto = gedcomx.Note()
-          fsNoto.subject = linio[1]
-          fsNoto.text = linio[3]
+          fsNoto.subject = linio[2]
+          if len(linio[3]) >1 and linio[3][0:1] == '\ufeff' :
+            fsNoto.text = linio[3][1:]
+          else :
+            fsNoto.text = linio[3]
+          fsNoto.id = linio[12]
           fsTR = gedcomx.Gedcomx()
           grFamilyHandle = linio[10]
           RSfsid = linio[11]
@@ -506,6 +519,7 @@ class PersonFS(Gramplet):
           fsTR.relationships.add(fsRS)
           peto = gedcomx.jsonigi(fsTR)
           jsonpeto = json.dumps(peto)
+          print(" jsonpeto = "+jsonpeto)
           if RSfsid :
             res = tree._FsSeanco.post_url( "/platform/tree/couple-relationships/"+RSfsid, jsonpeto )
             if res.status_code == 201 or res.status_code == 204:
@@ -520,9 +534,12 @@ class PersonFS(Gramplet):
              and linio[3] ) :
           print("NotoP gramps-->FS")
           fsNoto = gedcomx.Note()
-          fsNoto.subject = linio[1]
-          fsNoto.text = linio[3]
-          fsNoto.id = linio[11]
+          fsNoto.subject = linio[2]
+          if len(linio[3]) >1 and linio[3][0:1] == '\ufeff' :
+            fsNoto.text = linio[3][1:]
+          else :
+            fsNoto.text = linio[3]
+          fsNoto.id = linio[12]
           fsP.notes.add(fsNoto)
           fsP.id = self.FSID
           fsTP.persons.add(fsP)
@@ -557,19 +574,18 @@ class PersonFS(Gramplet):
     #else :
     #  intr = False
     #  txn = DbTxn(_("kopii al gramps"), self.dbstate.db)
+    regximo = self.cbReg.get_active_id()
     with DbTxn(_("kopii al gramps"), self.dbstate.db) as txn:
     #if txn :
       for x in model:
        l = [x]
        l.extend(x.iterchildren())
        for linio in l :
-        if linio[6] : 
-          # FARINDAĴO : aliaj tipoj
-          tipolinio = linio[7]
-          if ( (tipolinio == 'fakto' )
-             and linio[9] ) :
-            fsFakto_id = linio[9]
-            grFaktoH = linio[8]
+        tipolinio = linio[8]
+        if ( (tipolinio == 'fakto' )
+             and linio[10] ) :
+            fsFakto_id = linio[10]
+            grFaktoH = linio[9]
             if fsPersono.facts:
               for fsFakto in fsPersono.facts :
                 if fsFakto.id == fsFakto_id : break
@@ -595,13 +611,13 @@ class PersonFS(Gramplet):
                   grPersono.set_birth_ref(er)
                 elif event.type == EventType.DEATH :
                   grPersono.set_death_ref(er)
-          elif ( (tipolinio == 'edzoFakto')
-             and linio[9] 
-             and linio[10] ) :
-            grFaktoH = linio[8]
-            fsFakto_id = linio[9]
-            grParoH = linio[10]
-            fsParo_id = linio[11]
+        elif ( (tipolinio == 'edzoFakto')
+             and linio[10] 
+             and linio[11] ) :
+            grFaktoH = linio[9]
+            fsFakto_id = linio[10]
+            grParoH = linio[11]
+            fsParo_id = linio[12]
             grParo = self.dbstate.db.get_family_from_handle(grParoH)
             fsParo = gedcomx.Relationship._indekso[fsParo_id]
             for fsFakto in fsParo.facts :
@@ -624,27 +640,60 @@ class PersonFS(Gramplet):
               grParo.add_event_ref(er)
       
             self.dbstate.db.commit_family(grParo,txn)
-          elif ( (tipolinio == 'nomo' or tipolinio == 'nomo1')
-             and linio[9] ) :
-            grNomo_str = linio[8]
-            fsNomo_id = linio[9]
+        elif ( (tipolinio == 'nomo' or tipolinio == 'nomo1')
+             and linio[10] ) :
+            grNomo_str = linio[9]
+            fsNomo_id = linio[10]
             for fsNomo in fsPersono.names :
               if fsNomo.id == fsNomo_id : break
             Importo.aldNomo(self.dbstate.db, txn, fsNomo, grPersono)
-          elif ( (tipolinio == 'NotoP' )
-             and linio[3] ) :
-            print("NotoP FS-->gramps")
-            nh=linio[9]
+        elif ( (tipolinio == 'NotoF' )
+              and linio[6] and linio[12] ) :
+            print("NotoF FS-->gramps")
+            # self.modelKomp.add(['white',_('Familio'),titolo,teksto,fsTitolo,fsTeksto,'',False,'NotoF',family_handle,nh,fsParoId,fsNoto.id] )
+            grParoH = linio[9]
+            grParo = self.dbstate.db.get_family_from_handle(grParoH)
+            nh=linio[10]
             if nh :
               grNoto = self.dbstate.db.get_note_from_handle(nh)
             else :
               grNoto = Note()
-            grNoto.set_type(NoteType(linio[1]))
-            grNoto.set(linio[5])
+            grNoto.set_type(NoteType(linio[4]))
+            # on met un tag de type lien sur le premier caractère pour mémoriser l'ID FamilySearch :
+            tags = [  StyledTextTag(StyledTextTagType.LINK,"_fsftid="+ linio[12],[(0, 1)])]
+            # on ajoute un caractère invisible en début de texte :
+            grNoto.set_styledtext(StyledText("\ufeff"+linio[5], tags))
+            if not nh :
+              self.dbstate.db.add_note(grNoto, txn)
+            self.dbstate.db.commit_note(grNoto, txn)
+            grParo.add_note(grNoto.handle)
+            self.dbstate.db.commit_family(grParo,txn)
+        elif ( (tipolinio == 'NotoP' )
+              and linio[6] and linio[12] ) :
+            print("NotoP FS-->gramps")
+            nh=linio[10]
+            if nh :
+              grNoto = self.dbstate.db.get_note_from_handle(nh)
+            else :
+              grNoto = Note()
+            grNoto.set_type(NoteType(linio[4]))
+            # on met un tag de type lien sur le premier caractère pour mémoriser l'ID FamilySearch :
+            tags = [  StyledTextTag(StyledTextTagType.LINK,"_fsftid="+ linio[12],[(0, 1)])]
+            # on ajoute un caractère invisible en début de texte :
+            grNoto.set_styledtext(StyledText("\ufeff"+linio[5], tags))
             if not nh :
               self.dbstate.db.add_note(grNoto, txn)
             self.dbstate.db.commit_note(grNoto, txn)
             grPersono.add_note(grNoto.handle)
+        elif ( (tipolinio == 'Fonto' ) and linio[10] and linio[7]) :
+          fsSdId = linio[10]
+          fh = linio[9]
+          print(" fonto FS --> gramps, id="+fsFontoId)
+          if fh :
+            grFonto = self.dbstate.db.get_source_from_handle(fh)
+          else :
+            grFonto = Source()
+          sourceDescription = gedcomx.SourceDescription._indekso.get(fsSdId)
       self.dbstate.db.commit_person(grPersono,txn)
       self.dbstate.db.transaction_commit(txn)
     self.ButRefresxigi_clicked(None)
@@ -654,8 +703,8 @@ class PersonFS(Gramplet):
     menu.set_reserve_toggle_size(False)
     (model, iter_) = treeview.get_selection().get_selected()
     if iter_:
-      tipo=model.get_value(iter_, 7)
-      handle = model.get_value(iter_, 8)
+      tipo=model.get_value(iter_, 8)
+      handle = model.get_value(iter_, 9)
       if ( handle
          and (    tipo == 'infano' or tipo == 'patro'
                or tipo == 'patrino' or tipo == 'edzo'
@@ -724,15 +773,17 @@ class PersonFS(Gramplet):
 
   def toggled(self, path, val=None):
     row = self.modelKomp.model.get_iter((path,))
-    tipo=self.modelKomp.model.get_value(row, 7)
-    #if tipo != 'fakto' and tipo != 'edzoFakto' :
-    if (     tipo != 'fakto' and tipo != 'edzoFakto' and tipo != 'nomo' and tipo != 'nomo1' and tipo != 'edzo' 
+    regximo = self.cbReg.get_active_id()
+    if regximo != 'REG_fontoj' :
+      tipo=self.modelKomp.model.get_value(row, 8)
+      #if tipo != 'fakto' and tipo != 'edzoFakto' :
+      if (     tipo != 'fakto' and tipo != 'edzoFakto' and tipo != 'nomo' and tipo != 'nomo1' and tipo != 'edzo' 
          and tipo != 'NotoP' and tipo != 'NotoF'
          and tipo != 'infano'
-       ) :
-      self.modelKomp.model.set_value(row, 6, False)
-      OkDialog(_('Pardonu, nur edzaj, eventaj or nomaj linioj povas esti elektitaj.'))
-      print("  toggled:tipo="+tipo)
+         ) :
+        self.modelKomp.model.set_value(row, 7, False)
+        OkDialog(_('Pardonu, nur edzaj, eventaj, nomaj aŭ notaj linioj povas esti elektitaj.'))
+        print("  toggled:tipo="+str(tipo))
 
 
   def CB_Regximo_changed(self, dummy):
@@ -743,7 +794,23 @@ class PersonFS(Gramplet):
         (_('Gramps Valoro'), 4, 300),
         (_('FS Dato'), 5, 120),
         (_('FS Valoro'), 6, 300),
-        ('x', 7, 20, TOGGLE,True,self.toggled),
+        (' ', NOSORT, 1),
+        ('x', 8, 5, TOGGLE,True,self.toggled),
+        (_('xTipo'), NOSORT, 0),
+        (_('xGr'), NOSORT, 0),
+        (_('xFs'), NOSORT, 0),
+        (_('xGr2'), NOSORT, 0),
+        (_('xFs2'), NOSORT, 0),
+     ]
+    titles_komp_notoj = [  
+        (_('Koloro'), 1, 40,COLOR),
+        ( _('Propreco'), 2, 100),
+        ( _('Titolo'), 3, 120),
+        (_('Gramps Valoro'), 4, 300),
+        (_('FS Titolo'), 5, 120),
+        (_('FS Valoro'), 6, 300),
+        (' ', NOSORT, 1),
+        ('x', 8, 10, TOGGLE,True,self.toggled),
         (_('xTipo'), NOSORT, 0),
         (_('xGr'), NOSORT, 0),
         (_('xFs'), NOSORT, 0),
@@ -754,10 +821,11 @@ class PersonFS(Gramplet):
         (_('Koloro'), 1, 40,COLOR),
         ( _('Dato'), 2, 100),
         ( _('Titolo'), 3, 120),
-        (_('Gramps Referenco'), 4, 300),
-        (_('FS Dato'), 5, 120),
-        (_('FS Valoro'), 6, 300),
-        ('x', 7, 20, TOGGLE,True,self.toggled),
+        (_('Gramps URL'), 4, 200),
+        (_('FS Dato'), 5, 100),
+        (_('FS Titolo'), 6, 120),
+        (_('FS URL'), 7, 200),
+        ('x', 8, 10, TOGGLE,True,self.toggled),
         (_('xTipo'), NOSORT, 0),
         (_('xGr'), NOSORT, 0),
         (_('xFs'), NOSORT, 0),
@@ -772,6 +840,10 @@ class PersonFS(Gramplet):
       self.propKomp.remove_column(col)
     if regximo == 'REG_fontoj' :
       self.modelKomp = ListModel(self.propKomp, titles_komp_fontoj, list_mode="tree"
+                 ,event_func=self.l_duobla_klako
+                 ,right_click=self.l_dekstra_klako)
+    elif regximo == 'REG_notoj' :
+      self.modelKomp = ListModel(self.propKomp, titles_komp_notoj, list_mode="tree"
                  ,event_func=self.l_duobla_klako
                  ,right_click=self.l_dekstra_klako)
     else :
@@ -814,6 +886,9 @@ class PersonFS(Gramplet):
         fsPersono._infanojCP = set()
         fsPersono._gepatrojCP=set()
         fsPersono.sortKey = None
+      for sd in gedcomx.SourceDescription._indekso.values() :
+        sd.notes=set()
+        sd.citations=set()
       if PersonFS.fs_Tree and self.FSID in PersonFS.fs_Tree._persons :
         PersonFS.fs_Tree._persons.pop(self.FSID)
       PersonFS.fs_Tree.add_persons([self.FSID])
@@ -1356,32 +1431,27 @@ class PersonFS(Gramplet):
         colFS = _('Ne konektita al FamilySearch')
       else :
         colFS = '===================='
+      #import pdb; pdb.set_trace()
       fsFontoj = fsPerso.sources.copy()
-      # récupère les dates des sources
-      for fsFonto in fsFontoj :
-        sd =  gedcomx.SourceDescription._indekso.get(fsFonto.descriptionId) or gedcomx.SourceDescription()
-        if hasattr(sd,'_date'):
-          continue
-        # on aimerait charger la description avec l'API, malheureusement celle-ci ne retourne pas la date de la source.
-        #r = tree._FsSeanco.get_url("/platform/sources/descriptions/%s" % fsFonto.descriptionId)
-        # on charge donc sur le site, malheureusement celui-ci ne sait pas renvoyer du json, que du xml
-        r = tree._FsSeanco.get_url("/service/tree/links/sources/%s" % fsFonto.descriptionId,{"Accept": "application/xml"})
-        if r and r.text :
-          # arrivé ici, on se dit qu'on va utiliser un analyseur xml pour extraire les informations. Mauvaise idée !
-          # En effet FamilySearch ne respecte pas la norme XML (sans déconner, ils ne respectent pas leur propre norme (le gedcom)
-          # , tu ne t'attendais quand même pas à ce qu'ils respectent une norme païenne), on perdrait notamment les retours à la
-          # ligne dans les zones de texte. On va se contenter de chercher les balises.
-          posDebEvent = r.text.find("<event>")
-          posFinEvent = r.text.find("</event>")
-          if posDebEvent>=0 and posFinEvent>posDebEvent :
-            strEvent = r.text[posDebEvent+7:posFinEvent]
-            posDebFormal = strEvent.find("<eventDate>")
-            posFinFormal = strEvent.find("</eventDate>")
-            if posDebFormal>=0 and posFinFormal>posDebFormal :
-              strFormal = strEvent[posDebFormal+11:posFinFormal]
-              print(strFormal)
-              sd._date = strFormal
-      cl = grPersono.get_citation_list()
+      # ajout des sources des familles :
+      for paro in fsPerso._paroj :
+        fsFontoj.update(paro.sources)
+      # on récupère les dates des sources
+      Importo.akFontDatoj(PersonFS.fs_Tree)
+      # on initialise la liste des citations gramps
+      cl = set(grPersono.get_citation_list())
+      # ajout des citations liées aux évènements
+      for er in grPersono.get_event_ref_list() :
+        event = self.dbstate.db.get_event_from_handle(er.ref)
+        cl.update(event.get_citation_list())
+      # ajout des citations liées aux familles
+      for family_handle in grPersono.get_family_handle_list():
+        family = self.dbstate.db.get_family_from_handle(family_handle)
+        cl.update(family.get_citation_list())
+        # ajout des citations liées aux évènements des familles
+        for er in family.get_event_ref_list() :
+          event = self.dbstate.db.get_event_from_handle(er.ref)
+          cl.update(event.get_citation_list())
       for ch in cl :
         c = self.dbstate.db.get_citation_from_handle(ch)
         titolo = ""
@@ -1393,7 +1463,7 @@ class PersonFS(Gramplet):
             titolo = n.get()
             posRet = titolo.find("\n")
             if(posRet>0) :
-              titolo = titolo[:posRet-1]
+              titolo = titolo[:posRet]
             break
         teksto = ""
         # le texte sera la concaténation des notes
@@ -1401,6 +1471,7 @@ class PersonFS(Gramplet):
           n = self.dbstate.db.get_note_from_handle(nh)
           teksto += n.get()
         dato = utila.grdato_al_formal(c.date)
+        grURL = utila.get_url(c)
         referenco = c.page
         # la référence sera : titre dépôt + titre source + volume/page --> référence
         s = self.dbstate.db.get_source_from_handle(c.source_handle)
@@ -1413,29 +1484,58 @@ class PersonFS(Gramplet):
               referenco = d.name + '\n' + referenco
         koloro = "white"
         fsTeksto = colFS
-        #for x in fsFontoj :
-        #  if x.Date == dato :
-        #    fsTeksto = x.value
-        #    if fsTeksto == teksto :
-        #      koloro = "green"
-        #    else :
-        #      koloro = "yellow"
-        #    fsFontoj.remove(x)
-        #    break
-        self.modelKomp.add([koloro,titolo,dato,teksto,'==========',fsTeksto,False,'FontoP',None,None,None,None] )
+        fsURL = ""
+        fsDato = ""
+        fsTitolo = ""
+        fsid = utila.get_fsftid(c)
+        for x in fsFontoj :
+          if x.descriptionId == fsid :
+            sd =  gedcomx.SourceDescription._indekso.get(x.descriptionId) or gedcomx.SourceDescription()
+            for y in sd.titles :
+              fsTitolo += y.value
+            if len(sd.titles):
+              cTitolo = next(iter(sd.titles)).value
+            else:
+              cTitolo=''
+            komNoto = '\n'
+            if sd.resourceType == 'FSREADONLY':
+              linioj = next(iter(sd.citations)).value.split("\"")
+              if len(linioj) >=3 :
+                sTitolo = linioj[1]
+                komNoto = komNoto + '\n'.join(linioj[2:])
+            fsTeksto=cTitolo+komNoto
+            for fsN in sd.notes :
+              if fsN.subject :
+                fsTeksto = fsTeksto+fsN.subject
+              if fsN.text :
+                fsTeksto = fsTeksto+fsN.text
+            if hasattr(sd,'_date'):
+              fsDato = str(sd._date)
+            if hasattr(sd,'about'):
+              fsURL=sd.about
+            koloro = "orange"
+            if fsDato == dato and fsTitolo==titolo and fsURL == grURL :
+              koloro = "yellow"
+              if fsTeksto == teksto :
+                koloro = "green"
+            fsFontoj.remove(x)
+            break
+        self.modelKomp.add([koloro,dato,titolo,grURL,fsDato,fsTitolo,fsURL,False,'Fonto',c.handle,None,None,None] )
       for fsFonto in fsFontoj :
         sd =  gedcomx.SourceDescription._indekso.get(fsFonto.descriptionId) or gedcomx.SourceDescription()
-        titolo = ""
+        fsTitolo = ""
         for x in sd.titles :
-          titolo += x.value
+          fsTitolo += x.value
         teksto=""
-        fsTeksto = ""
+        fsURL = ""
         if hasattr(sd,'_date'):
-          dato = sd._date
+          fsDato = str(sd._date)
         else :
-          dato = ""
+          fsDato = ""
+        if hasattr(sd,'about'):
+          fsURL=sd.about
         koloro = "white"
-        self.modelKomp.add([koloro,titolo,dato,teksto,'==========',fsTeksto,False,'FontoP',None,None,None,None] )
+        self.modelKomp.add([koloro,'===','===','===',fsDato,fsTitolo,fsURL,False,'Fonto',None,sd.id,None,None] )
     elif regximo == 'REG_notoj' :
       datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/persons/%s/notes" % fsPerso.id)
       gedcomx.maljsonigi(PersonFS.fs_Tree,datumoj)
@@ -1451,25 +1551,40 @@ class PersonFS(Gramplet):
         teksto = n.get()
         fsTeksto = colFS
         titolo = _(n.type.xml_str())
+        fsTitolo = ""
+        grNoto_id = None
+        for t in n.text.get_tags():
+          if t.name == StyledTextTagType.LINK and t.value[0:8] == "_fsftid=":
+            grNoto_id = t.value[8:]
         koloro = "white"
         fsNoto_id = None
         for x in fsNotoj :
-          if x.subject == titolo :
+          if x.id == grNoto_id :
             fsTeksto = x.text
+            fsTitolo = x.subject
             fsNoto_id = x.id
-            if fsTeksto == teksto :
-              koloro = "green"
-            else :
-              koloro = "yellow"
             fsNotoj.remove(x)
             break
-        self.modelKomp.add([koloro,titolo,'',teksto,'==========',fsTeksto,False,'NotoP',None,nh,fsPerso.id,fsNoto_id] )
+        if not fsNoto_id :
+         for x in fsNotoj :
+          if x.subject == titolo :
+            fsTeksto = x.text
+            fsTitolo = x.subject
+            fsNoto_id = x.id
+            fsNotoj.remove(x)
+            break
+        if fsTitolo == titolo and (fsTeksto == teksto 
+           or (teksto[0:1] == '\ufeff' and fsTeksto == teksto[1:] )) :
+          koloro = "green"
+        else :
+          koloro = "yellow"
+        self.modelKomp.add([koloro,_('Persono'),titolo,teksto,fsTitolo,fsTeksto,'',False,'NotoP',None,nh,fsPerso.id,fsNoto_id] )
       for fsNoto in fsNotoj :
         if fsNoto.id :
           print ("Note avec Id : "+fsNoto.id)
-        teksto = fsNoto.text
-        titolo = fsNoto.subject
-        self.modelKomp.add(['white',titolo,'','============================','',teksto,False,'NotoP',None,None,fsPerso.id,None] )
+        fsTeksto = fsNoto.text
+        fsTitolo = fsNoto.subject
+        self.modelKomp.add(['white',_('Persono'),'','============================',fsTitolo,fsTeksto,'',False,'NotoP',None,None,fsPerso.id,fsNoto.id] )
       fsEdzoj = fsPerso._paroj.copy()
       for family_handle in grPersono.get_family_handle_list():
         family = self.dbstate.db.get_family_from_handle(family_handle)
@@ -1518,24 +1633,45 @@ class PersonFS(Gramplet):
             #teksto = n.get_styledtext()
             teksto = n.get()
             titolo = _(n.type.xml_str())
+            grNoto_id = None
+            for t in n.text.get_tags():
+              if t.name == StyledTextTagType.LINK and t.value[0:8] == "_fsftid=":
+                grNoto_id = t.value[8:]
             koloro = "white"
             fsTeksto = colFS
-            for fsNoto in fsNotoj :
-              if fsNoto.subject == titolo :
-                fsTeksto = fsNoto.text
-                fsNotoj.remove(fsNoto)
+            fsTitolo = None
+            fsNotoId = None
+            for x in fsNotoj :
+              if x.id == grNoto_id :
+                fsTeksto = x.text
+                fsTitolo = x.subject
+                fsNotoId = x.id
+                fsNotoj.remove(x)
                 break
-            self.modelKomp.add(['white',titolo,'',teksto,'',fsTeksto,False,'NotoF',None,nh,family_handle,fsParoId] )
+            if not fsNotoId :
+             for x in fsNotoj :
+              if x.subject == titolo :
+                fsTeksto = x.text
+                fsTitolo = x.subject
+                fsNotoId = x.id
+                fsNotoj.remove(x)
+                break
+            if fsTitolo == titolo and (fsTeksto == teksto 
+               or (teksto[0:1] == '\ufeff' and fsTeksto == teksto[1:] )) :
+              koloro = "green"
+            else :
+              koloro = "yellow"
+            self.modelKomp.add([koloro,_('Familio'),titolo,teksto,fsTitolo,fsTeksto,'',False,'NotoF',family_handle,nh,fsParoId,fsNotoId] )
           for fsNoto in fsNotoj :
-            self.modelKomp.add(['white',fsNoto.text,'','============================','',fsNoto.subject,False,'NotoF',None,None,family_handle,fsParoId] )
+            self.modelKomp.add(['white',_('Familio'),'','============================',fsNoto.subject,fsNoto.text,'',False,'NotoF',family_handle,None,fsParoId,fsNoto.id] )
           #, False, 'edzo', edzo_handle ,fsEdzoId , family.handle, fsParoId
-      for fsFam in fsEdzoj :
-        datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/couple-relationships/%s/notes" % fsFam.id)
-        gedcomx.maljsonigi(PersonFS.fs_Tree,datumoj)
-        for fsNoto in fsFam.notes :
-          teksto = fsNoto.text
-          titolo = fsNoto.subject
-          self.modelKomp.add(['white',titolo,'','============================','',teksto,False,'NotoF',None,None,None,fsFam.id] )
+      #for fsFam in fsEdzoj :
+      #  datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/couple-relationships/%s/notes" % fsFam.id)
+      #  gedcomx.maljsonigi(PersonFS.fs_Tree,datumoj)
+      #  for fsNoto in fsFam.notes :
+      #    fsTeksto = fsNoto.text
+      #    fsTitolo = fsNoto.subject
+      #    self.modelKomp.add(['white',_('Familio'),'','============================',fsTitolo,fsTeksto,'',False,'NotoF',None,None,fsFam.id,fsNoto.id] )
     elif regximo == 'REG_bildoj' :
       pass
     else : # REG_cxefa

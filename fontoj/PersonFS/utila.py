@@ -104,6 +104,14 @@ def get_fsftid(grObj) :
       return attr.get_value()
   return ''
 
+def get_url(grObj) :
+  if not grObj :
+    return ''
+  for attr in grObj.get_attribute_list():
+    if attr.get_type() == _('Internet Address'):
+      return attr.get_value()
+  return ''
+
 def get_fsfact(person, fact_tipo):
   """
   " Liveras la unuan familysearch fakton de la donita tipo.
