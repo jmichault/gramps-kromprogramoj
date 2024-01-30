@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GRAMPS 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-29 18:29+0100\n"
+"POT-Creation-Date: 2024-01-30 18:47+0100\n"
 "PO-Revision-Date: 2023-08-05 19:36+0000\n"
 "Last-Translator: Nick Hall <nick-h@gramps-project.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
@@ -160,115 +160,115 @@ msgstr "Importando crianças ..."
 msgid "sengepatra familio ???"
 msgstr "Família dos pais ???"
 
-#: PersonFS/Importo.py:852
+#: PersonFS/Importo.py:853
 msgid "Repository"
 msgstr "Repositório"
 
-#: PersonFS/Importo.py:854
+#: PersonFS/Importo.py:855
 msgid "Source:"
 msgstr "Fonte:"
 
-#: PersonFS/Importo.py:855
+#: PersonFS/Importo.py:856
 msgid "Volume/Page:"
 msgstr "Volume/Página:"
 
-#: PersonFS/Importo.py:857
+#: PersonFS/Importo.py:858
 msgid "Confidence:"
 msgstr "Confiança:"
 
-#: PersonFS/Importo.py:915 PersonFS/Importo.py:958 PersonFS/utila.py:111
+#: PersonFS/Importo.py:916 PersonFS/Importo.py:959 PersonFS/utila.py:111
 msgid "Internet Address"
 msgstr "Editor de endereço de Internet"
 
-#: PersonFS/Importo.py:936
+#: PersonFS/Importo.py:937
 msgid "Very High"
 msgstr "Muito alto"
 
-#: PersonFS/Importo.py:938
+#: PersonFS/Importo.py:939
 msgid "High"
 msgstr "Alto"
 
-#: PersonFS/Importo.py:940
+#: PersonFS/Importo.py:941
 msgid "Normal"
 msgstr "Normal"
 
-#: PersonFS/Importo.py:942
+#: PersonFS/Importo.py:943
 msgid "Low"
 msgstr "Baixo"
 
-#: PersonFS/Importo.py:944
+#: PersonFS/Importo.py:945
 msgid "Very Low"
 msgstr "Muito baixo"
 
-#: PersonFS/Importo.py:994
+#: PersonFS/Importo.py:995
 msgid "Kromprogramoj"
 msgstr "Plugins"
 
-#: PersonFS/Importo.py:1001 PersonFS/Importo.py:1056
+#: PersonFS/Importo.py:1002 PersonFS/Importo.py:1057
 msgid "FamilySearch Importo Opcionoj"
 msgstr "Opções de importação do FamilySearch"
 
-#: PersonFS/Importo.py:1002
+#: PersonFS/Importo.py:1003
 msgid "FamilySearch ID"
 msgstr "FamilySearch ID"
 
-#: PersonFS/Importo.py:1003
+#: PersonFS/Importo.py:1004
 msgid "identiga numero por esti prenita de FamilySearch retejo"
 msgstr "Número de identificação a ser retirado do site da FamilySearch"
 
-#: PersonFS/Importo.py:1005
+#: PersonFS/Importo.py:1006
 msgid "Nombro ascentontaj"
 msgstr "Número ascendente"
 
-#: PersonFS/Importo.py:1006
+#: PersonFS/Importo.py:1007
 msgid "Nombro de generacioj por supreniri"
 msgstr "Numericamente de geração para subir"
 
-#: PersonFS/Importo.py:1008
+#: PersonFS/Importo.py:1009
 msgid "Nombro descendontaj"
 msgstr "Número para descer"
 
-#: PersonFS/Importo.py:1009
+#: PersonFS/Importo.py:1010
 msgid "Nombro de generacioj descendontaj"
 msgstr "Numericamente de geração para descer"
 
-#: PersonFS/Importo.py:1011
+#: PersonFS/Importo.py:1012
 msgid "Ne reimporti ekzistantajn personojn"
 msgstr "Não re -imaginar pessoas existentes"
 
-#: PersonFS/Importo.py:1012
+#: PersonFS/Importo.py:1013
 msgid "Importi nur neekzistantajn personojn"
 msgstr "Importar apenas pessoas não existentes"
 
-#: PersonFS/Importo.py:1014
+#: PersonFS/Importo.py:1015
 msgid "Aldoni geedzoj"
 msgstr "Adicione cônjuges"
 
-#: PersonFS/Importo.py:1015
+#: PersonFS/Importo.py:1016
 msgid "Aldoni informojn pri geedzoj"
 msgstr "Adicione informações sobre cônjuges"
 
-#: PersonFS/Importo.py:1017 PersonFS/Importo.py:1018
+#: PersonFS/Importo.py:1018 PersonFS/Importo.py:1019
 msgid "Aldoni fontoj"
 msgstr "Adicione fontes"
 
-#: PersonFS/Importo.py:1020 PersonFS/Importo.py:1021
+#: PersonFS/Importo.py:1021 PersonFS/Importo.py:1022
 msgid "Aldoni notoj"
 msgstr "Adicione notas"
 
-#: PersonFS/Importo.py:1023
+#: PersonFS/Importo.py:1024
 msgid "Vorteco"
 msgstr "Vocabulário"
 
-#: PersonFS/Importo.py:1024
+#: PersonFS/Importo.py:1025
 msgid "Vorteca nivelo de 0 (minimuma) ĝis 3 (tre vorta)"
 msgstr "Nível de vocabulário de 0 (mínimo) a 3 (muito palavra)"
 
-#: PersonFS/Importo.py:1028
+#: PersonFS/Importo.py:1029
 msgid "Menuo Aldonita"
 msgstr "Menu adicionado"
 
-#: PersonFS/Importo.py:1050
+#: PersonFS/Importo.py:1051
 msgid "FamilySearch Import Tool"
 msgstr "Ferramenta de importação do FamilySearch"
 
@@ -359,10 +359,6 @@ msgstr "Data do FS"
 msgid "FS Valoro"
 msgstr "Valor FS"
 
-#: PersonFS/PersonFS.py:797 PersonFS/PersonFS.py:812
-msgid "x"
-msgstr "x"
-
 #: PersonFS/PersonFS.py:799 PersonFS/PersonFS.py:814 PersonFS/PersonFS.py:829
 msgid "xTipo"
 msgstr "Xtipo"
@@ -442,16 +438,16 @@ msgstr ""
 "Não há duplicações prováveis para a pessoa que %s encontrou no site "
 "\"FamilySearch\"."
 
-#: PersonFS/PersonFS.py:1431 PersonFS/PersonFS.py:1544 PersonFS/komparo.py:109
+#: PersonFS/PersonFS.py:1431 PersonFS/PersonFS.py:1543 PersonFS/komparo.py:109
 #: PersonFS/komparo.py:981
 msgid "Ne konektita al FamilySearch"
 msgstr "Não conectado ao FamilySearch"
 
-#: PersonFS/PersonFS.py:1582 PersonFS/PersonFS.py:1588
+#: PersonFS/PersonFS.py:1581 PersonFS/PersonFS.py:1587
 msgid "Persono"
 msgstr "Uma pessoa"
 
-#: PersonFS/PersonFS.py:1665 PersonFS/PersonFS.py:1667
+#: PersonFS/PersonFS.py:1664 PersonFS/PersonFS.py:1666
 msgid "Familio"
 msgstr "Família"
 
@@ -748,6 +744,9 @@ msgstr "Fontes"
 #: PersonFS/PersonFS.glade:949
 msgid "Reĝimo :  "
 msgstr "Regime:"
+
+#~ msgid "x"
+#~ msgstr "x"
 
 #~ msgid "Elŝutante notojn…"
 #~ msgstr "Download Notes ..."

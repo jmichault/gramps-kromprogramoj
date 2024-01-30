@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gramps 5.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-29 18:29+0100\n"
+"POT-Creation-Date: 2024-01-30 18:47+0100\n"
 "PO-Revision-Date: 2023-09-12 11:02+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gramps-project/"
@@ -161,117 +161,117 @@ msgstr "Kinderen importeren…"
 msgid "sengepatra familio ???"
 msgstr "ouderfamilie ???"
 
-#: PersonFS/Importo.py:852
+#: PersonFS/Importo.py:853
 msgid "Repository"
 msgstr "Bibliotheek"
 
-#: PersonFS/Importo.py:854
+#: PersonFS/Importo.py:855
 msgid "Source:"
 msgstr "Bron:"
 
-#: PersonFS/Importo.py:855
+#: PersonFS/Importo.py:856
 msgid "Volume/Page:"
 msgstr "Volume/Pagina:"
 
-#: PersonFS/Importo.py:857
+#: PersonFS/Importo.py:858
 msgid "Confidence:"
 msgstr "Betrouwbaarheid:"
 
-#: PersonFS/Importo.py:915 PersonFS/Importo.py:958 PersonFS/utila.py:111
+#: PersonFS/Importo.py:916 PersonFS/Importo.py:959 PersonFS/utila.py:111
 msgid "Internet Address"
 msgstr "Internet Adres"
 
-#: PersonFS/Importo.py:936
+#: PersonFS/Importo.py:937
 msgid "Very High"
 msgstr "Heel hoog"
 
-#: PersonFS/Importo.py:938
+#: PersonFS/Importo.py:939
 msgid "High"
 msgstr "Hoog"
 
-#: PersonFS/Importo.py:940
+#: PersonFS/Importo.py:941
 msgid "Normal"
 msgstr "Normaal"
 
-#: PersonFS/Importo.py:942
+#: PersonFS/Importo.py:943
 msgid "Low"
 msgstr "Laag"
 
-#: PersonFS/Importo.py:944
+#: PersonFS/Importo.py:945
 msgid "Very Low"
 msgstr "Heel laag"
 
-#: PersonFS/Importo.py:994
+#: PersonFS/Importo.py:995
 msgid "Kromprogramoj"
 msgstr "Plug -ins"
 
-#: PersonFS/Importo.py:1001 PersonFS/Importo.py:1056
+#: PersonFS/Importo.py:1002 PersonFS/Importo.py:1057
 msgid "FamilySearch Importo Opcionoj"
 msgstr "FamilySearch importoptie"
 
-#: PersonFS/Importo.py:1002
+#: PersonFS/Importo.py:1003
 msgid "FamilySearch ID"
 msgstr "FamilySearch ID"
 
-#: PersonFS/Importo.py:1003
+#: PersonFS/Importo.py:1004
 msgid "identiga numero por esti prenita de FamilySearch retejo"
 msgstr ""
 "identificatienummer dat moet worden gehaald van de website van de "
 "familiesearch"
 
-#: PersonFS/Importo.py:1005
+#: PersonFS/Importo.py:1006
 msgid "Nombro ascentontaj"
 msgstr "Aantal stijgende"
 
-#: PersonFS/Importo.py:1006
+#: PersonFS/Importo.py:1007
 msgid "Nombro de generacioj por supreniri"
 msgstr "Numeriek de generatie om naar boven te gaan"
 
-#: PersonFS/Importo.py:1008
+#: PersonFS/Importo.py:1009
 msgid "Nombro descendontaj"
 msgstr "Nummer om af te dalen"
 
-#: PersonFS/Importo.py:1009
+#: PersonFS/Importo.py:1010
 msgid "Nombro de generacioj descendontaj"
 msgstr "Numeriek van generatie om af te dalen"
 
-#: PersonFS/Importo.py:1011
+#: PersonFS/Importo.py:1012
 msgid "Ne reimporti ekzistantajn personojn"
 msgstr "Niet om bestaande personen opnieuw op te stellen"
 
-#: PersonFS/Importo.py:1012
+#: PersonFS/Importo.py:1013
 msgid "Importi nur neekzistantajn personojn"
 msgstr "Importeer alleen niet -bestaande personen"
 
-#: PersonFS/Importo.py:1014
+#: PersonFS/Importo.py:1015
 msgid "Aldoni geedzoj"
 msgstr "Voeg echtgenoten toe"
 
-#: PersonFS/Importo.py:1015
+#: PersonFS/Importo.py:1016
 msgid "Aldoni informojn pri geedzoj"
 msgstr "Voeg informatie toe over echtgenoten"
 
-#: PersonFS/Importo.py:1017 PersonFS/Importo.py:1018
+#: PersonFS/Importo.py:1018 PersonFS/Importo.py:1019
 msgid "Aldoni fontoj"
 msgstr "Voeg bronnen toe"
 
-#: PersonFS/Importo.py:1020 PersonFS/Importo.py:1021
+#: PersonFS/Importo.py:1021 PersonFS/Importo.py:1022
 msgid "Aldoni notoj"
 msgstr "Notities toevoegen"
 
-#: PersonFS/Importo.py:1023
+#: PersonFS/Importo.py:1024
 msgid "Vorteco"
 msgstr "Vocabulaire"
 
-#: PersonFS/Importo.py:1024
+#: PersonFS/Importo.py:1025
 msgid "Vorteca nivelo de 0 (minimuma) ĝis 3 (tre vorta)"
 msgstr "Woordenschatniveau van 0 (minimum) tot 3 (zeer woord)"
 
-#: PersonFS/Importo.py:1028
+#: PersonFS/Importo.py:1029
 msgid "Menuo Aldonita"
 msgstr "Menu toegevoegd"
 
-#: PersonFS/Importo.py:1050
+#: PersonFS/Importo.py:1051
 msgid "FamilySearch Import Tool"
 msgstr "FamilySearch Import Tool"
 
@@ -362,10 +362,6 @@ msgstr "FS datum"
 msgid "FS Valoro"
 msgstr "FS -waarde"
 
-#: PersonFS/PersonFS.py:797 PersonFS/PersonFS.py:812
-msgid "x"
-msgstr "X"
-
 #: PersonFS/PersonFS.py:799 PersonFS/PersonFS.py:814 PersonFS/PersonFS.py:829
 msgid "xTipo"
 msgstr "xTipo"
@@ -445,16 +441,16 @@ msgstr ""
 "Waarschijnlijk geen duplicaten voor de persoon %s gevonden op de website "
 "\"FamilySearch\"."
 
-#: PersonFS/PersonFS.py:1431 PersonFS/PersonFS.py:1544 PersonFS/komparo.py:109
+#: PersonFS/PersonFS.py:1431 PersonFS/PersonFS.py:1543 PersonFS/komparo.py:109
 #: PersonFS/komparo.py:981
 msgid "Ne konektita al FamilySearch"
 msgstr "Niet verbonden met FamilySearch"
 
-#: PersonFS/PersonFS.py:1582 PersonFS/PersonFS.py:1588
+#: PersonFS/PersonFS.py:1581 PersonFS/PersonFS.py:1587
 msgid "Persono"
 msgstr "Een persoon"
 
-#: PersonFS/PersonFS.py:1665 PersonFS/PersonFS.py:1667
+#: PersonFS/PersonFS.py:1664 PersonFS/PersonFS.py:1666
 msgid "Familio"
 msgstr "Familie"
 
@@ -750,6 +746,9 @@ msgstr "Bronnen"
 #: PersonFS/PersonFS.glade:949
 msgid "Reĝimo :  "
 msgstr "Regime: "
+
+#~ msgid "x"
+#~ msgstr "X"
 
 #~ msgid "Elŝutante notojn…"
 #~ msgstr "Notes downloaden…"
