@@ -688,12 +688,8 @@ class PersonFS(Gramplet):
         elif ( (tipolinio == 'Fonto' ) and linio[10] and linio[7]) :
           fsSdId = linio[10]
           fh = linio[9]
-          print(" fonto FS --> gramps, id="+fsFontoId)
-          if fh :
-            grFonto = self.dbstate.db.get_source_from_handle(fh)
-          else :
-            grFonto = Source()
-          sourceDescription = gedcomx.SourceDescription._indekso.get(fsSdId)
+          print(" fonto FS --> gramps, id="+fsSdId)
+          citation = Importo.aldFonto(self.dbstate.db,txn,fsSdId,grPersono,grPersono.citation_list)
       self.dbstate.db.commit_person(grPersono,txn)
       self.dbstate.db.transaction_commit(txn)
     self.ButRefresxigi_clicked(None)

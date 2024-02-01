@@ -391,6 +391,175 @@ def akFontDatoj(fsTree):
       if sd._collectionUri:
         sd._collection = sd._collectionUri.removeprefix('https://www.familysearch.org/platform/records/collections/')
 
+#def aldFonto(db, txn, fsFonto, obj, EkzCit):
+def aldFonto(db, txn, sdId, obj, EkzCit):
+    # akiri SourceDescription
+    sourceDescription = gedcomx.SourceDescription._indekso.get(sdId)
+    if not sourceDescription : return
+    # sercxi ekzistantan
+    trovita = False
+    # sercxi ekzistantan kun id
+    for ch in db.get_citation_handles() :
+      c = db.get_citation_from_handle(ch)
+      for attr in c.get_attribute_list():
+        if attr.get_type() == '_FSFTID' and attr.get_value() == sourceDescription.id :
+          trovita = True
+          print(" citation trouvée _FSFTID="+sourceDescription.id)
+          return c
+    print(" citation pas trouvée _FSFTID="+sourceDescription.id)
+    deponejo = None
+    sTitolo = None
+    cTitolo = None
+    komNoto = '\n'
+    posizio = None
+    konfido = None
+    #import pdb; pdb.set_trace()
+    if len(sourceDescription.titles):
+      cTitolo = next(iter(sourceDescription.titles)).value
+    if len(sourceDescription.citations):
+      sTitolo = next(iter(sourceDescription.citations)).value
+    if sourceDescription.resourceType == 'FSREADONLY':
+      deponejo = 'FamilySearch'
+      if sTitolo :
+        linioj = sTitolo.split("\"") 
+        if len(linioj) >=3 :
+          sTitolo = linioj[1]
+          komNoto = komNoto + '\n'.join(linioj[2:])
+    if cTitolo and sourceDescription.resourceType == 'DEFAULT':
+      linioj = sTitolo.split("\n") 
+      if len(linioj) >= 3 : #and linioj[0].find(_('Repository')+" :")==0 :
+        deponejo = linioj[0].removeprefix(_('Repository')+" :").strip()
+        # FARINDAĴO : essayer d'autres langues ?
+        sTitolo = linioj[1].removeprefix(_('Source:')).strip()
+        posizio = linioj[2].removeprefix(_('Volume/Page:')).strip()
+        if len(linioj) >= 4 :
+          konfido = linioj[3].removeprefix(_('Confidence:')).strip()
+      elif len(linioj) >=1 :
+        sTitolo = linioj[0]
+    r = None
+    if deponejo :
+      db.dbapi.execute("select handle from repository where name=?",[deponejo])
+      datumoj = db.dbapi.fetchone()
+      if datumoj and datumoj[0] :
+        rh = datumoj[0]
+      else :
+        r = Repository()
+        r.set_name(deponejo)
+        rtype = RepositoryType()
+        rtype.set((RepositoryType.WEBSITE))
+        r.set_type(rtype)
+        if deponejo == 'FamilySearch' :
+          url = Url()
+          url.path = 'https://www.familysearch.org/'
+          url.set_type(UrlType.WEB_HOME)
+          r.add_url(url)
+        db.add_repository(r, txn)
+        rh = r.handle
+    #  repo_ref = RepoRef()
+    #  repo_ref.set_reference_handle(rh)
+    #  repo_ref.set_media_type(SourceMediaType.ELECTRONIC)
+    #  s.add_repo_reference(repo_ref)
+    s = None
+    if sTitolo and not s and hasattr(sourceDescription,'_collection') and sourceDescription._collection:
+      # recherche de la source par son numéro de collection
+      s = db.get_source_from_gramps_id('FS_coll_'+sourceDescription._collection)
+    if sTitolo :
+      # recherche de la source par son titre
+      db.dbapi.execute("select handle from source where title=?",[sTitolo])
+      datumoj = db.dbapi.fetchone()
+      if datumoj and datumoj[0] :
+        sTmp = db.get_source_from_handle(datumoj[0])
+        if deponejo :
+          # FARINDAĴO
+          s = sTmp
+        else:
+          s = sTmp
+    if sTitolo and not s :
+      # on crée la source
+      s = Source()
+      if hasattr(sourceDescription,'_collection') and sourceDescription._collection:
+        s.gramps_id = 'FS_coll_'+sourceDescription._collection
+      if r :
+        rr = RepoRef()
+        rr.ref = r.handle
+        rr.set_media_type( SourceMediaType.ELECTRONIC)
+        s.add_repo_reference(rr)
+      if len(sourceDescription.descriptions):
+        description = next(iter(sourceDescription.descriptions))
+        if description and description.value:
+          s.set_description(description.value)
+      s.set_title(sTitolo)
+      if hasattr(sourceDescription,'_collectionUri') and sourceDescription._collectionUri:
+        attr = SrcAttribute()
+        attr.set_type(_('Internet Address'))
+        attr.set_value('https://www.familysearch.org/search/collection/'+sourceDescription._collection)
+        s.add_attribute(attr)
+      # FARINDAĴO : Elekti aŭtoro de SourceDescriptionId
+      if len(sourceDescription.authors):
+        s.set_author(next(iter(sourceDescription.authors)))
+      #if len(sourceDescription.links) and 'source-reference' in sourceDescription.links:
+      #  link = sourceDescription.links['source-reference']
+      #  s.set_publication_info(link.href)
+      #s.abbrev = "FamilySearch " + ???
+      db.add_source(s,txn)
+      db.commit_source(s,txn)
+    # sercxi ekzistantan citaĵon
+    for ch in obj.citation_list :
+      c = db.get_citation_from_handle(ch)
+      if get_fsftid(c) == sourceDescription.id :
+        return c
+    citation = Citation()
+    if posizio :
+      citation.set_page(posizio)
+    if konfido :
+      if konfido == _('Very High') :
+        citation.set_confidence_level(Citation.CONF_VERY_HIGH)
+      elif konfido == _('High') :
+        citation.set_confidence_level(Citation.CONF_HIGH)
+      elif konfido == _('Normal') :
+        citation.set_confidence_level(Citation.CONF_NORMAL)
+      elif konfido == _('Low') :
+        citation.set_confidence_level(Citation.CONF_LOW)
+      elif konfido == _('Very Low') :
+        citation.set_confidence_level(Citation.CONF_VERY_LOW)
+    if hasattr(sourceDescription,'_date') and sourceDescription._date:
+      citation.date = fsdato_al_gr(sourceDescription._date)
+    if s :
+      citation.set_reference_handle(s.get_handle())
+    db.add_citation(citation,txn)
+    db.commit_citation(citation,txn)
+    attr = SrcAttribute()
+    attr.set_type('_FSFTID')
+    attr.set_value(sourceDescription.id)
+    citation.add_attribute(attr)
+    if sourceDescription.about :
+      attr = SrcAttribute()
+      attr.set_type(_("Internet Address"))
+      attr.set_value(sourceDescription.about)
+      citation.add_attribute(attr)
+    if cTitolo or len(sourceDescription.notes) :
+      n = Note()
+      tags=[]
+      n.set_type(NoteType(NoteType.CITATION))
+      n.append(cTitolo)
+      tags.append(StyledTextTag(StyledTextTagType.BOLD, True,[(0, len(cTitolo))]))
+      n.append(komNoto)
+      for fsN in sourceDescription.notes :
+        if fsN.subject :
+          n.append(fsN.subject)
+          tags.append(StyledTextTag(StyledTextTagType.BOLD, True,[(len(str(n.text)),len(str(n.text))+ len(fsN.subject))]))
+        if fsN.text :
+          n.append(fsN.text)
+      n.text.set_tags(tags)
+      db.add_note(n, txn)
+      db.commit_note(n, txn)
+      citation.add_note(n.handle)
+    db.commit_citation(citation,txn)
+    obj.add_citation(citation.handle)
+    
+    return citation
+
+
 class FsAlGr:
   # 
   fs_TreeImp = None
@@ -459,7 +628,7 @@ class FsAlGr:
       grPerson.add_note(noto.handle)
     # fontoj
     for fsFonto in fsPersono.sources :
-      c = self.aldFonto(fsFonto,grPerson,grPerson.citation_list)
+      c = aldFonto(db, txn, fsFonto.descriptionId,grPerson,grPerson.citation_list)
       db.commit_person(grPerson,txn)
     # FARINDAĴOJ : memoroj
     #for fsMemoro in fsPersono.memories :
@@ -808,179 +977,11 @@ class FsAlGr:
       familio.add_note(noto.handle)
     # fontoj
     for fsFonto in fsFam.sources :
-      c = self.aldFonto(fsFonto,familio,familio.citation_list)
+      c = aldFonto(self.dbstate.db, self.txn, fsFonto.descriptionId,familio,familio.citation_list)
       #familio.add_citation(c.handle)
     # FARINDAĴOJ : FS ID
     self.dbstate.db.commit_family(familio,self.txn)
     return
-
-  def aldFonto(self, fsFonto, obj, EkzCit):
-    # akiri SourceDescription
-    sourceDescription = gedcomx.SourceDescription._indekso.get(fsFonto.descriptionId)
-    if not sourceDescription : return
-    # sercxi ekzistantan
-    trovita = False
-    # sercxi ekzistantan kun id
-    for ch in self.dbstate.db.get_citation_handles() :
-      c = self.dbstate.db.get_citation_from_handle(ch)
-      for attr in c.get_attribute_list():
-        if attr.get_type() == '_FSFTID' and attr.get_value() == sourceDescription.id :
-          trovita = True
-          print(" citation trouvée _FSFTID="+sourceDescription.id)
-          return c
-    print(" citation pas trouvée _FSFTID="+sourceDescription.id)
-    deponejo = None
-    sTitolo = None
-    cTitolo = None
-    komNoto = '\n'
-    posizio = None
-    konfido = None
-    #import pdb; pdb.set_trace()
-    if len(sourceDescription.titles):
-      cTitolo = next(iter(sourceDescription.titles)).value
-    if len(sourceDescription.citations):
-      sTitolo = next(iter(sourceDescription.citations)).value
-    if sourceDescription.resourceType == 'FSREADONLY':
-      deponejo = 'FamilySearch'
-      if sTitolo :
-        linioj = sTitolo.split("\"") 
-        if len(linioj) >=3 :
-          sTitolo = linioj[1]
-          komNoto = komNoto + '\n'.join(linioj[2:])
-    if cTitolo and sourceDescription.resourceType == 'DEFAULT':
-      linioj = sTitolo.split("\n") 
-      if len(linioj) >= 3 : #and linioj[0].find(_('Repository')+" :")==0 :
-        deponejo = linioj[0].removeprefix(_('Repository')+" :").strip()
-        # FARINDAĴO : essayer d'autres langues ?
-        sTitolo = linioj[1].removeprefix(_('Source:')).strip()
-        posizio = linioj[2].removeprefix(_('Volume/Page:')).strip()
-        if len(linioj) >= 4 :
-          konfido = linioj[3].removeprefix(_('Confidence:')).strip()
-      elif len(linioj) >=1 :
-        sTitolo = linioj[0]
-    r = None
-    if deponejo :
-      self.dbstate.db.dbapi.execute("select handle from repository where name=?",[deponejo])
-      datumoj = self.dbstate.db.dbapi.fetchone()
-      if datumoj and datumoj[0] :
-        rh = datumoj[0]
-      else :
-        r = Repository()
-        r.set_name(deponejo)
-        rtype = RepositoryType()
-        rtype.set((RepositoryType.WEBSITE))
-        r.set_type(rtype)
-        if deponejo == 'FamilySearch' :
-          url = Url()
-          url.path = 'https://www.familysearch.org/'
-          url.set_type(UrlType.WEB_HOME)
-          r.add_url(url)
-        self.dbstate.db.add_repository(r, self.txn)
-        rh = r.handle
-    #  repo_ref = RepoRef()
-    #  repo_ref.set_reference_handle(rh)
-    #  repo_ref.set_media_type(SourceMediaType.ELECTRONIC)
-    #  s.add_repo_reference(repo_ref)
-    s = None
-    if sTitolo and not s and hasattr(sourceDescription,'_collection') and sourceDescription._collection:
-      # recherche de la source par son numéro de collection
-      s = self.dbstate.db.get_source_from_gramps_id('FS_coll_'+sourceDescription._collection)
-    if sTitolo :
-      # recherche de la source par son titre
-      self.dbstate.db.dbapi.execute("select handle from source where title=?",[sTitolo])
-      datumoj = self.dbstate.db.dbapi.fetchone()
-      if datumoj and datumoj[0] :
-        sTmp = self.dbstate.db.get_source_from_handle(datumoj[0])
-        if deponejo :
-          # FARINDAĴO
-          s = sTmp
-        else:
-          s = sTmp
-    if sTitolo and not s :
-      # on crée la source
-      s = Source()
-      if hasattr(sourceDescription,'_collection') and sourceDescription._collection:
-        s.gramps_id = 'FS_coll_'+sourceDescription._collection
-      if r :
-        rr = RepoRef()
-        rr.ref = r.handle
-        rr.set_media_type( SourceMediaType.ELECTRONIC)
-        s.add_repo_reference(rr)
-      if len(sourceDescription.descriptions):
-        description = next(iter(sourceDescription.descriptions))
-        if description and description.value:
-          s.set_description(description.value)
-      s.set_title(sTitolo)
-      if hasattr(sourceDescription,'_collectionUri') and sourceDescription._collectionUri:
-        attr = SrcAttribute()
-        attr.set_type(_('Internet Address'))
-        attr.set_value('https://www.familysearch.org/search/collection/'+sourceDescription._collection)
-        s.add_attribute(attr)
-      # FARINDAĴO : Elekti aŭtoro de SourceDescriptionId
-      if len(sourceDescription.authors):
-        s.set_author(next(iter(sourceDescription.authors)))
-      #if len(sourceDescription.links) and 'source-reference' in sourceDescription.links:
-      #  link = sourceDescription.links['source-reference']
-      #  s.set_publication_info(link.href)
-      #s.abbrev = "FamilySearch " + ???
-      self.dbstate.db.add_source(s,self.txn)
-      self.dbstate.db.commit_source(s,self.txn)
-    # sercxi ekzistantan citaĵon
-    for ch in obj.citation_list :
-      c = self.dbstate.db.get_citation_from_handle(ch)
-      if get_fsftid(c) == sourceDescription.id :
-        return c
-    citation = Citation()
-    if posizio :
-      citation.set_page(posizio)
-    if konfido :
-      if konfido == _('Very High') :
-        citation.set_confidence_level(Citation.CONF_VERY_HIGH)
-      elif konfido == _('High') :
-        citation.set_confidence_level(Citation.CONF_HIGH)
-      elif konfido == _('Normal') :
-        citation.set_confidence_level(Citation.CONF_NORMAL)
-      elif konfido == _('Low') :
-        citation.set_confidence_level(Citation.CONF_LOW)
-      elif konfido == _('Very Low') :
-        citation.set_confidence_level(Citation.CONF_VERY_LOW)
-    if hasattr(sourceDescription,'_date') and sourceDescription._date:
-      citation.date = fsdato_al_gr(sourceDescription._date)
-    if s :
-      citation.set_reference_handle(s.get_handle())
-    self.dbstate.db.add_citation(citation,self.txn)
-    self.dbstate.db.commit_citation(citation,self.txn)
-    attr = SrcAttribute()
-    attr.set_type('_FSFTID')
-    attr.set_value(sourceDescription.id)
-    citation.add_attribute(attr)
-    if sourceDescription.about :
-      attr = SrcAttribute()
-      attr.set_type(_("Internet Address"))
-      attr.set_value(sourceDescription.about)
-      citation.add_attribute(attr)
-    if cTitolo or len(sourceDescription.notes) :
-      n = Note()
-      tags=[]
-      n.set_type(NoteType(NoteType.CITATION))
-      n.append(cTitolo)
-      tags.append(StyledTextTag(StyledTextTagType.BOLD, True,[(0, len(cTitolo))]))
-      n.append(komNoto)
-      for fsN in sourceDescription.notes :
-        if fsN.subject :
-          n.append(fsN.subject)
-          tags.append(StyledTextTag(StyledTextTagType.BOLD, True,[(len(str(n.text)),len(str(n.text))+ len(fsN.subject))]))
-        if fsN.text :
-          n.append(fsN.text)
-      n.text.set_tags(tags)
-      self.dbstate.db.add_note(n, self.txn)
-      self.dbstate.db.commit_note(n, self.txn)
-      citation.add_note(n.handle)
-    self.dbstate.db.commit_citation(citation,self.txn)
-    obj.add_citation(citation.handle)
-    
-    return citation
-
 
 
 class FSImportoOpcionoj(MenuToolOptions):
