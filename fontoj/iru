@@ -1,6 +1,6 @@
 GREFFONS="Lokpurigado  PersonFS  PlaceFrCog"
 LINGVOJ="fr nl en pt_BR"
-GRPATH="../../gramps-5.2.0rc1"
+GRPATH="../../gramps"
 
 #for G in $GREFFONS ; do
 # # met à jour les fichiers .pot
@@ -15,8 +15,10 @@ GRPATH="../../gramps-5.2.0rc1"
 #   # traduction google du fichier .po
 #   lib/traduki_po.sh "$G"/po/$L-local.po
 # done
+#  RESOURCEPATH="$GRPATH" LANGUAGE=eo.UTF-8 python3 make.py gramps51 build "$G"
 #done
 
 # mise à jour des fichiers tgz et des listes
-RESOURCEPATH="$GRPATH" LANGUAGE=eo.UTF-8 python3 make.py
+RESOURCEPATH="$GRPATH" LANGUAGE=eo.UTF-8 python3 make.py gramps51 build all
+RESOURCEPATH="$GRPATH" LANGUAGE=eo.UTF-8 python3 make.py gramps51 listing all
 

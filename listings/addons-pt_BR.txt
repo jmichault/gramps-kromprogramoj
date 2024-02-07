@@ -1,5 +1,5 @@
-{"t":'Gramplet',"i":'FS Gramplet',"n":'Personfs',"v":'beta 2.0.21',"g":'5.1',"d":'Interface para o FamilySearch',"z":'PersonFS.addon.tgz'}
-{"t":'Gramplet',"i":'Lokpurigado',"n":'Coloque a limpeza',"v":'1.0.19',"g":'5.1',"d":'A limpeza do local ajuda a completar locais usando o OpenStreetMap.',"z":'Lokpurigado.addon.tgz'}
-{"t":'Gramplet',"i":'PlaceFrCog Gramplet',"n":'Lugares: código geográfico oficial francês',"v":'1.0.33',"g":'5.1',"d":'Gramplet para tirar municípios do banco de dados INSEE',"z":'PlaceFrCog.addon.tgz'}
-{"t":'Tool',"i":'FamilySearch komparo',"n":'FamilySearch: Compare',"v":'beta 2.0.21',"g":'5.1',"d":'FamilySearch: Compare Gramps com pessoas com FS.',"z":'PersonFS.addon.tgz'}
-{"t":'Tool',"i":'Importo de FamilySearch',"n":'Importar dados de pesquisa em família',"v":'beta 2.0.21',"g":'5.1',"d":'FamilySearch.',"z":'PersonFS.addon.tgz'}
+{"t":'Gramplet',"i":'FS Gramplet',"n":'Personfs',"v":'beta 2.0.27',"g":'5.1',"d":'Interface para o FamilySearch',"z":'PersonFS.addon.tgz'}
+{"t":'Gramplet',"i":'Lokpurigado',"n":'Coloque a limpeza',"v":'1.0.25',"g":'5.1',"d":'A limpeza do local ajuda a completar locais usando o OpenStreetMap.',"z":'Lokpurigado.addon.tgz'}
+{"t":'Gramplet',"i":'PlaceFrCog Gramplet',"n":'Lugares: código geográfico oficial francês',"v":'1.0.39',"g":'5.1',"d":'Gramplet para tirar municípios do banco de dados INSEE',"z":'PlaceFrCog.addon.tgz'}
+{"t":'Ilo',"i":'FamilySearch komparo',"n":'FamilySearch: Compare',"v":'beta 2.0.27',"g":'5.1',"d":'FamilySearch: Compare Gramps com pessoas com FS.',"z":'PersonFS.addon.tgz'}
+{"t":'Ilo',"i":'Importo de FamilySearch',"n":'Importar dados de pesquisa em família',"v":'beta 2.0.27',"g":'5.1',"d":'FamilySearch.',"z":'PersonFS.addon.tgz'}

@@ -47,7 +47,6 @@ import glob
 import sys
 import os
 import tarfile
-from zipfile import ZipFile
 from xml.etree import ElementTree
 
 if "GRAMPSPATH" in os.environ:
@@ -56,9 +55,9 @@ else:
     GRAMPSPATH = "../../.."
 
 if(("LANGUAGE" not in os.environ) or
-   (not os.environ["LANGUAGE"].startswith("en"))):
-    raise ValueError("LANGUAGE should explicitly be english; Use "
-                     "'LANGUAGE=en_US.UTF-8 python3 make.py...' or similar")
+   (not os.environ["LANGUAGE"].startswith("eo"))):
+    raise ValueError("LANGUAGE should explicitly be esperanto; Use "
+                     "'LANGUAGE=eo.UTF-8 python3 make.py...' or similar")
 else:
     print("make.py: LANGUAGE is %s... good!" % os.environ["LANGUAGE"])
 
@@ -194,22 +193,6 @@ def do_tar(inc_files):
         inc_fil = inc_fil.replace("\\", "/")
         tar.add(inc_fil, filter=tar_filt)
     tar.close()
-
-def do_zip(inc_files):
-    """
-    An OS agnostic tar creation that uses only Python libs
-    inc_files is a list of filenames
-    """
-    if not inc_files:
-        print("***Nothing to build! %s" % addon)
-        exit()
-
-    mkdir(r("../download"))
-    increment_target(glob.glob(r('''%(addon)s/*gpr.py''')))
-    with ZipFile(r("../download/%(addon)s.zip"),'w') as zip:
-        # writing each file one by one
-        for inc_fil in inc_files:
-            zip.write(inc_fil)
 
 if command == "clean":
     if len(sys.argv) == 3:
@@ -407,7 +390,6 @@ elif command == "build":
                 # git doesn't remove empty folders when switching branchs
                 continue
             do_tar(files)
-            do_zip(files)
     else:
         for po in glob.glob(r('''%(addon)s/po/*.po''')):
             locale = os.path.basename(po[:-9])
@@ -424,7 +406,6 @@ elif command == "build":
         for patt in patts:
             files.extend(glob.glob(patt))
         do_tar(files)
-        do_zip(files)
 
 elif command == "as-needed":
     import tempfile
@@ -465,7 +446,7 @@ elif command == "as-needed":
             mkdir("%(addon)s/locale/%(locale)s/LC_MESSAGES/")
             system('''msgfmt %(po)s '''
                    '''-o "%(addon)s/locale/%(locale)s/LC_MESSAGES/addon.mo"''')
-        tgz = os.path.join("..", "addons", gramps_version, "download",
+        tgz = os.path.join( "download",
                            addon + ".addon.tgz")
         patts = [r('''%(addon)s/*.py'''), r('''%(addon)s/*.glade'''),
                  r('''%(addon)s/*.xml'''), r('''%(addon)s/*.txt'''),
@@ -535,7 +516,6 @@ elif command == "as-needed":
         if todo:
             # Build it.
             do_tar(sfiles)
-            do_zip(sfiles)
             print("***Rebuilt:      %s" % addon)
 
         # Add addon to newly created listing (equivalent to 'listing all')
@@ -545,7 +525,7 @@ elif command == "as-needed":
             for gpr in glob.glob(r('''%(addon)s/*.gpr.py''')):
                 # Make fallback language English (rather than current LANG)
                 local_gettext = glocale.get_addon_translator(
-                    gpr, languages=[lang, "en.UTF-8"]).gettext
+                    gpr, languages=[lang, "eo.UTF-8"]).gettext
                 plugins = []
                 with open(gpr.encode("utf-8", errors="backslashreplace")) as f:
                     code = compile(
@@ -619,7 +599,7 @@ elif command == "as-needed":
                           r('''%(addon)s/po/template.pot'''))
     # write out the listings
     for lang in languages:
-        fp = open(r("../listings/") +
+        fp = open(r("../addons/%(gramps_version)s/listings/") +
                   ("addons-%s.txt" % lang), "w", encoding="utf-8",
                   newline='')
         for plugin in sorted(listings[lang], key=lambda p: (p["t"], p["i"])):
@@ -651,7 +631,7 @@ elif command == "unlist":
             languages.add(locale[:-9])
     for lang in languages:
         lines = []
-        fp = open(r("../listings/") +
+        fp = open(r("../addons/%(gramps_version)s/listings/") +
                   ("addons-%s.txt" % lang), "r", encoding="utf-8")
         for line in fp:
             if cmd_arg + ".addon.tgz" not in line:
@@ -659,7 +639,7 @@ elif command == "unlist":
             else:
                 print("unlisting", line)
         fp.close()
-        fp = open(r("../listings/") +
+        fp = open(r("../addons/%(gramps_version)s/listings/") +
                   ("addons-%s.txt" % lang), "w", encoding="utf-8", newline='')
         for line in lines:
             fp.write(line)
@@ -676,7 +656,7 @@ elif command == "fix":
             languages.add(locale[:-9])
     for lang in languages:
         addons = {}
-        fp = open(r("../listings/") +
+        fp = open(r("../addons/%(gramps_version)s/listings/") +
                   ("addons-%s.txt" % lang), "r", encoding="utf-8")
         for line in fp:
             dictionary = eval(line)
@@ -685,7 +665,7 @@ elif command == "fix":
             else:
                 addons[dictionary["i"]] = dictionary
         fp.close()
-        fp = open(r("../listings/") +
+        fp = open(r("../addons/%(gramps_version)s/listings/") +
                   ("addons-%s.txt" % lang), "w", encoding="utf-8", newline='')
         for p in sorted(addons.values(), key=lambda p: (p["t"], p["i"])):
             plugin = {"n": p["n"].replace("'", "\\'"),
@@ -718,7 +698,7 @@ elif command == "check":
         kwargs["ptype"] = PTYPE_STR[ptype]
         plugins.append(kwargs)
     # get current build numbers from English listing
-    fp_in = open(r("../listings/addons-en.txt"),
+    fp_in = open(r("../addons/%(gramps_version)s/listings/addons-en.txt"),
                  "r", encoding="utf-8")
     addons = {}
     for line in fp_in:
@@ -730,7 +710,7 @@ elif command == "check":
     # go through all gpr's, check their build versions
     for gpr in glob.glob(r('''*/*.gpr.py''')):
         local_gettext = glocale.get_addon_translator(
-            gpr, languages=["en", "en.UTF-8"]).gettext
+            gpr, languages=["en", "eo.UTF-8"]).gettext
         plugins = []
         with open(gpr.encode("utf-8", errors="backslashreplace")) as f:
             code = compile(f.read(),
@@ -796,7 +776,7 @@ elif command == "listing":
             for gpr in glob.glob(r('''%(addon)s/*.gpr.py''')):
                 # Make fallback language English (rather than current LANG)
                 local_gettext = glocale.get_addon_translator(
-                    gpr, languages=[lang, "en.UTF-8"]).gettext
+                    gpr, languages=[lang, "eo.UTF-8"]).gettext
                 plugins = []
                 with open(gpr.encode("utf-8", errors="backslashreplace")) as f:
                     code = compile(
