@@ -1111,13 +1111,16 @@ def kompariFsGr(fsPersono,grPersono,db,model=None,dupdok=False):
   ret = list() 
   fsid = utila.get_fsftid(grPersono)
   if fsid != '' and PersonFS.PersonFS.fs_etikedado :
-    if db.transaction :
-      intr = True
-      txn=db.transaction
-    else :
-      intr = False
-      txn = DbTxn(_("FamilySearch etikedoj"), db)
-    # «tags»
+   # if db.transaction :
+   #   intr = True
+   #   print(" kompariFsGr : intr")
+   #   txn=db.transaction
+   # else :
+   #   intr = False
+   #   txn = DbTxn(_("FamilySearch etikedoj"), db)
+   #   print("début dbtxn FamilySearch etikedoj") 
+   # # «tags»
+   with DbTxn(_("FamilySearch etikedoj"), db) as txn :
     for t in fs_db.stato_tags:
       val = locals().get(t[0])
       if val == None : continue
@@ -1133,8 +1136,10 @@ def kompariFsGr(fsPersono,grPersono,db,model=None,dupdok=False):
       dbPersono.fs_datomod = fsPersono._last_modified
     dbPersono.konf_esenco = not FS_Esenco
     dbPersono.commit(txn)
-    if not intr :
-      db.transaction_commit(txn)
+   # if not intr :
+   #   print("fin dbtxn FamilySearch etikedoj") 
+   #   #db.transaction_commit(txn)
+   #   del txn
   return ret
 
   # FARINDAĴOJ : fontoj, notoj, memoroj, attributoj …

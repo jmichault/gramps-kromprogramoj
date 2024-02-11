@@ -16,9 +16,12 @@
   * idem pour : fiançailles
   * copie des notes personnepersonne et famillee de gramps vers FS.
 
-# à faire pour version 1.5
+# à faire pour prochaine version
 ## prioritaires
 * bogues :
+  * recherche d'un individu : problèmes sur la deuxième recherche ?
+  * import des parents : ne tient pas compte du type de lien
+    * ex. : GP83-PXQ : Athanaze Lamothe, en nourrice chez Jean Nadal x Jeanne Daza.
   * il faut rafraichir après transfert d'un enfant vers FS.
   * affichage court des annèes : transformer les dates républicaines (voir Libaros, Jean : son fils Frix affiché 0005-1882 au lieu de 1797-1882)
   * si connexion FS perdue : reconnecter correctement (actuellement, il faut rafraîchir une deuxième fois).
