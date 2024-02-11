@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gramps 5.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-01 17:55+0100\n"
+"POT-Creation-Date: 2024-02-11 22:19+0100\n"
 "PO-Revision-Date: 2023-09-12 11:02+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gramps-project/"
@@ -315,7 +315,7 @@ msgstr "Mislukte verbinding. FamilySearch -functies zijn niet beschikbaar."
 msgid "Pasvorta eraro. La funkcioj de FamilySearch ne estos disponeblaj."
 msgstr "Verkeerd wachtwoord. FamilySearch -functies zijn niet beschikbaar."
 
-#: PersonFS/PersonFS.py:578
+#: PersonFS/PersonFS.py:579
 msgid "kopii al gramps"
 msgstr "kopieer naar gramps"
 
@@ -398,7 +398,7 @@ msgstr "Gramps URL"
 msgid "FS URL"
 msgstr "FS URL"
 
-#: PersonFS/PersonFS.py:852 PersonFS/komparo.py:1119 PersonFS/utila.py:144
+#: PersonFS/PersonFS.py:852 PersonFS/komparo.py:1133 PersonFS/utila.py:144
 msgid "FamilySearch etikedoj"
 msgstr "FamilySearch -tags"
 

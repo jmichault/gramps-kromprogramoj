@@ -43,7 +43,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-01 17:55+0100\n"
+"POT-Creation-Date: 2024-02-11 22:19+0100\n"
 "PO-Revision-Date: 2023-08-26 20:29+0000\n"
 "Last-Translator: Jean-Marc <m.balthazar@posteo.net>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gramps-project/"
@@ -350,7 +350,7 @@ msgid "Pasvorta eraro. La funkcioj de FamilySearch ne estos disponeblaj."
 msgstr ""
 "Erreur de mot de passe. Les fonctions FamilySearch ne seront pas disponibles."
 
-#: PersonFS/PersonFS.py:578
+#: PersonFS/PersonFS.py:579
 msgid "kopii al gramps"
 msgstr "copier vers gramps"
 
@@ -433,7 +433,7 @@ msgstr "URL Gramps"
 msgid "FS URL"
 msgstr "URL FS"
 
-#: PersonFS/PersonFS.py:852 PersonFS/komparo.py:1119 PersonFS/utila.py:144
+#: PersonFS/PersonFS.py:852 PersonFS/komparo.py:1133 PersonFS/utila.py:144
 msgid "FamilySearch etikedoj"
 msgstr "Étiquettes FamilySearch"
 
