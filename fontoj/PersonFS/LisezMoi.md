@@ -69,6 +69,8 @@ Depuis le gramplet, vous pouvez aussi :
       pour pouvoir transférer les «Contrat de mariage»,«Fiançailles»,«Publications de mariage», on les transforme en «Mariage» avec une explication «http://gedcomx.org/xxxxx»
 * changer d'individu en double-cliquant sur la ligne correspondante.
 * éditer un évènement de la personne en double-cliquant sur la ligne correspondante.
+* utiliser le mode «Notes» pour comparer/transférer les notes individuelles et familiales
+* utiliser le mode «Sources» pour comparer les sources (expérimental, à n'utiliser qu'avec prudence).
 
 # le module d'import
 Vous pouvez le lancer soit depuis le menu, soit depuis le gramplet.  
