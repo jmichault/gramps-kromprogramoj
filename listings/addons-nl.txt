@@ -1,5 +1,5 @@
-{"t":'Gramplet',"i":'FS Gramplet',"n":'Persoon',"v":'beta 2.0.28',"g":'5.2',"d":'interface voor gezinsopdracht',"z":'PersonFS.addon.tgz'}
-{"t":'Gramplet',"i":'Lokpurigado',"n":'Plaats schoonmaken',"v":'1.0.29',"g":'5.1',"d":'Plaats schoonmaken helpt locaties te complete locaties met OpenStreetMap.',"z":'Lokpurigado.addon.tgz'}
-{"t":'Gramplet',"i":'PlaceFrCog Gramplet',"n":'Plaatsen: Franse officiële geografische code',"v":'1.0.43',"g":'5.1',"d":'Grampet om gemeenten uit de Insee -database te nemen',"z":'PlaceFrCog.addon.tgz'}
-{"t":'Ilo',"i":'FamilySearch komparo',"n":'FamilySearch: vergelijken',"v":'beta 2.0.28',"g":'5.2',"d":'FamilySearch: vergelijk gramps mensen met FS -mensen.',"z":'PersonFS.addon.tgz'}
-{"t":'Ilo',"i":'Importo de FamilySearch',"n":'Importeren van FamilySearch -gegevens',"v":'beta 2.0.28',"g":'5.2',"d":'FamilySearch.',"z":'PersonFS.addon.tgz'}
+{"t":'Gramplet',"i":'FS Gramplet',"n":'Persoon',"v":'beta 2.0.29',"g":'5.1',"d":'interface voor gezinsopdracht',"z":'PersonFS.addon.tgz'}
+{"t":'Gramplet',"i":'Lokpurigado',"n":'Plaats schoonmaken',"v":'1.0.31',"g":'5.1',"d":'Plaats schoonmaken helpt locaties te complete locaties met OpenStreetMap.',"z":'Lokpurigado.addon.tgz'}
+{"t":'Gramplet',"i":'PlaceFrCog Gramplet',"n":'Plaatsen: Franse officiële geografische code',"v":'1.0.45',"g":'5.1',"d":'Grampet om gemeenten uit de Insee -database te nemen',"z":'PlaceFrCog.addon.tgz'}
+{"t":'Ilo',"i":'FamilySearch komparo',"n":'FamilySearch: vergelijken',"v":'beta 2.0.29',"g":'5.1',"d":'FamilySearch: vergelijk gramps mensen met FS -mensen.',"z":'PersonFS.addon.tgz'}
+{"t":'Ilo',"i":'Importo de FamilySearch',"n":'Importeren van FamilySearch -gegevens',"v":'beta 2.0.29',"g":'5.1',"d":'FamilySearch.',"z":'PersonFS.addon.tgz'}

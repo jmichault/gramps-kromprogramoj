@@ -28,7 +28,7 @@ register(
     name = _("Lokpurigado"),
     description = _("Lokpurigado helpas kompletigi lokojn uzante OpenStreetMap."),
     status = STABLE,
-    version = '1.0.29',
+    version = '1.0.31',
     gramps_target_version = '5.1',
     fname = "lokpurigado.py",
     gramplet = 'Lokpurigado',
