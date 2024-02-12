@@ -1111,30 +1111,32 @@ def kompariFsGr(fsPersono,grPersono,db,model=None,dupdok=False):
   ret = list() 
   fsid = utila.get_fsftid(grPersono)
   if fsid != '' and PersonFS.PersonFS.fs_etikedado :
-    if db.transaction :
-      intr = True
-      txn=db.transaction
-    else :
-      intr = False
-      txn = DbTxn(_("FamilySearch etikedoj"), db)
-    # «tags»
-    for t in fs_db.stato_tags:
-      val = locals().get(t[0])
-      if val == None : continue
-      tag_fs = db.get_tag_from_name(t[0])
-      if val : ret.append(t[0])
-      if not val and tag_fs.handle in grPersono.tag_list:
-        grPersono.remove_tag(tag_fs.handle)
-      if tag_fs and val and tag_fs.handle not in grPersono.tag_list:
-        grPersono.add_tag(tag_fs.handle)
-    db.commit_person(grPersono, txn, grPersono.change)
-    dbPersono.gramps_datomod = grPersono.change
-    if fsPersono.id :
-      dbPersono.fs_datomod = fsPersono._last_modified
-    dbPersono.konf_esenco = not FS_Esenco
-    dbPersono.commit(txn)
-    if not intr :
-      db.transaction_commit(txn)
+   if db.transaction :
+     intr = True
+   else :
+     intr = False
+   # «tags»
+   for t in fs_db.stato_tags:
+     val = locals().get(t[0])
+     if val == None : continue
+     tag_fs = db.get_tag_from_name(t[0])
+     if val : ret.append(t[0])
+     if not val and tag_fs.handle in grPersono.tag_list:
+       grPersono.remove_tag(tag_fs.handle)
+     if tag_fs and val and tag_fs.handle not in grPersono.tag_list:
+       grPersono.add_tag(tag_fs.handle)
+   dbPersono.gramps_datomod = grPersono.change
+   if fsPersono.id :
+     dbPersono.fs_datomod = fsPersono._last_modified
+   dbPersono.konf_esenco = not FS_Esenco
+   if not intr :
+     with (db.transaction or DbTxn(_("FamilySearch etikedoj"), db)) as txn :
+       db.commit_person(grPersono, txn, grPersono.change)
+       dbPersono.commit(txn)
+   # if not intr :
+   #   print("fin dbtxn FamilySearch etikedoj") 
+   #   #db.transaction_commit(txn)
+   #   del txn
   return ret
 
   # FARINDAĴOJ : fontoj, notoj, memoroj, attributoj …

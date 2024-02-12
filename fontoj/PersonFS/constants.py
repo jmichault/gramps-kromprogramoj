@@ -56,7 +56,7 @@ GEDCOMX_GRAMPS_FAKTOJ = {
   "http://gedcomx.org/Religion": EventType.RELIGION,
   "http://gedcomx.org/Residence": EventType.RESIDENCE,
   "http://gedcomx.org/Retirement": EventType.RETIREMENT,
-#  "http://gedcomx.org/Stillbirth": EventType.STILLBIRTH,
+  "http://gedcomx.org/Stillbirth": EventType.STILLBIRTH,
   "data:,http://gedcomx.org/Will": EventType.WILL,
   "http://familysearch.org/v1/TitleOfNobility": EventType.NOB_TITLE,
 # traductions sans types prédéfinis correspondants

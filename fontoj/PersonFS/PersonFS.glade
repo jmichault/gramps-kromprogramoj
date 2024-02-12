@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkDialog" id="PersonFSDup">
@@ -237,6 +237,8 @@ PersonFS uzos ĉi tiujn informojn konforme al iliaj respektivaj servokondiĉoj k
   </object>
   <object class="GtkDialog" id="PersonFSRes">
     <property name="can-focus">False</property>
+    <property name="default-width">1500</property>
+    <property name="default-height">600</property>
     <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox">
@@ -481,17 +483,24 @@ PersonFS uzos ĉi tiujn informojn konforme al iliaj respektivaj servokondiĉoj k
               <placeholder/>
             </child>
             <child>
-              <object class="GtkTreeView" id="PersonFSResRes">
-                <property name="height-request">200</property>
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="enable-grid-lines">horizontal</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection"/>
+                <property name="shadow-type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="PersonFSResRes">
+                    <property name="height-request">200</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="enable-grid-lines">horizontal</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
+                  </object>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
+                <property name="expand">True</property>
                 <property name="fill">True</property>
                 <property name="position">3</property>
               </packing>
@@ -500,6 +509,7 @@ PersonFS uzos ĉi tiujn informojn konforme al iliaj respektivaj servokondiĉoj k
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="valign">end</property>
                 <child>
                   <placeholder/>
                 </child>
@@ -551,7 +561,7 @@ PersonFS uzos ĉi tiujn informojn konforme al iliaj respektivaj servokondiĉoj k
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
+            <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
@@ -927,7 +937,6 @@ PersonFS uzos ĉi tiujn informojn konforme al iliaj respektivaj servokondiĉoj k
                 <property name="halign">start</property>
                 <property name="active">0</property>
                 <property name="active-id">REG_cxefa</property>
-                <signal name="changed" handler="on_CB_Regximo_changed" swapped="no"/>
                 <items>
                   <item id="REG_cxefa" translatable="yes">Ĉefa</item>
                   <item id="REG_notoj" translatable="yes">Notoj</item>
@@ -936,6 +945,7 @@ PersonFS uzos ĉi tiujn informojn konforme al iliaj respektivaj servokondiĉoj k
                   <item id="REG_bildoj" translatable="yes">Bildoj</item>
                   -->
                 </items>
+                <signal name="changed" handler="on_CB_Regximo_changed" swapped="no"/>
               </object>
               <packing>
                 <property name="left-attach">2</property>
