@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GRAMPS 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-11 22:19+0100\n"
+"POT-Creation-Date: 2024-02-12 19:06+0100\n"
 "PO-Revision-Date: 2023-08-05 19:36+0000\n"
 "Last-Translator: Nick Hall <nick-h@gramps-project.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
@@ -591,8 +591,8 @@ msgstr "Famílias"
 msgid "Faktoj"
 msgstr "Fatos"
 
-#: PersonFS/PersonFS.glade:19 PersonFS/PersonFS.glade:252
-#: PersonFS/PersonFS.glade:733
+#: PersonFS/PersonFS.glade:19 PersonFS/PersonFS.glade:254
+#: PersonFS/PersonFS.glade:743
 msgid "xxxx-xxx"
 msgstr "xxxx-xxx"
 
@@ -631,117 +631,117 @@ msgstr ""
 "\"Glammment\" ou pela importação. Somente a ferramenta \"FamilySearch: "
 "comparação\" definirá as tags."
 
-#: PersonFS/PersonFS.glade:269
+#: PersonFS/PersonFS.glade:271
 msgid "Ligi"
 msgstr "Anexar"
 
-#: PersonFS/PersonFS.glade:305
+#: PersonFS/PersonFS.glade:307
 msgid "Nomo :"
 msgstr "Nome:"
 
-#: PersonFS/PersonFS.glade:326
+#: PersonFS/PersonFS.glade:328
 msgid "Antaŭnomo :"
 msgstr "Primeiro nome:"
 
-#: PersonFS/PersonFS.glade:347
+#: PersonFS/PersonFS.glade:349
 msgid "Sekso :"
 msgstr "Sexo:"
 
-#: PersonFS/PersonFS.glade:368
+#: PersonFS/PersonFS.glade:370
 msgid "Nasko :"
 msgstr "Aniversário:"
 
-#: PersonFS/PersonFS.glade:389
+#: PersonFS/PersonFS.glade:391
 msgid "Loko :"
 msgstr "Localização:"
 
-#: PersonFS/PersonFS.glade:408
+#: PersonFS/PersonFS.glade:410
 msgid "Lanĉi"
 msgstr "Lançar"
 
-#: PersonFS/PersonFS.glade:423
+#: PersonFS/PersonFS.glade:425
 msgid "Morto :"
 msgstr "Morte:"
 
-#: PersonFS/PersonFS.glade:519
+#: PersonFS/PersonFS.glade:529
 msgid "Aldoni mian personon al FamilySearch"
 msgstr "Adicione minha pessoa à pesquisa em família"
 
-#: PersonFS/PersonFS.glade:576
+#: PersonFS/PersonFS.glade:586
 msgid "Gramps Individuo/FamilySearch Individuo"
 msgstr "Gramps Individual/FamilySearch Individual"
 
-#: PersonFS/PersonFS.glade:657
+#: PersonFS/PersonFS.glade:667
 msgid "refreŝigi"
 msgstr "Atualizar"
 
-#: PersonFS/PersonFS.glade:681
+#: PersonFS/PersonFS.glade:691
 msgid "1-klaka importo"
 msgstr "Importação de 1 clique"
 
-#: PersonFS/PersonFS.glade:685
+#: PersonFS/PersonFS.glade:695
 msgid "Importas edzoj, gepatroj kaj infanoj kun unu kliko"
 msgstr "Importar maridos, pais e filhos com uma camarilha"
 
-#: PersonFS/PersonFS.glade:706
+#: PersonFS/PersonFS.glade:716
 msgid "importi"
 msgstr "Importar"
 
-#: PersonFS/PersonFS.glade:760
+#: PersonFS/PersonFS.glade:770
 msgid "Vidi FS duplikatojn"
 msgstr "Veja duplicatas FS"
 
-#: PersonFS/PersonFS.glade:773
+#: PersonFS/PersonFS.glade:783
 msgid "markita kiel konforma"
 msgstr "marcado como conformado"
 
-#: PersonFS/PersonFS.glade:798
+#: PersonFS/PersonFS.glade:808
 msgid "Statuso de esencaj informoj (precipa nomo/antaŭnomo, sekso, datoj de naskiĝo kaj morto)"
 msgstr ""
 "Status da informação essencial (nome principal/primeiro nome, gênero, datas "
 "de nascimento e morte)"
 
-#: PersonFS/PersonFS.glade:818
+#: PersonFS/PersonFS.glade:828
 msgid "Statuso de familiaj ligoj (gepatroj, geedzoj, infanoj)"
 msgstr "Status dos laços familiares (pais, cônjuges, filhos)"
 
-#: PersonFS/PersonFS.glade:838
+#: PersonFS/PersonFS.glade:848
 msgid "Statuso de eventoj"
 msgstr "Status dos eventos"
 
-#: PersonFS/PersonFS.glade:858
+#: PersonFS/PersonFS.glade:868
 msgid "Statuso de dokumentoj"
 msgstr "Status de documentos"
 
-#: PersonFS/PersonFS.glade:878
+#: PersonFS/PersonFS.glade:888
 msgid "Statuso de duploj"
 msgstr "Status duplica"
 
-#: PersonFS/PersonFS.glade:897
+#: PersonFS/PersonFS.glade:907
 msgid "FamilySearch Identiga N° :"
 msgstr "FamilySearch Identificando #:"
 
-#: PersonFS/PersonFS.glade:901
+#: PersonFS/PersonFS.glade:911
 msgid "Klaku min por kopii FSFTID al tondujo"
 msgstr "Clique em mim para copiar o fsftid para a área de transferência"
 
-#: PersonFS/PersonFS.glade:912
+#: PersonFS/PersonFS.glade:922
 msgid "Serĉi"
 msgstr "Procurar"
 
-#: PersonFS/PersonFS.glade:932
+#: PersonFS/PersonFS.glade:941
 msgid "Ĉefa"
 msgstr "Principal"
 
-#: PersonFS/PersonFS.glade:933
+#: PersonFS/PersonFS.glade:942
 msgid "Notoj"
 msgstr "Notas"
 
-#: PersonFS/PersonFS.glade:934
+#: PersonFS/PersonFS.glade:943
 msgid "Fontoj"
 msgstr "Fontes"
 
-#: PersonFS/PersonFS.glade:949
+#: PersonFS/PersonFS.glade:959
 msgid "Reĝimo :  "
 msgstr "Regime:"
 
