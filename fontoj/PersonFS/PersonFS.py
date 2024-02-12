@@ -63,7 +63,7 @@ except ValueError:
 _ = _trans.gettext
 
 # gedcomx biblioteko. Instalu kun `pip install --user --upgrade --break-system-packages gedcomx-v1`
-mingedcomx="1.0.18"
+mingedcomx="1.0.19"
 import importlib
 from importlib.metadata import version
 try:
@@ -1185,7 +1185,7 @@ class PersonFS(Gramplet):
     loko = self.top.get_object("fs_loko_eniro").get_text()
     if loko :
       mendo = mendo + "q.anyPlace=%s&" % loko
-    mendo = mendo + "offset=0&count=10"
+    mendo = mendo + "offset=0&count=50"
     datumoj = tree._FsSeanco.get_jsonurl(
                     mendo ,{"Accept": "application/x-gedcomx-atom+json"}
                 )
