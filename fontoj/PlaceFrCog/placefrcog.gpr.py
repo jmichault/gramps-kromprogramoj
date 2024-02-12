@@ -37,7 +37,7 @@ register(GRAMPLET,
          gramplet_title = _("Fr COG"),
          detached_width = 510,
          detached_height = 480,
-         version = '1.0.45',
+         version = '1.0.46',
          gramps_target_version = '5.1',
          include_in_listing = True,
         )

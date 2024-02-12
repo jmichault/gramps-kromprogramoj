@@ -1,5 +1,5 @@
-{"t":'Gramplet',"i":'FS Gramplet',"n":'Personfs',"v":'beta 2.0.29',"g":'5.1',"d":'Interface for FamilySearch',"z":'PersonFS.addon.tgz'}
-{"t":'Gramplet',"i":'Lokpurigado',"n":'Place cleaning',"v":'1.0.31',"g":'5.1',"d":'Place cleaning helps complete locations using OpenStreetMap.',"z":'Lokpurigado.addon.tgz'}
-{"t":'Gramplet',"i":'PlaceFrCog Gramplet',"n":'Places: French Official Geographic Code',"v":'1.0.45',"g":'5.1',"d":'Gramplet to take municipalities from the INSEE database',"z":'PlaceFrCog.addon.tgz'}
-{"t":'Ilo',"i":'FamilySearch komparo',"n":'FamilySearch: Compare',"v":'beta 2.0.29',"g":'5.1',"d":'FamilySearch: Compare Gramps people with FS people.',"z":'PersonFS.addon.tgz'}
-{"t":'Ilo',"i":'Importo de FamilySearch',"n":'Import of FamilySearch Data',"v":'beta 2.0.29',"g":'5.1',"d":'FamilySearch.',"z":'PersonFS.addon.tgz'}
+{"t":'Gramplet',"i":'FS Gramplet',"n":'Personfs',"v":'2.0.28',"g":'5.1',"d":'Interface for FamilySearch',"z":'PersonFS.addon.tgz'}
+{"t":'Gramplet',"i":'Lokpurigado',"n":'Place cleaning',"v":'1.0.32',"g":'5.1',"d":'Place cleaning helps complete locations using OpenStreetMap.',"z":'Lokpurigado.addon.tgz'}
+{"t":'Gramplet',"i":'PlaceFrCog Gramplet',"n":'Places: French Official Geographic Code',"v":'1.0.46',"g":'5.1',"d":'Gramplet to take municipalities from the INSEE database',"z":'PlaceFrCog.addon.tgz'}
+{"t":'Ilo',"i":'FamilySearch komparo',"n":'FamilySearch: Compare',"v":'2.0.28',"g":'5.1',"d":'FamilySearch: Compare Gramps people with FS people.',"z":'PersonFS.addon.tgz'}
+{"t":'Ilo',"i":'Importo de FamilySearch',"n":'Import of FamilySearch Data',"v":'2.0.28',"g":'5.1',"d":'FamilySearch.',"z":'PersonFS.addon.tgz'}
