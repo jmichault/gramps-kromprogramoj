@@ -62,20 +62,20 @@ except ValueError:
     _trans = glocale.translation
 _ = _trans.gettext
 
-# gedcomx biblioteko. Instalu kun `pip install --user --upgrade --break-system-packages gedcomx-v1`
-mingedcomx="1.0.19"
+# gedcomx_v1 biblioteko. Instalu kun `pip install --user --upgrade --break-system-packages gedcomx_v1`
+mingedcomx="1.0.20"
 import importlib
 from importlib.metadata import version
 try:
-  v = version('gedcomx-v1')
+  v = version('gedcomx_v1')
 except :
   v="0.0.0"
 from packaging.version import parse
 if parse(v) < parse(mingedcomx) :
-  print (_('gedcomx ne trovita aŭ < %s' % mingedcomx))
+  print (_('gedcomx_v1 ne trovita aŭ < %s' % mingedcomx))
   import pip
-  pip.main(['install', '--user', '--upgrade', '--break-system-packages', 'gedcomx-v1'])
-import gedcomx
+  pip.main(['install', '--user', '--upgrade', '--break-system-packages', 'gedcomx_v1'])
+import gedcomx_v1
 
 # lokaloj importadoj
 from constants import GRAMPS_GEDCOMX_FAKTOJ
@@ -182,25 +182,25 @@ class PersonFS(Gramplet):
           CONFIG.set("preferences.fs_etikedado", str(PersonFS.fs_etikedado))
           CONFIG.save()
           if vorteco >= 3:
-            tree._FsSeanco = gedcomx.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, True, False, 2, PersonFS.lingvo)
+            tree._FsSeanco = gedcomx_v1.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, True, False, 2, PersonFS.lingvo)
           else :
-            tree._FsSeanco = gedcomx.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, False, False, 2, PersonFS.lingvo)
+            tree._FsSeanco = gedcomx_v1.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, False, False, 2, PersonFS.lingvo)
           if PersonFS.fs_client_id != '':
             tree._FsSeanco.client_id=PersonFS.fs_client_id
           #else :
-          #tree._FsSeanco = gedcomx.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, False, False, 2, PersonFS.lingvo)
+          #tree._FsSeanco = gedcomx_v1.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, False, False, 2, PersonFS.lingvo)
         else :
           print("Vi devas enigi la ID kaj pasvorton")
       else:
         if vorteco >= 3:
-          tree._FsSeanco = gedcomx.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, True, False, 2, PersonFS.lingvo)
+          tree._FsSeanco = gedcomx_v1.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, True, False, 2, PersonFS.lingvo)
         else :
-          tree._FsSeanco = gedcomx.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, False, False, 2, PersonFS.lingvo)
+          tree._FsSeanco = gedcomx_v1.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, False, False, 2, PersonFS.lingvo)
           if PersonFS.fs_client_id != '':
             tree._FsSeanco.client_id=PersonFS.fs_client_id
         tree._FsSeanco.login()
       print(" langage session FS = "+tree._FsSeanco.lingvo);
-      if tree._FsSeanco.stato == gedcomx.fs_session.STATO_PASVORTA_ERARO :
+      if tree._FsSeanco.stato == gedcomx_v1.fs_session.STATO_PASVORTA_ERARO :
          WarningDialog(_('Pasvorta erraro. La funkcioj de FamilySearch ne estos disponeblaj.'))
       elif not tree._FsSeanco.logged :
         WarningDialog(_('Malsukcesa konekto. La funkcioj de FamilySearch ne estos disponeblaj.'))
@@ -225,12 +225,12 @@ class PersonFS(Gramplet):
       self.pref_clicked(None)
     if not tree._FsSeanco:
       print("konektas al FS")
-      #tree._FsSeanco = gedcomx.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, True, False, 2, PersonFS.lingvo)
-      tree._FsSeanco = gedcomx.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, False, False, 2, PersonFS.lingvo)
+      #tree._FsSeanco = gedcomx_v1.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, True, False, 2, PersonFS.lingvo)
+      tree._FsSeanco = gedcomx_v1.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, False, False, 2, PersonFS.lingvo)
       if PersonFS.fs_client_id != '':
         tree._FsSeanco.client_id=PersonFS.fs_client_id
       tree._FsSeanco.login()
-    if tree._FsSeanco.stato == gedcomx.fs_session.STATO_PASVORTA_ERARO :
+    if tree._FsSeanco.stato == gedcomx_v1.fs_session.STATO_PASVORTA_ERARO :
       WarningDialog(_('Pasvorta eraro. La funkcioj de FamilySearch ne estos disponeblaj.'))
       return
     elif not tree._FsSeanco.logged :
@@ -294,13 +294,13 @@ class PersonFS(Gramplet):
     model = self.modelKomp.model
     active_handle = self.get_active('Person')
     grPersono = self.dbstate.db.get_person_from_handle(active_handle)
-    # on va construire 2 gedcomx :
+    # on va construire 2 gedcomx_v1 :
     # fsTP va contenir la personne principale, avec ses évènements, notes, …
-    fsTP = gedcomx.Gedcomx()
+    fsTP = gedcomx_v1.Gedcomx()
     # fsTR va contenir les personnes reliées, avec leurs évènement, notes, …
-    fsTR = gedcomx.Gedcomx()
+    fsTR = gedcomx_v1.Gedcomx()
     # fsP est la personne principale
-    fsP = gedcomx.Person()
+    fsP = gedcomx_v1.Person()
     for x in model:
      l = [x]
      l.extend(x.iterchildren())
@@ -324,7 +324,7 @@ class PersonFS(Gramplet):
             grValoro = grFaktoPriskribo
           else :
             grValoro = grFaktoPriskribo +' @ '+ grFaktoLoko
-          fsFakto = gedcomx.Fact()
+          fsFakto = gedcomx_v1.Fact()
           fsFaktoId = get_fsftid(event)
           if fsFaktoId != '' :
             fsFakto.id = fsFaktoId
@@ -336,15 +336,15 @@ class PersonFS(Gramplet):
             fsFakto.type = 'data:,'+tipo
           fsFakto.value = grFaktoPriskribo
           if grFaktoDato :
-            fsFakto.date = gedcomx.Date()
+            fsFakto.date = gedcomx_v1.Date()
             fsFakto.date.original = event.date.text
             if not fsFakto.date.original or fsFakto.date.original=='' :
               fsFakto.date.original = get_date(event)
-            fsFakto.date.formal = gedcomx.DateFormal(grFaktoDato)
+            fsFakto.date.formal = gedcomx_v1.DateFormal(grFaktoDato)
             if str(fsFakto.date.formal) == '' :
               fsFakto.date.formal = None
           if grFaktoLoko :
-            fsFakto.place = gedcomx.PlaceReference()
+            fsFakto.place = gedcomx_v1.PlaceReference()
             fsFakto.place.original = grFaktoLoko
           if tipolinio == 'fakto' :
             fsTP.persons.add(fsP)
@@ -357,17 +357,17 @@ class PersonFS(Gramplet):
                   or grTag == EventType.ENGAGEMENT ) :
               tipo = GRAMPS_GEDCOMX_FAKTOJ.get(EventType.MARRIAGE)
               fsFakto.type = tipo
-              fsFakto.attribution = gedcomx.Attribution()
+              fsFakto.attribution = gedcomx_v1.Attribution()
               fsFakto.attribution.changeMessage = GRAMPS_GEDCOMX_FAKTOJ.get(grTag) + '\n' + str(event)
-            fsTR = gedcomx.Gedcomx()
+            fsTR = gedcomx_v1.Gedcomx()
             grFamilyHandle = linio[11]
             RSfsid = linio[12]
             grFamily = self.dbstate.db.get_family_from_handle(grFamilyHandle)
-            fsRS = gedcomx.Relationship()
+            fsRS = gedcomx_v1.Relationship()
             fsRS.id = RSfsid
             fsRS.facts.add(fsFakto)
             fsTR.relationships.add(fsRS)
-            peto = gedcomx.jsonigi(fsTR)
+            peto = gedcomx_v1.jsonigi(fsTR)
             jsonpeto = json.dumps(peto)
             if RSfsid :
               res = tree._FsSeanco.post_url( "/platform/tree/couple-relationships/"+RSfsid, jsonpeto )
@@ -399,7 +399,7 @@ class PersonFS(Gramplet):
                 if (     grNomo.get_surname() == grSurname
                      and grNomo.first_name == grGiven) :
                   break
-          fsNomo = gedcomx.Name()
+          fsNomo = gedcomx_v1.Name()
           if tipolinio == 'nomo1':
             fsNomo.preferred = True
           else:
@@ -414,12 +414,12 @@ class PersonFS(Gramplet):
              fsNomo.type = 'http://gedcomx.org/BirthName'
           else : 
             fsNomo.type = "http://gedcomx.org/BirthName"
-          fsNF = gedcomx.NameForm()
-          fsNP = gedcomx.NamePart()
+          fsNF = gedcomx_v1.NameForm()
+          fsNP = gedcomx_v1.NamePart()
           fsNP.type = "http://gedcomx.org/Surname"
           fsNP.value = grSurname
           fsNF.parts.add (fsNP)
-          fsNP = gedcomx.NamePart()
+          fsNP = gedcomx_v1.NamePart()
           fsNP.type = "http://gedcomx.org/Given"
           fsNP.value = grGiven
           fsNF.parts.add (fsNP)
@@ -430,13 +430,13 @@ class PersonFS(Gramplet):
         elif ( (tipolinio == 'edzo' )
              and linio[9] ) :
           grEdzo = self.dbstate.db.get_person_from_handle(linio[8])
-          fsTR = gedcomx.Gedcomx()
+          fsTR = gedcomx_v1.Gedcomx()
           grFamilyHandle = linio[11]
           RSfsid = linio[12]
           grFamily = self.dbstate.db.get_family_from_handle(grFamilyHandle)
-          fsRS = gedcomx.Relationship()
-          fsRS.person1 = gedcomx.ResourceReference()
-          fsRS.person2 = gedcomx.ResourceReference()
+          fsRS = gedcomx_v1.Relationship()
+          fsRS.person1 = gedcomx_v1.ResourceReference()
+          fsRS.person2 = gedcomx_v1.ResourceReference()
           fsRS.id = RSfsid
           fsRS.type = "http://gedcomx.org/Couple"
           if grEdzo.get_gender() == Person.MALE :
@@ -448,7 +448,7 @@ class PersonFS(Gramplet):
           fsRS.person1.resource = "https://api.familysearch.org/platform/tree/persons/" + fsRS.person1.resourceId
           fsRS.person2.resource = "https://api.familysearch.org/platform/tree/persons/" + fsRS.person2.resourceId
           fsTR.relationships.add(fsRS)
-          peto = gedcomx.jsonigi(fsTR)
+          peto = gedcomx_v1.jsonigi(fsTR)
           jsonpeto = json.dumps(peto)
           if RSfsid and RSfsid != '' :
             res = tree._FsSeanco.post_url( "/platform/tree/couple-relationships/"+RSfsid, jsonpeto )
@@ -467,27 +467,27 @@ class PersonFS(Gramplet):
           grFamilyHandle = linio[11]
           fsFamId = linio[12]
           child_ref = linio[9]
-          fsTR = gedcomx.Gedcomx()
-          fsCPRS = gedcomx.ChildAndParentsRelationship()
+          fsTR = gedcomx_v1.Gedcomx()
+          fsCPRS = gedcomx_v1.ChildAndParentsRelationship()
           grFamily = self.dbstate.db.get_family_from_handle(grFamilyHandle)
           child = self.dbstate.db.get_person_from_handle(child_ref)
-          fsCPRS.child = gedcomx.ResourceReference()
+          fsCPRS.child = gedcomx_v1.ResourceReference()
           fsCPRS.child.resourceId = utila.get_fsftid(child)
           fsCPRS.child.resource = "https://api.familysearch.org/platform/tree/persons/" + fsCPRS.child.resourceId
           grhusband_handle = grFamily.get_father_handle()
           if grhusband_handle :
             gepatro1 = self.dbstate.db.get_person_from_handle(grhusband_handle)
-            fsCPRS.parent1 = gedcomx.ResourceReference()
+            fsCPRS.parent1 = gedcomx_v1.ResourceReference()
             fsCPRS.parent1.resourceId = utila.get_fsftid(gepatro1)
             fsCPRS.parent1.resource = "https://api.familysearch.org/platform/tree/persons/" + fsCPRS.parent1.resourceId
           spouse_handle = grFamily.get_mother_handle()
           if spouse_handle :
             gepatro2 = self.dbstate.db.get_person_from_handle(spouse_handle)
-            fsCPRS.parent2 = gedcomx.ResourceReference()
+            fsCPRS.parent2 = gedcomx_v1.ResourceReference()
             fsCPRS.parent2.resourceId = utila.get_fsftid(gepatro2)
             fsCPRS.parent2.resource = "https://api.familysearch.org/platform/tree/persons/" + fsCPRS.parent2.resourceId
           fsTR.childAndParentsRelationships.add(fsCPRS)
-          peto = gedcomx.jsonigi(fsTR)
+          peto = gedcomx_v1.jsonigi(fsTR)
           jsonpeto = json.dumps(peto)
           res = tree._FsSeanco.post_url( "/platform/tree/relationships", jsonpeto )
           if res.status_code == 201 or res.status_code == 204:
@@ -502,22 +502,22 @@ class PersonFS(Gramplet):
              and linio[9] ) :
           print("NotoF gramps-->FS")
           # self.modelKomp.add(['white',titolo,_('Familio'),teksto,'',fsTeksto,'',False,'NotoF',nh,family_handle,fsParoId,fsNoto.id] )
-          fsNoto = gedcomx.Note()
+          fsNoto = gedcomx_v1.Note()
           fsNoto.subject = linio[2]
           if len(linio[3]) >1 and linio[3][0:1] == '\ufeff' :
             fsNoto.text = linio[3][1:]
           else :
             fsNoto.text = linio[3]
           fsNoto.id = linio[12]
-          fsTR = gedcomx.Gedcomx()
+          fsTR = gedcomx_v1.Gedcomx()
           grFamilyHandle = linio[10]
           RSfsid = linio[11]
           grFamily = self.dbstate.db.get_family_from_handle(grFamilyHandle)
-          fsRS = gedcomx.Relationship()
+          fsRS = gedcomx_v1.Relationship()
           fsRS.id = RSfsid
           fsRS.notes.add(fsNoto)
           fsTR.relationships.add(fsRS)
-          peto = gedcomx.jsonigi(fsTR)
+          peto = gedcomx_v1.jsonigi(fsTR)
           jsonpeto = json.dumps(peto)
           print(" jsonpeto = "+jsonpeto)
           if RSfsid :
@@ -533,7 +533,7 @@ class PersonFS(Gramplet):
         elif ( (tipolinio == 'NotoP' )
              and linio[3] ) :
           print("NotoP gramps-->FS")
-          fsNoto = gedcomx.Note()
+          fsNoto = gedcomx_v1.Note()
           fsNoto.subject = linio[2]
           if len(linio[3]) >1 and linio[3][0:1] == '\ufeff' :
             fsNoto.text = linio[3][1:]
@@ -546,7 +546,7 @@ class PersonFS(Gramplet):
      # FARINDAĴO : gepatroj, infanoj,…
 
     if len(fsTP.persons) >0 :
-      peto = gedcomx.jsonigi(fsTP)
+      peto = gedcomx_v1.jsonigi(fsTP)
       jsonpeto = json.dumps(peto)
       res = tree._FsSeanco.post_url( "/platform/tree/persons/"+self.FSID, jsonpeto )
       if res.status_code == 201 or res.status_code == 204:
@@ -565,7 +565,7 @@ class PersonFS(Gramplet):
     model = self.modelKomp.model
     active_handle = self.get_active('Person')
     grPersono = self.dbstate.db.get_person_from_handle(active_handle)
-    fsPersono = gedcomx.Person._indekso.get(self.FSID) 
+    fsPersono = gedcomx_v1.Person._indekso.get(self.FSID) 
     if self.dbstate.db.transaction :
       print("??? transaction en cours ???")
       self.dbstate.db.transaction_commit(self.dbstate.db.transaction)
@@ -619,7 +619,7 @@ class PersonFS(Gramplet):
             grParoH = linio[11]
             fsParo_id = linio[12]
             grParo = self.dbstate.db.get_family_from_handle(grParoH)
-            fsParo = gedcomx.Relationship._indekso[fsParo_id]
+            fsParo = gedcomx_v1.Relationship._indekso[fsParo_id]
             for fsFakto in fsParo.facts :
               if fsFakto.id == fsFakto_id : break
             if grFaktoH :
@@ -867,7 +867,7 @@ class PersonFS(Gramplet):
 
   def ButRefresxigi_clicked(self, dummy):
     if self.FSID :
-      fsPersono = gedcomx.Person._indekso.get(self.FSID)
+      fsPersono = gedcomx_v1.Person._indekso.get(self.FSID)
       if fsPersono:
         for paro in fsPersono._paroj :
           paro.person1=None
@@ -882,13 +882,13 @@ class PersonFS(Gramplet):
         fsPersono._infanojCP = set()
         fsPersono._gepatrojCP=set()
         fsPersono.sortKey = None
-      for sd in gedcomx.SourceDescription._indekso.values() :
+      for sd in gedcomx_v1.SourceDescription._indekso.values() :
         sd.notes=set()
         sd.citations=set()
       if PersonFS.fs_Tree and self.FSID in PersonFS.fs_Tree._persons :
         PersonFS.fs_Tree._persons.pop(self.FSID)
       PersonFS.fs_Tree.add_persons([self.FSID])
-    #rezulto = gedcomx.jsonigi(PersonFS.fs_Tree)
+    #rezulto = gedcomx_v1.jsonigi(PersonFS.fs_Tree)
     #f = open('arbo2.out.json','w')
     #json.dump(rezulto,f,indent=2)
     #f.close()
@@ -911,8 +911,8 @@ class PersonFS(Gramplet):
   def ButAldoni_clicked(self, dummy):
     active_handle = self.get_active('Person')
     person = self.dbstate.db.get_person_from_handle(active_handle)
-    fsPerso = gedcomx.Person()
-    fsPerso.gender = gedcomx.Gender()
+    fsPerso = gedcomx_v1.Person()
+    fsPerso.gender = gedcomx_v1.Gender()
     fsPerso.living = False
     if person.get_gender() == Person.MALE :
       fsPerso.gender.type = "http://gedcomx.org/Male"
@@ -921,7 +921,7 @@ class PersonFS(Gramplet):
     else:
       fsPerso.gender.type = "http://gedcomx.org/Unknown"
     grNomo = person.primary_name
-    nomo = gedcomx.Name()
+    nomo = gedcomx_v1.Name()
     nomo.surname = None
     if grNomo.type == 3 :
       nomo.type = 'http://gedcomx.org/MarriedName'
@@ -929,15 +929,15 @@ class PersonFS(Gramplet):
       nomo.type = 'http://gedcomx.org/AlsoKnownAs'
     else :
       nomo.type = 'http://gedcomx.org/BirthName'
-    nf = gedcomx.NameForm()
+    nf = gedcomx_v1.NameForm()
     nomo.nameForms = set()
     nomo.nameForms.add(nf)
     nf.parts = set()
-    np1=gedcomx.NamePart()
+    np1=gedcomx_v1.NamePart()
     np1.type = "http://gedcomx.org/Given"
     np1.value = grNomo.first_name
     nf.parts.add(np1)
-    np2=gedcomx.NamePart()
+    np2=gedcomx_v1.NamePart()
     np2.type = "http://gedcomx.org/Surname"
     np2.value = grNomo.get_surname()
     nf.parts.add(np2)
@@ -963,15 +963,15 @@ class PersonFS(Gramplet):
     #  else :
     #    grValoro = grFaktoPriskribo +' @ '+ grFaktoLoko
     #  grTag = PERSONALCONSTANTEVENTS.get(int(event.type), "").strip() or event.type
-    #  fsFakto = gedcomx.Fact()
-    #  fsFakto.date = gedcomx.Date()
+    #  fsFakto = gedcomx_v1.Fact()
+    #  fsFakto.date = gedcomx_v1.Date()
     #  fsFakto.date.original = grFaktoDato
     #  fsFakto.type = GRAMPS_GEDCOMX_FAKTOJ.get(grTag)
     #  fsFakto.place = grFaktoLoko
     #  fsFakto.value = grFaktoPriskribo
     #  fsPerso.facts.add(fsFakto)
     # FARINDAĴOJ : fontoj, …
-    peto = {'persons' : [gedcomx.jsonigi(fsPerso)]}
+    peto = {'persons' : [gedcomx_v1.jsonigi(fsPerso)]}
     jsonpeto = json.dumps(peto)
     res = tree._FsSeanco.post_url( "/platform/tree/persons", jsonpeto )
     if res :
@@ -1217,8 +1217,8 @@ class PersonFS(Gramplet):
       motherId = None
       if "persons" in data:
         for person in data["persons"]:
-          PersonFS.fs_TreeSercxo._persons[person["id"]] = gedcomx.Person(person["id"], PersonFS.fs_TreeSercxo)
-          gedcomx.maljsonigi(PersonFS.fs_TreeSercxo._persons[person["id"]],person)
+          PersonFS.fs_TreeSercxo._persons[person["id"]] = gedcomx_v1.Person(person["id"], PersonFS.fs_TreeSercxo)
+          gedcomx_v1.maljsonigi(PersonFS.fs_TreeSercxo._persons[person["id"]],person)
         for person in data["persons"]:
           if "ascendancyNumber" in person["display"] and person["display"]["ascendancyNumber"] == 1 :
             if person["gender"]["type"] == "http://gedcomx.org/Female" :
@@ -1227,7 +1227,7 @@ class PersonFS(Gramplet):
             elif person["gender"]["type"] == "http://gedcomx.org/Male" :
               fatherId=person["id"]
               father=PersonFS.fs_TreeSercxo._persons[person["id"]]
-      fsPerso = PersonFS.fs_TreeSercxo._persons.get(fsId) or gedcomx.Person()
+      fsPerso = PersonFS.fs_TreeSercxo._persons.get(fsId) or gedcomx_v1.Person()
       edzoj = ''
       if "relationships" in data:
         for rel in data["relationships"]:
@@ -1240,7 +1240,7 @@ class PersonFS(Gramplet):
             elif person1Id==fsId:
               edzoId = person2Id
             if edzoId:
-              fsEdzo = PersonFS.fs_TreeSercxo._persons.get(edzoId) or gedcomx.Person()
+              fsEdzo = PersonFS.fs_TreeSercxo._persons.get(edzoId) or gedcomx_v1.Person()
               fsEdzoNomo = fsEdzo.akPrefNomo()
               if edzoj != '': edzoj = edzoj + "\n"
               edzoj = edzoj + fsEdzoNomo.akSurname() +  ', ' + fsEdzoNomo.akGiven()
@@ -1255,13 +1255,13 @@ class PersonFS(Gramplet):
                 mother = person1
               
       fsNomo = fsPerso.akPrefNomo()
-      fsBirth = get_fsfact (fsPerso, 'http://gedcomx.org/Birth' ) or gedcomx.Fact()
+      fsBirth = get_fsfact (fsPerso, 'http://gedcomx.org/Birth' ) or gedcomx_v1.Fact()
       fsBirthLoko = fsBirth.place 
       if fsBirthLoko :
         fsBirth = str(fsBirth.date or '') + ' \n@ ' +fsBirthLoko.original
       else :
         fsBirth = str(fsBirth.date or '')
-      fsDeath = get_fsfact (fsPerso, 'http://gedcomx.org/Death' ) or gedcomx.Fact()
+      fsDeath = get_fsfact (fsPerso, 'http://gedcomx.org/Death' ) or gedcomx_v1.Fact()
       fsDeathLoko = fsDeath.place 
       if fsDeathLoko :
         fsDeath = str(fsDeath.date or '') + ' \n@ ' +fsDeathLoko.original
@@ -1270,11 +1270,11 @@ class PersonFS(Gramplet):
       if father :
         fsPatroNomo = father.akPrefNomo()
       else:
-        fsPatroNomo = gedcomx.Name()
+        fsPatroNomo = gedcomx_v1.Name()
       if mother :
         fsPatrinoNomo = mother.akPrefNomo()
       else:
-        fsPatrinoNomo = gedcomx.Name()
+        fsPatrinoNomo = gedcomx_v1.Name()
       self.modelRes.add( ( 
 		  str(entry.get("score"))
 		, fsId
@@ -1392,11 +1392,11 @@ class PersonFS(Gramplet):
     ##  return
     #
     PersonFS.FSID = self.FSID
-    fsPerso = gedcomx.Person()
+    fsPerso = gedcomx_v1.Person()
     if PersonFS.FSID != '' and PersonFS.fs_Tree :
       # ŝarĝante individuan "FamilySearch" :
       PersonFS.fs_Tree.add_persons([fsid])
-      #fsPerso = gedcomx.Person._indekso.get(fsid) 
+      #fsPerso = gedcomx_v1.Person._indekso.get(fsid) 
       fsPerso = PersonFS.fs_Tree._persons.get(fsid)
       # legas persona kaplinio
       mendo = "/platform/tree/persons/"+fsid
@@ -1412,7 +1412,7 @@ class PersonFS(Gramplet):
         etag = r.headers['Etag']
       if not fsPerso :
         PersonFS.fs_Tree.add_persons([fsid])
-        fsPerso = gedcomx.Person._indekso.get(fsid) or gedcomx.Person()
+        fsPerso = gedcomx_v1.Person._indekso.get(fsid) or gedcomx_v1.Person()
       if fsPerso and fsid != PersonFS.FSID :
         fsPerso.id=fsid
 
@@ -1422,7 +1422,7 @@ class PersonFS(Gramplet):
     regximo = self.cbReg.get_active_id()
     if regximo == 'REG_fontoj' :
       datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/persons/%s/sources" % fsPerso.id)
-      gedcomx.maljsonigi(PersonFS.fs_Tree,datumoj)
+      gedcomx_v1.maljsonigi(PersonFS.fs_Tree,datumoj)
       if not PersonFS.fs_Tree:
         colFS = _('Ne konektita al FamilySearch')
       else :
@@ -1486,7 +1486,7 @@ class PersonFS(Gramplet):
         fsid = utila.get_fsftid(c)
         for x in fsFontoj :
           if x.descriptionId == fsid :
-            sd =  gedcomx.SourceDescription._indekso.get(x.descriptionId) or gedcomx.SourceDescription()
+            sd =  gedcomx_v1.SourceDescription._indekso.get(x.descriptionId) or gedcomx_v1.SourceDescription()
             for y in sd.titles :
               fsTitolo += y.value
             if len(sd.titles):
@@ -1518,7 +1518,7 @@ class PersonFS(Gramplet):
             break
         self.modelKomp.add([koloro,dato,titolo,grURL,fsDato,fsTitolo,fsURL,False,'Fonto',c.handle,None,None,None] )
       for fsFonto in fsFontoj :
-        sd =  gedcomx.SourceDescription._indekso.get(fsFonto.descriptionId) or gedcomx.SourceDescription()
+        sd =  gedcomx_v1.SourceDescription._indekso.get(fsFonto.descriptionId) or gedcomx_v1.SourceDescription()
         fsTitolo = ""
         for x in sd.titles :
           fsTitolo += x.value
@@ -1534,7 +1534,7 @@ class PersonFS(Gramplet):
         self.modelKomp.add([koloro,'===','===','===',fsDato,fsTitolo,fsURL,False,'Fonto',None,sd.id,None,None] )
     elif regximo == 'REG_notoj' :
       datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/persons/%s/notes" % fsPerso.id)
-      gedcomx.maljsonigi(PersonFS.fs_Tree,datumoj)
+      gedcomx_v1.maljsonigi(PersonFS.fs_Tree,datumoj)
       if not PersonFS.fs_Tree:
         colFS = _('Ne konektita al FamilySearch')
       else :
@@ -1614,14 +1614,14 @@ class PersonFS(Gramplet):
               break
           if fsParo :
             datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/couple-relationships/%s/notes" % fsParo.id)
-            gedcomx.maljsonigi(PersonFS.fs_Tree,datumoj)
+            gedcomx_v1.maljsonigi(PersonFS.fs_Tree,datumoj)
             fsNotoj = fsParo.notes.copy()
           else :
             fsNotoj = set()
           if PersonFS.fs_Tree :
-            fsEdzo = PersonFS.fs_Tree._persons.get(fsEdzoId) or gedcomx.Person()
+            fsEdzo = PersonFS.fs_Tree._persons.get(fsEdzoId) or gedcomx_v1.Person()
           else :
-            fsEdzo = gedcomx.Person()
+            fsEdzo = gedcomx_v1.Person()
           fsNomo = fsEdzo.akPrefNomo()
           nl = family.get_note_list()
           for nh in nl :
@@ -1663,7 +1663,7 @@ class PersonFS(Gramplet):
           #, False, 'edzo', edzo_handle ,fsEdzoId , family.handle, fsParoId
       #for fsFam in fsEdzoj :
       #  datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/couple-relationships/%s/notes" % fsFam.id)
-      #  gedcomx.maljsonigi(PersonFS.fs_Tree,datumoj)
+      #  gedcomx_v1.maljsonigi(PersonFS.fs_Tree,datumoj)
       #  for fsNoto in fsFam.notes :
       #    fsTeksto = fsNoto.text
       #    fsTitolo = fsNoto.subject

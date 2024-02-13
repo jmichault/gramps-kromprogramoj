@@ -9,8 +9,8 @@ To be able to use the extension you need a familysearch account, this will be re
 #Installation
 ## prerequisites
 * gramps 5.1 (>= 5.1.6).
-* The gramplet uses “requests” and “gedcomx-v1” (>=1.0.12) python modules.  
-You can install 'requests' and 'gedcomx-v1' manually, or let the gramplet install them automatically (requires pip).  
+* The gramplet uses “requests” and “gedcomx\_v1” (>=1.0.20) python modules.  
+You can install 'requests' and 'gedcomx\_v1' manually, or let the gramplet install them automatically (requires pip).  
 
 ## adding the project to the plugin manager
 * open the plugin manager (“puzzle” icon, or Edit menu-->Plugin manager)

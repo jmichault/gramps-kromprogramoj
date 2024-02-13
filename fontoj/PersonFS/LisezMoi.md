@@ -11,8 +11,8 @@ Pour pouvoir utiliser l'extension il vous faut un compte _familysearch_, celui-c
 # installation
 ## prérequis
 Cette extension est prévue pour gramps version 5.1 (>= 5.1.6).
-Le gramplet utilise les modules python «requests» et «gedcomx-v1» (>=1.0.12).  
-Vous pouvez installer «requests» et «gedcomx-v1» manuellement, ou laisser le gramplet les installer automatiquement (nécessite pip).
+Le gramplet utilise les modules python «requests» et «gedcomx\_v1» (>=1.0.20).  
+Vous pouvez installer «requests» et «gedcomx\_v1» manuellement, ou laisser le gramplet les installer automatiquement (nécessite pip).
 
 ## ajout du projet dans le gestionnaire de greffons
 * ouvrez le gestionnaire de greffons (icône «puzzle», ou menu Édition-->Gestionnaire de greffons)

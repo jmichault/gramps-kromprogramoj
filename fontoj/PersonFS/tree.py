@@ -26,14 +26,14 @@ import email.utils
 import time
 from urllib.parse import unquote
 
-# gedcomx biblioteko. Instalu kun `pip install gedcomx-v1`
-import gedcomx
+# gedcomx_v1 biblioteko. Instalu kun `pip install gedcomx_v1`
+import gedcomx_v1
 
 # local imports
 from constants import (
     MAX_PERSONS,
 )
-from gedcomx.dateformal import DateFormal
+from gedcomx_v1.dateformal import DateFormal
 
 import gettext
 _ = gettext.gettext
@@ -42,11 +42,11 @@ _ = gettext.gettext
 _FsSeanco = None
 
 
-class Tree(gedcomx.Gedcomx):
-  """ gedcomx tree class
+class Tree(gedcomx_v1.Gedcomx):
+  """ gedcomx_v1 tree class
   """
   def __init__(self):
-    gedcomx._utila.klaso_ini(self)
+    gedcomx_v1._utila.klaso_ini(self)
     self._fam = dict()
     self._places = dict()
     self._persons = dict()
@@ -66,13 +66,13 @@ class Tree(gedcomx.Gedcomx):
       data = None
 
     if data:
-      gedcomx.maljsonigi(self,data)
-      fsPersono = gedcomx.Person._indekso[fid]
+      gedcomx_v1.maljsonigi(self,data)
+      fsPersono = gedcomx_v1.Person._indekso[fid]
       if 'Last-Modified' in r.headers :
         fsPersono._last_modified = int(time.mktime(email.utils.parsedate(r.headers['Last-Modified'])))
       if 'Etag' in r.headers :
         fsPersono._etag = r.headers['Etag']
-      self._persons[fid]=gedcomx.Person._indekso[fid]
+      self._persons[fid]=gedcomx_v1.Person._indekso[fid]
 
   def add_persons(self, fids):
     """add individuals to the family tree
@@ -90,8 +90,8 @@ class Tree(gedcomx.Gedcomx):
     loop.run_until_complete( sxargi_personoj(loop,fids))
 
     for fid in fids :
-      if fid in gedcomx.Person._indekso :
-        self._persons[fid]=gedcomx.Person._indekso[fid]
+      if fid in gedcomx_v1.Person._indekso :
+        self._persons[fid]=gedcomx_v1.Person._indekso[fid]
 
   def add_parents(self, fids):
     """add parents relationships
