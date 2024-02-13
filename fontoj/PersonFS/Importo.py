@@ -53,20 +53,20 @@ except ValueError:
 _ = _trans.gettext
 
 
-# gedcomx biblioteko. Instalu kun `pip install --user --upgrade --break-system-packages gedcomx-v1`
-mingedcomx="1.0.17"
+# gedcomx_v1 biblioteko. Instalu kun `pip install --user --upgrade --break-system-packages gedcomx_v1`
+mingedcomx="1.0.20"
 import importlib
 from importlib.metadata import version
 try:
-  v = version('gedcomx-v1')
+  v = version('gedcomx_v1')
 except :
   v="0.0.0"
 from packaging.version import parse
 if parse(v) < parse(mingedcomx) :
-  print (_('gedcomx ne trovita aŭ < %s' % mingedcomx))
+  print (_('gedcomx_v1 ne trovita aŭ < %s' % mingedcomx))
   import pip
-  pip.main(['install', '--user', '--upgrade', '--break-system-packages', 'gedcomx-v1'])
-import gedcomx
+  pip.main(['install', '--user', '--upgrade', '--break-system-packages', 'gedcomx_v1'])
+import gedcomx_v1
 
 
 # tutmondaj variabloj
@@ -156,14 +156,14 @@ def aldLoko(db, txn, pl):
       self.write_log("WARNING: Status code: %s" % r.status_code)
     return None
   if not 'places' in datumoj : return
-  t = gedcomx.Gedcomx()
-  gedcomx.maljsonigi(t,datumoj)
+  t = gedcomx_v1.Gedcomx()
+  gedcomx_v1.maljsonigi(t,datumoj)
   fsPlaceId = datumoj['places'][0]['id']
   # FARINDAĴO : charger le lien place, et récupérer toutes les descriptions
-  fsPlace = gedcomx.PlaceDescription._indekso.get(fsPlaceId)
+  fsPlace = gedcomx_v1.PlaceDescription._indekso.get(fsPlaceId)
   if fsPlace.jurisdiction :
     fsParentId = fsPlace.jurisdiction.resourceId
-    fsParent = gedcomx.PlaceDescription._indekso.get(fsParentId)
+    fsParent = gedcomx_v1.PlaceDescription._indekso.get(fsParentId)
     grParent = aldLoko( db, txn, fsParent)
   else:
     grParent = None
@@ -379,13 +379,13 @@ def akFontDatoj(fsTree):
     r = tree._FsSeanco.get_url("/service/tree/links/source/%s" % sd.id,{"Accept": "application/json"})
     if r and r.text :
       datumoj = r.json()
-      #gedcomx.maljsonigi(fsTree,datumoj)
+      #gedcomx_v1.maljsonigi(fsTree,datumoj)
       e = datumoj.get('event')
       if e:
         strFormal = e.get('eventDate')
-        d= gedcomx.Date()
+        d= gedcomx_v1.Date()
         d.original=strFormal
-        d.formal = gedcomx.dateformal.DateFormal(strFormal)
+        d.formal = gedcomx_v1.dateformal.DateFormal(strFormal)
         sd._date = d
       sd._collectionUri = datumoj.get('fsCollectionUri')
       if sd._collectionUri:
@@ -394,7 +394,7 @@ def akFontDatoj(fsTree):
 #def aldFonto(db, txn, fsFonto, obj, EkzCit):
 def aldFonto(db, txn, sdId, obj, EkzCit):
     # akiri SourceDescription
-    sourceDescription = gedcomx.SourceDescription._indekso.get(sdId)
+    sourceDescription = gedcomx_v1.SourceDescription._indekso.get(sdId)
     if not sourceDescription : return
     # sercxi ekzistantan
     trovita = False
@@ -724,16 +724,16 @@ class FsAlGr:
     #      #PersonFS.CONFIG.set("preferences.fs_pasvorto", PersonFS.PersonFS.fs_pasvorto) #
     #      PersonFS.CONFIG.save()
     #      if self.vorteco >= 3:
-    #        tree._FsSeanco = gedcomx.FsSession(PersonFS.PersonFS.fs_sn, PersonFS.PersonFS.fs_pasvorto, True, False, 2)
+    #        tree._FsSeanco = gedcomx_v1.FsSession(PersonFS.PersonFS.fs_sn, PersonFS.PersonFS.fs_pasvorto, True, False, 2)
     #      else :
-    #        tree._FsSeanco = gedcomx.FsSession(PersonFS.PersonFS.fs_sn, PersonFS.PersonFS.fs_pasvorto, False, False, 2)
+    #        tree._FsSeanco = gedcomx_v1.FsSession(PersonFS.PersonFS.fs_sn, PersonFS.PersonFS.fs_pasvorto, False, False, 2)
     #    else :
     #      print("Vi devas enigi la ID kaj pasvorton")
     #  else:
     #    if self.vorteco >= 3:
-    #      tree._FsSeanco = gedcomx.FsSession(PersonFS.PersonFS.fs_sn, PersonFS.PersonFS.fs_pasvorto, True, False, 2)
+    #      tree._FsSeanco = gedcomx_v1.FsSession(PersonFS.PersonFS.fs_sn, PersonFS.PersonFS.fs_pasvorto, True, False, 2)
     #    else :
-    #      tree._FsSeanco = gedcomx.FsSession(PersonFS.PersonFS.fs_sn, PersonFS.PersonFS.fs_pasvorto, False, False, 2)
+    #      tree._FsSeanco = gedcomx_v1.FsSession(PersonFS.PersonFS.fs_sn, PersonFS.PersonFS.fs_pasvorto, False, False, 2)
     print("importo")
     if self.fs_TreeImp:
       del self.fs_TreeImp
@@ -782,19 +782,19 @@ class FsAlGr:
       for fsPersono in self.fs_TreeImp.persons :
         progress.step()
         datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/persons/%s/notes" % fsPersono.id)
-        gedcomx.maljsonigi(self.fs_TreeImp,datumoj)
+        gedcomx_v1.maljsonigi(self.fs_TreeImp,datumoj)
         datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/persons/%s/sources" % fsPersono.id)
-        gedcomx.maljsonigi(self.fs_TreeImp,datumoj)
+        gedcomx_v1.maljsonigi(self.fs_TreeImp,datumoj)
         datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/persons/%s/memories" % fsPersono.id)
-        gedcomx.maljsonigi(self.fs_TreeImp,datumoj)
+        gedcomx_v1.maljsonigi(self.fs_TreeImp,datumoj)
       for fsFam in self.fs_TreeImp.relationships :
         datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/couple-relationships/%s/notes" % fsFam.id)
-        gedcomx.maljsonigi(self.fs_TreeImp,datumoj)
+        gedcomx_v1.maljsonigi(self.fs_TreeImp,datumoj)
         datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/couple-relationships/%s/sources" % fsFam.id)
-        gedcomx.maljsonigi(self.fs_TreeImp,datumoj)
+        gedcomx_v1.maljsonigi(self.fs_TreeImp,datumoj)
       akFontDatoj(self.fs_TreeImp)
     if self.vorteco >= 3:
-      rezulto = gedcomx.jsonigi(self.fs_TreeImp)
+      rezulto = gedcomx_v1.jsonigi(self.fs_TreeImp)
       f = open('importo.out.json','w')
       json.dump(rezulto,f,indent=2)
       f.close()

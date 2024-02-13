@@ -9,7 +9,7 @@ ensuite :
 
 ```
 pacman -S mingw-w64-x86_64-python3-requests mingw-w64-x86_64-python3-pip mingw-w64-x86_64-python3-packaging unzip
-pip install gedcomx-v1
+pip install gedcomx_v1
 cd ~/grampsdev
 git checkout v5.1.5
 python3 -m build

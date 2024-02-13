@@ -4,30 +4,45 @@
 "i": "FamilySearch komparo",
 "t": 2,
 "d": "FamilySearch : comparer les personnes de gramps avec celles de FamilySearch.",
-"v": "beta 2.0.22",
+"v": "beta 2.0.28",
 "g": "5.2",
 "s": 3,
-"z": "PersonFS.addon.tgz"
+"z": "PersonFS.addon.tgz",
+"rm": [
+"gedcomx_v1",
+"packaging",
+"requests"
+]
 },
 {
 "n": "Import de donn\u00e9es FamilySearch",
 "i": "Importo de FamilySearch",
 "t": 2,
 "d": "FamilySearch.",
-"v": "beta 2.0.22",
+"v": "beta 2.0.28",
 "g": "5.2",
 "s": 3,
-"z": "PersonFS.addon.tgz"
+"z": "PersonFS.addon.tgz",
+"rm": [
+"gedcomx_v1",
+"packaging",
+"requests"
+]
 },
 {
 "n": "PersonFS",
 "i": "FS Gramplet",
 "t": 10,
 "d": "interface pour FamilySearch",
-"v": "beta 2.0.22",
+"v": "beta 2.0.28",
 "g": "5.2",
 "s": 3,
-"z": "PersonFS.addon.tgz"
+"z": "PersonFS.addon.tgz",
+"rm": [
+"gedcomx_v1",
+"packaging",
+"requests"
+]
 },
 {
 "n": "Am\u00e9lioration des lieux",

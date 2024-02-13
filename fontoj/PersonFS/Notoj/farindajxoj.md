@@ -87,7 +87,7 @@
 	ou afficher un avertissement.
   * recherche accessible depuis le menu ?
   * recherche : charger les suivants
-* identifier et gérer les pré-requis (requests, gedcomx-v1)
+* identifier et gérer les pré-requis (requests, gedcomx\_v1)
 * synchro :
   * accélérer le traitement :
     * lancement en multi-thread (async ?)
@@ -105,7 +105,7 @@
 * bogue gramps si case à cocher dans un treeview : sudo sed -i 's/int(path)/path/' /usr/lib/python3/dist-packages/gramps/gui/listmodel.py
 	--> doit être corrigé par gramps-project : https://github.com/gramps-project/gramps/pull/1426
 	--> je pourrais alors supprimer mialistmodel.py
-* gestion pointue des lieux dans l'import , dans le gramplet, dans gedcomx-v1 ?
+* gestion pointue des lieux dans l'import , dans le gramplet, dans gedcomx\_v1 ?
   - attention, car une refonte en profondeur de la gestion des lieux est prévue pour gramps 2.0…
 * gestion des «memories»
 * module de liaison automatique.

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GRAMPS 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-12 19:06+0100\n"
+"POT-Creation-Date: 2024-02-13 18:55+0100\n"
 "PO-Revision-Date: 2023-08-05 19:36+0000\n"
 "Last-Translator: Nick Hall <nick-h@gramps-project.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
@@ -30,8 +30,8 @@ msgstr ""
 
 #: PersonFS/Importo.py:66 PersonFS/PersonFS.py:75
 #, python-format
-msgid "gedcomx ne trovita aŭ < %s"
-msgstr "Gedcomx não encontrado ou < %s"
+msgid "gedcomx_v1 ne trovita aŭ < %s"
+msgstr "Gedcomx_v1 não encontrado ou < %s"
 
 #: PersonFS/Importo.py:218
 msgid "Konstrui FSID listo por lokoj"
@@ -284,19 +284,19 @@ msgstr "Interface para o FamilySearch"
 msgid "FS"
 msgstr "Fs"
 
-#: PersonFS/PersonFS.gpr.py:47
+#: PersonFS/PersonFS.gpr.py:48
 msgid "Importo de FamilySearch datumoj"
 msgstr "Importar dados de pesquisa em família"
 
-#: PersonFS/PersonFS.gpr.py:48
+#: PersonFS/PersonFS.gpr.py:49
 msgid "FamilySearch."
 msgstr "FamilySearch."
 
-#: PersonFS/PersonFS.gpr.py:61
+#: PersonFS/PersonFS.gpr.py:63
 msgid "FamilySearch : kompari"
 msgstr "FamilySearch: Compare"
 
-#: PersonFS/PersonFS.gpr.py:62
+#: PersonFS/PersonFS.gpr.py:64
 msgid "FamilySearch : kompari gramps personojn kun FS personojn."
 msgstr "FamilySearch: Compare Gramps com pessoas com FS."
 
@@ -744,6 +744,10 @@ msgstr "Fontes"
 #: PersonFS/PersonFS.glade:959
 msgid "Reĝimo :  "
 msgstr "Regime:"
+
+#, python-format
+#~ msgid "gedcomx ne trovita aŭ < %s"
+#~ msgstr "Gedcomx não encontrado ou < %s"
 
 #~ msgid "x"
 #~ msgstr "x"

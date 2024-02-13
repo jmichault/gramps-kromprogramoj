@@ -10,8 +10,8 @@ Por povi uzi la gramplet vi bezonas _familysearch_-konton, ĉi tio estas enigota
 # instalado
 ## antaŭkondiĉoj
 Ĉi tiu kromprogramo estas destinita por gramps-versio 5.2.
-La gramplet uzas "requests" kaj "gedcomx-v1" (>=1.0.19) python-modulojn.  
-Vi povas instali 'requests' kaj 'gedcomx-v1' permane, aŭ lasi la gramplet instali ilin aŭtomate (postulas pip).  
+La gramplet uzas "requests" kaj "gedcomx\_v1" (>=1.0.19) python-modulojn.  
+Vi povas instali 'requests' kaj 'gedcomx\_v1' permane, aŭ lasi la gramplet instali ilin aŭtomate (postulas pip).  
 
 ## aldonante la projekton al la aldonaĵadministranto
 * Malfermu la aldonaĵadministranton ("puzlo" ikono aŭ Redakti menuon --> Aldonaĵadministrilon)
