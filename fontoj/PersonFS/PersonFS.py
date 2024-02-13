@@ -63,7 +63,7 @@ except ValueError:
 _ = _trans.gettext
 
 # gedcomx biblioteko. Instalu kun `pip install --user --upgrade --break-system-packages gedcomx-v1`
-mingedcomx="1.0.18"
+mingedcomx="1.0.19"
 import importlib
 from importlib.metadata import version
 try:
@@ -574,9 +574,9 @@ class PersonFS(Gramplet):
     #else :
     #  intr = False
     #  txn = DbTxn(_("kopii al gramps"), self.dbstate.db)
+    #if txn :
     regximo = self.cbReg.get_active_id()
     with DbTxn(_("kopii al gramps"), self.dbstate.db) as txn:
-    #if txn :
       for x in model:
        l = [x]
        l.extend(x.iterchildren())
@@ -688,12 +688,8 @@ class PersonFS(Gramplet):
         elif ( (tipolinio == 'Fonto' ) and linio[10] and linio[7]) :
           fsSdId = linio[10]
           fh = linio[9]
-          print(" fonto FS --> gramps, id="+fsFontoId)
-          if fh :
-            grFonto = self.dbstate.db.get_source_from_handle(fh)
-          else :
-            grFonto = Source()
-          sourceDescription = gedcomx.SourceDescription._indekso.get(fsSdId)
+          print(" fonto FS --> gramps, id="+fsSdId)
+          citation = Importo.aldFonto(self.dbstate.db,txn,fsSdId,grPersono,grPersono.citation_list)
       self.dbstate.db.commit_person(grPersono,txn)
       self.dbstate.db.transaction_commit(txn)
     self.ButRefresxigi_clicked(None)
@@ -1189,7 +1185,7 @@ class PersonFS(Gramplet):
     loko = self.top.get_object("fs_loko_eniro").get_text()
     if loko :
       mendo = mendo + "q.anyPlace=%s&" % loko
-    mendo = mendo + "offset=0&count=10"
+    mendo = mendo + "offset=0&count=50"
     datumoj = tree._FsSeanco.get_jsonurl(
                     mendo ,{"Accept": "application/x-gedcomx-atom+json"}
                 )
@@ -1206,12 +1202,12 @@ class PersonFS(Gramplet):
       fsId = entry.get("id")
       data=entry["content"]["gedcomx"]
       # bizare, FamilySearch ne uzas gedcomx-formaton
-      #gedcomx.maljsonigi(self.fs_TreeSercxo, data )
+      #gedcomx.maljsonigi(PersonFS.fs_TreeSercxo, data )
       if "places" in data:
         for place in data["places"]:
-          if place["id"] not in self.fs_TreeSercxo._places:
+          if place["id"] not in PersonFS.fs_TreeSercxo._places:
             if 'latitude' in place and 'longitude' in place :
-              self.fs_TreeSercxo._places[place["id"]] = (
+              PersonFS.fs_TreeSercxo._places[place["id"]] = (
                                 str(place["latitude"]),
                                 str(place["longitude"]),
                             )
@@ -1221,16 +1217,16 @@ class PersonFS(Gramplet):
       motherId = None
       if "persons" in data:
         for person in data["persons"]:
-          self.fs_TreeSercxo._persons[person["id"]] = gedcomx.Person(person["id"], self.fs_TreeSercxo)
-          gedcomx.maljsonigi(self.fs_TreeSercxo._persons[person["id"]],person)
+          PersonFS.fs_TreeSercxo._persons[person["id"]] = gedcomx.Person(person["id"], PersonFS.fs_TreeSercxo)
+          gedcomx.maljsonigi(PersonFS.fs_TreeSercxo._persons[person["id"]],person)
         for person in data["persons"]:
           if "ascendancyNumber" in person["display"] and person["display"]["ascendancyNumber"] == 1 :
             if person["gender"]["type"] == "http://gedcomx.org/Female" :
               motherId=person["id"]
-              mother=self.fs_TreeSercxo._persons[person["id"]]
+              mother=PersonFS.fs_TreeSercxo._persons[person["id"]]
             elif person["gender"]["type"] == "http://gedcomx.org/Male" :
               fatherId=person["id"]
-              father=self.fs_TreeSercxo._persons[person["id"]]
+              father=PersonFS.fs_TreeSercxo._persons[person["id"]]
       fsPerso = PersonFS.fs_TreeSercxo._persons.get(fsId) or gedcomx.Person()
       edzoj = ''
       if "relationships" in data:
@@ -1252,7 +1248,7 @@ class PersonFS(Gramplet):
             person1Id = rel["person1"]["resourceId"]
             person2Id = rel["person2"]["resourceId"]
             if person2Id == fsId :
-              person1=self.fs_TreeSercxo._persons[person1Id]
+              person1=PersonFS.fs_TreeSercxo._persons[person1Id]
               if not father and person1.gender.type == "http://gedcomx.org/Male" :
                 father = person1
               elif not mother and person1.gender.type == "http://gedcomx.org/Female" :

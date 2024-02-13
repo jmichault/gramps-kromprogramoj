@@ -9,25 +9,19 @@ To be able to use the extension you need a familysearch account, this will be re
 #Installation
 ## prerequisites
 The gramplet uses “requests” and “gedcomx-v1” (>=1.0.12) python modules.  
-Therefore this plugin cannot be used with the official AIO distribution of gramps.  
-
 You can install 'requests' and 'gedcomx-v1' manually, or let the gramplet install them automatically (requires pip).  
-For windows, you can try experimental AIO distribution [here](https://github.com/jmichault/gramps-aio/releases) ).
 
+## adding the project to the plugin manager
+* open the plugin manager (“puzzle” icon, or Edit menu-->Plugin manager)
+* go to “Projects” tab
+   * click on “+”
+     * Project Name: jmichault (or whatever you want)
+     * URL: https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps52
+     * click on “Validate”
+* go to the “Plugins” tab
+   * search for PersonFS
+   * click “Install”
 
-## loading the zip
-On the [project homepage](https://github.com/jmichault/PersonFS), click “Releases” (right), and in “Assets” choose the PersonFS.zip file).
-Then extract the zip to Gramps plugins folder (~/.gramps/gramps51/plugins for gramps version 5.1)
-(or %APPDATA%\gramps\gramps51\plugins for windows).
-
-## with git
-In a terminal, run the following commands:
-
-```
-cd ~/.gramps/gramps51/plugins
-git clone https://github.com/jmichault/PersonFS.git
-```
-(note: to be adapted if gramps is not in version 5.1)
 
 # the gramplet
 ## enable
@@ -70,6 +64,8 @@ From the gramplet, you can also:
   * caution: places that are not standardized in FamilySearch are not copied.
 * change individual by double-clicking on the corresponding line.
 * edit an event of the person by double-clicking on the corresponding line.
+* use “Notes” mode to compare/transfer individual and family notes
+* use “Sources” mode to compare sources (experimental, use only with caution).
 
 # the import module
 You can launch it either from the menu or from the gramplet.
