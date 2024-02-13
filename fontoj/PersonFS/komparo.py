@@ -41,7 +41,7 @@ except ValueError:
     _trans = glocale.translation
 _ = _trans.gettext
 
-import gedcomx
+import gedcomx_v1
 
 import PersonFS
 import fs_db
@@ -315,7 +315,7 @@ def NomojKomp(grPersono, fsPerso ) :
     fsNomoj = fsPerso.names.copy()
     if fsNomo and fsNomo in fsNomoj: fsNomoj.remove(fsNomo)
     for grNomo in grPersono.alternate_names :
-      fsNomo = gedcomx.Name()
+      fsNomo = gedcomx_v1.Name()
       koloro = "yellow"
       for x in fsNomoj :
         if (grNomo.get_surname() == x.akSurname()) and (grNomo.first_name == x.akGiven()) :
@@ -446,7 +446,7 @@ def aldGepKomp(db, grPersono, fsPersono ) :
     fsmother_id = ''
     fsMother = None
     for fsid in parents_ids :
-      fs2 = gedcomx.Person._indekso.get(fsid) or gedcomx.Person()
+      fs2 = gedcomx_v1.Person._indekso.get(fsid) or gedcomx_v1.Person()
       if fs2.gender and fs2.gender.type == "http://gedcomx.org/Male" :
         fsfather_id = fsid
         fsFather = fs2
@@ -547,9 +547,9 @@ def aldEdzKompNotoj(db, grPersono, fsPerso) :
       if edzo_handle == None and fsEdzoId == '' :
         koloro = "green"
       if PersonFS.PersonFS.fs_Tree :
-        fsEdzo = PersonFS.PersonFS.fs_Tree._persons.get(fsEdzoId) or gedcomx.Person()
+        fsEdzo = PersonFS.PersonFS.fs_Tree._persons.get(fsEdzoId) or gedcomx_v1.Person()
       else :
-        fsEdzo = gedcomx.Person()
+        fsEdzo = gedcomx_v1.Person()
       fsNomo = fsEdzo.akPrefNomo()
       res.append( ( koloro , _trans.gettext('Spouse')
                 , grperso_datoj(db, edzo) , edzoNomo.get_surname() + ', ' + edzoNomo.first_name + ' [' + edzoFsid + ']'
@@ -569,7 +569,7 @@ def aldEdzKompNotoj(db, grPersono, fsPerso) :
     if fsEdzo :
       fsNomo = fsEdzo.akPrefNomo()
     else :
-      fsNomo = gedcomx.Name()
+      fsNomo = gedcomx_v1.Name()
     res.append( ( koloro , _trans.gettext('Spouse')
                 , '', ''
           , fsperso_datoj(db, fsEdzo) , fsNomo.akSurname() +  ', ' + fsNomo.akGiven()  + ' [' + str(fsEdzoId)  + ']' , ''
@@ -628,9 +628,9 @@ def aldEdzKomp(db, grPersono, fsPerso) :
       if edzo_handle == None and fsEdzoId == '' :
         koloro = "green"
       if PersonFS.PersonFS.fs_Tree :
-        fsEdzo = PersonFS.PersonFS.fs_Tree._persons.get(fsEdzoId) or gedcomx.Person()
+        fsEdzo = PersonFS.PersonFS.fs_Tree._persons.get(fsEdzoId) or gedcomx_v1.Person()
       else :
-        fsEdzo = gedcomx.Person()
+        fsEdzo = gedcomx_v1.Person()
       fsNomo = fsEdzo.akPrefNomo()
       res.append( ( koloro , _trans.gettext('Spouse')
                 , grperso_datoj(db, edzo) , edzoNomo.get_surname() + ', ' + edzoNomo.first_name + ' [' + edzoFsid + ']'
@@ -743,9 +743,9 @@ def aldEdzKomp(db, grPersono, fsPerso) :
         if fsInfanoId != '' and fsInfanoId == infanoFsid :
           koloro = "green"
         if PersonFS.PersonFS.fs_Tree :
-          fsInfano = PersonFS.PersonFS.fs_Tree._persons.get(fsInfanoId) or gedcomx.Person()
+          fsInfano = PersonFS.PersonFS.fs_Tree._persons.get(fsInfanoId) or gedcomx_v1.Person()
         else :
-          fsInfano = gedcomx.Person()
+          fsInfano = gedcomx_v1.Person()
         fsNomo = fsInfano.akPrefNomo()
         res.append( ( koloro ,'    '+ _trans.gettext('Child')
                 , grperso_datoj(db, infano) , infanoNomo.get_surname() + ', ' + infanoNomo.first_name + ' [' + infanoFsid + ']'
@@ -763,7 +763,7 @@ def aldEdzKomp(db, grPersono, fsPerso) :
             if fsInfano :
               fsNomo = fsInfano.akPrefNomo()
             else :
-              fsNomo = gedcomx.Name()
+              fsNomo = gedcomx_v1.Name()
             res.append( ( koloro ,'    '+ _trans.gettext('Child')
                 , '', ''
                 , fsperso_datoj(db, fsInfano), fsNomo.akSurname() +  ', ' + fsNomo.akGiven() + ' [' + fsInfanoId + ']' , ''
@@ -784,7 +784,7 @@ def aldEdzKomp(db, grPersono, fsPerso) :
     if fsEdzo :
       fsNomo = fsEdzo.akPrefNomo()
     else :
-      fsNomo = gedcomx.Name()
+      fsNomo = gedcomx_v1.Name()
     res.append( ( koloro , _trans.gettext('Spouse')
                 , '', ''
           , fsperso_datoj(db, fsEdzo) , fsNomo.akSurname() +  ', ' + fsNomo.akGiven()  + ' [' + str(fsEdzoId)  + ']' , ''
@@ -800,7 +800,7 @@ def aldEdzKomp(db, grPersono, fsPerso) :
         if fsInfano :
           fsNomo = fsInfano.akPrefNomo()
         else :
-          fsNomo = gedcomx.Name()
+          fsNomo = gedcomx_v1.Name()
         res.append( ( koloro ,'    '+ _trans.gettext('Child')
                 , '', ''
                 , fsperso_datoj(db, fsInfano), fsNomo.akSurname() +  ', ' + fsNomo.akGiven() + ' [' + fsInfanoId + ']' , ''
@@ -815,7 +815,7 @@ def aldEdzKomp(db, grPersono, fsPerso) :
     if fsInfano :
       fsNomo = fsInfano.akPrefNomo()
     else :
-      fsNomo = gedcomx.Name()
+      fsNomo = gedcomx_v1.Name()
     res.append( ( koloro ,_trans.gettext('Child')
                 , '', ''
                 , fsperso_datoj(db, fsInfano), fsNomo.akSurname() +  ', ' + fsNomo.akGiven() + ' [' + fsInfanoId + ']' , ''

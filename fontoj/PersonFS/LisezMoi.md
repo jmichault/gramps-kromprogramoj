@@ -1,7 +1,7 @@
 
 
 Ceci est une extension pour interfacer _gramps_ avec _familysearch.com_.
-il se compose de :
+elle se compose de :
 * un [_gramplet_](https://www.gramps-project.org/wiki/index.php/Gramplets) permettant de comparer votre individu avec celui de _FamilySearch_. Depuis ce gramplet, vous pouvez aussi faire des recherches sur familysearch, consulter les doublons potentiels trouvés par FamilySearch, copier les évènements vers ou depuis FamilySearch, importer les ancêtre et descendants.
 * un module d'import accessible par le menu «Outils» --> «Modification de l'arbre familial» --> «Import de données FamilySearch»
 * un module de comparaison accessible par le menu «Outils» --> «Modification de l'arbre familial» --> «FamilySearch : comparer»
@@ -11,8 +11,8 @@ Pour pouvoir utiliser l'extension il vous faut un compte _familysearch_, celui-c
 # installation
 ## prérequis
 Cette extension est prévue pour gramps version 5.2.
-Le gramplet utilise les modules python «requests» et «gedcomx-v1» (>=1.0.12).  
-Vous pouvez installer «requests» et «gedcomx-v1» manuellement, ou laisser le gramplet les installer automatiquement (nécessite pip).
+Le gramplet utilise les modules python «requests» et «gedcomx\_v1» (>=1.0.12).  
+Vous pouvez installer «requests» et «gedcomx\_v1» manuellement, ou laisser le gramplet les installer automatiquement (nécessite pip).
 
 ## ajout du projet dans le gestionnaire de greffons
 * ouvrez le gestionnaire de greffons (icône «puzzle», ou menu Édition-->Gestionnaire de greffons)

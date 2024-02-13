@@ -4,30 +4,45 @@
 "i": "FamilySearch komparo",
 "t": 2,
 "d": "FamilySearch: vergelijk gramps mensen met FS -mensen.",
-"v": "beta 2.0.22",
+"v": "beta 2.0.28",
 "g": "5.2",
 "s": 3,
-"z": "PersonFS.addon.tgz"
+"z": "PersonFS.addon.tgz",
+"rm": [
+"gedcomx_v1",
+"packaging",
+"requests"
+]
 },
 {
 "n": "Importeren van FamilySearch -gegevens",
 "i": "Importo de FamilySearch",
 "t": 2,
 "d": "FamilySearch.",
-"v": "beta 2.0.22",
+"v": "beta 2.0.28",
 "g": "5.2",
 "s": 3,
-"z": "PersonFS.addon.tgz"
+"z": "PersonFS.addon.tgz",
+"rm": [
+"gedcomx_v1",
+"packaging",
+"requests"
+]
 },
 {
 "n": "Persoon",
 "i": "FS Gramplet",
 "t": 10,
 "d": "interface voor gezinsopdracht",
-"v": "beta 2.0.22",
+"v": "beta 2.0.28",
 "g": "5.2",
 "s": 3,
-"z": "PersonFS.addon.tgz"
+"z": "PersonFS.addon.tgz",
+"rm": [
+"gedcomx_v1",
+"packaging",
+"requests"
+]
 },
 {
 "n": "Plaats schoonmaken",
