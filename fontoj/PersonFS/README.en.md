@@ -6,7 +6,7 @@ This is an extension to interface gramps with familysearch.com. it's made of :
 
 To be able to use the extension you need a familysearch account, this will be requested when launching the gramplet, as well as the associated password.
 
-#Installation
+# Installation
 ## prerequisites
 * gramps 5.1 (>= 5.1.6).
 * The gramplet uses “requests” and “gedcomx\_v1” (>=1.0.20) python modules.  
