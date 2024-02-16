@@ -13,17 +13,13 @@ Por povi uzi la gramplet vi bezonas _familysearch_-konton, ĉi tio estas enigota
 La gramplet uzas "requests" kaj "gedcomx\_v1" (>=1.0.20) python-modulojn.  
 Vi povas instali 'requests' kaj 'gedcomx\_v1' permane, aŭ lasi la gramplet instali ilin aŭtomate (postulas pip).  
 
-## aldonante la projekton al la aldonaĵadministranto
-* Malfermu la aldonaĵadministranton ("puzlo" ikono aŭ Redakti menuon --> Aldonaĵadministrilon)
-* iru al la langeto "Projektoj".
-  * alklaku la butonon + (maldekstre malsupre), kaj enigu:
-    * "Nomo de la projekto:": "jmichault" (aŭ kion ajn vi volas)
-    * "URL:": "<https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps52>"
-    * «URL :» : «<https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps52>»
-    * alklaku "Valigiti"
-    * marku la skatolon maldekstre de la nova projekto por aktivigi ĝin.
-       La projektaj kromaĵoj nun haveblas en la langeto "Kromaĵoj".
-* iru al la langeto "Kromaĵoj".
+##  instalado :
+  * malfermi Agordojn
+  * En "Kie kontroli:", metu:
+    "<https://github.com/jmichault/gramps-kromprogramoj/raw/gramps51>"
+  * alklaku "Fermu"
+  * malfermu la menuon "Helpo" --> "Kromprograma administranto"
+  * Kromprogramoj aperas en la listo.
   * serĉu «PersonFS»
   * alklaku "Instali"
 

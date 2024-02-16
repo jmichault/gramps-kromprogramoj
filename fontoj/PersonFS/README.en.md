@@ -12,16 +12,15 @@ To be able to use the extension you need a familysearch account, this will be re
 * The gramplet uses “requests” and “gedcomx\_v1” (>=1.0.20) python modules.  
 You can install 'requests' and 'gedcomx\_v1' manually, or let the gramplet install them automatically (requires pip).  
 
-## adding the project to the plugin manager
-* open the plugin manager (“puzzle” icon, or Edit menu-->Plugin manager)
-* go to “Projects” tab
-   * click on “+”
-     * Project Name: jmichault (or whatever you want)
-     * URL: https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps52
-     * click on “Validate”
-* go to the “Plugins” tab
-   * search for PersonFS
-   * click “Install”
+## install
+* open Preferences
+* In «Where to check:», put :
+  «<https://github.com/jmichault/gramps-kromprogramoj/raw/gramps51>»
+* click on «Close»
+* open menu «Help» --> «Plugin Manager»
+* plugins appears in the list.
+* search for PersonFS
+* click “Install”
 
 
 # the gramplet

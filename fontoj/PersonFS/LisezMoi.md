@@ -14,14 +14,13 @@ Cette extension est prévue pour gramps version 5.1 (>= 5.1.6).
 Le gramplet utilise les modules python «requests» et «gedcomx\_v1» (>=1.0.20).  
 Vous pouvez installer «requests» et «gedcomx\_v1» manuellement, ou laisser le gramplet les installer automatiquement (nécessite pip).
 
-## ajout du projet dans le gestionnaire de greffons
-* ouvrez le gestionnaire de greffons (icône «puzzle», ou menu Édition-->Gestionnaire de greffons)
-* allez à l'onglet «Projets»
-  * cliquez sur «+»
-    * Nom du Projet : jmichault (ou ce que vous voulez)
-    * URL : https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps52
-    * cliquez sur «Valider»
-* allez à l'onglet «Greffons»
+## installation
+  * ouvrez les préférences
+  * Dans «Où rechercher :», mettre :
+  «<https://github.com/jmichault/gramps-kromprogramoj/raw/gramps51>»
+  * cliquez sur «Fermer»
+  * allez au menu «Aide» --> «Gestionnaire de greffons»
+  * les greffons apparaissent dans la liste.
   * cherchez PersonFS
   * cliquez sur «Installer»
 
