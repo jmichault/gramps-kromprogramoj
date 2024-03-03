@@ -34,7 +34,8 @@
   * naissance sans date dans gramps n'apparait pas ?
   * transfert d'une date «vers xxxx» devient «abt xxxx-00-00» au lieu de "abt xxxx»
   * positionner la langue lors des transferts vers FS. Notamment pour les noms.
-* gramplet :
+* autres, gramplet :
+  * lors d'un transfert vers FS, renseigner la langue.
   * copie d'un contrat de mariage vers FS : plutôt q'un mariage, mettre un mariage de droit coutumier  
      (Mariage alternatif dans gramps)
   * copie d'un ban de mariage vers FS : faire comme pour les contrats et fiançailles.

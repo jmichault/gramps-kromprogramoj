@@ -45,7 +45,7 @@ from gramps.gen.datehandler import get_date
 from gramps.gen.display.name import displayer as name_displayer
 from gramps.gen.display.place import displayer as _pd
 from gramps.gen.errors import WindowActiveError
-from gramps.gen.lib import Date, EventRef, EventType, EventRoleType, Name, NameType, NoteType, Person, StyledText, StyledTextTag, StyledTextTagType, Tag, Note
+from gramps.gen.lib import Citation, Date, EventRef, EventType, EventRoleType, Name, NameType, NoteType, Person, StyledText, StyledTextTag, StyledTextTagType, Tag, Note
 from gramps.gen.plug import Gramplet, PluginRegister
 from gramps.gen.utils.db import get_birth_or_fallback, get_death_or_fallback
 
@@ -63,7 +63,7 @@ except ValueError:
 _ = _trans.gettext
 
 # gedcomx_v1 biblioteko. Instalu kun `pip install --user --upgrade --break-system-packages gedcomx_v1`
-mingedcomx="1.0.20"
+mingedcomx="1.0.21"
 import importlib
 from importlib.metadata import version
 try:
@@ -225,8 +225,8 @@ class PersonFS(Gramplet):
       self.pref_clicked(None)
     if not tree._FsSeanco:
       print("konektas al FS")
-      #tree._FsSeanco = gedcomx_v1.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, True, False, 2, PersonFS.lingvo)
-      tree._FsSeanco = gedcomx_v1.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, False, False, 2, PersonFS.lingvo)
+      tree._FsSeanco = gedcomx_v1.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, True, False, 2, PersonFS.lingvo)
+      #tree._FsSeanco = gedcomx_v1.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, False, False, 2, PersonFS.lingvo)
       if PersonFS.fs_client_id != '':
         tree._FsSeanco.client_id=PersonFS.fs_client_id
       tree._FsSeanco.login()
@@ -543,15 +543,87 @@ class PersonFS(Gramplet):
           fsP.notes.add(fsNoto)
           fsP.id = self.FSID
           fsTP.persons.add(fsP)
+        elif ( (tipolinio == 'Fonto' )
+             and linio[2] ) :
+          #### self.modelKomp.add([koloro,dato,titolo,grURL,fsDato,fsTitolo,fsURL,False,'Fonto',c.handle,sd_id,teksto,fsTeksto] )
+          print("Fonto gramps-->FS")
+          c = self.dbstate.db.get_citation_from_handle(linio[9])
+          sd_id = utila.get_fsftid(c)
+          fsFonto = gedcomx_v1.SourceDescription()
+          fsFontoRef = gedcomx_v1.SourceReference()
+          mFonto = Importo.MezaFonto()
+          mFonto.deGramps(c)
+          mFonto.alFS(fsFonto,fsFontoRef)
+          fsFonto.lang = PersonFS.lingvo
+          if ( sd_id == '' or
+               linio[1] != linio[4] or
+               linio[2] != linio[5] or
+               linio[3] != linio[6] or
+               linio[11] != linio[12] ) :
+            # il faut créer ou mettre à jour la source dans FS
+            # créer la source :
+            fsTPs = gedcomx_v1.Gedcomx()
+            fsTPs.sourceDescriptions.add(fsFonto)
+            peto = gedcomx_v1.jsonigi(fsTPs)
+            jsonpeto = json.dumps(peto)
+            if fsFonto.id :
+              res = tree._FsSeanco.post_url( "/platform/sources/descriptions/"+fsFonto.id, jsonpeto )
+            else :
+              res = tree._FsSeanco.post_url( "/platform/sources/descriptions", jsonpeto )
+            if not res :
+              print("la ĝisdatigo ne havis rezulton por:")
+              print(" jsonpeto = "+jsonpeto)
+            else :
+              print("ĝisdatigo rezulto :")
+              print(" jsonpeto = "+jsonpeto)
+              print(" res.status_code="+str(res.status_code))
+              print (res.headers)
+              print (res.text)
+              # et récupérer son id :
+              if sd_id=='' and res.headers.get('x-entity-id') :
+                sd_id = res.headers['x-entity-id']
+                fsFonto.id = sd_id
+                fsFontoRef.id = sd_id
+                utila.ligi_gr_fs(self.dbstate.db,c,sd_id)
+            if linio[1] != linio[4] :
+              # on passe par l'interface service, car l'interface api ne sait pas mettre à jour la date
+              tmpFonto = gedcomx_v1.SourceDescription()
+              tmpFonto.id = sd_id
+              tmpFonto.title = titolo
+              tmpFonto.citation = referenco
+              tmpFonto.notes = teksto
+              tmpFonto.event = dict()
+              tmpFonto.event['eventDate']=linio[1]
+              tmpFonto.uri = dict()
+              tmpFonto.uri['uri']=grURL
+              peto = gedcomx_v1.jsonigi(tmpFonto)
+              jsonpeto = json.dumps(peto)
+              headers = {"Accept": "application/json","Content-Type": "application/json"}
+              res = tree._FsSeanco.put_url( "https://www.familysearch.org/service/tree/links/source/"+sd_id+"?result=full", jsonpeto, headers )
+              if not res :
+                print("la ĝisdatigo ne havis rezulton por:")
+                print(" jsonpeto = "+jsonpeto)
+              else :
+                print("ĝisdatigo rezulto :")
+                print(" jsonpeto = "+jsonpeto)
+                print(" res.status_code="+str(res.status_code))
+                print (res.headers)
+                print (res.text)
+          fsP.sources.add(fsFontoRef)
+          fsP.id = self.FSID
+          fsTP.persons.add(fsP)
      # FARINDAĴO : gepatroj, infanoj,…
 
     if len(fsTP.persons) >0 :
       peto = gedcomx_v1.jsonigi(fsTP)
       jsonpeto = json.dumps(peto)
       res = tree._FsSeanco.post_url( "/platform/tree/persons/"+self.FSID, jsonpeto )
-      if res.status_code == 201 or res.status_code == 204:
+      if not res :
+        print("la ĝisdatigo ne havis rezulton por:")
+        print(" jsonpeto = "+jsonpeto)
+      elif res.status_code == 201 or res.status_code == 204:
         print("ĝisdatigo sukceso")
-      if res.status_code != 201 and res.status_code != 204 :
+      else :
         print("ĝisdatigo rezulto :")
         print(" jsonpeto = "+jsonpeto)
         print(" res.status_code="+str(res.status_code))
@@ -583,6 +655,7 @@ class PersonFS(Gramplet):
        for linio in l :
         tipolinio = linio[8]
         if ( (tipolinio == 'fakto' )
+             and linio[7] 
              and linio[10] ) :
             fsFakto_id = linio[10]
             grFaktoH = linio[9]
@@ -612,6 +685,7 @@ class PersonFS(Gramplet):
                 elif event.type == EventType.DEATH :
                   grPersono.set_death_ref(er)
         elif ( (tipolinio == 'edzoFakto')
+             and linio[7] 
              and linio[10] 
              and linio[11] ) :
             grFaktoH = linio[9]
@@ -641,6 +715,7 @@ class PersonFS(Gramplet):
       
             self.dbstate.db.commit_family(grParo,txn)
         elif ( (tipolinio == 'nomo' or tipolinio == 'nomo1')
+             and linio[7] 
              and linio[10] ) :
             grNomo_str = linio[9]
             fsNomo_id = linio[10]
@@ -648,6 +723,7 @@ class PersonFS(Gramplet):
               if fsNomo.id == fsNomo_id : break
             Importo.aldNomo(self.dbstate.db, txn, fsNomo, grPersono)
         elif ( (tipolinio == 'NotoF' )
+             and linio[7] 
               and linio[6] and linio[12] ) :
             print("NotoF FS-->gramps")
             # self.modelKomp.add(['white',_('Familio'),titolo,teksto,fsTitolo,fsTeksto,'',False,'NotoF',family_handle,nh,fsParoId,fsNoto.id] )
@@ -669,6 +745,7 @@ class PersonFS(Gramplet):
             grParo.add_note(grNoto.handle)
             self.dbstate.db.commit_family(grParo,txn)
         elif ( (tipolinio == 'NotoP' )
+             and linio[7] 
               and linio[6] and linio[12] ) :
             print("NotoP FS-->gramps")
             nh=linio[10]
@@ -876,6 +953,7 @@ class PersonFS(Gramplet):
         fsPersono.facts=set()
         fsPersono.names=set()
         fsPersono.notes=set()
+        fsPersono.sources=set()
         fsPersono._gepatroj =set()
         fsPersono._infanoj=set()
         fsPersono._paroj=set()
@@ -1427,14 +1505,23 @@ class PersonFS(Gramplet):
         colFS = _('Ne konektita al FamilySearch')
       else :
         colFS = '===================='
-      #import pdb; pdb.set_trace()
-      fsFontoj = fsPerso.sources.copy()
+      # création de la liste des sources : sources de la personne
+      fsFontIdj = dict()
+      for x in fsPerso.sources :
+        fsFontIdj[x.descriptionId]=None
       # ajout des sources des familles :
       for paro in fsPerso._paroj :
-        fsFontoj.update(paro.sources)
-      # on récupère les dates des sources
+        for x in paro.sources :
+          fsFontIdj[x.descriptionId]=None
+      # on efface les dates des sources, pour forcer leur mise à jour
+      for x in fsFontIdj :
+        sd =  gedcomx_v1.SourceDescription._indekso.get(x) or gedcomx_v1.SourceDescription()
+        fsFontIdj[x] = sd
+        if hasattr(sd,'_date') :
+          delattr(sd,'_date')
+      # on récupère les données manquantes des sources (date, note, collection, film)
       Importo.akFontDatoj(PersonFS.fs_Tree)
-      # on initialise la liste des citations gramps
+      # on crée la liste des citations gramps
       cl = set(grPersono.get_citation_list())
       # ajout des citations liées aux évènements
       for er in grPersono.get_event_ref_list() :
@@ -1483,10 +1570,11 @@ class PersonFS(Gramplet):
         fsURL = ""
         fsDato = ""
         fsTitolo = ""
+        sd_id=""
         fsid = utila.get_fsftid(c)
-        for x in fsFontoj :
-          if x.descriptionId == fsid :
-            sd =  gedcomx_v1.SourceDescription._indekso.get(x.descriptionId) or gedcomx_v1.SourceDescription()
+        sd = fsFontIdj[fsid]
+        if sd :
+            sd_id = sd.id
             for y in sd.titles :
               fsTitolo += y.value
             if len(sd.titles):
@@ -1502,23 +1590,23 @@ class PersonFS(Gramplet):
             fsTeksto=cTitolo+komNoto
             for fsN in sd.notes :
               if fsN.subject :
-                fsTeksto = fsTeksto+fsN.subject
+                fsTeksto = fsTeksto+'\n'+fsN.subject
               if fsN.text :
-                fsTeksto = fsTeksto+fsN.text
+                fsTeksto = fsTeksto+'\n'+fsN.text
             if hasattr(sd,'_date'):
               fsDato = str(sd._date)
             if hasattr(sd,'about'):
               fsURL=sd.about
             koloro = "orange"
+            teksto = teksto.strip(' \n')
+            fsTeksto = fsTeksto.strip(' \n')
             if fsDato == dato and fsTitolo==titolo and fsURL == grURL :
               koloro = "yellow"
               if fsTeksto == teksto :
                 koloro = "green"
-            fsFontoj.remove(x)
-            break
-        self.modelKomp.add([koloro,dato,titolo,grURL,fsDato,fsTitolo,fsURL,False,'Fonto',c.handle,None,None,None] )
-      for fsFonto in fsFontoj :
-        sd =  gedcomx_v1.SourceDescription._indekso.get(fsFonto.descriptionId) or gedcomx_v1.SourceDescription()
+            fsFontIdj.pop(fsid)
+        self.modelKomp.add([koloro,dato,titolo,grURL,fsDato,fsTitolo,fsURL,False,'Fonto',c.handle,sd_id,teksto,fsTeksto] )
+      for sd in fsFontIdj.values() :
         fsTitolo = ""
         for x in sd.titles :
           fsTitolo += x.value

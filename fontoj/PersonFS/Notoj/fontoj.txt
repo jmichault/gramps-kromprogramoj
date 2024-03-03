@@ -8,23 +8,23 @@ Dans gramps, on a une hiérarchie dépôt --> source --> citation
 dans FS, on a pour les sources saisies manuellement :
   * des dossiers personnels pour regrouper les sources, invisibles des autres utilisateurs.
   * des sources qui ont comme propriétés :
-    * date (absente de la norme gedcomx !) (SourceDescription._date)
-    * titre (texte monoligne) (SourceDescription.titles)
-    * une url, ou un souvenir (SourceDescription.about)
-    * référence (texte multiligne) (SourceDescription.citations)
-    * note (texte multiligne) (SourceDescription.notes)
-    * raison de la modification (texte multiligne)
+    * identifiant (service:id)(gedcomx:SourceDescription.id)
+    * date (absente de la norme gedcomx !) (service:event.eventDate)(gedcomx:SourceDescription._date (ajout personnel))
+    * titre (texte monoligne) (service:titre)(gedcomx:SourceDescription.titles)
+    * une url, ou un souvenir (service:uri[uri])(gedcomx:SourceDescription.about)
+    * référence (texte multiligne) (service:citation)(gedcomx:SourceDescription.citations)
+    * note (texte multiligne) (service:notes)(gedcomx:SourceDescription.notes)
+    * Raison justifiant la modification de cette source : (texte multiligne) (service:notesJustification)
   * des références de source, qui ont comme propriétés :
     * la source (SourceReference.descriptionId)
     * le référent : individu, couple, …
     * des signets (SourceReference.tags), équivalents d'une référence
       * pour une référence vers un individu : nom, sexe, naissance, baptême, décès, enterrement, service militaire, ….
-    * raison de la référence (texte multiligne)
+    * Raison justifiant l’ajout de cette source : (texte multiligne)
     note : les sources peuvent être référencées par :
       * un individu
       * un couple
       * un évènement
-      …
 
 ## les sources FS fournies par FS
 Dans le cas des sources fournies par FS, c'est beaucoup plus riche , on a :
@@ -45,6 +45,7 @@ Dans le cas des sources fournies par FS, c'est beaucoup plus riche , on a :
     * références (ex. : lien vers un autre catalogue dont il fait partie)
     * records (liens vers les sous-catalogues ou les microfilms)
 	--> https://www.familysearch.org/search/catalog/822462?availability=Family%20History%20Library
+  * des groupes d'image
   * des films (ou fichiers numériques) (à compléter/vérifier) :
     * N° 
     * image group number (DGS)
@@ -59,10 +60,18 @@ Dans le cas des sources fournies par FS, c'est beaucoup plus riche , on a :
   * des images
 
   * des documents, qui ont comme propriétés (à compléter/vérifier) :
+    * un ID
+      * Note : pour récupérer le filmNumber :
+	* appeler l'url avec «?useSLS=true», ex. : https://www.familysearch.org/ark:/61903/1:1:QGYT-R7CZ?useSLS=true
+        * chercher FS_COLLECTION_ID = N° de la collection
+          * --> adresse de la collection : https://www.familysearch.org/search/collection/2796817
+	* chercher FS_DIGITAL_FILM_NBR = N° du film
+          * --> adresse de l'indexation du film : https://www.familysearch.org/search/record/results?q.filmNumber=008062833_001_M9D4-643
+	* chercher FS_IMAGE_NBR = N° de l'image
     * le N° collection
     * filmNumber = Numéro du dossier numérique
     * N° d'image dans le film
-    * lien vers l'image ?
+    * lien vers l'image
     * personne(s) principale(s) :
       * informations importantes :
         * noms (au moins 1?) : type, nom de famille, prénom, nom, préfixe du nom, suffixe du nom
@@ -89,7 +98,8 @@ Dans le cas des sources fournies par FS, c'est beaucoup plus riche , on a :
         * …
     * autres personnes : mêmes renseignements
   * des sources comme ci-dessus, seule différence : l'url et la référence sont ceux du document et ne sont pas modifiables.
-  * des références, comme ci-dessus.
+    * attention : familysearch crée une source différente pour chaque liaison à une personne (la note n'est donc pas partagée).
+  * des références de source, comme ci-dessus.
 
 ## les sources gramps
 Dans gramps, on a :
@@ -121,15 +131,7 @@ Dans gramps, on a :
   * des notes
   * des galeries
   * des attributs
-  * des références = liste des individus, lieux et évènements qui la référencent.
-
-
-exemple de saisie typique dans gramps : gestion de la source «Famille (DE) BASSECOURT», par Didier Bouquet :
-* dépôt : geneanet.org
-* source : «Famille (DE) BASSECOURT», auteur=
-* citation : page 7/9, V-2) Hugues DE BASSECOURT, …
-
-
+  * des références = liste des individus, familles, lieux, évènements, média, noms, adresses, attributs, … qui la référencent.
 
 ## comparaison
 
@@ -141,12 +143,13 @@ On voit que le traitement des sources est très différent dans gramps et FS. Du
   * pas de personne principale dans gramps.
   * pas de type d'évènement dans gramps.
   * pas de lieu dans gramps.
+  * pas d'information au niveau de la référence de citation dans gramps.
   * dans gramps, on peut mettre plusieurs notes de différents types, pas dans FS.
   * dans gramps, on peut mettre des étiquettes et des attributs, pas dans FS.
 * similitudes entre les deux façons de gérer les sources :
   * lieu FS ~ dépôt
   * collection : ~ dépôt, mais pas de hiérarchie possible dans gramps…
-  * dossier numérique (film) FS ~ source
+  * dossier numérique (film) FS ~ source gramps
   * document FS ~ citation gramps
   * source FS ~ citation gramps
 
@@ -176,14 +179,16 @@ On voit que le traitement des sources est très différent dans gramps et FS. Du
     problème : pas de personne principale dans gramps, ni d'évènement principal. Pas de lieu principal non plus.  
     décision : on prend la première ligne de la note de type «Citation» --> titre  
       --> risque de donner des choses bizarres pour des citations qui n'ont pas été pensées pour le transfert.  
-      --> contrainte importante pour la saisi des citations dans gramps…  
+      --> contrainte importante pour la saisie des citations dans gramps…  
   * la date  FS
-    elle existe des deux cotés, mais n'est pas dans le standard gedcomx, donc pas transférable par l'interface api.
-    FARINDAĴO : trouver comment la mettre à jour avec l'interface service.
+    elle existe des deux cotés, mais n'est pas dans le standard gedcomx, donc pas transférable par l'interface api.  
+    Du coup, il faut la mettre à jour avec l'interface service (non documentée).
   * l'url  FS
     attribut «Internet Address» --> url
   * la note  FS
-    décision : concaténation des notes , note de type citation sans la première ligne en premier --> note
+    décision : on concaténe les notes :
+    * note de type citation en premier, sans la première ligne (qui a alimenté le titre)
+    * puis les autres notes, préfixées par leur titre entre «***»
   * la référence  FS
     prévue dans FS pour contenir l'équivalent de la source gramps.  
     décision : titre dépôt + titre source + volume/page + niveau de confiance --> référence
@@ -198,26 +203,27 @@ On voit que le traitement des sources est très différent dans gramps et FS. Du
   mariage ???  
   autre ???  
 
-il faudrait arriver à ne pas faire de doublons de sources dans FS quand on transfère.
-  * on ne peut pas l'id de source dans le transfert, donc il faudra faire en 3 étapes :
-    * création de la source en la rattachant à une personne.
+il faut arriver à ne pas faire de doublons de sources dans FS quand on transfère.
+  * on ne peut pas avoir l'id de source dans le transfert, donc il faudra faire en 3 étapes :
+    * création de la source en la rattachant à une personne avec l'interface api.
     * récupération de son ID.
+    * mise à jour de la date avec l'interface service.
     * connexion aux autres évènements/personnes.
 
 ## Transfert dans le sens source FS --> citation gramps :
-### liens d'une source FS :
-  * https://www.familysearch.org/platform/sources/descriptions/3V5Z-7VR
-  * https://www.familysearch.org/service/tree/links/source/3V5Z-7VR
-  * https://www.familysearch.org/tree/sources/viewedit/3V5Z-7VR
-  * https://www.familysearch.org/platform/tree/source-references?description=S1G1-GPN
+### exemples de liens d'une source FS :
+  * lien api : https://www.familysearch.org/platform/sources/descriptions/3V5Z-7VR
+  * lien service : https://www.familysearch.org/service/tree/links/source/3V5Z-7VR
+  * lien ui : https://www.familysearch.org/tree/sources/viewedit/3V5Z-7VR
+  * lien api reference : https://www.familysearch.org/platform/tree/source-references?description=S1G1-GPN
 
 ### dans tous les cas :
-  * id = SourceDescription.descriptionId --> attribut _FSFTID citation
+  * id = SourceReference.descriptionId=SourceDescription.id --> attribut _FSFTID citation
   * date =  servicesource.event[0].eventdate = SourceDescription._date --> date citation
   * page internet = SourceDescription.about --> url citation
+  * titre (SourceDescription.title) + note jusqu'à «***» --> note de citation.
 
-### source utilisateur venant de gramps :
-  * titre (SourceDescription.title) + note --> note de citation.
+### cas d'une source utilisateur venant de gramps :
   * référence (SourceDescription.citations) :
     * ligne 1 --> titre dépot
     * ligne 2 --> titre source
@@ -225,17 +231,17 @@ il faudrait arriver à ne pas faire de doublons de sources dans FS quand on tran
     * ligne 4 --> niveau de confiance
 
 ### source utilisateur d'origine indéterminée :
-  * titre + note --> note de citation.
-  * référence --> titre de source.
+  * première ligne référence --> titre de source.
 
 ### source FS :
-  * titre  = SourceDescription.title --> début de la note de citation.
-  * référence = SourceDescription.citations --> 
-      entre les guillemets : titre de la source
-      suite : suite de la note de citation
-  * note : fin de la note de citation
+  * référence = SourceDescription.citations -->   
+      entre les guillemets : titre de la source (C'est le titre de la collection)  
+      suite : à voir (note de type «référence FamilySearch» ?)  
   * collectionUri = servicesource.fsCollectionUri = attribut «Internet Address» de la source, 
     * numéro de collection : id de la source, et attribut 
   * «FamilySearch» : titre du dépôt.
+  * numéro de film : attribut ?
+  * numéro de collection : attribut ?
+
 
 

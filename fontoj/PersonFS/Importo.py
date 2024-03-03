@@ -54,7 +54,7 @@ _ = _trans.gettext
 
 
 # gedcomx_v1 biblioteko. Instalu kun `pip install --user --upgrade --break-system-packages gedcomx_v1`
-mingedcomx="1.0.20"
+mingedcomx="1.0.21"
 import importlib
 from importlib.metadata import version
 try:
@@ -379,6 +379,7 @@ def akFontDatoj(fsTree):
     r = tree._FsSeanco.get_url("/service/tree/links/source/%s" % sd.id,{"Accept": "application/json"})
     if r and r.text :
       datumoj = r.json()
+      print("akFonto : res="+str(datumoj))
       #gedcomx_v1.maljsonigi(fsTree,datumoj)
       e = datumoj.get('event')
       if e:
@@ -388,8 +389,18 @@ def akFontDatoj(fsTree):
         d.formal = gedcomx_v1.dateformal.DateFormal(strFormal)
         sd._date = d
       sd._collectionUri = datumoj.get('fsCollectionUri')
-      if sd._collectionUri:
+      if sd._collectionUri :
         sd._collection = sd._collectionUri.removeprefix('https://www.familysearch.org/platform/records/collections/')
+      u = datumoj.get('uri')
+      if u :
+        sd.about = u.get('uri')
+      n = datumoj.get('notes')
+      if len(sd.notes) :
+        next(iter(sd.notes)).text = n
+      else :
+        fsNoto = gedcomx_v1.Note()
+        fsNoto.text = n
+        sd.notes.add(fsNoto)
 
 #def aldFonto(db, txn, fsFonto, obj, EkzCit):
 def aldFonto(db, txn, sdId, obj, EkzCit):
@@ -407,74 +418,199 @@ def aldFonto(db, txn, sdId, obj, EkzCit):
           print(" citation trouvée _FSFTID="+sourceDescription.id)
           return c
     print(" citation pas trouvée _FSFTID="+sourceDescription.id)
-    deponejo = None
-    sTitolo = None
-    cTitolo = None
-    komNoto = '\n'
-    posizio = None
-    konfido = None
-    #import pdb; pdb.set_trace()
-    if len(sourceDescription.titles):
-      cTitolo = next(iter(sourceDescription.titles)).value
-    if len(sourceDescription.citations):
-      sTitolo = next(iter(sourceDescription.citations)).value
-    if sourceDescription.resourceType == 'FSREADONLY':
-      deponejo = 'FamilySearch'
-      if sTitolo :
-        linioj = sTitolo.split("\"") 
+    mFonto = MezaFonto()
+    mFonto.deFS(sourceDescription,None)
+    citation = mFonto.alGramps(db, txn, obj)
+    
+    return citation
+
+class MezaFonto:
+  # destinée à servir d'intermédiaire entre les classes gramps et gedcomx pour une citation gramps et une source FS
+  # pour faciliter la comparaison
+  # et pour faciliter la lecture du code
+  #
+  # attributs :
+  # id = sourceDescription.id
+  # deponejo = titre du dépôt gramps
+  # sTitolo = titre de la source gramps
+  # cTitolo = titre FS (--> première ligne note de type citation)
+  # posizio = Vue/Page
+  # konfido = niveau de confiance
+  # url = URL
+  # dato = date
+  # noto = note FS
+  # kolekto = N° de collection FS
+  # kolektoUrl = URL de la collection
+  #filmo = N° de film FS
+  #
+  # méthodes :
+  # def deFS(self, fsSD, fsSR): de FS vers MezaFonto
+  # def alFS(self, fsSD, fsSR): de MezaFonto vers FS
+  # def deGramps(self, citation): de gramps vers MezaFonto
+  # def alGramps(self, db, txn, citation): de MezaFonto vers gramps
+  #
+  def deFS(self, fsSD, fsSR):
+    self.id = fsSD.id
+    self.deponejo = None
+    self.sTitolo = None
+    self.cTitolo = None
+    self.posizio = None
+    self.konfido = None
+    self.url = fsSD.about
+    self.dato = None
+    self.noto = '\n'
+    self.kolekto = sd._collection
+    self.kolektoUrl = sd._collectionUri
+    if len(fsSD.titles):
+      self.cTitolo = next(iter(fsSD.titles)).value
+    if len(fsSD.citations):
+      FSCitation = next(iter(fsSD.citations)).value
+    if fsSD.resourceType == 'FSREADONLY':
+      self.deponejo = 'FamilySearch'
+      if FSCitation :
+        linioj = FSCitation.split("\"") 
         if len(linioj) >=3 :
           sTitolo = linioj[1]
-          komNoto = komNoto + '\n'.join(linioj[2:])
-    if cTitolo and sourceDescription.resourceType == 'DEFAULT':
-      linioj = sTitolo.split("\n") 
-      if len(linioj) >= 3 : #and linioj[0].find(_('Repository')+" :")==0 :
-        deponejo = linioj[0].removeprefix(_('Repository')+" :").strip()
-        # FARINDAĴO : essayer d'autres langues ?
-        sTitolo = linioj[1].removeprefix(_('Source:')).strip()
-        posizio = linioj[2].removeprefix(_('Volume/Page:')).strip()
-        if len(linioj) >= 4 :
-          konfido = linioj[3].removeprefix(_('Confidence:')).strip()
-      elif len(linioj) >=1 :
-        sTitolo = linioj[0]
+          self.noto = self.noto + '\n'.join(linioj[2:])
+    if FSCitation and fsSD.resourceType == 'DEFAULT':
+      linioj = FSCitation.split("\n") 
+      for linio in linioj :
+        if linio.startswith(_('Repository')):
+          self.deponejo = linioj[0].removeprefix(_('Repository')+" :").strip()
+        elif linio.startswith(_('Source:')):
+          self.sTitolo = linioj[1].removeprefix(_('Source:')).strip()
+        elif linio.startswith(_('Volume/Page:')):
+          self.posizio = linioj[2].removeprefix(_('Volume/Page:')).strip()
+        elif linio.startswith(_('Confidence:')):
+          self.konfido = linioj[3].removeprefix(_('Confidence:')).strip()
+      # FARINDAĴO : si rien de trouvé et langue de la source != langue en cours, ré-essayer avec la langue de la source
+      # si pas trouvé de titre de source, on prend la première ligne
+      if not sTitolo and  len(linioj) >=1 :
+        self.sTitolo = linioj[0]
+    if hasattr(fsSD,'_date') and fsSD._date:
+      self.date = fsdato_al_gr(fsSD._date)
+
+  def alFS(self, fsSD, fsSR):
+    # fsSD est une gedcomx_v1.SourceDescription
+    # fsSR est une gedcomx_v1.SourceReference
+    fsSR.id = self.id
+    fsSR.description = "https://api.familysearch.org/platform/sources/descriptions/"+self.id
+    fsSD.id = self.id
+    fsSD.titles.add(self.cTitolo)
+    fsNoto = gedcomx_v1.Note()
+    fsNoto.text = self.noto
+    fsSD.notes.add(fsNoto)
+    # about sera l'Adresse Internet
+    fsSD.about = self.url
+    # la référence sera : titre dépôt + titre source + volume/page + confiance --> référence
+    referenco = _('Volume/Page:') +" "+ self.posizio
+    if self.sTitolo :
+      referenco = _('Source:') + " " + self.sTitolo + '\n' + referenco
+      if self.deponejo :
+        referenco = _('Repository')+" : " + self.deponejo + '\n' + referenco
+    referenco = referenco + '\n' + _('Confidence:') +" " + self.konfido
+    fsCitation = gedcomx_v1.SourceCitation
+    fsCitation.value = referenco
+    fsSD.citations.add(fsCitation)
+    fsSD.event = dict()
+    fsSD.event['eventDate']=self.date
+
+
+  
+  def deGramps(self, citation):
+    self.id = utila.get_fsftid(c)
+    self.deponejo = None  #
+    self.sTitolo = None  #
+    self.cTitolo = None #
+    self.posizio = c.page
+    self.konfido = None #
+    self.url = utila.get_url(c)
+    self.dato = utila.grdato_al_formal(c.date)
+    self.noto = "" #
+    self.kolekto = None
+    self.kolektoUrl = None
+    s = self.dbstate.db.get_source_from_handle(c.source_handle)
+
+    if s :
+      self.sTitolo = s.title
+      if len(s.reporef_list)>0 :
+        dh = s.reporef_list[0].ref
+        d = self.dbstate.db.get_repository_from_handle(dh)
+        if d :
+          self.deponejo = d.name
+    konfido = c.get_confidence_level()
+    if konfido == Citation.CONF_VERY_HIGH :
+      self.konfido = _('Very High')
+    elif konfido == Citation.CONF_HIGH :
+      self.konfido = _('High')
+    elif konfido == Citation.CONF_NORMAL :
+      self.konfido = _('Normal')
+    elif konfido == Citation.CONF_LOW :
+      self.konfido = _('Low')
+    elif konfido == Citation.CONF_VERY_LOW :
+      self.konfido = _('Very Low')
+
+
+    # on cherche la première note de type Citation,
+    #   le titre sera la première ligne de cette note.
+    nhTitolo = None
+    for nh in citation.note_list :
+      n = self.dbstate.db.get_note_from_handle(nh)
+      if n.type == NoteType.CITATION :
+        nhTitolo = nh
+        noto = n.get()
+        posRet = noto.find("\n")
+        if(posRet>0) :
+          self.noto = noto[posRet+1:]
+          self.noto = self.noto.strip(' \n')
+          self.cTitolo = noto[:posRet]
+        else :
+          self.cTitolo = noto
+        break
+    # le texte sera la concaténation des notes
+    for nh in citation.note_list :
+      if nh == nhTitolo : continue
+      n = self.dbstate.db.get_note_from_handle(nh)
+      self.noto += n.get()
+
+  def alGramps(self, db, txn, obj):
+    # obj = objet auquel il faut rattacher la source
+    # création du dépôt si nécessaire :
     r = None
-    if deponejo :
-      db.dbapi.execute("select handle from repository where name=?",[deponejo])
+    if self.deponejo :
+      db.dbapi.execute("select handle from repository where name=?",[self.deponejo])
       datumoj = db.dbapi.fetchone()
       if datumoj and datumoj[0] :
         rh = datumoj[0]
       else :
         r = Repository()
-        r.set_name(deponejo)
+        r.set_name(self.deponejo)
         rtype = RepositoryType()
         rtype.set((RepositoryType.WEBSITE))
         r.set_type(rtype)
-        if deponejo == 'FamilySearch' :
+        if self.deponejo == 'FamilySearch' :
           url = Url()
           url.path = 'https://www.familysearch.org/'
           url.set_type(UrlType.WEB_HOME)
           r.add_url(url)
         db.add_repository(r, txn)
         rh = r.handle
-    #  repo_ref = RepoRef()
-    #  repo_ref.set_reference_handle(rh)
-    #  repo_ref.set_media_type(SourceMediaType.ELECTRONIC)
-    #  s.add_repo_reference(repo_ref)
     s = None
-    if sTitolo and not s and hasattr(sourceDescription,'_collection') and sourceDescription._collection:
+    if self.sTitolo and not s and hasattr(sourceDescription,'_collection') and sourceDescription._collection:
       # recherche de la source par son numéro de collection
       s = db.get_source_from_gramps_id('FS_coll_'+sourceDescription._collection)
-    if sTitolo :
+    if self.sTitolo :
       # recherche de la source par son titre
-      db.dbapi.execute("select handle from source where title=?",[sTitolo])
+      db.dbapi.execute("select handle from source where title=?",[self.sTitolo])
       datumoj = db.dbapi.fetchone()
       if datumoj and datumoj[0] :
         sTmp = db.get_source_from_handle(datumoj[0])
-        if deponejo :
+        if self.deponejo :
           # FARINDAĴO
           s = sTmp
         else:
           s = sTmp
-    if sTitolo and not s :
+    if self.sTitolo and not s :
       # on crée la source
       s = Source()
       if hasattr(sourceDescription,'_collection') and sourceDescription._collection:
@@ -488,7 +624,7 @@ def aldFonto(db, txn, sdId, obj, EkzCit):
         description = next(iter(sourceDescription.descriptions))
         if description and description.value:
           s.set_description(description.value)
-      s.set_title(sTitolo)
+      s.set_title(self.sTitolo)
       if hasattr(sourceDescription,'_collectionUri') and sourceDescription._collectionUri:
         attr = SrcAttribute()
         attr.set_type(_('Internet Address'))
@@ -506,57 +642,50 @@ def aldFonto(db, txn, sdId, obj, EkzCit):
     # sercxi ekzistantan citaĵon
     for ch in obj.citation_list :
       c = db.get_citation_from_handle(ch)
-      if get_fsftid(c) == sourceDescription.id :
+      if get_fsftid(c) == self.id :
         return c
     citation = Citation()
-    if posizio :
-      citation.set_page(posizio)
-    if konfido :
-      if konfido == _('Very High') :
+    if self.posizio :
+      citation.set_page(self.posizio)
+    if self.konfido :
+      if self.konfido == _('Very High') :
         citation.set_confidence_level(Citation.CONF_VERY_HIGH)
-      elif konfido == _('High') :
+      elif self.konfido == _('High') :
         citation.set_confidence_level(Citation.CONF_HIGH)
-      elif konfido == _('Normal') :
+      elif self.konfido == _('Normal') :
         citation.set_confidence_level(Citation.CONF_NORMAL)
-      elif konfido == _('Low') :
+      elif self.konfido == _('Low') :
         citation.set_confidence_level(Citation.CONF_LOW)
-      elif konfido == _('Very Low') :
+      elif self.konfido == _('Very Low') :
         citation.set_confidence_level(Citation.CONF_VERY_LOW)
-    if hasattr(sourceDescription,'_date') and sourceDescription._date:
-      citation.date = fsdato_al_gr(sourceDescription._date)
+    if self.date:
+      citation.date = fsdato_al_gr(self.date)
     if s :
       citation.set_reference_handle(s.get_handle())
     db.add_citation(citation,txn)
     db.commit_citation(citation,txn)
     attr = SrcAttribute()
     attr.set_type('_FSFTID')
-    attr.set_value(sourceDescription.id)
+    attr.set_value(self.id)
     citation.add_attribute(attr)
-    if sourceDescription.about :
+    if self.url :
       attr = SrcAttribute()
       attr.set_type(_("Internet Address"))
-      attr.set_value(sourceDescription.about)
+      attr.set_value(self.url)
       citation.add_attribute(attr)
-    if cTitolo or len(sourceDescription.notes) :
+    if self.cTitolo or len(self.noto) :
       n = Note()
       tags=[]
       n.set_type(NoteType(NoteType.CITATION))
-      n.append(cTitolo)
+      n.append(self.cTitolo)
       tags.append(StyledTextTag(StyledTextTagType.BOLD, True,[(0, len(cTitolo))]))
-      n.append(komNoto)
-      for fsN in sourceDescription.notes :
-        if fsN.subject :
-          n.append(fsN.subject)
-          tags.append(StyledTextTag(StyledTextTagType.BOLD, True,[(len(str(n.text)),len(str(n.text))+ len(fsN.subject))]))
-        if fsN.text :
-          n.append(fsN.text)
+      n.append(self.noto)
       n.text.set_tags(tags)
       db.add_note(n, txn)
       db.commit_note(n, txn)
       citation.add_note(n.handle)
     db.commit_citation(citation,txn)
     obj.add_citation(citation.handle)
-    
     return citation
 
 
