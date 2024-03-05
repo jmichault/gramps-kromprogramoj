@@ -382,6 +382,8 @@ class Lokpurigado(Gramplet):
           if place[3]:
               return
           # check if we might already have it in db
+          #import pdb; pdb.set_trace()
+          # FARINDAĴO : 
           t_place = self.dbstate.db.get_place_from_gramps_id(place[0])
           if not t_place or t_place.handle == self.place.handle:
               # need to process the OpenStreetMap ID for result
@@ -521,6 +523,7 @@ class Lokpurigado(Gramplet):
           code = rezultoj[0]["tags"].get("postal_code")
         if admin_level == "2" :
           code = rezultoj[0]["tags"].get("ISO3166-1:alpha3")
+          if code : self.newplace.gramps_id = code
         self.newplace.code = code
       # FARINDAĴO
       # obtenir tous les parents administratifs :
@@ -571,13 +574,14 @@ class Lokpurigado(Gramplet):
               osm_id = 'FrCogDep'+str(code)
             elif code and admin_level == 4 :
               osm_id = 'FrCogReg'+str(code)
+          if admin_level == 2 :
+            code = rezultoj[0]["tags"].get("ISO3166-1:alpha3")
+            if code : osm_id = code
           osm_idj.append(osm_id)
           self.newplace.parent_ids = osm_idj
+          break
       # obtenir les parents directs :
       # '[timeout:10][out:json]; rel(7377); rel(br); out tags center;
-      #
-      #      self.newplace.parent_names = h_name_list[1:]
-      #      self.newplace.parent_ids = h_geoid_list[1:]
       return True
 
   def on_edit_clicked(self, dummy):
@@ -692,7 +696,8 @@ class Lokpurigado(Gramplet):
       parent = None
       if not self.keep_enclosure or not self.place.placeref_list:
         if self.newplace.parent_ids:
-          # we might have a parent with geo id 'GEO12345'
+          # we might have a parent with osm id 'Osm_xxx_yyy'
+          #import pdb; pdb.set_trace()
           parent = self.dbstate.db.get_place_from_gramps_id(
               self.newplace.parent_ids[0])
         if not parent and self.newplace.parent_names:
