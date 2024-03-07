@@ -33,6 +33,8 @@ import locale
 import socket
 import json
 
+#import pdb; pdb.set_trace()
+
 #------------------------------------------------------------------------
 #
 # GTK modules
@@ -84,6 +86,7 @@ _ = _trans.gettext
 GRAMPLET_CONFIG_NAME = "lokpurigado_gramplet"
 CONFIG = config.register_manager(GRAMPLET_CONFIG_NAME)
 CONFIG.register("preferences.web_links", True)
+CONFIG.register("preferences.keep_enclosure", True)
 CONFIG.register("preferences.keep_lang", "fr oc eo")
 CONFIG.load()
 
@@ -107,6 +110,7 @@ class Lokpurigado(Gramplet):
     Komencu la gramplet.
     """
     self.keepweb = CONFIG.get("preferences.web_links")
+    self.keep_enclosure = CONFIG.get("preferences.keep_enclosure")
     allowed_languages = CONFIG.get("preferences.keep_lang")
     self.allowed_languages = allowed_languages.split()
     self.incomp_hndl = ''  # lasta uzata tenilo por nekompletaj lokoj
@@ -205,6 +209,7 @@ class Lokpurigado(Gramplet):
 
   def on_save(self, *args, **kwargs):
       CONFIG.set("preferences.web_links", self.keepweb)
+      CONFIG.set("preferences.keep_enclosure", self.keep_enclosure)
       CONFIG.set("preferences.keep_lang", ' '.join(self.allowed_languages))
       CONFIG.save()
 
@@ -377,6 +382,8 @@ class Lokpurigado(Gramplet):
           if place[3]:
               return
           # check if we might already have it in db
+          #import pdb; pdb.set_trace()
+          # FARINDAĴO : 
           t_place = self.dbstate.db.get_place_from_gramps_id(place[0])
           if not t_place or t_place.handle == self.place.handle:
               # need to process the OpenStreetMap ID for result
@@ -412,8 +419,8 @@ class Lokpurigado(Gramplet):
       """ get data for place and parse out g_name dom structure into the
       NewPlace structure """
       self.newplace = NewPlace(json_datoj['display_name'])
-      self.newplace.osmid = 'Osm_'+osm_tipo+str(osm_id)
-      self.newplace.gramps_id = 'Osm_'+osm_tipo+str(osm_id)
+      self.newplace.osmid = 'Osm_'+osm_tipo+"_"+str(osm_id)
+      self.newplace.gramps_id = 'Osm_'+osm_tipo+"_"+str(osm_id)
       self.newplace.lat = json_datoj['lat']
       self.newplace.long = json_datoj['lon']
       url = Url()
@@ -462,8 +469,6 @@ class Lokpurigado(Gramplet):
           self.newplace.place_type = PlaceType(PlaceType.REGION)
         elif value == 'hamlet' :
           self.newplace.place_type = PlaceType(PlaceType.HAMLET)
-        else :
-          self.newplace.place_type = PlaceType(PlaceType.UNKNOWN)
       # obtenir plus d'informations :
       osm_url = ('https://overpass-api.de/api/interpreter')
       if osm_tipo == 'relation' :
@@ -474,6 +479,7 @@ class Lokpurigado(Gramplet):
         osm_datoj= 'data='+quote('[out:json][timeout:25];node('+str(osm_id)+');out center tags;')
       res = self.get_osm_data(osm_url,bytes(osm_datoj,'utf-8'))
       self.newplace.code = ''
+      rezultoj = None
       if res and len(res) :
         rezultoj=res.get("elements")
         for lingvo in self.allowed_languages :
@@ -483,21 +489,97 @@ class Lokpurigado(Gramplet):
             new_place.set_language(lingvo)
             new_place.set_value(ling_nomo)
             self.newplace.add_name(new_place)
+        # 
+        admin_level = rezultoj[0]["tags"].get("admin_level")
+        if not self.newplace.place_type :
+          match admin_level :
+            case "2" :
+              self.newplace.place_type = PlaceType(PlaceType.COUNTRY)
+            case "3" :
+              self.newplace.place_type = PlaceType(PlaceType.STATE)
+            case "4" :
+              self.newplace.place_type = PlaceType(PlaceType.REGION)
+            case "5" :
+              self.newplace.place_type = PlaceType(PlaceType.COUNTY)
+            case "6" :
+              self.newplace.place_type = PlaceType(PlaceType.DEPARTMENT)
+            case "7" :
+              self.newplace.place_type = PlaceType(PlaceType.BOROUGH)
+            case "8" :
+              self.newplace.place_type = PlaceType(PlaceType.MUNICIPALITY)
+            case _ :
+              self.newplace.place_type = PlaceType(PlaceType.UNKNOWN)
         code = rezultoj[0]["tags"].get("ref:INSEE")
         if code :
           self.postal_lbl.set_text(_("INSEE Kodo"))
-          if self.newplace.place_type == PlaceType.MUNICIPALITY :
+          if admin_level == 8 :
             self.newplace.gramps_id = 'FrCogCom'+str(code)
-          elif self.newplace.place_type == PlaceType.DEPARTMENT :
+          elif admin_level == 6 :
             self.newplace.gramps_id = 'FrCogDep'+str(code)
-          elif self.newplace.place_type == PlaceType.REGION :
+          elif admin_level == 4 :
             self.newplace.gramps_id = 'FrCogReg'+str(code)
         else :
           self.postal_lbl.set_text(_("Poŝtkodo"))
           code = rezultoj[0]["tags"].get("postal_code")
+        if admin_level == "2" :
+          code = rezultoj[0]["tags"].get("ISO3166-1:alpha3")
+          if code : self.newplace.gramps_id = code
         self.newplace.code = code
+      # FARINDAĴO
       # obtenir tous les parents administratifs :
       # 'is_in(46.6121074,0.5541073)->.a;relation["admin_level"~"8|7|6|5|4|3|2"](pivot.a);out tags center;'
+      if rezultoj :
+        admin_level = int( rezultoj[0]["tags"].get("admin_level") or "9")
+        res = None
+        while admin_level>1 and not res :
+          if json_datoj['display_name'].endswith('France') :
+            # en France, on saute les arrondissements et la France Métropolitaine :
+            if admin_level==8 or admin_level == 4 :
+              admin_level = admin_level - 1
+          osm_datoj= '[timeout:10][out:json];is_in('+str(self.newplace.lat)+','+str(self.newplace.long)+')->.a;relation["admin_level"="'+str(admin_level-1)+'"](pivot.a);out tags center;'
+          osm_url = ('https://overpass-api.de/api/interpreter')
+          res = self.get_osm_data(osm_url,bytes(osm_datoj,'utf-8'))
+          if not res or not len(res) :
+            return True
+          if res and len(res) and not res.get("elements") :
+            admin_level = admin_level - 1
+            res = None
+            continue;
+          rezultoj=res.get("elements")
+          if len(rezultoj)==0 :
+            admin_level = admin_level - 1
+            res = None
+            continue;
+          nomoj=list()
+          nomoj.append(rezultoj[0]["tags"].get("name"))
+          self.newplace.parent_names = nomoj
+          datoj=dict()
+          datoj["display_name"]= json_datoj['display_name'].replace(json_datoj['name'],'').strip(" ,")
+          datoj["name"]=rezultoj[0]["tags"].get("name")
+          datoj["addresstype"]=""
+          admin_level = int (rezultoj[0]["tags"].get("admin_level") or "9")
+          datoj["admin_level"]=admin_level
+          datoj["lat"]=str(rezultoj[0]["center"]["lat"])
+          datoj["lon"]=str(rezultoj[0]["center"]["lon"])
+          self.newplace.parent_datoj = datoj
+          self.newplace.parent_tipo = rezultoj[0]["type"]
+          self.newplace.parent_osmid = rezultoj[0]["id"]
+          osm_idj=list()
+          osm_id = 'Osm_'+ rezultoj[0]["type"] +"_"+ str(rezultoj[0]["id"])
+          if json_datoj['display_name'].endswith('France') :
+            code = rezultoj[0]["tags"].get("ref:INSEE")
+            if code and admin_level == 8 :
+              osm_id  = 'FrCogCom'+str(code)
+            elif code and admin_level == 6 :
+              osm_id = 'FrCogDep'+str(code)
+            elif code and admin_level == 4 :
+              osm_id = 'FrCogReg'+str(code)
+          if admin_level == 2 :
+            code = rezultoj[0]["tags"].get("ISO3166-1:alpha3")
+            if code : osm_id = code
+          osm_idj.append(osm_id)
+          self.newplace.parent_ids = osm_idj
+          break
       # obtenir les parents directs :
       # '[timeout:10][out:json]; rel(7377); rel(br); out tags center;
       return True
@@ -612,6 +694,47 @@ class Lokpurigado(Gramplet):
       # Enclose in the next level place
       next_place = False
       parent = None
+      if not self.keep_enclosure or not self.place.placeref_list:
+        if self.newplace.parent_ids:
+          # we might have a parent with osm id 'Osm_xxx_yyy'
+          #import pdb; pdb.set_trace()
+          parent = self.dbstate.db.get_place_from_gramps_id(
+              self.newplace.parent_ids[0])
+        if not parent and self.newplace.parent_names:
+          # make one, will have to be examined/cleaned later
+          parent = Place()
+          parent.title = ', '.join(self.newplace.parent_names)
+          name = PlaceName()
+          name.value = parent.title
+          parent.name = name
+          if self.newplace.parent_ids:
+                    parent.gramps_id = self.newplace.parent_ids[0]
+          with DbTxn(_("Add Place (%s)") % parent.title,
+                           self.dbstate.db) as trans:
+                    self.dbstate.db.add_place(parent, trans)
+                    next_place = True
+        if parent:
+          if located_in(self.dbstate.db, parent.handle,
+                              self.place.handle):
+              # attempting to create a place loop, not good!
+              ErrorDialog(_('Place cycle detected'),
+                                msg2=_("The place you chose is enclosed in the"
+                                       " place you are workin on!\n"
+                                       "Please cancel and choose another "
+                                       "place."),
+                                parent=self.uistate.window)
+              return
+          # check to see if we already have the enclosing place
+          already_there = False
+          for pref in self.place.placeref_list:
+                    if parent.handle == pref.ref:
+                        already_there = True
+                        break
+          if not already_there:
+                    placeref = PlaceRef()
+                    placeref.set_reference_handle(parent.handle)
+                    self.place.set_placeref_list([placeref])
+
       # We're finally ready to commit the updated place
       with DbTxn(_("Redakti Lokon (%s)") % self.place.title,
                  self.dbstate.db) as trans:
@@ -622,10 +745,10 @@ class Lokpurigado(Gramplet):
           self.place = parent
           # if osmparse fails, leave us at main view
           if self.newplace.parent_ids and \
-              self.osmparse(self.newplace.parent_ids[0],
-                            _(", ").join(self.newplace.parent_names),
-                            self.newplace.parent_ids,
-                            self.newplace.parent_names):
+              self.osmparse(self.newplace.parent_tipo,
+                            self.newplace.parent_osmid,
+                            self.newplace.parent_datoj,
+                            None):
               # osmparse worked, lets put up the results view
               self.gui.get_child().remove(self.mainwin)
               self.gui.get_child().add(self.results_win)
@@ -769,9 +892,13 @@ class Lokpurigado(Gramplet):
       top.set_transient_for(self.uistate.window)
       parent_modal = self.uistate.window.get_modal()
       if parent_modal:
-          self.uistate.window.set_modal(False)
+        self.uistate.window.set_modal(False)
       keepweb = self.top.get_object("keepweb")
       keepweb.set_active(self.keepweb)
+      # for some reason you can only set the radiobutton to True
+      self.top.get_object(
+          "enc_radio_but_keep" if self.keep_enclosure
+          else "enc_radio_but_repl").set_active(True)
       keepalt = self.top.get_object("keep_alt_entry")
       keepalt.set_text(' '.join(self.allowed_languages))
       top.show()
@@ -779,6 +906,8 @@ class Lokpurigado(Gramplet):
       if self.uistate.window and parent_modal:
           self.uistate.window.set_modal(True)
       self.keepweb = keepweb.get_active()
+      self.keep_enclosure = self.top.get_object(
+            "enc_radio_but_keep").get_active()
       self.allowed_languages = keepalt.get_text().split()
       top.hide()
 

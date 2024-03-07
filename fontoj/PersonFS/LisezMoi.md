@@ -70,7 +70,23 @@ Depuis le gramplet, vous pouvez aussi :
 * changer d'individu en double-cliquant sur la ligne correspondante.
 * éditer un évènement de la personne en double-cliquant sur la ligne correspondante.
 * utiliser le mode «Notes» pour comparer/transférer les notes individuelles et familiales
-* utiliser le mode «Sources» pour comparer les sources (expérimental, à n'utiliser qu'avec prudence).
+* utiliser le mode «Sources» pour comparer les sources (*expérimental, à n'utiliser qu'avec prudence*).
+  * la gestion des sources est très différente dans gramps et FamilySearch, aussi le transfert ne gére que les données suivantes :
+    * dans le sens citation saisie dans gramps vers FamilySearch :
+      * le titre est constitué de la première ligne de la note de type citation.  
+          (donc vous devez saisir votre citation en en tenant compte : vous devez avoir une note de type «Citation», et la première ligne doit correspondre au titre que vous voulez voir apparaitre)
+      * la référence est constituée de :
+        1. une ligne pour le dépôt : `Dépôt : titre_du_dépôt`
+        2. une ligne pour la source : `Source : titre_de_la_source`
+        3. une ligne pour la page : `Volume/Page : page_saisie_pour_la_citation`
+        4. une ligne pour le niveau de confiance , par exemple : `Niveau de confiance : Très haut`
+      * la Note est constituée de la concaténation de toutes les notes de la citation (sans reprendre le titre).
+      * l'url est récupérée dans l'attribut 'Adresse Internet' de la citation.
+    * dans le sens FamilySearch vers gramps.
+      * si la source est de type FSREADONLY (i.e. une donnée fournie par FamilySearch) :
+        * on crée une source correspondant à la collection du document FamilySearch (qui se trouve sur la première ligne de la référence).
+        * on relie la source au dépôt «FamilySearch»
+      * …
 
 # le module d'import
 Vous pouvez le lancer soit depuis le menu, soit depuis le gramplet.  
@@ -114,6 +130,10 @@ Puis cliquez sur le bouton «Importer»
   * si vous ne le trouvez pas : utilisez le bouton Ajouter.
 3. faites de même avec ses parents, puis les parents de ses parents …
 
+
+## très régulièreent
+1. consultez les lieux. Le transfert de données FamilySearch a très probablement créé des doublons : fusionnez les avec vos lieux pré-existants, ou mettez-les à vos propres normes.
+
 ## régulièrement
 1. exécutez le module de comparaison
 2. filtrez les «ascendants» avec l'étiquette FS_Gepatro
@@ -125,4 +145,3 @@ Puis cliquez sur le bouton «Importer»
   * cliquez sur le lien menant à FamilySearch et vérifiez les documents proposés.
 6. filtrez les «ascendants» avec l'étiquette FS_Dup
   * cliquez sur le bouton «Voir les doublons FS» et vérifiez s'il faut les fusionner.
-7. consultez les lieux. Le transfert de données FamilySearch a très probablement créé des doublons : fusionnez les avec vos lieux pré-existants, ou mettez-les à vos propres normes.
