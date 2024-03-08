@@ -39,7 +39,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gramps 5.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-13 18:54+0100\n"
+"POT-Creation-Date: 2024-03-08 15:54+0100\n"
 "PO-Revision-Date: 2024-03-06 20:39+0200\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew (Israel) <https://hosted.weblate.org/projects/gramps-project/gramps/he/>\n"
@@ -58,121 +58,115 @@ msgstr "ניקוי מקום"
 msgid "Lokpurigado helpas kompletigi lokojn uzante OpenStreetMap."
 msgstr "ניקוי מקום עוזר להשלים פרטים על המקום באמצעות OpenStreetMap."
 
-#: Lokpurigado/lokpurigado.py:246
-msgid ""
-"\n"
-"Neniu kongruo\n"
-"trovita"
+#: Lokpurigado/lokpurigado.py:251
+msgid "\nNeniu kongruo\ntrovita"
 msgstr ""
 "\n"
 "לא נמצאה\n"
 "התאמה"
 
-#: Lokpurigado/lokpurigado.py:247
+#: Lokpurigado/lokpurigado.py:252
 msgid "Trovi"
 msgstr "חיפוש"
 
-#: Lokpurigado/lokpurigado.py:273
+#: Lokpurigado/lokpurigado.py:278
 #, python-format
-msgid ""
-"%s\n"
-"Lokaj\n"
-"kongruecoj"
+msgid "%s\nLokaj\nkongruecoj"
 msgstr ""
 "%s \n"
 "תאימות\n"
 "מקום"
 
-#: Lokpurigado/lokpurigado.py:275
+#: Lokpurigado/lokpurigado.py:280
 msgid "Kunfandi"
 msgstr "מיזוג"
 
-#: Lokpurigado/lokpurigado.py:276
+#: Lokpurigado/lokpurigado.py:281
 msgid "Serĉi en OpenStreetMap"
 msgstr "חיפוש ב־OpenStreetMap"
 
-#: Lokpurigado/lokpurigado.py:298
+#: Lokpurigado/lokpurigado.py:303
 msgid "Neniuj kongruoj estis trovitaj"
 msgstr "לא נמצאו התאמות"
 
-#: Lokpurigado/lokpurigado.py:299
+#: Lokpurigado/lokpurigado.py:304
 msgid "Provu ŝanĝi la titolon aŭ uzu la butonon \"Redakti\" por permane kompletigi ĉi tiun nivelon."
 msgstr "נא לשנות את הכותרת או להשתמש בלחצן 'ערוכה'  להשלמת רמה זו באופן ידני."
 
-#: Lokpurigado/lokpurigado.py:307
+#: Lokpurigado/lokpurigado.py:312
 #, python-format
-msgid ""
-"\n"
-"%s\n"
-"OpenStreetMap\n"
-"Kongruecoj"
+msgid "\n%s\nOpenStreetMap\nKongruecoj"
 msgstr ""
 "\n"
 "%s \n"
 "תאימות \n"
 "OpenStreetMap"
 
-#: Lokpurigado/lokpurigado.py:308 Lokpurigado/lokpurigado.glade:814
+#: Lokpurigado/lokpurigado.py:313 Lokpurigado/lokpurigado.glade:814
 msgid "Elekti"
 msgstr "בחירה"
 
-#: Lokpurigado/lokpurigado.py:314
+#: Lokpurigado/lokpurigado.py:319
 #, python-format
 msgid "%s kongruoj trovitaj"
 msgstr "נמצאו %s התאמות"
 
-#: Lokpurigado/lokpurigado.py:315
-msgid ""
-"Nur 10 kongruecoj estas montritaj.\n"
-"Por vidi pliajn rezultojn, premu la serĉbutonon denove.\n"
-"Aŭ provu ŝanĝi la Titolo kun pli da detaloj, kiel lando."
+#: Lokpurigado/lokpurigado.py:320
+msgid "Nur 10 kongruecoj estas montritaj.\nPor vidi pliajn rezultojn, premu la serĉbutonon denove.\nAŭ provu ŝanĝi la Titolo kun pli da detaloj, kiel lando."
 msgstr ""
 "מוצגות 10 התאמות בלבד.\n"
 "כדי להציג תוצאות נוספות, נא להקיש על לחצן החיפוש שוב,\n"
 "או לנסות לשנות את הכותרת ולהוסיף פרטים נוספים, כגון מדינה."
 
-#: Lokpurigado/lokpurigado.py:348 Lokpurigado/lokpurigado.py:353
+#: Lokpurigado/lokpurigado.py:353 Lokpurigado/lokpurigado.py:358
 msgid "Problemo akiri datumojn de retejo"
 msgstr "היתה בעיה בקבלת נתונים מהאתר"
 
-#: Lokpurigado/lokpurigado.py:354
+#: Lokpurigado/lokpurigado.py:359
 msgid "TTT-peto elĉerpita, vi povas provi denove…"
 msgstr "הזמן שהוקצב לבקשת מרשתת תם, נא לנסות שוב..."
 
-#: Lokpurigado/lokpurigado.py:399
+#: Lokpurigado/lokpurigado.py:406
 msgid "Lokciklo detektita"
 msgstr "Local cycle detected"
 
-#: Lokpurigado/lokpurigado.py:400
-msgid ""
-"Unu el la lokoj, kiujn vi kunfandas, enfermas la alian!\n"
-"Bonvolu elekti alian lokon."
+#: Lokpurigado/lokpurigado.py:407
+msgid "Unu el la lokoj, kiujn vi kunfandas, enfermas la alian!\nBonvolu elekti alian lokon."
 msgstr ""
 "אחד המקומות שנבחרו למיזוג מוכל בתוך המקום השני!\n"
 "אנא לבחר מקום אחר."
 
-#: Lokpurigado/lokpurigado.py:488
+#: Lokpurigado/lokpurigado.py:514
 msgid "INSEE Kodo"
 msgstr "INSEE קוד"
 
-#: Lokpurigado/lokpurigado.py:496 Lokpurigado/lokpurigado.glade:65
+#: Lokpurigado/lokpurigado.py:522 Lokpurigado/lokpurigado.glade:65
 msgid "Poŝtkodo"
 msgstr "מיקוד"
 
-#: Lokpurigado/lokpurigado.py:616
+#: Lokpurigado/lokpurigado.py:712
+#, python-format
+msgid "Add Place (%s)"
+msgstr "הוספת מקום (%s)"
+
+#: Lokpurigado/lokpurigado.py:720
+msgid "Place cycle detected"
+msgstr "זוהתה הפניה מעגלית ב'מקומות'"
+
+#: Lokpurigado/lokpurigado.py:721
+msgid "The place you chose is enclosed in the place you are workin on!\nPlease cancel and choose another place."
+msgstr "המקום שבחרת סגור במקום בו אתה עובד! \nplase בטל ובחר מקום אחר."
+
+#: Lokpurigado/lokpurigado.py:739
 #, python-format
 msgid "Redakti Lokon (%s)"
 msgstr "עריכת מקום (%s)"
 
-#: Lokpurigado/lokpurigado.py:626
-msgid ", "
-msgstr ", "
-
-#: Lokpurigado/lokpurigado.py:841
+#: Lokpurigado/lokpurigado.py:970
 msgid "Ĉi tiu Loko ne estas uzata!"
 msgstr "מיקום זה אינו בשימוש!"
 
-#: Lokpurigado/lokpurigado.py:842
+#: Lokpurigado/lokpurigado.py:971
 msgid "Vi devus forigi ĝin aŭ, se ĝi enhavas utilajn notojn aŭ aliajn datumojn, uzu serĉon por kunfandi ĝin kun valida loko."
 msgstr "יש למחוק אותו או, אם הוא מכיל הערות שימושיות או נתונים אחרים, ניתן להשתמש בחיפוש כדי למזג אותו עם מיקום חוקי."
 
@@ -208,7 +202,8 @@ msgstr "נא לסמן תיבה זו לשמירת המיקוד המקורי."
 msgid "Marku ĉi tiun skatolon se vi volas konservi la originan LokTipon."
 msgstr "נא לסמן תיבה זו לשמירת סוג המקום המקורי."
 
-#: Lokpurigado/lokpurigado.glade:166 Lokpurigado/lokpurigado.glade:180 Lokpurigado/lokpurigado.glade:339 Lokpurigado/lokpurigado.glade:353
+#: Lokpurigado/lokpurigado.glade:166 Lokpurigado/lokpurigado.glade:180
+#: Lokpurigado/lokpurigado.glade:339 Lokpurigado/lokpurigado.glade:353
 msgid "Orig"
 msgstr "מקור"
 
@@ -237,9 +232,7 @@ msgid "Check this box if you want to keep the original Gramps ID."
 msgstr "נא לסמן תיבה זו כדי לשמור את מזהה גרמפס המקורי."
 
 #: Lokpurigado/lokpurigado.glade:391
-msgid ""
-"Alterative Names\n"
-"Select one or more rows and press 'Keep' button to toggle the 'include into place' status ."
+msgid "Alterative Names\nSelect one or more rows and press 'Keep' button to toggle the 'include into place' status ."
 msgstr ""
 "שמות חלופיים\n"
 "נא לבחור שורה אחת או יותר ולהקיש על לחצן 'שמירה' כדי להחליף את מצב 'לכלול במקום'."
@@ -317,11 +310,7 @@ msgid "Alternative Names Languages to keep"
 msgstr "שמות שפה חלופיים לשמירה"
 
 #: Lokpurigado/lokpurigado.glade:707
-msgid ""
-"Enter the two or three letter codes for the languages you wish to keep, seperated by spaces.\n"
-"For example \"fr oc eo\".\n"
-"These languages will initially be checked off on the Names result display.\n"
-"If you often see an un-checked name in a specific language you want, add the language code here."
+msgid "Enter the two or three letter codes for the languages you wish to keep, seperated by spaces.\nFor example \"fr oc eo\".\nThese languages will initially be checked off on the Names result display.\nIf you often see an un-checked name in a specific language you want, add the language code here."
 msgstr ""
 "נא להזין את שתיים או שלוש האותיות של קודי השפה לשמירה, כשהן מופרדות ברווחים.\n"
 "לדוגמה \"fr oc eo\".\n"
@@ -333,9 +322,7 @@ msgid "Titolo"
 msgstr "כותרת"
 
 #: Lokpurigado/lokpurigado.glade:754
-msgid ""
-"Current Place title.\n"
-"You can edit this to help find other places, particularly to reduce the number of results."
+msgid "Current Place title.\nYou can edit this to help find other places, particularly to reduce the number of results."
 msgstr ""
 "כותרת המקום הנוכחי.\n"
 "ניתן לערוך זאת בנסיון למצוא מקומות אחרים, במיוחד כדי לצמצם את מספר התוצאות."
@@ -385,9 +372,10 @@ msgid "Serĉrezultaj lokoj"
 msgstr "תוצאות חיפוש מקומות"
 
 #: Lokpurigado/lokpurigado.glade:991
-msgid ""
-"No\n"
-"Matches"
+msgid "No\nMatches"
 msgstr ""
 "לא נמצאו\n"
 "התאמות"
+
+#~ msgid ", "
+#~ msgstr ", "

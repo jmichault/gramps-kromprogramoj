@@ -1,6 +1,6 @@
 GREFFONS="Lokpurigado  PersonFS  PlaceFrCog"
-LINGVOJ="fr nl en pt_BR"
-GRPATH="../../gramps-5.2.0rc1"
+LINGVOJ="fr nl en he pt_BR"
+GRPATH="../../gramps"
 
 for G in $GREFFONS ; do
  # met à jour les fichiers .pot

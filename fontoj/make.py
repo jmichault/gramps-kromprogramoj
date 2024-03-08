@@ -242,12 +242,12 @@ elif command == "init":
                 continue  # skip this one if not listed
 
             mkdir("%(addon)s/po")
-            system('''xgettext --language=Python --keyword=_ --keyword=N_'''
+            system('''xgettext --no-wrap --language=Python --keyword=_ --keyword=N_'''
                    ''' --from-code=UTF-8'''
                    ''' -o "%(addon)s/po/template.pot" "%(addon)s"/*.py ''')
             fnames = glob.glob("%s/*.glade" % addon)
             if fnames:
-                system('''xgettext -j --add-comments -L Glade '''
+                system('''xgettext --no-wrap -j --add-comments -L Glade '''
                        '''--from-code=UTF-8 -o "%(addon)s/po/template.pot" '''
                        '''"%(addon)s"/*.glade''')
 
@@ -266,7 +266,7 @@ elif command == "init":
                             head.write(txl)
                 root.clear()
                 # now append XML text to the pot
-                system('''xgettext -j --keyword=_ --from-code=UTF-8 '''
+                system('''xgettext --no-wrap -j --keyword=_ --from-code=UTF-8 '''
                        '''--language=Python -o "%(addon)s/po/template.pot" '''
                        '''"%(filename)s.h"''')
                 os.remove(filename + '.h')
@@ -284,7 +284,7 @@ elif command == "init":
         if os.path.isfile(r('''%(addon)s/po/%(locale)s-local.po''')):
             raise ValueError(r('''%(addon)s/po/%(locale)s-local.po''') +
                              " already exists!")
-        system('''msginit --no-translator --locale=%(locale)s '''
+        system('''msginit --no-wrap --no-translator --locale=%(locale)s '''
                '''--input="%(addon)s/po/template.pot" '''
                '''--output="%(addon)s/po/%(locale)s-local.po"''')
         echo('''You can now edit "%(addon)s/po/%(locale)s-local.po"''')
@@ -304,11 +304,11 @@ elif command == "update":
                            ''' is missing!\n run ./make.py '''
                            ''' init %(addon)s %(locale)s'''))
     # Retrieve updated data for locale:
-    system('''msginit --no-translator --locale=%(locale)s '''
+    system('''msginit --no-wrap --no-translator --locale=%(locale)s '''
            '''--input="%(addon)s/po/template.pot" '''
            '''--output="%(addon)s/po/%(locale)s.po"''')
     # Merge existing local translation with last data:
-    system('''msgmerge --no-fuzzy-matching %(addon)s/po/%(locale)s-local.po '''
+    system('''msgmerge --no-wrap --no-fuzzy-matching %(addon)s/po/%(locale)s-local.po '''
            '''%(addon)s/po/%(locale)s.po'''
            ''' -o %(addon)s/po/%(locale)s-local.po''')
     # Start with Gramps main PO file:
@@ -326,23 +326,23 @@ elif command == "update":
         if os.path.isfile(po_file):
             locale_po_files.append(po_file)
     # Concat those together:
-    system('''msgcat --use-first %(list)s '''
+    system('''msgcat --no-wrap --use-first %(list)s '''
            '''-o "%(addon)s/po/%(locale)s-global.po"''',
            list=" ".join(['''"%s"''' % name for name in locale_po_files]))
     # Merge the local and global:
     #locale_local = r("%(module)s/po/%(locale)s-local.po", module=module)
     #if os.path.isfile(locale_local):
-    system('''msgmerge --no-fuzzy-matching -U '''
+    system('''msgmerge --no-wrap --no-fuzzy-matching -U '''
            '''"%(addon)s/po/%(locale)s-global.po" '''
            '''"%(addon)s/po/%(locale)s-local.po" ''')
     # Get all of the addon strings out of the catalog:
-    system('''msggrep --location=%(addon)s/* '''
+    system('''msggrep --no-wrap --location=%(addon)s/* '''
            '''"%(addon)s/po/%(locale)s-global.po" '''
            '''--output-file="%(addon)s/po/%(locale)s-temp.po"''')
     # Finally, add back any updates to the local version:
-    system('''msgcat --use-first '''
-           '''"%(addon)s/po/%(locale)s-temp.po" '''
+    system('''msgcat --no-wrap --use-first '''
            '''"%(addon)s/po/%(locale)s-local.po" '''
+           '''"%(addon)s/po/%(locale)s-temp.po" '''
            '''-o "%(addon)s/po/%(locale)s-local.po.2" ''')
     os.remove(r("%(addon)s/po/%(locale)s-local.po"))
     os.rename(r("%(addon)s/po/%(locale)s-local.po.2"),
@@ -574,12 +574,12 @@ elif command == "as-needed":
         cleanup(addon)
         if todo:  # make an updated pot file
             mkdir("%(addon)s/po")
-            system('''xgettext --language=Python --keyword=_ --keyword=N_'''
+            system('''xgettext --no-wrap --language=Python --keyword=_ --keyword=N_'''
                    ''' --from-code=UTF-8'''
                    ''' -o "%(addon)s/po/temp.pot" "%(addon)s"/*.py ''')
             fnames = glob.glob("%s/*.glade" % addon)
             if fnames:
-                system('''xgettext -j --add-comments -L Glade '''
+                system('''xgettext --no-wrap -j --add-comments -L Glade '''
                        '''--from-code=UTF-8 -o "%(addon)s/po/temp.pot" '''
                        '''"%(addon)s"/*.glade''')
 
@@ -598,13 +598,13 @@ elif command == "as-needed":
                             head.write(txl)
                 root.clear()
                 # now append XML text to the pot
-                system('''xgettext -j --keyword=_ --from-code=UTF-8 '''
+                system('''xgettext --no-wrap -j --keyword=_ --from-code=UTF-8 '''
                        '''--language=Python -o "%(addon)s/po/temp.pot" '''
                        '''"%(filename)s.h"''')
                 os.remove(filename + '.h')
             if os.path.isfile(r('''%(addon)s/po/template.pot''')):
                 # we do a merge so changes to header are not lost
-                system('''msgmerge --no-fuzzy-matching -U '''
+                system('''msgmerge --no-wrap --no-fuzzy-matching -U '''
                        '''%(addon)s/po/template.pot '''
                        '''%(addon)s/po/temp.pot''')
                 os.remove(r('''%(addon)s/po/temp.pot'''))
