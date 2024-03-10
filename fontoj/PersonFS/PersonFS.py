@@ -552,7 +552,7 @@ class PersonFS(Gramplet):
           fsFonto = gedcomx_v1.SourceDescription()
           fsFontoRef = gedcomx_v1.SourceReference()
           mFonto = Importo.MezaFonto()
-          mFonto.deGramps(c)
+          mFonto.deGramps(self.dbstate.db, c)
           mFonto.alFS(fsFonto,fsFontoRef)
           fsFonto.lang = PersonFS.lingvo
           if ( sd_id == '' or
@@ -589,9 +589,9 @@ class PersonFS(Gramplet):
               # on passe par l'interface service, car l'interface api ne sait pas mettre à jour la date
               tmpFonto = gedcomx_v1.SourceDescription()
               tmpFonto.id = sd_id
-              tmpFonto.title = titolo
-              tmpFonto.citation = referenco
-              tmpFonto.notes = teksto
+              tmpFonto.title = mFonto.cTitolo
+              tmpFonto.citation = mFonto.referenco
+              tmpFonto.notes = mFonto.teksto
               tmpFonto.event = dict()
               tmpFonto.event['eventDate']=linio[1]
               tmpFonto.uri = dict()
@@ -1557,14 +1557,15 @@ class PersonFS(Gramplet):
         grURL = utila.get_url(c)
         referenco = c.page
         # la référence sera : titre dépôt + titre source + volume/page --> référence
-        s = self.dbstate.db.get_source_from_handle(c.source_handle)
-        if s :
-          referenco = s.title + '\n' + referenco
-          if len(s.reporef_list)>0 :
-            dh = s.reporef_list[0].ref
-            d = self.dbstate.db.get_repository_from_handle(dh)
-            if d :
-              referenco = d.name + '\n' + referenco
+        if c.source_handle :
+          s = self.dbstate.db.get_source_from_handle(c.source_handle)
+          if s :
+            referenco = s.title + '\n' + referenco
+            if len(s.reporef_list)>0 :
+              dh = s.reporef_list[0].ref
+              d = self.dbstate.db.get_repository_from_handle(dh)
+              if d :
+                referenco = d.name + '\n' + referenco
         koloro = "white"
         fsTeksto = colFS
         fsURL = ""
@@ -1572,7 +1573,7 @@ class PersonFS(Gramplet):
         fsTitolo = ""
         sd_id=""
         fsid = utila.get_fsftid(c)
-        sd = fsFontIdj[fsid]
+        sd = fsFontIdj.get(fsid)
         if sd :
             sd_id = sd.id
             for y in sd.titles :
