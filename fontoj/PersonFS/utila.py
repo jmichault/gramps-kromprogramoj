@@ -142,16 +142,21 @@ def ligi_gr_fs(db,grObjekto,fsid):
   else :
     intr = False
     txn = DbTxn(_("FamilySearch etikedoj"), db)
-  for attr in grObjekto.get_attribute_list():
-      if attr.get_type() == '_FSFTID':
-        if fsid != attr.get_value() :
-          attr.set_value(fsid)
+  attr = None
+  for x in grObjekto.get_attribute_list():
+      if x.get_type() == '_FSFTID':
+        attr = x
+        if fsid != x.get_value() :
+          x.set_value(fsid)
         break
-  if not attr or attr.get_type() != '_FSFTID' :
-      attr = Attribute()
-      attr.set_type('_FSFTID')
-      attr.set_value(fsid)
-      grObjekto.add_attribute(attr)
+  if not attr :
+   if  grObjekto.__class__.__name__ == 'Citation' :
+     attr = SrcAttribute()
+   else :
+     attr = Attribute()
+   attr.set_type('_FSFTID')
+   attr.set_value(fsid)
+   grObjekto.add_attribute(attr)
   match  grObjekto.__class__.__name__ :
     case 'Person' :
       db.commit_person(grObjekto,txn)

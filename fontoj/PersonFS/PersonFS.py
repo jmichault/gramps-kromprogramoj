@@ -590,8 +590,9 @@ class PersonFS(Gramplet):
               tmpFonto = gedcomx_v1.SourceDescription()
               tmpFonto.id = sd_id
               tmpFonto.title = mFonto.cTitolo
-              tmpFonto.citation = mFonto.referenco
-              tmpFonto.notes = mFonto.teksto
+              #tmpFonto.citation = mFonto.referenco
+              tmpFonto.citation = next(iter(fsFonto.citations)).value
+              tmpFonto.notes = mFonto.noto
               tmpFonto.event = dict()
               tmpFonto.event['eventDate']=linio[1]
               tmpFonto.uri = dict()
