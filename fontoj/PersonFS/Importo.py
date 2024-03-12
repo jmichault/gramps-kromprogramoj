@@ -461,7 +461,10 @@ class MezaFonto:
     self.dato = None
     self.noto = '\n'
     self.kolekto = fsSD._collection
-    self.kolektoUrl = 'https://www.familysearch.org/search/collection/'+self.kolekto
+    if self.kolekto :
+      self.kolektoUrl = 'https://www.familysearch.org/search/collection/'+self.kolekto
+    else :
+      self.kolektoUrl = None
     if len(fsSD.titles):
       self.cTitolo = next(iter(fsSD.titles)).value
     if len(fsSD.citations):
