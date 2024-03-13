@@ -467,6 +467,7 @@ class MezaFonto:
       self.kolektoUrl = None
     if len(fsSD.titles):
       self.cTitolo = next(iter(fsSD.titles)).value
+    FSCitation = None
     if len(fsSD.citations):
       FSCitation = next(iter(fsSD.citations)).value
     if fsSD.resourceType == 'FSREADONLY':
