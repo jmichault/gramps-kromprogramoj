@@ -371,6 +371,8 @@ def aldNomoj(db, txn, fsPersono, grPerson):
 def akFontDatoj(fsTree):
   # récupère les dates des sources, qui sont absentes des API
   for sd in fsTree.sourceDescriptions :
+    if sd.id[:2] == 'SD' : # pas une vraie sourceDescription
+      continue
     if hasattr(sd,'_date'):
       continue
     sd._date = None
@@ -392,6 +394,14 @@ def akFontDatoj(fsTree):
       sd._collectionUri = datumoj.get('fsCollectionUri')
       if sd._collectionUri :
         sd._collection = sd._collectionUri.removeprefix('https://www.familysearch.org/platform/records/collections/')
+      t = datumoj.get('title')
+      if t :
+        if len(sd.titles) :
+          next(iter(sd.titles)).value = t
+        else :
+          fsTitolo = gedcomx_v1.TextValue()
+          fsTitolo.value = t
+          sd.titles.add(fsTitolo)
       u = datumoj.get('uri')
       if u :
         sd.about = u.get('uri')
@@ -408,17 +418,6 @@ def aldFonto(db, txn, sdId, obj, EkzCit):
     # akiri SourceDescription
     sourceDescription = gedcomx_v1.SourceDescription._indekso.get(sdId)
     if not sourceDescription : return
-    # sercxi ekzistantan
-    trovita = False
-    # sercxi ekzistantan kun id
-    for ch in db.get_citation_handles() :
-      c = db.get_citation_from_handle(ch)
-      for attr in c.get_attribute_list():
-        if attr.get_type() == '_FSFTID' and attr.get_value() == sourceDescription.id :
-          trovita = True
-          print(" citation trouvée _FSFTID="+sourceDescription.id)
-          return c
-    print(" citation pas trouvée _FSFTID="+sourceDescription.id)
     mFonto = MezaFonto()
     mFonto.deFS(sourceDescription,None)
     citation = mFonto.alGramps(db, txn, obj)
@@ -636,14 +635,34 @@ class MezaFonto:
         rr.set_media_type( SourceMediaType.ELECTRONIC)
         s.add_repo_reference(rr)
       db.commit_source(s,txn)
-    # sercxi ekzistantan citaĵon
-    for ch in obj.citation_list :
+    # sercxi ekzistantan
+    trovita = False
+    citation = None
+    # sercxi ekzistantan kun id
+    for ch in db.get_citation_handles() :
       c = db.get_citation_from_handle(ch)
-      if get_fsftid(c) == self.id :
-        # FARINDAĴO : ajouter la citation à l'objet si elle n'y est pas déjà
-        # obj.add_citation(c.handle)
-        return c
-    citation = Citation()
+      for attr in c.get_attribute_list():
+        if attr.get_type() == '_FSFTID' and attr.get_value() == self.id :
+          trovita = True
+          citation = c
+          print(" citation trouvée _FSFTID="+self.id)
+          break
+      if trovita : break
+    ## sercxi ekzistantan citaĵon
+    #for ch in obj.citation_list :
+    #  c = db.get_citation_from_handle(ch)
+    #  if get_fsftid(c) == self.id :
+    #    # FARINDAĴO : ajouter la citation à l'objet si elle n'y est pas déjà
+    #    # obj.add_citation(c.handle)
+    #    return c
+    if not citation :
+      print(" citation pas trouvée _FSFTID="+self.id)
+      citation = Citation()
+      attr = SrcAttribute()
+      attr.set_type('_FSFTID')
+      attr.set_value(self.id)
+      citation.add_attribute(attr)
+      db.add_citation(citation,txn)
     if self.posizio :
       citation.set_page(self.posizio)
     if self.konfido :
@@ -661,29 +680,36 @@ class MezaFonto:
       citation.date = fsdato_al_gr(self.dato)
     if s :
       citation.set_reference_handle(s.get_handle())
-    attr = SrcAttribute()
-    attr.set_type('_FSFTID')
-    attr.set_value(self.id)
-    citation.add_attribute(attr)
     if self.url :
-      attr = SrcAttribute()
-      attr.set_type(_("Internet Address"))
-      attr.set_value(self.url)
-      citation.add_attribute(attr)
-    db.add_citation(citation,txn)
+      u0 = utila.get_url(citation)
+      if not u0 :
+        attr = SrcAttribute()
+        attr.set_type(_("Internet Address"))
+        attr.set_value(self.url)
+        citation.add_attribute(attr)
     db.commit_citation(citation,txn)
     if self.cTitolo or len(self.noto) :
-      n = Note()
-      tags=[]
-      n.set_type(NoteType(NoteType.CITATION))
-      n.append(self.cTitolo)
-      tags.append(StyledTextTag(StyledTextTagType.BOLD, True,[(0, len(self.cTitolo))]))
-      n.append(self.noto)
-      n.text.set_tags(tags)
-      db.add_note(n, txn)
-      db.commit_note(n, txn)
-      citation.add_note(n.handle)
+      note = None
+      for nh in citation.note_list :
+        n = db.get_note_from_handle(nh)
+        if n.type == NoteType.CITATION :
+          note = n
+      if not note :
+        n = Note()
+        tags=[]
+        n.set_type(NoteType(NoteType.CITATION))
+        n.append(self.cTitolo)
+        tags.append(StyledTextTag(StyledTextTagType.BOLD, True,[(0, len(self.cTitolo))]))
+        n.append(self.noto)
+        n.text.set_tags(tags)
+        db.add_note(n, txn)
+        db.commit_note(n, txn)
+        citation.add_note(n.handle)
     db.commit_citation(citation,txn)
+    # voir si la citation n'est pas déjà associée.
+    for ch in obj.citation_list :
+      if ch == citation.handle :
+        return citation
     obj.add_citation(citation.handle)
     return citation
 

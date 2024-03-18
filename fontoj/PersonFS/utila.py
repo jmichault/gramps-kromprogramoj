@@ -1,5 +1,5 @@
 from gramps.gen.db import DbTxn
-from gramps.gen.lib import Attribute, EventRoleType, Date
+from gramps.gen.lib import Attribute, EventRoleType, Date, SrcAttribute
 from gramps.gen.lib.date import gregorian
 
 from gramps.gen.const import GRAMPS_LOCALE as glocale

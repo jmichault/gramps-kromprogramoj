@@ -167,7 +167,7 @@ On voit que le traitement des sources est très différent dans gramps et FS. Du
     * il va falloir recopier les infos du dépôt dans chaque source FS. À mettre dans la zone référence.
   * on ne peut pas créer de film dans FS, donc on perd la notion de source.
     * il va falloir recopier les infos de la source dans chaque source FS. À mettre aussi dans la zone référence.
-  * dans FS, il n'y a qu'une seule note par source, dans gramps on peut en metttre plusieurs
+  * dans FS, il n'y a qu'une seule note par source, dans gramps on peut en mettre plusieurs
     * il va falloir regrouper toutes les notes source+citation dans la zone notes.
 
 

@@ -19,6 +19,7 @@
 # à faire pour prochaine version
 ## prioritaires
 * bogues :
+  * copie de source vers FS : la date n'est pas mise à jour pour les sources FS (la note est bien mise à jour).
   * recherche d'un individu : problèmes sur la deuxième recherche ?
   * import des parents : ne tient pas compte du type de lien
     * ex. : GP83-PXQ : Athanaze Lamothe, en nourrice chez Jean Nadal x Jeanne Daza.
