@@ -544,13 +544,22 @@ class PersonFS(Gramplet):
           fsP.id = self.FSID
           fsTP.persons.add(fsP)
         elif ( (tipolinio == 'Fonto' )
-             and linio[2] ) :
+             and linio[7] ) :
           #### self.modelKomp.add([koloro,dato,titolo,grURL,fsDato,fsTitolo,fsURL,False,'Fonto',c.handle,sd_id,teksto,fsTeksto] )
           print("Fonto gramps-->FS")
+          if not linio[2] :
+            WarningDialog(_('\tTitolo estas postulata.\n\nAldonu citaĵotipan noton al via citaĵo:\nla unua linio servos kiel titolo.'))
+            continue
           c = self.dbstate.db.get_citation_from_handle(linio[9])
-          sd_id = utila.get_fsftid(c)
           fsFonto = gedcomx_v1.SourceDescription()
           fsFontoRef = gedcomx_v1.SourceReference()
+          sd_id = utila.get_fsftid(c)
+          if sd_id :
+            fsSD = gedcomx_v1.SourceDescription._indekso.get(sd_id)
+            fsFonto.id = sd_id
+            fsFontoRef.id = sd_id
+          else :
+            fsSD = None
           mFonto = Importo.MezaFonto()
           mFonto.deGramps(self.dbstate.db, c)
           mFonto.alFS(fsFonto,fsFontoRef)
@@ -585,18 +594,23 @@ class PersonFS(Gramplet):
                 fsFonto.id = sd_id
                 fsFontoRef.id = sd_id
                 utila.ligi_gr_fs(self.dbstate.db,c,sd_id)
-            if linio[1] != linio[4] :
+            if linio[1] != linio[4] : # il faut mettre à jour la date
               # on passe par l'interface service, car l'interface api ne sait pas mettre à jour la date
               tmpFonto = gedcomx_v1.SourceDescription()
               tmpFonto.id = sd_id
               tmpFonto.title = mFonto.cTitolo
-              #tmpFonto.citation = mFonto.referenco
-              tmpFonto.citation = next(iter(fsFonto.citations)).value
-              tmpFonto.notes = mFonto.noto
+              # FARINDAĴO : la mise à jour de la date ne fonctionne pas pour les sources FS
               tmpFonto.event = dict()
               tmpFonto.event['eventDate']=linio[1]
-              tmpFonto.uri = dict()
-              tmpFonto.uri['uri']=grURL
+              tmpFonto.notes = mFonto.noto
+              if not fsSD or fsSD.resourceType == 'DEFAULT' : # nouvelle source ou source pas de type FSREADONLY
+                tmpFonto.uri = dict()
+                tmpFonto.uri['uri']=mFonto.url
+                tmpFonto.citation = next(iter(fsFonto.citations)).value
+              elif fsSD and fsSD.resourceType == 'FSREADONLY' : # source FS, on ne peut pas modifier uri, ni citation
+                tmpFonto.uri = dict()
+                tmpFonto.uri['uri']=fsSD.about
+                tmpFonto.sourceType = 'FSREADONLY'
               peto = gedcomx_v1.jsonigi(tmpFonto)
               jsonpeto = json.dumps(peto)
               headers = {"Accept": "application/json","Content-Type": "application/json"}
@@ -1517,6 +1531,10 @@ class PersonFS(Gramplet):
       # on efface les dates des sources, pour forcer leur mise à jour
       for x in fsFontIdj :
         sd =  gedcomx_v1.SourceDescription._indekso.get(x) or gedcomx_v1.SourceDescription()
+        if not sd.id :
+          sd.id=x
+          gedcomx_v1.SourceDescription._indekso[x]=sd
+          PersonFS.fs_Tree.sourceDescriptions.add(sd)
         fsFontIdj[x] = sd
         if hasattr(sd,'_date') :
           delattr(sd,'_date')
@@ -1607,6 +1625,10 @@ class PersonFS(Gramplet):
               if fsTeksto == teksto :
                 koloro = "green"
             fsFontIdj.pop(fsid)
+        else :
+          fsDato = "==="
+          fsTitolo = "==="
+          fsURL = "==="
         self.modelKomp.add([koloro,dato,titolo,grURL,fsDato,fsTitolo,fsURL,False,'Fonto',c.handle,sd_id,teksto,fsTeksto] )
       for sd in fsFontIdj.values() :
         fsTitolo = ""
