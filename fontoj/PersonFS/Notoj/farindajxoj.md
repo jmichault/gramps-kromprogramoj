@@ -11,6 +11,7 @@
   * copie d'un contrat de mariage vers FS : ne marche pas car FS n'accepte que les évènements suivants sur un mariage : «Mariage», «Annulation»,«Divorce»,«Mariage de droit coutumier»,«A vécu maritalement», «Aucun enfant».
     * --> créer un évènement mariage avec une explication qui dit que c'est un contrat ?  
 	  c'est la solution choisie : on met en explication :"http://gedcomx.org/MarriageContract\nContrat de mariage."
+    * --> créer un évènement «Mariage de droit coutumier» avec une explication qui dit que c'est un contrat ?  
     * --> lier ces autres évènements aux conjoints ? (c'est ce que fait familysearch)
     * --> transformer les autres évènements en note (pb : pas de date sur les notes, il faut la rajouter dans le texte)?
   * idem pour : fiançailles

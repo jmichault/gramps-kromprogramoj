@@ -476,17 +476,19 @@ class MezaFonto:
         if len(linioj) >=3 :
           self.sTitolo = linioj[1]
           self.noto = self.noto + '\n'.join(linioj[2:])
+    if len(fsSD.notes) :
+      self.noto = next(iter(fsSD.notes)).text
     if FSCitation and fsSD.resourceType == 'DEFAULT':
       linioj = FSCitation.split("\n") 
       for linio in linioj :
         if linio.startswith(_('Repository')):
-          self.deponejo = linioj[0].removeprefix(_('Repository')+" :").strip()
+          self.deponejo = linio.removeprefix(_('Repository')+" :").strip()
         elif linio.startswith(_('Source:')):
-          self.sTitolo = linioj[1].removeprefix(_('Source:')).strip()
+          self.sTitolo = linio.removeprefix(_('Source:')).strip()
         elif linio.startswith(_('Volume/Page:')):
-          self.posizio = linioj[2].removeprefix(_('Volume/Page:')).strip()
+          self.posizio = linio.removeprefix(_('Volume/Page:')).strip()
         elif linio.startswith(_('Confidence:')):
-          self.konfido = linioj[3].removeprefix(_('Confidence:')).strip()
+          self.konfido = linio.removeprefix(_('Confidence:')).strip()
       # FARINDAĴO : si rien de trouvé et langue de la source != langue en cours, ré-essayer avec la langue de la source
       # si pas trouvé de titre de source, on prend la première ligne
       if not self.sTitolo and  len(linioj) >=1 :
