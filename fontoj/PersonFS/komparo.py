@@ -673,10 +673,17 @@ def aldEdzKomp(db, grPersono, fsPerso) :
             else:
               gedTag = fsFakto.type
           grTag = int(event.type) or event.type
-          # Ĉu ĉi tio estas MARR_CONTR aŭ ENGAGEMENT, …  konvertita al MARRIAGE ?
-          if fsFakto.attribution and fsFakto.attribution.changeMessage :
+          # Ĉu ĉi tio estas MARR_CONTR aŭ ENGAGEMENT, …  konvertita al MARRIAGE aux MARR_ALT ?
+          if ( (gedTag == EventType.MARR_ALT or gedTag == EventType.MARRIAGE)
+               and fsFakto.attribution
+               and fsFakto.attribution.changeMessage) :
             linio = fsFakto.attribution.changeMessage.partition('\n')[0]
-            tag = GEDCOMX_GRAMPS_FAKTOJ.get(linio)
+            if linio[:5] == 'http:' :
+              tag = GEDCOMX_GRAMPS_FAKTOJ.get(linio)
+            elif linio[:5] == 'data:' :
+              tag = unquote(linio[6:])
+            else :
+              tag = None
             if tag : gedTag = tag
           if gedTag != grTag :
             continue

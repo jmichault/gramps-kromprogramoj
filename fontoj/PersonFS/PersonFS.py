@@ -24,6 +24,7 @@ fs Gramplet.
 """
 
 import json
+import re
 import email.utils
 
 #-------------------------------------------------------------------------
@@ -351,14 +352,19 @@ class PersonFS(Gramplet):
             fsP.facts.add(fsFakto)
           elif tipolinio == 'edzoFakto' :
             # FS n'accepte que les évènements suivants sur un mariage : «Mariage», «Annulation»,«Divorce»,«Mariage de droit coutumier»,«A vécu maritalement», «Aucun enfant».
-            # ni konvertas MARR_CONTR,ENGAGEMENT al MARRIAGE + klarigo
-            if ( grTag == EventType.MARR_CONTR
-                  or grTag == EventType.MARR_BANNS
-                  or grTag == EventType.ENGAGEMENT ) :
-              tipo = GRAMPS_GEDCOMX_FAKTOJ.get(EventType.MARRIAGE)
+            # ni konvertas MARR_CONTR,ENGAGEMENT al MARR_ALT + klarigo
+            #if ( grTag == EventType.MARR_CONTR
+            #      or grTag == EventType.MARR_BANNS
+            #      or grTag == EventType.ENGAGEMENT ) :
+            if ( grTag != EventType.MARRIAGE
+                and grTag != EventType.ANNULMENT
+                and grTag != EventType.DIVORCE
+                and grTag != EventType.MARR_ALT
+                and grTag != EventType.MARR_ALT ) :
+              tipo = GRAMPS_GEDCOMX_FAKTOJ.get(EventType.MARR_ALT)
               fsFakto.type = tipo
               fsFakto.attribution = gedcomx_v1.Attribution()
-              fsFakto.attribution.changeMessage = GRAMPS_GEDCOMX_FAKTOJ.get(grTag) + '\n' + str(event)
+              fsFakto.attribution.changeMessage = (GRAMPS_GEDCOMX_FAKTOJ.get(grTag) or ('data:,'+str(event.type))) + '\n' + str(event.type)
             fsTR = gedcomx_v1.Gedcomx()
             grFamilyHandle = linio[11]
             RSfsid = linio[12]
@@ -371,9 +377,12 @@ class PersonFS(Gramplet):
             jsonpeto = json.dumps(peto)
             if RSfsid :
               res = tree._FsSeanco.post_url( "/platform/tree/couple-relationships/"+RSfsid, jsonpeto )
-              if res.status_code == 201 or res.status_code == 204:
+              if res and (res.status_code == 201 or res.status_code == 204):
                 print("ĝisdatigo sukceso")
-              if res.status_code != 201 and res.status_code != 204 :
+              elif not res :
+                print("la ĝisdatigo ne havis rezulton por:")
+                print(" jsonpeto = "+jsonpeto)
+              else :
                 print("ĝisdatigo rezulto :")
                 print(" jsonpeto = "+jsonpeto)
                 print(" res.status_code="+str(res.status_code))
@@ -454,9 +463,12 @@ class PersonFS(Gramplet):
             res = tree._FsSeanco.post_url( "/platform/tree/couple-relationships/"+RSfsid, jsonpeto )
           else :
             res = tree._FsSeanco.post_url( "/platform/tree/relationships", jsonpeto )
-          if res.status_code == 201 or res.status_code == 204:
+          if res and (res.status_code == 201 or res.status_code == 204):
             print("ĝisdatigo sukceso")
-          if res.status_code != 201 and res.status_code != 204 :
+          elif not res :
+            print("la ĝisdatigo ne havis rezulton por:")
+            print(" jsonpeto = "+jsonpeto)
+          else :
             print("ĝisdatigo rezulto :")
             print(" jsonpeto = "+jsonpeto)
             print(" res.status_code="+str(res.status_code))
@@ -490,9 +502,12 @@ class PersonFS(Gramplet):
           peto = gedcomx_v1.jsonigi(fsTR)
           jsonpeto = json.dumps(peto)
           res = tree._FsSeanco.post_url( "/platform/tree/relationships", jsonpeto )
-          if res.status_code == 201 or res.status_code == 204:
+          if res and (res.status_code == 201 or res.status_code == 204):
             print("ĝisdatigo sukceso")
-          if res.status_code != 201 and res.status_code != 204 :
+          elif not res :
+            print("la ĝisdatigo ne havis rezulton por:")
+            print(" jsonpeto = "+jsonpeto)
+          else :
             print("ĝisdatigo rezulto :")
             print(" jsonpeto = "+jsonpeto)
             print(" res.status_code="+str(res.status_code))
@@ -501,7 +516,7 @@ class PersonFS(Gramplet):
         elif ( (tipolinio == 'NotoF' )
              and linio[9] ) :
           print("NotoF gramps-->FS")
-          # self.modelKomp.add(['white',titolo,_('Familio'),teksto,'',fsTeksto,'',False,'NotoF',nh,family_handle,fsParoId,fsNoto.id] )
+          # self.modelKomp.add(['white',_('Familio'),titolo,teksto,fsTitolo,fsTeksto,'',False,'NotoF',family_handle,nh,fsParoId,fsNoto.id] )
           fsNoto = gedcomx_v1.Note()
           fsNoto.subject = linio[2]
           if len(linio[3]) >1 and linio[3][0:1] == '\ufeff' :
@@ -510,7 +525,7 @@ class PersonFS(Gramplet):
             fsNoto.text = linio[3]
           fsNoto.id = linio[12]
           fsTR = gedcomx_v1.Gedcomx()
-          grFamilyHandle = linio[10]
+          grFamilyHandle = linio[9]
           RSfsid = linio[11]
           grFamily = self.dbstate.db.get_family_from_handle(grFamilyHandle)
           fsRS = gedcomx_v1.Relationship()
@@ -522,9 +537,12 @@ class PersonFS(Gramplet):
           print(" jsonpeto = "+jsonpeto)
           if RSfsid :
             res = tree._FsSeanco.post_url( "/platform/tree/couple-relationships/"+RSfsid, jsonpeto )
-            if res.status_code == 201 or res.status_code == 204:
+            if res and (res.status_code == 201 or res.status_code == 204):
               print("ĝisdatigo sukceso")
-            if res.status_code != 201 and res.status_code != 204 :
+            elif not res :
+              print("la ĝisdatigo ne havis rezulton por:")
+              print(" jsonpeto = "+jsonpeto)
+            else :
               print("ĝisdatigo rezulto :")
               print(" jsonpeto = "+jsonpeto)
               print(" res.status_code="+str(res.status_code))
@@ -739,7 +757,7 @@ class PersonFS(Gramplet):
             Importo.aldNomo(self.dbstate.db, txn, fsNomo, grPersono)
         elif ( (tipolinio == 'NotoF' )
              and linio[7] 
-              and linio[6] and linio[12] ) :
+              and linio[4] and linio[12] ) :
             print("NotoF FS-->gramps")
             # self.modelKomp.add(['white',_('Familio'),titolo,teksto,fsTitolo,fsTeksto,'',False,'NotoF',family_handle,nh,fsParoId,fsNoto.id] )
             grParoH = linio[9]
@@ -753,7 +771,7 @@ class PersonFS(Gramplet):
             # on met un tag de type lien sur le premier caractère pour mémoriser l'ID FamilySearch :
             tags = [  StyledTextTag(StyledTextTagType.LINK,"_fsftid="+ linio[12],[(0, 1)])]
             # on ajoute un caractère invisible en début de texte :
-            grNoto.set_styledtext(StyledText("\ufeff"+linio[5], tags))
+            grNoto.set_styledtext(StyledText("\ufeff"+(linio[5] or ' '), tags))
             if not nh :
               self.dbstate.db.add_note(grNoto, txn)
             self.dbstate.db.commit_note(grNoto, txn)
@@ -1558,33 +1576,12 @@ class PersonFS(Gramplet):
         c = self.dbstate.db.get_citation_from_handle(ch)
         titolo = ""
         # on cherche la première note de type Citation,
-        #   le titre sera la première ligne de cette note.
-        for nh in c.note_list :
-          n = self.dbstate.db.get_note_from_handle(nh)
-          if n.type == NoteType.CITATION :
-            titolo = n.get()
-            posRet = titolo.find("\n")
-            if(posRet>0) :
-              titolo = titolo[:posRet]
-            break
-        teksto = ""
-        # le texte sera la concaténation des notes
-        for nh in c.note_list :
-          n = self.dbstate.db.get_note_from_handle(nh)
-          teksto += n.get()
+        mfGr = Importo.MezaFonto()
+        mfGr.deGramps(self.dbstate.db, c)
+        titolo = mfGr.cTitolo
+        teksto = mfGr.noto
         dato = utila.grdato_al_formal(c.date)
-        grURL = utila.get_url(c)
-        referenco = c.page
-        # la référence sera : titre dépôt + titre source + volume/page --> référence
-        if c.source_handle :
-          s = self.dbstate.db.get_source_from_handle(c.source_handle)
-          if s :
-            referenco = s.title + '\n' + referenco
-            if len(s.reporef_list)>0 :
-              dh = s.reporef_list[0].ref
-              d = self.dbstate.db.get_repository_from_handle(dh)
-              if d :
-                referenco = d.name + '\n' + referenco
+        grURL = mfGr.url
         koloro = "white"
         fsTeksto = colFS
         fsURL = ""
@@ -1594,37 +1591,24 @@ class PersonFS(Gramplet):
         fsid = utila.get_fsftid(c)
         sd = fsFontIdj.get(fsid)
         if sd :
-            sd_id = sd.id
-            for y in sd.titles :
-              fsTitolo += y.value
-            if len(sd.titles):
-              cTitolo = next(iter(sd.titles)).value
-            else:
-              cTitolo=''
-            komNoto = '\n'
-            if sd.resourceType == 'FSREADONLY':
-              linioj = next(iter(sd.citations)).value.split("\"")
-              if len(linioj) >=3 :
-                sTitolo = linioj[1]
-                komNoto = komNoto + '\n'.join(linioj[2:])
-            fsTeksto=cTitolo+komNoto
-            for fsN in sd.notes :
-              if fsN.subject :
-                fsTeksto = fsTeksto+'\n'+fsN.subject
-              if fsN.text :
-                fsTeksto = fsTeksto+'\n'+fsN.text
-            if hasattr(sd,'_date'):
-              fsDato = str(sd._date)
-            if hasattr(sd,'about'):
-              fsURL=sd.about
-            koloro = "orange"
-            teksto = teksto.strip(' \n')
-            fsTeksto = fsTeksto.strip(' \n')
-            if fsDato == dato and fsTitolo==titolo and fsURL == grURL :
-              koloro = "yellow"
-              if fsTeksto == teksto :
-                koloro = "green"
-            fsFontIdj.pop(fsid)
+          mfFs = Importo.MezaFonto()
+          mfFs.deFS(sd,None)
+          sd_id = sd.id
+          fsTitolo = mfFs.cTitolo
+          fsTeksto = mfFs.noto
+          fsDato = str(mfFs.dato)
+          fsURL= mfFs.url
+          koloro = "orange"
+          teksto = teksto.strip(' \n\t')
+          teksto = re.sub('[ \n\t]+',' ',teksto)
+          if fsTeksto :
+            fsTeksto = fsTeksto.strip(' \n\t')
+            fsTeksto = re.sub('[ \n\t]+',' ',fsTeksto)
+          if fsDato == dato and fsTitolo==titolo and fsURL == grURL :
+            koloro = "yellow"
+            if fsTeksto == teksto :
+              koloro = "green"
+          fsFontIdj.pop(fsid)
         else :
           fsDato = "==="
           fsTitolo = "==="

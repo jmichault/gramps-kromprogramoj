@@ -106,11 +106,11 @@ def get_fsftid(grObj) :
 
 def get_url(grObj) :
   if not grObj :
-    return ''
+    return None
   for attr in grObj.get_attribute_list():
     if attr.get_type() == _('Internet Address'):
       return attr.get_value()
-  return ''
+  return None
 
 def get_fsfact(person, fact_tipo):
   """
