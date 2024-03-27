@@ -1606,7 +1606,7 @@ class PersonFS(Gramplet):
             fsTeksto = re.sub('[ \n\t]+',' ',fsTeksto)
           if fsDato == dato and fsTitolo==titolo and fsURL == grURL :
             koloro = "yellow"
-            if fsTeksto == teksto :
+            if (not fsTeksto and not teksto) or (fsTeksto == teksto) :
               koloro = "green"
           fsFontIdj.pop(fsid)
         else :
