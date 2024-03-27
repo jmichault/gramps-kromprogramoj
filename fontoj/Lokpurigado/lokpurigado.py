@@ -512,12 +512,13 @@ class Lokpurigado(Gramplet):
         code = rezultoj[0]["tags"].get("ref:INSEE")
         if code :
           self.postal_lbl.set_text(_("INSEE Kodo"))
-          if admin_level == 8 :
-            self.newplace.gramps_id = 'FrCogCom'+str(code)
-          elif admin_level == 6 :
-            self.newplace.gramps_id = 'FrCogDep'+str(code)
-          elif admin_level == 4 :
-            self.newplace.gramps_id = 'FrCogReg'+str(code)
+          match admin_level :
+            case "8" :
+              self.newplace.gramps_id = 'FrCogCom'+str(code)
+            case "6" :
+              self.newplace.gramps_id = 'FrCogDep'+str(code)
+            case "4" :
+              self.newplace.gramps_id = 'FrCogReg'+str(code)
         else :
           self.postal_lbl.set_text(_("Poŝtkodo"))
           code = rezultoj[0]["tags"].get("postal_code")
