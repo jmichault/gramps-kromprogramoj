@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gramps 5.1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-31 22:06+0200\n"
+"POT-Creation-Date: 2024-03-31 22:36+0200\n"
 "PO-Revision-Date: 2023-10-06 15:54+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gramps-project/gramps/he/>\n"
@@ -61,7 +61,7 @@ msgstr "טען בשם (במקום זאת)"
 #: PlaceFrCog/placefrcog.py:159 PlaceFrCog/placefrcog.py:258
 #, python-format
 msgid "Ĝisdatigo de loko kun INSEE-id %s"
-msgstr "עדכון המקום עם INEE ID %S"
+msgstr "עדכון המקום עם INEE ID %s"
 
 #: PlaceFrCog/placefrcog.py:183 PlaceFrCog/placefrcog.py:247
 msgid "Ekzistanta kodo"
@@ -74,7 +74,7 @@ msgstr "קוד זה כבר קיים במסד הנתונים."
 #: PlaceFrCog/placefrcog.py:193
 #, python-format
 msgid "Aldono de loko kun INSEE-id %s"
-msgstr "הוספת מקום עם INEE-ID %S"
+msgstr "הוספת מקום עם INEE-ID %s"
 
 #: PlaceFrCog/placefrcog.py:222
 msgid "Nekonato nomo"
@@ -87,18 +87,16 @@ msgstr "שם זה לא נמצא במסד הנתונים של Insee:"
 #: PlaceFrCog/placefrcog.py:229
 #, python-format
 msgid "%d rezultoj"
-msgstr "%D תוצאות"
+msgstr "%d תוצאות"
 
 #: PlaceFrCog/placefrcog.py:229
 #, python-format
 msgid "Unua rezulto :\n\t%s ; kodo=%s. \n\n\t\tImporti ?\n"
-msgstr ""
-"תוצאה ראשונה: \n"
-" \t%s; "
+msgstr "תוצאה ראשונה :\n\t%s ; קוד=%s. \n\n\t\tייבא ?\n"
 
 #: PlaceFrCog/placefrcog.py:230
-msgid "Ies, Importi"
-msgstr "IES, יבוא"
+msgid "Jes, Importi"
+msgstr "כן, לייבא"
 
 #: PlaceFrCog/placefrcog.py:230
 msgid "Venonta"
@@ -116,3 +114,4 @@ msgstr "קוד זה לא נמצא במסד הנתונים של Insee:"
 #, python-format
 msgid "Aldono de loko %s"
 msgstr "הוספת מקום %s"
+

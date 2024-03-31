@@ -39,7 +39,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gramps 3.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-31 22:06+0200\n"
+"POT-Creation-Date: 2024-03-31 22:36+0200\n"
 "PO-Revision-Date: 2023-08-26 16:16+0000\n"
 "Last-Translator: Nick Hall <nick-h@gramps-project.org>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/gramps-project/gramps/en/>\n"
@@ -127,8 +127,8 @@ msgstr ""
 "\t\tImport ?\n"
 
 #: PlaceFrCog/placefrcog.py:230
-msgid "Ies, Importi"
-msgstr "Ies, import"
+msgid "Jes, Importi"
+msgstr "Jes, Importi"
 
 #: PlaceFrCog/placefrcog.py:230
 msgid "Venonta"
@@ -146,3 +146,6 @@ msgstr "This code was not found in the INSEE database:"
 #, python-format
 msgid "Aldono de loko %s"
 msgstr "Adding place %s"
+
+#~ msgid "Ies, Importi"
+#~ msgstr "Ies, import"

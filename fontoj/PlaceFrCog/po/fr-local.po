@@ -43,7 +43,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-31 22:06+0200\n"
+"POT-Creation-Date: 2024-03-31 22:36+0200\n"
 "PO-Revision-Date: 2023-08-26 20:29+0000\n"
 "Last-Translator: Jean-Marc <m.balthazar@posteo.net>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gramps-project/gramps/fr/>\n"
@@ -131,8 +131,8 @@ msgstr ""
 "\t\tImporter ?\n"
 
 #: PlaceFrCog/placefrcog.py:230
-msgid "Ies, Importi"
-msgstr "Oui, importer"
+msgid "Jes, Importi"
+msgstr "Oui, pour importer"
 
 #: PlaceFrCog/placefrcog.py:230
 msgid "Venonta"
@@ -150,3 +150,6 @@ msgstr "Ce code n'a pas été trouvé dans la base INSEE : "
 #, python-format
 msgid "Aldono de loko %s"
 msgstr "Ajout du lieu %s"
+
+#~ msgid "Ies, Importi"
+#~ msgstr "Oui, importer"

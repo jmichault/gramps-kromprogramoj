@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gramps 5.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-31 22:06+0200\n"
+"POT-Creation-Date: 2024-03-31 22:36+0200\n"
 "PO-Revision-Date: 2023-09-12 11:02+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gramps-project/gramps/nl/>\n"
@@ -105,8 +105,8 @@ msgstr ""
 "\t\tImporteren?\n"
 
 #: PlaceFrCog/placefrcog.py:230
-msgid "Ies, Importi"
-msgstr "IES, importeren"
+msgid "Jes, Importi"
+msgstr "Ja, om te importeren"
 
 #: PlaceFrCog/placefrcog.py:230
 msgid "Venonta"
@@ -124,6 +124,9 @@ msgstr "Deze code werd niet gevonden in de Insee -database:"
 #, python-format
 msgid "Aldono de loko %s"
 msgstr "Place %s toevoegen"
+
+#~ msgid "Ies, Importi"
+#~ msgstr "IES, importeren"
 
 #~ msgid "Enigu la INSEE-numeron de la komunumo: (a plurajn nombrojn apartigitajn per spacoj)"
 #~ msgstr "Voer het insege nummer van de gemeenschap in: (of verschillende nummers gescheiden door spaties)"

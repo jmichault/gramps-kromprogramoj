@@ -227,7 +227,7 @@ class PlaceFrCog(Gramplet):
       codDep = json[pos]['codeDepartement']
       insee_id = json[pos]['code']
       d = QuestionDialog3(_("%d rezultoj") % (nb-pos), _("Unua rezulto :\n\t%s ; kodo=%s. \n\n\t\tImporti ?\n") % ( json[pos]['nom'] , insee_id )
-                 ,_("Ies, Importi"),_("Venonta")
+                 ,_("Jes, Importi"),_("Venonta")
                  , parent=self.uistate.window)
       res = d.run()
       if res == -1 :
