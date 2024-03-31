@@ -17,5 +17,7 @@ for G in $GREFFONS ; do
  done
 done
 
-# mise à jour des fichiers tgz et des listes
-RESOURCEPATH="$GRPATH" LANGUAGE=eo.UTF-8 python3 make.py
+if [ $# -gt 0 ] ; then
+  # mise à jour des fichiers tgz et des listes
+  RESOURCEPATH="$GRPATH" LANGUAGE=eo.UTF-8 python3 make.py
+fi

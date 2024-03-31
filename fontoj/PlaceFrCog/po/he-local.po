@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gramps 5.1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-08 15:54+0100\n"
+"POT-Creation-Date: 2024-03-31 22:06+0200\n"
 "PO-Revision-Date: 2023-10-06 15:54+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gramps-project/gramps/he/>\n"
@@ -93,6 +93,8 @@ msgstr "%D תוצאות"
 #, python-format
 msgid "Unua rezulto :\n\t%s ; kodo=%s. \n\n\t\tImporti ?\n"
 msgstr ""
+"תוצאה ראשונה: \n"
+" \t%s; "
 
 #: PlaceFrCog/placefrcog.py:230
 msgid "Ies, Importi"

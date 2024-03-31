@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gramps 5.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-08 15:54+0100\n"
+"POT-Creation-Date: 2024-03-31 22:05+0200\n"
 "PO-Revision-Date: 2023-09-12 11:02+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gramps-project/gramps/nl/>\n"
@@ -116,33 +116,33 @@ msgstr "Een van de plaatsen die u samenvoegt, is opgesloten in de andere!"
 msgid "INSEE Kodo"
 msgstr "Insee code"
 
-#: Lokpurigado/lokpurigado.py:522 Lokpurigado/lokpurigado.glade:65
+#: Lokpurigado/lokpurigado.py:523 Lokpurigado/lokpurigado.glade:65
 msgid "Poŝtkodo"
 msgstr "Postcode"
 
-#: Lokpurigado/lokpurigado.py:712
+#: Lokpurigado/lokpurigado.py:713
 #, python-format
 msgid "Add Place (%s)"
 msgstr "Locatie (%s) toevoegen"
 
-#: Lokpurigado/lokpurigado.py:720
+#: Lokpurigado/lokpurigado.py:721
 msgid "Place cycle detected"
 msgstr "Locatielus gedetecteerd"
 
-#: Lokpurigado/lokpurigado.py:721
+#: Lokpurigado/lokpurigado.py:722
 msgid "The place you chose is enclosed in the place you are workin on!\nPlease cancel and choose another place."
 msgstr "De plaats die u heeft gekozen, is ingesloten op de plaats waarop u werkt!"
 
-#: Lokpurigado/lokpurigado.py:739
+#: Lokpurigado/lokpurigado.py:740
 #, python-format
 msgid "Redakti Lokon (%s)"
 msgstr "Locatie bewerken (%s)"
 
-#: Lokpurigado/lokpurigado.py:970
+#: Lokpurigado/lokpurigado.py:971
 msgid "Ĉi tiu Loko ne estas uzata!"
 msgstr "Deze plek wordt niet gebruikt!"
 
-#: Lokpurigado/lokpurigado.py:971
+#: Lokpurigado/lokpurigado.py:972
 msgid "Vi devus forigi ĝin aŭ, se ĝi enhavas utilajn notojn aŭ aliajn datumojn, uzu serĉon por kunfandi ĝin kun valida loko."
 msgstr "U moet het verwijderen of, als het nuttige opmerkingen of andere gegevens bevat, een zoekopdracht gebruiken om deze samen te voegen met een geldige locatie."
 
