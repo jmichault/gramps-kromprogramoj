@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GRAMPS 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-08 15:54+0100\n"
+"POT-Creation-Date: 2024-03-31 22:36+0200\n"
 "PO-Revision-Date: 2023-08-05 19:36+0000\n"
 "Last-Translator: Nick Hall <nick-h@gramps-project.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/gramps-project/gramps/pt_BR/>\n"
@@ -115,33 +115,35 @@ msgstr "Um dos lugares que você se fundem está trancado no outro!"
 msgid "INSEE Kodo"
 msgstr "Código INSEE"
 
-#: Lokpurigado/lokpurigado.py:522 Lokpurigado/lokpurigado.glade:65
+#: Lokpurigado/lokpurigado.py:523 Lokpurigado/lokpurigado.glade:65
 msgid "Poŝtkodo"
 msgstr "Código postal"
 
-#: Lokpurigado/lokpurigado.py:712
+#: Lokpurigado/lokpurigado.py:713
 #, python-format
 msgid "Add Place (%s)"
 msgstr "Adicionar lugar (%s)"
 
-#: Lokpurigado/lokpurigado.py:720
+#: Lokpurigado/lokpurigado.py:721
 msgid "Place cycle detected"
 msgstr "Referência circular de lugares detectado"
 
-#: Lokpurigado/lokpurigado.py:721
+#: Lokpurigado/lokpurigado.py:722
 msgid "The place you chose is enclosed in the place you are workin on!\nPlease cancel and choose another place."
-msgstr "O lugar que você escolheu é fechado no local em que você está trabalhando! \nupase Cancelar e escolher outro lugar."
+msgstr ""
+"O lugar que você escolheu é fechado no local em que você está trabalhando! \n"
+"upase Cancelar e escolher outro lugar."
 
-#: Lokpurigado/lokpurigado.py:739
+#: Lokpurigado/lokpurigado.py:740
 #, python-format
 msgid "Redakti Lokon (%s)"
 msgstr "Editar local (%s)"
 
-#: Lokpurigado/lokpurigado.py:970
+#: Lokpurigado/lokpurigado.py:971
 msgid "Ĉi tiu Loko ne estas uzata!"
 msgstr "Este lugar não é usado!"
 
-#: Lokpurigado/lokpurigado.py:971
+#: Lokpurigado/lokpurigado.py:972
 msgid "Vi devus forigi ĝin aŭ, se ĝi enhavas utilajn notojn aŭ aliajn datumojn, uzu serĉon por kunfandi ĝin kun valida loko."
 msgstr "Você deve excluí -lo ou, se ele contiver notas úteis ou outros dados, use uma pesquisa para mesclar com um local válido."
 

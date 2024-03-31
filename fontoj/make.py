@@ -316,7 +316,10 @@ elif command == "update":
         raise ValueError("Where is GRAMPSPATH/po: '%s/po'? Use"
                          " 'GRAMPSPATH=path python3 make.py update'" %
                          (GRAMPSPATH))
-    locale_po_files = [r("%(GRAMPSPATH)s/po/%(locale)s.po")]
+    if locale =='en' :
+      locale_po_files = [r("%(GRAMPSPATH)s/po/en_GB.po")]
+    else :
+      locale_po_files = [r("%(GRAMPSPATH)s/po/%(locale)s.po")]
     # Next, get all of the translations from other addons:
     for module in [name for name in os.listdir(".") if os.path.isdir(name)]:
         # skip the addon we are updating:
@@ -326,6 +329,7 @@ elif command == "update":
         if os.path.isfile(po_file):
             locale_po_files.append(po_file)
     # Concat those together:
+    list=" ".join(['''"%s"''' % name for name in locale_po_files])
     system('''msgcat --no-wrap --use-first %(list)s '''
            '''-o "%(addon)s/po/%(locale)s-global.po"''',
            list=" ".join(['''"%s"''' % name for name in locale_po_files]))

@@ -16,10 +16,14 @@
     * --> transformer les autres évènements en note (pb : pas de date sur les notes, il faut la rajouter dans le texte)?
   * idem pour : fiançailles
   * copie des notes personnepersonne et famillee de gramps vers FS.
+  * copie de source vers FS : il faut le faire 2 fois, la première fois la source est créée, mais pas liée.
 
 # à faire pour prochaine version
 ## prioritaires
 * bogues :
+  * mise à jour de source vers gramps : à voir.
+  * copie de source vers gramps : «None» dans la note de citation si pas de note.
+  * copie de source vers FS : rattacher au couple quand la source est attachée au couple ou à un évènement du couple.
   * copie de source vers FS : la date n'est pas mise à jour pour les sources FS (la note est bien mise à jour).
   * recherche d'un individu : problèmes sur la deuxième recherche ?
   * import des parents : ne tient pas compte du type de lien
@@ -29,7 +33,6 @@
   * si connexion FS perdue : reconnecter correctement (actuellement, il faut rafraîchir une deuxième fois).
   * comparaison : fsid G6M3-79W : le conjoint n'apparaît pas car il n'y a pas de lien conjugal dans FS.
   * comparaison : la comparaison des mariages n'utilise pas le fsftid
-  * mise à jour d'un événement avec changement de lieu : le lieu est parfois effacé ? Si le lieu est nouveau ?
   * import d'une date A/+1736 (pas prévu dans gramps).
   * comparaison : la liste des filtres est celle du premier lancement.
   * import 1 clic : quelquefois les enfants ne sont pas tous importés.

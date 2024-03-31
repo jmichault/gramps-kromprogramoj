@@ -684,7 +684,8 @@ def aldEdzKomp(db, grPersono, fsPerso) :
               tag = unquote(linio[6:])
             else :
               tag = None
-            if tag : gedTag = tag
+            if tag :
+              gedTag = GEDCOMX_GRAMPS_FAKTOJ.get(linio) or tag
           if gedTag != grTag :
             continue
           fsFaktoDato = str(fsFakto.date or '')

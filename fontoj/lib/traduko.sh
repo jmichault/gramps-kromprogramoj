@@ -37,16 +37,23 @@ then
   MSG=$("$BASEDIR/trans" -b -s "$src" -t "$dst" "$txt")
 else
   # echo pas sorry
-  MSG=$(echo "$MSG0" \
-  | sed "s/\\\ [nN]/\\\n/g;s/] (/](/g;s/ __ / __/g" \
+  MSG1=$(echo "$MSG0" \
   | jq '.[0][][0]' \
+  )
+if [ -z "$MSG1" ] ; then
+  MSG1=$(echo "$MSG0" |sed "s/\[*\"//;s/\".*//")
+fi
+  MSG=$(echo "$MSG1" \
+  | sed "s/\\\ [nN]/\\\n/g;s/] (/](/g;s/ __ / __/g" \
+  | sed "s/\\\ [tT]/\\\t/g" \
   | grep -v '^null$' \
   | sed "s/\\\\u003d/=/g;s/\\\\u003c/</g;s/\\\\u003e/>/g" \
   | sed "s/\\\\u200b//g" \
   | sed "s/\xe2\x80\x8b//g" \
   | sed "s/^\"//;s/\"$//" \
   | tr -d "\n" \
-  | sed "s/\. \\\n$/.  \\\n/" \
+  | sed "s/\. \\\n$/.  \\\n/g" \
+  | sed "s/\. \\\t$/.  \\\t/g" \
   )
 fi
 [ "$DEBUG" ] && echo "$dst txt=$MSG" >&2

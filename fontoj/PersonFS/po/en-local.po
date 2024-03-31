@@ -39,11 +39,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gramps 3.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-13 18:55+0100\n"
+"POT-Creation-Date: 2024-03-31 22:36+0200\n"
 "PO-Revision-Date: 2023-08-26 16:16+0000\n"
 "Last-Translator: Nick Hall <nick-h@gramps-project.org>\n"
-"Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/"
-"gramps-project/gramps/en/>\n"
+"Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/gramps-project/gramps/en/>\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -51,247 +50,247 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.0.1-dev\n"
 
-#: PersonFS/Importo.py:66 PersonFS/PersonFS.py:75
+#: PersonFS/Importo.py:67 PersonFS/PersonFS.py:76
 #, python-format
 msgid "gedcomx_v1 ne trovita aŭ < %s"
 msgstr "gedcomx_v1 ne trovita aŭ < %s"
 
-#: PersonFS/Importo.py:218
+#: PersonFS/Importo.py:219
 msgid "Konstrui FSID listo por lokoj"
 msgstr "Build FSID list for places"
 
-#: PersonFS/Importo.py:431
+#: PersonFS/Importo.py:484 PersonFS/Importo.py:485 PersonFS/Importo.py:516
 msgid "Repository"
 msgstr "Repository"
 
-#: PersonFS/Importo.py:433
+#: PersonFS/Importo.py:486 PersonFS/Importo.py:487 PersonFS/Importo.py:514
 msgid "Source:"
 msgstr "Source:"
 
-#: PersonFS/Importo.py:434
+#: PersonFS/Importo.py:488 PersonFS/Importo.py:489 PersonFS/Importo.py:512
 msgid "Volume/Page:"
 msgstr "Volume/Page:"
 
-#: PersonFS/Importo.py:436
+#: PersonFS/Importo.py:490 PersonFS/Importo.py:491 PersonFS/Importo.py:517
 msgid "Confidence:"
 msgstr "Confidence:"
 
-#: PersonFS/Importo.py:494 PersonFS/Importo.py:537 PersonFS/utila.py:111
-msgid "Internet Address"
-msgstr "Internet Address"
-
-#: PersonFS/Importo.py:515
+#: PersonFS/Importo.py:550 PersonFS/Importo.py:671
 msgid "Very High"
 msgstr "Very High"
 
-#: PersonFS/Importo.py:517
+#: PersonFS/Importo.py:552 PersonFS/Importo.py:673
 msgid "High"
 msgstr "High"
 
-#: PersonFS/Importo.py:519
+#: PersonFS/Importo.py:554 PersonFS/Importo.py:675
 msgid "Normal"
 msgstr "Normal"
 
-#: PersonFS/Importo.py:521
+#: PersonFS/Importo.py:556 PersonFS/Importo.py:677
 msgid "Low"
 msgstr "Low"
 
-#: PersonFS/Importo.py:523
+#: PersonFS/Importo.py:558 PersonFS/Importo.py:679
 msgid "Very Low"
 msgstr "Very Low"
 
-#: PersonFS/Importo.py:658
+#: PersonFS/Importo.py:629 PersonFS/Importo.py:689 PersonFS/utila.py:111
+msgid "Internet Address"
+msgstr "Internet Address"
+
+#: PersonFS/Importo.py:814
 msgid "FamilySearch Importo"
 msgstr "FamilySearch Import"
 
-#: PersonFS/Importo.py:658 PersonFS/komparo.py:111
+#: PersonFS/Importo.py:814 PersonFS/komparo.py:111
 msgid "Starting"
 msgstr "Starting"
 
-#: PersonFS/Importo.py:667
+#: PersonFS/Importo.py:823
 msgid "Konstrui FSID listo (1/11)"
 msgstr "Build FSID list (1/11)"
 
-#: PersonFS/Importo.py:673
+#: PersonFS/Importo.py:829
 msgid "«FamilySearch» ekzistanta ID"
 msgstr "«FamilySearch» Existing ID"
 
-#: PersonFS/Importo.py:675 PersonFS/Importo.py:679
+#: PersonFS/Importo.py:831 PersonFS/Importo.py:835
 #, python-format
 msgid "«FamilySearch» duplikata ID : %s "
 msgstr "«FamilySearch» Duplicate ID: %S"
 
-#: PersonFS/Importo.py:678
+#: PersonFS/Importo.py:834
 msgid "Duplikata FSFTID"
 msgstr "Duplicate fsftid"
 
-#: PersonFS/Importo.py:680
+#: PersonFS/Importo.py:836
 msgid "_Daŭru averton"
 msgstr "_Al a warning"
 
-#: PersonFS/Importo.py:680
+#: PersonFS/Importo.py:836
 msgid "_Ĉesu averton"
 msgstr "_ Cell a warning"
 
-#: PersonFS/Importo.py:688
+#: PersonFS/Importo.py:844
 msgid "Ne konekta al FamilySearch"
 msgstr "Not connected to FamilySearch"
 
-#: PersonFS/Importo.py:690
+#: PersonFS/Importo.py:846
 msgid "Konstrui FSID listo por lokoj (2/11)"
 msgstr "Build FSID list for locations (2/11)"
 
-#: PersonFS/Importo.py:742
+#: PersonFS/Importo.py:898
 msgid "Elŝutante personojn… (3/11)"
 msgstr "Downloading people ... (3/11)"
 
-#: PersonFS/Importo.py:743
+#: PersonFS/Importo.py:899
 msgid "Elŝutante personon…"
 msgstr "Downloading a person ..."
 
-#: PersonFS/Importo.py:747
+#: PersonFS/Importo.py:903
 msgid "Elŝutante ascendantojn… (4/11)"
 msgstr "Downloading ascendants… (4/11)"
 
-#: PersonFS/Importo.py:756
+#: PersonFS/Importo.py:912
 #, python-format
 msgid "Elŝutante %d generaciojn de ascendantojn…"
 msgstr "Downloading %d generations of ascendants ..."
 
-#: PersonFS/Importo.py:759
+#: PersonFS/Importo.py:915
 msgid "Elŝutante posteulojn… (5/11)"
 msgstr "Downloading descendants ... (5/11)"
 
-#: PersonFS/Importo.py:767
+#: PersonFS/Importo.py:923
 #, python-format
 msgid "Elŝutante %d generaciojn de posteulojn…"
 msgstr "Downloading %d generations of descendants ..."
 
-#: PersonFS/Importo.py:774
+#: PersonFS/Importo.py:930
 msgid "Elŝutante edzojn… (6/11)"
 msgstr "Downloading husbands ... (6/11)"
 
-#: PersonFS/Importo.py:775
+#: PersonFS/Importo.py:931
 msgid "Elŝutante edzojn…"
 msgstr "Downloading husbands ..."
 
-#: PersonFS/Importo.py:780
+#: PersonFS/Importo.py:936
 msgid "Elŝutante notojn… (7/11)"
 msgstr "Downloading Notes… (7/11)"
 
-#: PersonFS/Importo.py:781
+#: PersonFS/Importo.py:937
 msgid "Elŝutante notojn kaj fontojn…"
 msgstr "Elŝutante notojn kaj fontojn…"
 
-#: PersonFS/Importo.py:802
+#: PersonFS/Importo.py:958
 msgid "Importado…"
 msgstr "Import ..."
 
-#: PersonFS/Importo.py:813
+#: PersonFS/Importo.py:969
 msgid "Importado de lokoj… (8/11)"
 msgstr "Importing places… (8/11)"
 
-#: PersonFS/Importo.py:814
+#: PersonFS/Importo.py:970
 msgid "Importado de lokoj…"
 msgstr "Importing places ..."
 
-#: PersonFS/Importo.py:818
+#: PersonFS/Importo.py:974
 msgid "Importado de personoj… (9/11)"
 msgstr "Importing persons ... (9/11)"
 
-#: PersonFS/Importo.py:819
+#: PersonFS/Importo.py:975
 msgid "Importado de personoj…"
 msgstr "Importing people ..."
 
-#: PersonFS/Importo.py:824
+#: PersonFS/Importo.py:980
 msgid "Importado de familioj… (10/11)"
 msgstr "Importing families ... (10/11)"
 
-#: PersonFS/Importo.py:825
+#: PersonFS/Importo.py:981
 msgid "Importado de familioj…"
 msgstr "Importing families ..."
 
-#: PersonFS/Importo.py:831
+#: PersonFS/Importo.py:987
 msgid "Importado de infanoj… (11/11)"
 msgstr "Importing children ... (11/11)"
 
-#: PersonFS/Importo.py:832
+#: PersonFS/Importo.py:988
 msgid "Importado de infanoj…"
 msgstr "Importing children ..."
 
-#: PersonFS/Importo.py:879 PersonFS/Importo.py:937
+#: PersonFS/Importo.py:1035 PersonFS/Importo.py:1093
 msgid "sengepatra familio ???"
 msgstr "Parent family ???"
 
-#: PersonFS/Importo.py:996
+#: PersonFS/Importo.py:1152
 msgid "Kromprogramoj"
 msgstr "Plugins"
 
-#: PersonFS/Importo.py:1003 PersonFS/Importo.py:1058
+#: PersonFS/Importo.py:1159 PersonFS/Importo.py:1214
 msgid "FamilySearch Importo Opcionoj"
 msgstr "FamilySearch Import Optiones"
 
-#: PersonFS/Importo.py:1004
+#: PersonFS/Importo.py:1160
 msgid "FamilySearch ID"
 msgstr "FamilySearch ID"
 
-#: PersonFS/Importo.py:1005
+#: PersonFS/Importo.py:1161
 msgid "identiga numero por esti prenita de FamilySearch retejo"
 msgstr "Identification number to be taken from FamilySearch website"
 
-#: PersonFS/Importo.py:1007
+#: PersonFS/Importo.py:1163
 msgid "Nombro ascentontaj"
 msgstr "Number ascending"
 
-#: PersonFS/Importo.py:1008
+#: PersonFS/Importo.py:1164
 msgid "Nombro de generacioj por supreniri"
 msgstr "Numerically de generation to go up"
 
-#: PersonFS/Importo.py:1010
+#: PersonFS/Importo.py:1166
 msgid "Nombro descendontaj"
 msgstr "Number to descend"
 
-#: PersonFS/Importo.py:1011
+#: PersonFS/Importo.py:1167
 msgid "Nombro de generacioj descendontaj"
 msgstr "Numerically of generation to descend"
 
-#: PersonFS/Importo.py:1013
+#: PersonFS/Importo.py:1169
 msgid "Ne reimporti ekzistantajn personojn"
 msgstr "Not to re -importing existing persons"
 
-#: PersonFS/Importo.py:1014
+#: PersonFS/Importo.py:1170
 msgid "Importi nur neekzistantajn personojn"
 msgstr "Import only non -existent persons"
 
-#: PersonFS/Importo.py:1016
+#: PersonFS/Importo.py:1172
 msgid "Aldoni geedzoj"
 msgstr "Add spouses"
 
-#: PersonFS/Importo.py:1017
+#: PersonFS/Importo.py:1173
 msgid "Aldoni informojn pri geedzoj"
 msgstr "Add information about spouses"
 
-#: PersonFS/Importo.py:1019 PersonFS/Importo.py:1020
+#: PersonFS/Importo.py:1175 PersonFS/Importo.py:1176
 msgid "Aldoni fontoj"
 msgstr "Add sources"
 
-#: PersonFS/Importo.py:1022 PersonFS/Importo.py:1023
+#: PersonFS/Importo.py:1178 PersonFS/Importo.py:1179
 msgid "Aldoni notoj"
 msgstr "Add notes"
 
-#: PersonFS/Importo.py:1025
+#: PersonFS/Importo.py:1181
 msgid "Vorteco"
 msgstr "Vocabulary"
 
-#: PersonFS/Importo.py:1026
+#: PersonFS/Importo.py:1182
 msgid "Vorteca nivelo de 0 (minimuma) ĝis 3 (tre vorta)"
 msgstr "Vocabulary level from 0 (minimum) to 3 (very word)"
 
-#: PersonFS/Importo.py:1030
+#: PersonFS/Importo.py:1186
 msgid "Menuo Aldonita"
 msgstr "Menu added"
 
-#: PersonFS/Importo.py:1052
+#: PersonFS/Importo.py:1208
 msgid "FamilySearch Import Tool"
 msgstr "FamilySearch Import Tool"
 
@@ -323,153 +322,158 @@ msgstr "FamilySearch: Compare"
 msgid "FamilySearch : kompari gramps personojn kun FS personojn."
 msgstr "FamilySearch: Compare Gramps people with FS people."
 
-#: PersonFS/PersonFS.py:204
+#: PersonFS/PersonFS.py:205
 msgid "Pasvorta erraro. La funkcioj de FamilySearch ne estos disponeblaj."
 msgstr "Password error. FamilySearch functions will not be available."
 
-#: PersonFS/PersonFS.py:206 PersonFS/PersonFS.py:237
+#: PersonFS/PersonFS.py:207 PersonFS/PersonFS.py:238
 msgid "Malsukcesa konekto. La funkcioj de FamilySearch ne estos disponeblaj."
 msgstr "Failed connection. FamilySearch functions will not be available."
 
-#: PersonFS/PersonFS.py:234
+#: PersonFS/PersonFS.py:235
 msgid "Pasvorta eraro. La funkcioj de FamilySearch ne estos disponeblaj."
 msgstr "Password error. FamilySearch functions will not be available."
 
-#: PersonFS/PersonFS.py:579
+#: PersonFS/PersonFS.py:569
+msgid "\tTitolo estas postulata.\n\nAldonu citaĵotipan noton al via citaĵo:\nla unua linio servos kiel titolo."
+msgstr ""
+"\tTitolo estas postulata.\n"
+"\n"
+"Aldonu citaĵotipan noton al via citaĵo:\n"
+"la unua linio servos kiel titolo."
+
+#: PersonFS/PersonFS.py:686
 msgid "kopii al gramps"
 msgstr "copy to gramps"
 
-#: PersonFS/PersonFS.py:709
+#: PersonFS/PersonFS.py:821
 #, python-format
 msgid "Redakti : %s - %s - %s"
 msgstr "Edit: %s - %s - %s"
 
-#: PersonFS/PersonFS.py:714
+#: PersonFS/PersonFS.py:826
 msgid "Kopii elekton de gramps al FS"
 msgstr "Copy a selection from gramps to FS"
 
-#: PersonFS/PersonFS.py:719
+#: PersonFS/PersonFS.py:831
 msgid "Kopii elekton de FS al gramps"
 msgstr "Copy a choice from FS to Gramps"
 
-#: PersonFS/PersonFS.py:781
+#: PersonFS/PersonFS.py:893
 msgid "Pardonu, nur edzaj, eventaj, nomaj aŭ notaj linioj povas esti elektitaj."
-msgstr ""
-"Pardonu, nur edzaj, eventaj, nomaj aŭ notaj linioj povas esti elektitaj."
+msgstr "Pardonu, nur edzaj, eventaj, nomaj aŭ notaj linioj povas esti elektitaj."
 
-#: PersonFS/PersonFS.py:787 PersonFS/PersonFS.py:802 PersonFS/PersonFS.py:817
+#: PersonFS/PersonFS.py:899 PersonFS/PersonFS.py:914 PersonFS/PersonFS.py:929
 msgid "Koloro"
 msgstr "Color"
 
-#: PersonFS/PersonFS.py:788 PersonFS/PersonFS.py:803
+#: PersonFS/PersonFS.py:900 PersonFS/PersonFS.py:915
 msgid "Propreco"
 msgstr "Peculiarity"
 
-#: PersonFS/PersonFS.py:789 PersonFS/PersonFS.py:818
+#: PersonFS/PersonFS.py:901 PersonFS/PersonFS.py:930
 msgid "Dato"
 msgstr "Date"
 
-#: PersonFS/PersonFS.py:790 PersonFS/PersonFS.py:805
+#: PersonFS/PersonFS.py:902 PersonFS/PersonFS.py:917
 msgid "Gramps Valoro"
 msgstr "Gramps value"
 
-#: PersonFS/PersonFS.py:791 PersonFS/PersonFS.py:821
+#: PersonFS/PersonFS.py:903 PersonFS/PersonFS.py:933
 msgid "FS Dato"
 msgstr "Fs date"
 
-#: PersonFS/PersonFS.py:792 PersonFS/PersonFS.py:807
+#: PersonFS/PersonFS.py:904 PersonFS/PersonFS.py:919
 msgid "FS Valoro"
 msgstr "Fs value"
 
-#: PersonFS/PersonFS.py:795 PersonFS/PersonFS.py:810 PersonFS/PersonFS.py:825
+#: PersonFS/PersonFS.py:907 PersonFS/PersonFS.py:922 PersonFS/PersonFS.py:937
 msgid "xTipo"
 msgstr "XTIPO"
 
-#: PersonFS/PersonFS.py:796 PersonFS/PersonFS.py:811 PersonFS/PersonFS.py:826
+#: PersonFS/PersonFS.py:908 PersonFS/PersonFS.py:923 PersonFS/PersonFS.py:938
 msgid "xGr"
 msgstr "xgr"
 
-#: PersonFS/PersonFS.py:797 PersonFS/PersonFS.py:812 PersonFS/PersonFS.py:827
+#: PersonFS/PersonFS.py:909 PersonFS/PersonFS.py:924 PersonFS/PersonFS.py:939
 msgid "xFs"
 msgstr "xfs"
 
-#: PersonFS/PersonFS.py:798 PersonFS/PersonFS.py:813 PersonFS/PersonFS.py:828
+#: PersonFS/PersonFS.py:910 PersonFS/PersonFS.py:925 PersonFS/PersonFS.py:940
 msgid "xGr2"
 msgstr "xgr2"
 
-#: PersonFS/PersonFS.py:799 PersonFS/PersonFS.py:814 PersonFS/PersonFS.py:829
+#: PersonFS/PersonFS.py:911 PersonFS/PersonFS.py:926 PersonFS/PersonFS.py:941
 msgid "xFs2"
 msgstr "xfs2"
 
-#: PersonFS/PersonFS.py:804 PersonFS/PersonFS.py:819
+#: PersonFS/PersonFS.py:916 PersonFS/PersonFS.py:931
 msgid "Titolo"
 msgstr "Title"
 
-#: PersonFS/PersonFS.py:806 PersonFS/PersonFS.py:822
+#: PersonFS/PersonFS.py:918 PersonFS/PersonFS.py:934
 msgid "FS Titolo"
 msgstr "FS Titolo"
 
-#: PersonFS/PersonFS.py:820
+#: PersonFS/PersonFS.py:932
 msgid "Gramps URL"
 msgstr "Gramps URL"
 
-#: PersonFS/PersonFS.py:823
+#: PersonFS/PersonFS.py:935
 msgid "FS URL"
 msgstr "FS URL"
 
-#: PersonFS/PersonFS.py:852 PersonFS/komparo.py:1133 PersonFS/utila.py:144
+#: PersonFS/PersonFS.py:964 PersonFS/komparo.py:1141 PersonFS/utila.py:144
 msgid "FamilySearch etikedoj"
 msgstr "FamilySearch tags"
 
-#: PersonFS/PersonFS.py:1055 PersonFS/PersonFS.py:1099
+#: PersonFS/PersonFS.py:1168 PersonFS/PersonFS.py:1212
 msgid "score"
 msgstr "score"
 
-#: PersonFS/PersonFS.py:1056 PersonFS/PersonFS.py:1100
+#: PersonFS/PersonFS.py:1169 PersonFS/PersonFS.py:1213
 msgid "FS Id"
 msgstr "FS ID"
 
-#: PersonFS/PersonFS.py:1057 PersonFS/PersonFS.py:1101
+#: PersonFS/PersonFS.py:1170 PersonFS/PersonFS.py:1214
 msgid "Nomo, antaŭnomo"
 msgstr "Name, first name"
 
-#: PersonFS/PersonFS.py:1058 PersonFS/PersonFS.py:1102
+#: PersonFS/PersonFS.py:1171 PersonFS/PersonFS.py:1215
 msgid "Birth"
 msgstr "BIRTH"
 
-#: PersonFS/PersonFS.py:1059 PersonFS/PersonFS.py:1103
+#: PersonFS/PersonFS.py:1172 PersonFS/PersonFS.py:1216
 msgid "Death"
 msgstr "Death"
 
-#: PersonFS/PersonFS.py:1060 PersonFS/PersonFS.py:1104
+#: PersonFS/PersonFS.py:1173 PersonFS/PersonFS.py:1217
 msgid "Parents"
 msgstr "Parents"
 
-#: PersonFS/PersonFS.py:1061 PersonFS/PersonFS.py:1105
+#: PersonFS/PersonFS.py:1174 PersonFS/PersonFS.py:1218
 msgid "Spouses"
 msgstr "SPOUSES"
 
-#: PersonFS/PersonFS.py:1079
+#: PersonFS/PersonFS.py:1192
 msgid "Eraro: neniuj datumoj."
 msgstr "Error: No data."
 
-#: PersonFS/PersonFS.py:1087
+#: PersonFS/PersonFS.py:1200
 #, python-format
 msgid "Neniuj verŝajnaj duplikatoj por la persono %s trovita de la retejo \"FamilySearch\"."
-msgstr ""
-"No likely duplicates for the person %s found from the \"FamilySearch\" "
-"website."
+msgstr "No likely duplicates for the person %s found from the \"FamilySearch\" website."
 
-#: PersonFS/PersonFS.py:1427 PersonFS/PersonFS.py:1539 PersonFS/komparo.py:109
-#: PersonFS/komparo.py:981
+#: PersonFS/PersonFS.py:1540 PersonFS/PersonFS.py:1637 PersonFS/komparo.py:109
+#: PersonFS/komparo.py:989
 msgid "Ne konektita al FamilySearch"
 msgstr "Not connected to FamilySearch"
 
-#: PersonFS/PersonFS.py:1577 PersonFS/PersonFS.py:1583
+#: PersonFS/PersonFS.py:1675 PersonFS/PersonFS.py:1681
 msgid "Persono"
 msgstr "Persono"
 
-#: PersonFS/PersonFS.py:1660 PersonFS/PersonFS.py:1662
+#: PersonFS/PersonFS.py:1758 PersonFS/PersonFS.py:1760
 msgid "Familio"
 msgstr "Familio"
 
@@ -584,32 +588,32 @@ msgid "Mother"
 msgstr "Mother"
 
 #: PersonFS/komparo.py:554 PersonFS/komparo.py:573 PersonFS/komparo.py:635
-#: PersonFS/komparo.py:788
+#: PersonFS/komparo.py:796
 msgid "Spouse"
 msgstr "Spouse"
 
-#: PersonFS/komparo.py:750 PersonFS/komparo.py:767 PersonFS/komparo.py:804
-#: PersonFS/komparo.py:819
+#: PersonFS/komparo.py:758 PersonFS/komparo.py:775 PersonFS/komparo.py:812
+#: PersonFS/komparo.py:827
 msgid "Child"
 msgstr "Child"
 
-#: PersonFS/komparo.py:988 PersonFS/komparo.py:990 PersonFS/komparo.py:992
+#: PersonFS/komparo.py:996 PersonFS/komparo.py:998 PersonFS/komparo.py:1000
 msgid "Esenco"
 msgstr "Essence"
 
-#: PersonFS/komparo.py:1002 PersonFS/komparo.py:1004 PersonFS/komparo.py:1006
+#: PersonFS/komparo.py:1010 PersonFS/komparo.py:1012 PersonFS/komparo.py:1014
 msgid "Aliaj nomoj"
 msgstr "Other names"
 
-#: PersonFS/komparo.py:1017 PersonFS/komparo.py:1019 PersonFS/komparo.py:1021
+#: PersonFS/komparo.py:1025 PersonFS/komparo.py:1027 PersonFS/komparo.py:1029
 msgid "Gepatroj"
 msgstr "Parents"
 
-#: PersonFS/komparo.py:1031 PersonFS/komparo.py:1033 PersonFS/komparo.py:1035
+#: PersonFS/komparo.py:1039 PersonFS/komparo.py:1041 PersonFS/komparo.py:1043
 msgid "Familioj"
 msgstr "Families"
 
-#: PersonFS/komparo.py:1045 PersonFS/komparo.py:1047 PersonFS/komparo.py:1049
+#: PersonFS/komparo.py:1053 PersonFS/komparo.py:1055 PersonFS/komparo.py:1057
 msgid "Faktoj"
 msgstr "Facts"
 
@@ -630,8 +634,7 @@ msgstr "Personfs preferences"
 msgid "Alklakante la Apliki-Butonon, mi konsentas\nPersonFS ŝatus scii viajn bazajn FamilySearch-profilinformojn kaj alirdatenojn pri viaj prapatroj de la FamilySearch genealogia arbo.\nPersonFS uzos ĉi tiujn informojn konforme al iliaj respektivaj servokondiĉoj kaj privatecaj politikoj.\n"
 msgstr ""
 "By clicking on the App button, I agree \n"
-"personfs would like to know your basic FamilySearch profile information and "
-"access dating about your ancestors of the FamilySearch Genealogical Tree.\n"
+"personfs would like to know your basic FamilySearch profile information and access dating about your ancestors of the FamilySearch Genealogical Tree.\n"
 
 #: PersonFS/PersonFS.glade:171
 msgid "FamilySearch identeco :"
@@ -647,10 +650,7 @@ msgstr "turn on automatic tagging"
 
 #: PersonFS/PersonFS.glade:222
 msgid "Se ĉi tiu skatolo estas nemarkita, la etikedoj ne estos kreitaj per la «gramplet», nek per la importo. Nur la ilo \"FamilySearch : Komparo\" difinos la etikedojn."
-msgstr ""
-"If this box is unmarked, the tags will not be created by the \"Grampment\" "
-"or the import. Only the tool \"FamilySearch: Comparison\" will define the "
-"tags."
+msgstr "If this box is unmarked, the tags will not be created by the \"Grampment\" or the import. Only the tool \"FamilySearch: Comparison\" will define the tags."
 
 #: PersonFS/PersonFS.glade:271
 msgid "Ligi"
@@ -718,9 +718,7 @@ msgstr "marked as conforming"
 
 #: PersonFS/PersonFS.glade:808
 msgid "Statuso de esencaj informoj (precipa nomo/antaŭnomo, sekso, datoj de naskiĝo kaj morto)"
-msgstr ""
-"Status of essential information (main name/first name, gender, dates of "
-"birth and death)"
+msgstr "Status of essential information (main name/first name, gender, dates of birth and death)"
 
 #: PersonFS/PersonFS.glade:828
 msgid "Statuso de familiaj ligoj (gepatroj, geedzoj, infanoj)"

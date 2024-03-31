@@ -39,7 +39,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gramps 5.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-08 15:54+0100\n"
+"POT-Creation-Date: 2024-03-31 22:36+0200\n"
 "PO-Revision-Date: 2024-03-06 20:39+0200\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew (Israel) <https://hosted.weblate.org/projects/gramps-project/gramps/he/>\n"
@@ -50,247 +50,247 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: PersonFS/Importo.py:66 PersonFS/PersonFS.py:75
+#: PersonFS/Importo.py:67 PersonFS/PersonFS.py:76
 #, python-format
 msgid "gedcomx_v1 ne trovita aŭ < %s"
 msgstr "gedcomx_v1 לא נמצא < %s"
 
-#: PersonFS/Importo.py:218
+#: PersonFS/Importo.py:219
 msgid "Konstrui FSID listo por lokoj"
 msgstr "בנית רשימת FSID למקומות"
 
-#: PersonFS/Importo.py:478 PersonFS/Importo.py:479 PersonFS/Importo.py:510
+#: PersonFS/Importo.py:484 PersonFS/Importo.py:485 PersonFS/Importo.py:516
 msgid "Repository"
 msgstr "מאגר"
 
-#: PersonFS/Importo.py:480 PersonFS/Importo.py:481 PersonFS/Importo.py:508
+#: PersonFS/Importo.py:486 PersonFS/Importo.py:487 PersonFS/Importo.py:514
 msgid "Source:"
 msgstr "מקור:"
 
-#: PersonFS/Importo.py:482 PersonFS/Importo.py:483 PersonFS/Importo.py:506
+#: PersonFS/Importo.py:488 PersonFS/Importo.py:489 PersonFS/Importo.py:512
 msgid "Volume/Page:"
 msgstr "כרך/עמוד:"
 
-#: PersonFS/Importo.py:484 PersonFS/Importo.py:485 PersonFS/Importo.py:511
+#: PersonFS/Importo.py:490 PersonFS/Importo.py:491 PersonFS/Importo.py:517
 msgid "Confidence:"
 msgstr "ודאות:"
 
-#: PersonFS/Importo.py:543 PersonFS/Importo.py:651
+#: PersonFS/Importo.py:550 PersonFS/Importo.py:671
 msgid "Very High"
 msgstr "גבוהה מאוד"
 
-#: PersonFS/Importo.py:545 PersonFS/Importo.py:653
+#: PersonFS/Importo.py:552 PersonFS/Importo.py:673
 msgid "High"
 msgstr "גבוהה"
 
-#: PersonFS/Importo.py:547 PersonFS/Importo.py:655
+#: PersonFS/Importo.py:554 PersonFS/Importo.py:675
 msgid "Normal"
 msgstr "תיקנית"
 
-#: PersonFS/Importo.py:549 PersonFS/Importo.py:657
+#: PersonFS/Importo.py:556 PersonFS/Importo.py:677
 msgid "Low"
 msgstr "נמוכה"
 
-#: PersonFS/Importo.py:551 PersonFS/Importo.py:659
+#: PersonFS/Importo.py:558 PersonFS/Importo.py:679
 msgid "Very Low"
 msgstr "נמוכה מאוד"
 
-#: PersonFS/Importo.py:630 PersonFS/Importo.py:673 PersonFS/utila.py:111
+#: PersonFS/Importo.py:629 PersonFS/Importo.py:689 PersonFS/utila.py:111
 msgid "Internet Address"
 msgstr "כתובת מרשתת"
 
-#: PersonFS/Importo.py:787
+#: PersonFS/Importo.py:814
 msgid "FamilySearch Importo"
 msgstr "FamilySearch יבוא"
 
-#: PersonFS/Importo.py:787 PersonFS/komparo.py:111
+#: PersonFS/Importo.py:814 PersonFS/komparo.py:111
 msgid "Starting"
 msgstr "החלה"
 
-#: PersonFS/Importo.py:796
+#: PersonFS/Importo.py:823
 msgid "Konstrui FSID listo (1/11)"
 msgstr "בנית רשימת FSID (1/11)"
 
-#: PersonFS/Importo.py:802
+#: PersonFS/Importo.py:829
 msgid "«FamilySearch» ekzistanta ID"
 msgstr "«FamilySearch» מזהה קיים"
 
-#: PersonFS/Importo.py:804 PersonFS/Importo.py:808
+#: PersonFS/Importo.py:831 PersonFS/Importo.py:835
 #, python-format
 msgid "«FamilySearch» duplikata ID : %s "
 msgstr "«FamilySearch» מזהה כפול: %s "
 
-#: PersonFS/Importo.py:807
+#: PersonFS/Importo.py:834
 msgid "Duplikata FSFTID"
 msgstr "שכפול FSFTID"
 
-#: PersonFS/Importo.py:809
+#: PersonFS/Importo.py:836
 msgid "_Daŭru averton"
 msgstr "_להזהיר"
 
-#: PersonFS/Importo.py:809
+#: PersonFS/Importo.py:836
 msgid "_Ĉesu averton"
 msgstr "_לא להזהיר"
 
-#: PersonFS/Importo.py:817
+#: PersonFS/Importo.py:844
 msgid "Ne konekta al FamilySearch"
 msgstr "לא מחוברל־FamilySearch"
 
-#: PersonFS/Importo.py:819
+#: PersonFS/Importo.py:846
 msgid "Konstrui FSID listo por lokoj (2/11)"
 msgstr "בנית רשימת FSID (2/11) למקומות"
 
-#: PersonFS/Importo.py:871
+#: PersonFS/Importo.py:898
 msgid "Elŝutante personojn… (3/11)"
 msgstr "יבוא אנשים ... (3/11)"
 
-#: PersonFS/Importo.py:872
+#: PersonFS/Importo.py:899
 msgid "Elŝutante personon…"
 msgstr "יבוא אדם..."
 
-#: PersonFS/Importo.py:876
+#: PersonFS/Importo.py:903
 msgid "Elŝutante ascendantojn… (4/11)"
 msgstr "יבוא אבות־קדמונים… (4/11)"
 
-#: PersonFS/Importo.py:885
+#: PersonFS/Importo.py:912
 #, python-format
 msgid "Elŝutante %d generaciojn de ascendantojn…"
 msgstr "יבוא %d דורות אבות קדמונים..."
 
-#: PersonFS/Importo.py:888
+#: PersonFS/Importo.py:915
 msgid "Elŝutante posteulojn… (5/11)"
 msgstr "יבוא צאצאים ... (5/11)"
 
-#: PersonFS/Importo.py:896
+#: PersonFS/Importo.py:923
 #, python-format
 msgid "Elŝutante %d generaciojn de posteulojn…"
 msgstr "יבוא %d דורות צאצאים..."
 
-#: PersonFS/Importo.py:903
+#: PersonFS/Importo.py:930
 msgid "Elŝutante edzojn… (6/11)"
 msgstr "יבוא זוגאים ... (6/11)"
 
-#: PersonFS/Importo.py:904
+#: PersonFS/Importo.py:931
 msgid "Elŝutante edzojn…"
 msgstr "יבוא זוגאים..."
 
-#: PersonFS/Importo.py:909
+#: PersonFS/Importo.py:936
 msgid "Elŝutante notojn… (7/11)"
 msgstr "יבוא הערות … (7/11)"
 
-#: PersonFS/Importo.py:910
+#: PersonFS/Importo.py:937
 msgid "Elŝutante notojn kaj fontojn…"
 msgstr "יבוא הערות ומקורות..."
 
-#: PersonFS/Importo.py:931
+#: PersonFS/Importo.py:958
 msgid "Importado…"
 msgstr "יבוא ..."
 
-#: PersonFS/Importo.py:942
+#: PersonFS/Importo.py:969
 msgid "Importado de lokoj… (8/11)"
 msgstr "יבוא מקומות… (8/11)"
 
-#: PersonFS/Importo.py:943
+#: PersonFS/Importo.py:970
 msgid "Importado de lokoj…"
 msgstr "יבוא מקומות..."
 
-#: PersonFS/Importo.py:947
+#: PersonFS/Importo.py:974
 msgid "Importado de personoj… (9/11)"
 msgstr "יבוא אנשים ... (9/11)"
 
-#: PersonFS/Importo.py:948
+#: PersonFS/Importo.py:975
 msgid "Importado de personoj…"
 msgstr "יבוא אנשים..."
 
-#: PersonFS/Importo.py:953
+#: PersonFS/Importo.py:980
 msgid "Importado de familioj… (10/11)"
 msgstr "יבוא משפחות ... (10/11)"
 
-#: PersonFS/Importo.py:954
+#: PersonFS/Importo.py:981
 msgid "Importado de familioj…"
 msgstr "יבוא משפחות..."
 
-#: PersonFS/Importo.py:960
+#: PersonFS/Importo.py:987
 msgid "Importado de infanoj… (11/11)"
 msgstr "יבוא צאצאים ... (11/11)"
 
-#: PersonFS/Importo.py:961
+#: PersonFS/Importo.py:988
 msgid "Importado de infanoj…"
 msgstr "יבוא צאצאים..."
 
-#: PersonFS/Importo.py:1008 PersonFS/Importo.py:1066
+#: PersonFS/Importo.py:1035 PersonFS/Importo.py:1093
 msgid "sengepatra familio ???"
 msgstr "משפחת הורה ???"
 
-#: PersonFS/Importo.py:1125
+#: PersonFS/Importo.py:1152
 msgid "Kromprogramoj"
 msgstr "מתקעים"
 
-#: PersonFS/Importo.py:1132 PersonFS/Importo.py:1187
+#: PersonFS/Importo.py:1159 PersonFS/Importo.py:1214
 msgid "FamilySearch Importo Opcionoj"
 msgstr "אפשרויות יבוא מ־FamilySearch"
 
-#: PersonFS/Importo.py:1133
+#: PersonFS/Importo.py:1160
 msgid "FamilySearch ID"
 msgstr "FamilySearch מזהה"
 
-#: PersonFS/Importo.py:1134
+#: PersonFS/Importo.py:1161
 msgid "identiga numero por esti prenita de FamilySearch retejo"
 msgstr "מספר מזהה שיילקח מאתר FamilySearch"
 
-#: PersonFS/Importo.py:1136
+#: PersonFS/Importo.py:1163
 msgid "Nombro ascentontaj"
 msgstr "מספר עולה"
 
-#: PersonFS/Importo.py:1137
+#: PersonFS/Importo.py:1164
 msgid "Nombro de generacioj por supreniri"
 msgstr "מספר דורות אחורה"
 
-#: PersonFS/Importo.py:1139
+#: PersonFS/Importo.py:1166
 msgid "Nombro descendontaj"
 msgstr "מספר יורד"
 
-#: PersonFS/Importo.py:1140
+#: PersonFS/Importo.py:1167
 msgid "Nombro de generacioj descendontaj"
 msgstr "מספר דורות קדימה"
 
-#: PersonFS/Importo.py:1142
+#: PersonFS/Importo.py:1169
 msgid "Ne reimporti ekzistantajn personojn"
 msgstr "לא להוריד אדם שכבר קיים"
 
-#: PersonFS/Importo.py:1143
+#: PersonFS/Importo.py:1170
 msgid "Importi nur neekzistantajn personojn"
 msgstr "ליבא רק אנשים שלא קיימים כבר בגרמפס"
 
-#: PersonFS/Importo.py:1145
+#: PersonFS/Importo.py:1172
 msgid "Aldoni geedzoj"
 msgstr "הוספת זוגאים"
 
-#: PersonFS/Importo.py:1146
+#: PersonFS/Importo.py:1173
 msgid "Aldoni informojn pri geedzoj"
 msgstr "הוספת מידע על זוגאי"
 
-#: PersonFS/Importo.py:1148 PersonFS/Importo.py:1149
+#: PersonFS/Importo.py:1175 PersonFS/Importo.py:1176
 msgid "Aldoni fontoj"
 msgstr "הוספת מקורות"
 
-#: PersonFS/Importo.py:1151 PersonFS/Importo.py:1152
+#: PersonFS/Importo.py:1178 PersonFS/Importo.py:1179
 msgid "Aldoni notoj"
 msgstr "הוספת הערות"
 
-#: PersonFS/Importo.py:1154
+#: PersonFS/Importo.py:1181
 msgid "Vorteco"
 msgstr "מילולי"
 
-#: PersonFS/Importo.py:1155
+#: PersonFS/Importo.py:1182
 msgid "Vorteca nivelo de 0 (minimuma) ĝis 3 (tre vorta)"
 msgstr "רמת מילולית בין 0 (מזערית) ל־3 (מילולית מאוד)"
 
-#: PersonFS/Importo.py:1159
+#: PersonFS/Importo.py:1186
 msgid "Menuo Aldonita"
 msgstr "תפריט התווסף"
 
-#: PersonFS/Importo.py:1181
+#: PersonFS/Importo.py:1208
 msgid "FamilySearch Import Tool"
 msgstr "FamilySearchכלי יבוא נתונים מ־"
 
@@ -322,150 +322,158 @@ msgstr "FamilySearch: השוואה"
 msgid "FamilySearch : kompari gramps personojn kun FS personojn."
 msgstr "FamilySearch: השוואה בין אנשים בגראמפס לאנשים ב־FS."
 
-#: PersonFS/PersonFS.py:204
+#: PersonFS/PersonFS.py:205
 msgid "Pasvorta erraro. La funkcioj de FamilySearch ne estos disponeblaj."
 msgstr "שגיאת ססמה. תיפקודי FamilySearch לא יהיו זמינים."
 
-#: PersonFS/PersonFS.py:206 PersonFS/PersonFS.py:237
+#: PersonFS/PersonFS.py:207 PersonFS/PersonFS.py:238
 msgid "Malsukcesa konekto. La funkcioj de FamilySearch ne estos disponeblaj."
 msgstr "חיבור כשל. תכונות FamilySearch לא יהיו זמינות."
 
-#: PersonFS/PersonFS.py:234
+#: PersonFS/PersonFS.py:235
 msgid "Pasvorta eraro. La funkcioj de FamilySearch ne estos disponeblaj."
 msgstr "שגיאת ססמה. תיפקודי FamilySearch לא יהיו זמינים."
 
-#: PersonFS/PersonFS.py:651
+#: PersonFS/PersonFS.py:569
+msgid "\tTitolo estas postulata.\n\nAldonu citaĵotipan noton al via citaĵo:\nla unua linio servos kiel titolo."
+msgstr ""
+"\ttitle נדרש. \n"
+" \n"
+"aldonu הצעת מחיר סוג הערה לציטוט שלך: \n"
+" השורה הראשונה תשמש כותרת."
+
+#: PersonFS/PersonFS.py:686
 msgid "kopii al gramps"
 msgstr "העתקה לגרמפס"
 
-#: PersonFS/PersonFS.py:786
+#: PersonFS/PersonFS.py:821
 #, python-format
 msgid "Redakti : %s - %s - %s"
 msgstr "עריכה: %s - %s - %s"
 
-#: PersonFS/PersonFS.py:791
+#: PersonFS/PersonFS.py:826
 msgid "Kopii elekton de gramps al FS"
 msgstr "העתקת בחירה מגרמפס ל־FS"
 
-#: PersonFS/PersonFS.py:796
+#: PersonFS/PersonFS.py:831
 msgid "Kopii elekton de FS al gramps"
 msgstr "העתקת בחירה מ־FS לגרמפס"
 
-#: PersonFS/PersonFS.py:858
+#: PersonFS/PersonFS.py:893
 msgid "Pardonu, nur edzaj, eventaj, nomaj aŭ notaj linioj povas esti elektitaj."
 msgstr "לתשומת לב, ניתן לסמן ולבחור רק בשורות: שם, מצב משפחתי, אירוע, או הערה."
 
-#: PersonFS/PersonFS.py:864 PersonFS/PersonFS.py:879 PersonFS/PersonFS.py:894
+#: PersonFS/PersonFS.py:899 PersonFS/PersonFS.py:914 PersonFS/PersonFS.py:929
 msgid "Koloro"
 msgstr "צבע"
 
-#: PersonFS/PersonFS.py:865 PersonFS/PersonFS.py:880
+#: PersonFS/PersonFS.py:900 PersonFS/PersonFS.py:915
 msgid "Propreco"
 msgstr "תקינות"
 
-#: PersonFS/PersonFS.py:866 PersonFS/PersonFS.py:895
+#: PersonFS/PersonFS.py:901 PersonFS/PersonFS.py:930
 msgid "Dato"
 msgstr "תאריך"
 
-#: PersonFS/PersonFS.py:867 PersonFS/PersonFS.py:882
+#: PersonFS/PersonFS.py:902 PersonFS/PersonFS.py:917
 msgid "Gramps Valoro"
 msgstr "ערך בגרמפס"
 
-#: PersonFS/PersonFS.py:868 PersonFS/PersonFS.py:898
+#: PersonFS/PersonFS.py:903 PersonFS/PersonFS.py:933
 msgid "FS Dato"
 msgstr "תאריך ב־FS"
 
-#: PersonFS/PersonFS.py:869 PersonFS/PersonFS.py:884
+#: PersonFS/PersonFS.py:904 PersonFS/PersonFS.py:919
 msgid "FS Valoro"
 msgstr "FS ערך ב־"
 
-#: PersonFS/PersonFS.py:872 PersonFS/PersonFS.py:887 PersonFS/PersonFS.py:902
+#: PersonFS/PersonFS.py:907 PersonFS/PersonFS.py:922 PersonFS/PersonFS.py:937
 msgid "xTipo"
 msgstr "xסוג"
 
-#: PersonFS/PersonFS.py:873 PersonFS/PersonFS.py:888 PersonFS/PersonFS.py:903
+#: PersonFS/PersonFS.py:908 PersonFS/PersonFS.py:923 PersonFS/PersonFS.py:938
 msgid "xGr"
 msgstr "xgr"
 
-#: PersonFS/PersonFS.py:874 PersonFS/PersonFS.py:889 PersonFS/PersonFS.py:904
+#: PersonFS/PersonFS.py:909 PersonFS/PersonFS.py:924 PersonFS/PersonFS.py:939
 msgid "xFs"
 msgstr "xfs"
 
-#: PersonFS/PersonFS.py:875 PersonFS/PersonFS.py:890 PersonFS/PersonFS.py:905
+#: PersonFS/PersonFS.py:910 PersonFS/PersonFS.py:925 PersonFS/PersonFS.py:940
 msgid "xGr2"
 msgstr "xgr2"
 
-#: PersonFS/PersonFS.py:876 PersonFS/PersonFS.py:891 PersonFS/PersonFS.py:906
+#: PersonFS/PersonFS.py:911 PersonFS/PersonFS.py:926 PersonFS/PersonFS.py:941
 msgid "xFs2"
 msgstr "xfs2"
 
-#: PersonFS/PersonFS.py:881 PersonFS/PersonFS.py:896
+#: PersonFS/PersonFS.py:916 PersonFS/PersonFS.py:931
 msgid "Titolo"
 msgstr "כותרת"
 
-#: PersonFS/PersonFS.py:883 PersonFS/PersonFS.py:899
+#: PersonFS/PersonFS.py:918 PersonFS/PersonFS.py:934
 msgid "FS Titolo"
 msgstr "כותרת ב־FS"
 
-#: PersonFS/PersonFS.py:897
+#: PersonFS/PersonFS.py:932
 msgid "Gramps URL"
 msgstr "מען־URL גרמפס"
 
-#: PersonFS/PersonFS.py:900
+#: PersonFS/PersonFS.py:935
 msgid "FS URL"
 msgstr "FS URLמען־"
 
-#: PersonFS/PersonFS.py:929 PersonFS/komparo.py:1133 PersonFS/utila.py:144
+#: PersonFS/PersonFS.py:964 PersonFS/komparo.py:1141 PersonFS/utila.py:144
 msgid "FamilySearch etikedoj"
 msgstr "FamilySearch תגי"
 
-#: PersonFS/PersonFS.py:1133 PersonFS/PersonFS.py:1177
+#: PersonFS/PersonFS.py:1168 PersonFS/PersonFS.py:1212
 msgid "score"
 msgstr "ציון"
 
-#: PersonFS/PersonFS.py:1134 PersonFS/PersonFS.py:1178
+#: PersonFS/PersonFS.py:1169 PersonFS/PersonFS.py:1213
 msgid "FS Id"
 msgstr "FS מזהה"
 
-#: PersonFS/PersonFS.py:1135 PersonFS/PersonFS.py:1179
+#: PersonFS/PersonFS.py:1170 PersonFS/PersonFS.py:1214
 msgid "Nomo, antaŭnomo"
 msgstr "שם משפחה, שם פרטי"
 
-#: PersonFS/PersonFS.py:1136 PersonFS/PersonFS.py:1180
+#: PersonFS/PersonFS.py:1171 PersonFS/PersonFS.py:1215
 msgid "Birth"
 msgstr "לידה"
 
-#: PersonFS/PersonFS.py:1137 PersonFS/PersonFS.py:1181
+#: PersonFS/PersonFS.py:1172 PersonFS/PersonFS.py:1216
 msgid "Death"
 msgstr "פטירה"
 
-#: PersonFS/PersonFS.py:1138 PersonFS/PersonFS.py:1182
+#: PersonFS/PersonFS.py:1173 PersonFS/PersonFS.py:1217
 msgid "Parents"
 msgstr "הורים"
 
-#: PersonFS/PersonFS.py:1139 PersonFS/PersonFS.py:1183
+#: PersonFS/PersonFS.py:1174 PersonFS/PersonFS.py:1218
 msgid "Spouses"
 msgstr "זוגאי"
 
-#: PersonFS/PersonFS.py:1157
+#: PersonFS/PersonFS.py:1192
 msgid "Eraro: neniuj datumoj."
 msgstr "שגיאה: אין נתונים."
 
-#: PersonFS/PersonFS.py:1165
+#: PersonFS/PersonFS.py:1200
 #, python-format
 msgid "Neniuj verŝajnaj duplikatoj por la persono %s trovita de la retejo \"FamilySearch\"."
 msgstr "לא נמצאה סבירות לשכפול אדם %s באתר FamilySearch."
 
-#: PersonFS/PersonFS.py:1505 PersonFS/PersonFS.py:1627 PersonFS/komparo.py:109
-#: PersonFS/komparo.py:981
+#: PersonFS/PersonFS.py:1540 PersonFS/PersonFS.py:1637 PersonFS/komparo.py:109
+#: PersonFS/komparo.py:989
 msgid "Ne konektita al FamilySearch"
 msgstr "FamilySearchלא מחובר ל־"
 
-#: PersonFS/PersonFS.py:1665 PersonFS/PersonFS.py:1671
+#: PersonFS/PersonFS.py:1675 PersonFS/PersonFS.py:1681
 msgid "Persono"
 msgstr "אדם"
 
-#: PersonFS/PersonFS.py:1748 PersonFS/PersonFS.py:1750
+#: PersonFS/PersonFS.py:1758 PersonFS/PersonFS.py:1760
 msgid "Familio"
 msgstr "משפחה"
 
@@ -580,32 +588,32 @@ msgid "Mother"
 msgstr "אם"
 
 #: PersonFS/komparo.py:554 PersonFS/komparo.py:573 PersonFS/komparo.py:635
-#: PersonFS/komparo.py:788
+#: PersonFS/komparo.py:796
 msgid "Spouse"
 msgstr "זוגאי"
 
-#: PersonFS/komparo.py:750 PersonFS/komparo.py:767 PersonFS/komparo.py:804
-#: PersonFS/komparo.py:819
+#: PersonFS/komparo.py:758 PersonFS/komparo.py:775 PersonFS/komparo.py:812
+#: PersonFS/komparo.py:827
 msgid "Child"
 msgstr "צאצא"
 
-#: PersonFS/komparo.py:988 PersonFS/komparo.py:990 PersonFS/komparo.py:992
+#: PersonFS/komparo.py:996 PersonFS/komparo.py:998 PersonFS/komparo.py:1000
 msgid "Esenco"
 msgstr "מהות"
 
-#: PersonFS/komparo.py:1002 PersonFS/komparo.py:1004 PersonFS/komparo.py:1006
+#: PersonFS/komparo.py:1010 PersonFS/komparo.py:1012 PersonFS/komparo.py:1014
 msgid "Aliaj nomoj"
 msgstr "שמות אחרים"
 
-#: PersonFS/komparo.py:1017 PersonFS/komparo.py:1019 PersonFS/komparo.py:1021
+#: PersonFS/komparo.py:1025 PersonFS/komparo.py:1027 PersonFS/komparo.py:1029
 msgid "Gepatroj"
 msgstr "הורים"
 
-#: PersonFS/komparo.py:1031 PersonFS/komparo.py:1033 PersonFS/komparo.py:1035
+#: PersonFS/komparo.py:1039 PersonFS/komparo.py:1041 PersonFS/komparo.py:1043
 msgid "Familioj"
 msgstr "משפחה"
 
-#: PersonFS/komparo.py:1045 PersonFS/komparo.py:1047 PersonFS/komparo.py:1049
+#: PersonFS/komparo.py:1053 PersonFS/komparo.py:1055 PersonFS/komparo.py:1057
 msgid "Faktoj"
 msgstr "נתונים"
 
@@ -757,9 +765,3 @@ msgstr "מקורות"
 msgid "Reĝimo :  "
 msgstr "מצב: "
 
-#, python-format
-#~ msgid "gedcomx ne trovita aŭ < %s"
-#~ msgstr "GEDCOMX not found or < %s"
-
-#~ msgid "x"
-#~ msgstr "x"

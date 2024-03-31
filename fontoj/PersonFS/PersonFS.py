@@ -609,6 +609,7 @@ class PersonFS(Gramplet):
               # et récupérer son id :
               if sd_id=='' and res.headers.get('x-entity-id') :
                 sd_id = res.headers['x-entity-id']
+                mFonto.id = sd_id
                 fsFonto.id = sd_id
                 fsFontoRef.id = sd_id
                 utila.ligi_gr_fs(self.dbstate.db,c,sd_id)
@@ -642,6 +643,7 @@ class PersonFS(Gramplet):
                 print(" res.status_code="+str(res.status_code))
                 print (res.headers)
                 print (res.text)
+          mFonto.alFS(fsFonto,fsFontoRef)
           fsP.sources.add(fsFontoRef)
           fsP.id = self.FSID
           fsTP.persons.add(fsP)
@@ -1606,7 +1608,7 @@ class PersonFS(Gramplet):
             fsTeksto = re.sub('[ \n\t]+',' ',fsTeksto)
           if fsDato == dato and fsTitolo==titolo and fsURL == grURL :
             koloro = "yellow"
-            if fsTeksto == teksto :
+            if (not fsTeksto and teksto=='') or (fsTeksto == teksto) :
               koloro = "green"
           fsFontIdj.pop(fsid)
         else :
