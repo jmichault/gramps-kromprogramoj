@@ -477,7 +477,7 @@ class MezaFonto:
           self.sTitolo = linioj[1]
           self.noto = self.noto + '\n'.join(linioj[2:])
     if len(fsSD.notes) :
-      self.noto = next(iter(fsSD.notes)).text
+      self.noto = next(iter(fsSD.notes)).text or ''
     if FSCitation and fsSD.resourceType == 'DEFAULT':
       linioj = FSCitation.split("\n") 
       for linio in linioj :
@@ -700,9 +700,9 @@ class MezaFonto:
         n = Note()
         tags=[]
         n.set_type(NoteType(NoteType.CITATION))
-        n.append(self.cTitolo)
+        n.append(self.cTitolo or '')
         tags.append(StyledTextTag(StyledTextTagType.BOLD, True,[(0, len(self.cTitolo))]))
-        n.append(self.noto)
+        n.append(self.noto or '')
         n.text.set_tags(tags)
         db.add_note(n, txn)
         db.commit_note(n, txn)
