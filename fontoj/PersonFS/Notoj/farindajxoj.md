@@ -17,6 +17,7 @@
   * idem pour : fiançailles
   * copie des notes personnepersonne et famillee de gramps vers FS.
   * copie de source vers FS : il faut le faire 2 fois, la première fois la source est créée, mais pas liée.
+  * positionner la langue lors des transferts vers FS. Notamment pour les noms.
 
 # à faire pour prochaine version
 ## prioritaires
@@ -38,7 +39,6 @@
   * import 1 clic : quelquefois les enfants ne sont pas tous importés.
   * naissance sans date dans gramps n'apparait pas ?
   * transfert d'une date «vers xxxx» devient «abt xxxx-00-00» au lieu de "abt xxxx»
-  * positionner la langue lors des transferts vers FS. Notamment pour les noms.
 * autres, gramplet :
   * lors d'un transfert vers FS, renseigner la langue.
   * copie d'un contrat de mariage vers FS : plutôt q'un mariage, mettre un mariage de droit coutumier  

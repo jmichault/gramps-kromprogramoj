@@ -298,8 +298,10 @@ class PersonFS(Gramplet):
     # on va construire 2 gedcomx_v1 :
     # fsTP va contenir la personne principale, avec ses évènements, notes, …
     fsTP = gedcomx_v1.Gedcomx()
+    fsTP.lang = PersonFS.lingvo
     # fsTR va contenir les personnes reliées, avec leurs évènement, notes, …
     fsTR = gedcomx_v1.Gedcomx()
+    fsTR.lang = PersonFS.lingvo
     # fsP est la personne principale
     fsP = gedcomx_v1.Person()
     for x in model:
@@ -424,6 +426,7 @@ class PersonFS(Gramplet):
           else : 
             fsNomo.type = "http://gedcomx.org/BirthName"
           fsNF = gedcomx_v1.NameForm()
+          fsNF.lang = PersonFS.lingvo
           fsNP = gedcomx_v1.NamePart()
           fsNP.type = "http://gedcomx.org/Surname"
           fsNP.value = grSurname
