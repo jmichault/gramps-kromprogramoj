@@ -536,15 +536,15 @@ class MezaFonto:
     self.noto = "" #
     self.kolekto = None
     self.kolektoUrl = None
-    s = db.get_source_from_handle(citation.source_handle)
-
-    if s :
-      self.sTitolo = s.title
-      if len(s.reporef_list)>0 :
-        dh = s.reporef_list[0].ref
-        d = db.get_repository_from_handle(dh)
-        if d :
-          self.deponejo = d.name
+    if citation.source_handle :
+      s = db.get_source_from_handle(citation.source_handle)
+      if s :
+        self.sTitolo = s.title
+        if len(s.reporef_list)>0 :
+          dh = s.reporef_list[0].ref
+          d = db.get_repository_from_handle(dh)
+          if d :
+            self.deponejo = d.name
     konfido = citation.get_confidence_level()
     if konfido == Citation.CONF_VERY_HIGH :
       self.konfido = _('Very High')

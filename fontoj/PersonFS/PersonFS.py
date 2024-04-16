@@ -621,7 +621,6 @@ class PersonFS(Gramplet):
               tmpFonto = gedcomx_v1.SourceDescription()
               tmpFonto.id = sd_id
               tmpFonto.title = mFonto.cTitolo
-              # FARINDAĴO : la mise à jour de la date ne fonctionne pas pour les sources FS
               tmpFonto.event = dict()
               tmpFonto.event['eventDate']=linio[1]
               tmpFonto.notes = mFonto.noto
@@ -992,6 +991,7 @@ class PersonFS(Gramplet):
         fsPersono.names=set()
         fsPersono.notes=set()
         fsPersono.sources=set()
+        fsPersono.evidence=set()
         fsPersono._gepatroj =set()
         fsPersono._infanoj=set()
         fsPersono._paroj=set()
@@ -1770,7 +1770,20 @@ class PersonFS(Gramplet):
       #    fsTitolo = fsNoto.subject
       #    self.modelKomp.add(['white',_('Familio'),'','============================',fsTitolo,fsTeksto,'',False,'NotoF',None,None,fsFam.id,fsNoto.id] )
     elif regximo == 'REG_bildoj' :
-      pass
+      datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/persons/%s/memories" % fsPerso.id)
+      gedcomx_v1.maljsonigi(PersonFS.fs_Tree,datumoj)
+      if not PersonFS.fs_Tree:
+        colFS = _('Ne konektita al FamilySearch')
+      else :
+        colFS = '===================='
+      mrl = grPersono.get_media_list()
+      for mr in mrl :
+        self.modelKomp.add(['white','','==========',mr.ref,'==========',colFS,'',False,'Bildo',None,None,None,None]  )
+      for e in fsPerso.evidence :
+        print("evidence : resource="+e.resource)
+        print("           resourceid="+e.resourceId)
+        self.modelKomp.add(['white','','==========','============================','==========',e.resource,'',False,'Bildo',None,None,None,None]  )
+      # FARINDAĴO
     else : # REG_cxefa
       kompRet = komparo.kompariFsGr(fsPerso, grPersono, self.dbstate.db, self.modelKomp,getfs)
       for row in self.modelKomp.model :
