@@ -211,18 +211,25 @@ class PersonFS(Gramplet):
                  }
         url = 'https://ident.familysearch.org/cis-web/oauth2/v3/token'
         r = tree._FsSeanco.post_url(url,data,headers)
-        if vorteco :
+        if vorteco and r :
           print(" étape client_credentials, r="+str(r))
           print("        , r.text="+r.text)
-        json = r.json()
-        if json and json.get('access_token') :
-          tree._FsSeanco.access_token = r.json()['access_token']
-          print("FamilySearch-ĵetono akirita")
-          tree._FsSeanco.logged = True
-          tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_KONEKTITA
-          return True
+        if r :
+          json = r.json()
+          if json and json.get('access_token') :
+            tree._FsSeanco.access_token = r.json()['access_token']
+            print("FamilySearch-ĵetono akirita")
+            tree._FsSeanco.logged = True
+            tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_KONEKTITA
+            return True
+          else:
+            print(" échec de connexion")
+            print("        , r.text="+r.text)
+            tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_PASVORTA_ERARO
+            return False
         else:
           print(" échec de connexion")
+          tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_PASVORTA_ERARO
           return False
 
   def aki_sesio(vokanto,vorteco=5):
@@ -317,12 +324,12 @@ class PersonFS(Gramplet):
       print("konektas al FS")
       tree._FsSeanco = gedcomx_v1.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, True, False, 2, PersonFS.lingvo)
       #tree._FsSeanco = gedcomx_v1.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, False, False, 2, PersonFS.lingvo)
-      if PersonFS.fs_client_id != '':
-        tree._FsSeanco.client_id=PersonFS.fs_client_id
-        tree._FsSeanco.login_password()
-      else :
-        self.login_openid(0)
-        #tree._FsSeanco.login()
+    if PersonFS.fs_client_id != '':
+      tree._FsSeanco.client_id=PersonFS.fs_client_id
+      tree._FsSeanco.login_password()
+    else :
+      self.login_openid(0)
+      #tree._FsSeanco.login()
     if tree._FsSeanco.stato == gedcomx_v1.fs_session.STATO_PASVORTA_ERARO :
       WarningDialog(_('Pasvorta eraro. La funkcioj de FamilySearch ne estos disponeblaj.'))
       return
