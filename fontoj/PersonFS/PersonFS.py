@@ -51,7 +51,7 @@ from gramps.gen.plug import Gramplet, PluginRegister
 from gramps.gen.utils.db import get_birth_or_fallback, get_death_or_fallback
 
 from gramps.gui.dialog import OptionDialog, OkDialog , WarningDialog
-from gramps.gui.editors import EditCitation, EditPerson, EditEvent
+from gramps.gui.editors import EditCitation, EditNote, EditPerson, EditEvent
 from gramps.gui.listmodel import ListModel, NOSORT, COLOR, TOGGLE
 from gramps.gui.viewmanager import run_plugin
 from gramps.gui.widgets.buttons import IconButton
@@ -94,6 +94,55 @@ import time
 
 #from objbrowser import browse ;browse(locals())
 #import pdb; pdb.set_trace()
+
+
+import gi
+gi.require_version("Gtk", "3.0")		# GUI toolkit
+gi.require_version("WebKit2", "4.0")	# Web content engine
+from gi.repository import Gtk, WebKit2
+
+class miniBrowser():
+
+    def __init__(self, *args, **kwargs):
+        self.code=''
+        # create window
+        self.main_window = Gtk.Window(title = "My Browser")
+        self.main_window.connect('destroy', Gtk.main_quit)	# connect the "destroy" trigger to Gtk.main_quit procedure
+        self.main_window.set_default_size(800, 800)		# set window size
+
+        # Create view for webpage
+        self.web_view = WebKit2.WebView()				# initialize webview
+        if len(args) >= 1:
+          self.web_view.load_uri(args[0])	# default homepage
+        else :
+          self.web_view.load_uri('https://google.com')	# default homepage
+        self.web_view.connect('notify::title', self.change_title)	# trigger: title change
+        self.web_view.connect('notify::uri', self.change_uri)	# trigger: webpage is loading
+        self.scrolled_window = Gtk.ScrolledWindow()		# scrolling window widget
+        self.scrolled_window.add(self.web_view)
+
+        # Add everything and initialize
+        self.vbox_container = Gtk.VBox()		# vertical box container
+        self.vbox_container.pack_start(self.scrolled_window, True, True, 0)
+        
+        self.main_window.add(self.vbox_container)
+        self.main_window.show_all()
+        Gtk.main()
+
+    def change_title(self, widget, frame):
+        print("change_title:"+self.web_view.get_title())
+        self.main_window.set_title(self.web_view.get_title())
+
+    def change_uri(self, widget, frame):
+        uri = self.web_view.get_uri()
+        print("change_uri:"+uri);
+        if uri[0:10]=='https://mi':
+          poscode=uri.find('code=')
+          if poscode>0 :
+            self.code= uri[poscode+5:]
+            print("change_url:code="+self.code)
+          self.main_window.close()
+
 
 #-------------------------------------------------------------------------
 #
@@ -139,9 +188,46 @@ class PersonFS(Gramplet):
   if not lingvo :
     lingvo = glocale.language[0]
 
-  def aki_sesio(vokanto,vorteco=0):
+  def login_openid(self,vorteco) :
+        # !!!! tests !!!! ne marche pas
+        # voir https://github.com/misbach/fs-auth/blob/master/index_raw.html
+        print("!!!Désolé, l'authentification de type «openid» n'a pas été testée")
+        tree._FsSeanco.logged = False
+        tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_LOGIN
+        appKey = 'a02j000000KTRjpAAH'
+        redirect = 'https://misbach.github.io/fs-auth/index_raw.html'
+        url = 'https://ident.familysearch.org/cis-web/oauth2/v3/authorization?response_type=code&scope=openid profile email qualifies_for_affiliate_account country&client_id='+appKey+'&redirect_uri='+redirect+'&username='+ tree._FsSeanco.username
+        # ouvrir une fenêtre de navigation
+        print("url= "+url)
+        main = miniBrowser(url)
+        print("code="+main.code)
+        headers= {"Accept": "application/json"}
+        headers.update ( {"Content-Type": "application/x-www-form-urlencoded"})
+        data = {
+                   "grant_type": 'authorization_code',
+                   "client_id": appKey,
+                   "code": main.code,
+                   "redirect_uri": redirect,
+                 }
+        url = 'https://ident.familysearch.org/cis-web/oauth2/v3/token'
+        r = tree._FsSeanco.post_url(url,data,headers)
+        if vorteco :
+          print(" étape client_credentials, r="+str(r))
+          print("        , r.text="+r.text)
+        json = r.json()
+        if json and json.get('access_token') :
+          tree._FsSeanco.access_token = r.json()['access_token']
+          print("FamilySearch-ĵetono akirita")
+          tree._FsSeanco.logged = True
+          tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_KONEKTITA
+          return True
+        else:
+          print(" échec de connexion")
+          return False
+
+  def aki_sesio(vokanto,vorteco=5):
     if not tree._FsSeanco:
-      if PersonFS.fs_sn == '' or PersonFS.fs_pasvorto == '':
+      if PersonFS.fs_sn == '' : #or PersonFS.fs_pasvorto == '':
         import locale, os
         gtk = Gtk.Builder()
         gtk.set_translation_domain("addon")
@@ -197,9 +283,12 @@ class PersonFS(Gramplet):
           tree._FsSeanco = gedcomx_v1.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, True, False, 2, PersonFS.lingvo)
         else :
           tree._FsSeanco = gedcomx_v1.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, False, False, 2, PersonFS.lingvo)
-          if PersonFS.fs_client_id != '':
-            tree._FsSeanco.client_id=PersonFS.fs_client_id
-        tree._FsSeanco.login()
+        if PersonFS.fs_client_id != '':
+          tree._FsSeanco.client_id=PersonFS.fs_client_id
+          tree._FsSeanco.login_password()
+        else :
+          self.login_openid(vorteco)
+          #tree._FsSeanco.login()
       print(" langage session FS = "+tree._FsSeanco.lingvo);
       if tree._FsSeanco.stato == gedcomx_v1.fs_session.STATO_PASVORTA_ERARO :
          WarningDialog(_('Pasvorta erraro. La funkcioj de FamilySearch ne estos disponeblaj.'))
@@ -222,7 +311,7 @@ class PersonFS(Gramplet):
 
 
   def konekti_FS(self):
-    if PersonFS.fs_sn == '' or PersonFS.fs_pasvorto == '':
+    if PersonFS.fs_sn == '' : #or PersonFS.fs_pasvorto == '':
       self.pref_clicked(None)
     if not tree._FsSeanco:
       print("konektas al FS")
@@ -230,7 +319,10 @@ class PersonFS(Gramplet):
       #tree._FsSeanco = gedcomx_v1.FsSession(PersonFS.fs_sn, PersonFS.fs_pasvorto, False, False, 2, PersonFS.lingvo)
       if PersonFS.fs_client_id != '':
         tree._FsSeanco.client_id=PersonFS.fs_client_id
-      tree._FsSeanco.login()
+        tree._FsSeanco.login_password()
+      else :
+        self.login_openid(0)
+        #tree._FsSeanco.login()
     if tree._FsSeanco.stato == gedcomx_v1.fs_session.STATO_PASVORTA_ERARO :
       WarningDialog(_('Pasvorta eraro. La funkcioj de FamilySearch ne estos disponeblaj.'))
       return
@@ -256,6 +348,13 @@ class PersonFS(Gramplet):
       event = self.dbstate.db.get_event_from_handle(handle)
       try:
         EditEvent(self.dbstate, self.uistate, [], event)
+      except WindowActiveError:
+        pass
+    elif ( handle
+         and (tipo == 'NotoP' or tipo == 'NotoF' )) :
+      noto = self.dbstate.db.get_note_from_handle(model.get_value(iter_, 10))
+      try:
+        EditNote(self.dbstate, self.uistate, [], noto)
       except WindowActiveError:
         pass
     elif ( handle
@@ -298,8 +397,10 @@ class PersonFS(Gramplet):
     # on va construire 2 gedcomx_v1 :
     # fsTP va contenir la personne principale, avec ses évènements, notes, …
     fsTP = gedcomx_v1.Gedcomx()
+    fsTP.lang = PersonFS.lingvo
     # fsTR va contenir les personnes reliées, avec leurs évènement, notes, …
     fsTR = gedcomx_v1.Gedcomx()
+    fsTR.lang = PersonFS.lingvo
     # fsP est la personne principale
     fsP = gedcomx_v1.Person()
     for x in model:
@@ -424,6 +525,7 @@ class PersonFS(Gramplet):
           else : 
             fsNomo.type = "http://gedcomx.org/BirthName"
           fsNF = gedcomx_v1.NameForm()
+          fsNF.lang = PersonFS.lingvo
           fsNP = gedcomx_v1.NamePart()
           fsNP.type = "http://gedcomx.org/Surname"
           fsNP.value = grSurname
@@ -618,7 +720,6 @@ class PersonFS(Gramplet):
               tmpFonto = gedcomx_v1.SourceDescription()
               tmpFonto.id = sd_id
               tmpFonto.title = mFonto.cTitolo
-              # FARINDAĴO : la mise à jour de la date ne fonctionne pas pour les sources FS
               tmpFonto.event = dict()
               tmpFonto.event['eventDate']=linio[1]
               tmpFonto.notes = mFonto.noto
@@ -989,6 +1090,7 @@ class PersonFS(Gramplet):
         fsPersono.names=set()
         fsPersono.notes=set()
         fsPersono.sources=set()
+        fsPersono.evidence=set()
         fsPersono._gepatroj =set()
         fsPersono._infanoj=set()
         fsPersono._paroj=set()
@@ -1672,7 +1774,7 @@ class PersonFS(Gramplet):
           koloro = "green"
         else :
           koloro = "yellow"
-        self.modelKomp.add([koloro,_('Persono'),titolo,teksto,fsTitolo,fsTeksto,'',False,'NotoP',None,nh,fsPerso.id,fsNoto_id] )
+        self.modelKomp.add([koloro,_('Persono'),titolo,teksto,fsTitolo,fsTeksto,'',False,'NotoP',person_handle,nh,fsPerso.id,fsNoto_id] )
       for fsNoto in fsNotoj :
         if fsNoto.id :
           print ("Note avec Id : "+fsNoto.id)
@@ -1767,7 +1869,21 @@ class PersonFS(Gramplet):
       #    fsTitolo = fsNoto.subject
       #    self.modelKomp.add(['white',_('Familio'),'','============================',fsTitolo,fsTeksto,'',False,'NotoF',None,None,fsFam.id,fsNoto.id] )
     elif regximo == 'REG_bildoj' :
-      pass
+      datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/persons/%s/memories" % fsPerso.id)
+      gedcomx_v1.maljsonigi(PersonFS.fs_Tree,datumoj)
+      if not PersonFS.fs_Tree:
+        colFS = _('Ne konektita al FamilySearch')
+      else :
+        colFS = '===================='
+      mrl = grPersono.get_media_list()
+      for mr in mrl :
+        m = self.dbstate.db.get_media_from_handle(mr.ref)
+        self.modelKomp.add(['white',m.desc,m.path,mr.ref,'==========',colFS,'',False,'Bildo',None,None,None,None]  )
+      for e in fsPerso.evidence :
+        print("evidence : resource="+e.resource)
+        print("           resourceid="+e.resourceId)
+        self.modelKomp.add(['white','','==========','============================','==========',e.resource,'',False,'Bildo',None,None,None,None]  )
+      # FARINDAĴO
     else : # REG_cxefa
       kompRet = komparo.kompariFsGr(fsPerso, grPersono, self.dbstate.db, self.modelKomp,getfs)
       for row in self.modelKomp.model :

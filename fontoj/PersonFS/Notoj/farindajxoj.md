@@ -17,14 +17,15 @@
   * idem pour : fiançailles
   * copie des notes personnepersonne et famillee de gramps vers FS.
   * copie de source vers FS : il faut le faire 2 fois, la première fois la source est créée, mais pas liée.
+  * positionner la langue lors des transferts vers FS. Notamment pour les noms.
 
 # à faire pour prochaine version
 ## prioritaires
 * bogues :
+  * mise à jour de source vers familysearch : la note n'est pas mise à jour.
   * mise à jour de source vers gramps : à voir.
   * copie de source vers gramps : «None» dans la note de citation si pas de note.
   * copie de source vers FS : rattacher au couple quand la source est attachée au couple ou à un évènement du couple.
-  * copie de source vers FS : la date n'est pas mise à jour pour les sources FS (la note est bien mise à jour).
   * recherche d'un individu : problèmes sur la deuxième recherche ?
   * import des parents : ne tient pas compte du type de lien
     * ex. : GP83-PXQ : Athanaze Lamothe, en nourrice chez Jean Nadal x Jeanne Daza.
@@ -38,7 +39,6 @@
   * import 1 clic : quelquefois les enfants ne sont pas tous importés.
   * naissance sans date dans gramps n'apparait pas ?
   * transfert d'une date «vers xxxx» devient «abt xxxx-00-00» au lieu de "abt xxxx»
-  * positionner la langue lors des transferts vers FS. Notamment pour les noms.
 * autres, gramplet :
   * lors d'un transfert vers FS, renseigner la langue.
   * copie d'un contrat de mariage vers FS : plutôt q'un mariage, mettre un mariage de droit coutumier  
@@ -72,6 +72,7 @@
 * traduction en français
 * mise à jour doc
 ## facultatifs
+* pouvoir importer un enfant, un conjoint, ou un parent individuellement.
 * maintenir un dictionnaire personne.fsid-handle.
 * maintenir un dictionnaire lieu.fsid-handle.
 * gedcomx : attributs inconnus :
