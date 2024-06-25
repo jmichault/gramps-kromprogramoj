@@ -4,15 +4,14 @@
 "i": "FamilySearch komparo",
 "t": 2,
 "d": "FamilySearch: Compare Gramps com pessoas com FS.",
-"v": "beta 2.0.40",
+"v": "beta 2.0.43",
 "g": "5.2",
 "s": 3,
 "z": "PersonFS.addon.tgz",
 "rm": [
 "gedcomx_v1",
 "packaging",
-"requests",
-"fake-useragent"
+"requests"
 ]
 },
 {
@@ -20,15 +19,14 @@
 "i": "Importo de FamilySearch",
 "t": 2,
 "d": "FamilySearch.",
-"v": "beta 2.0.40",
+"v": "beta 2.0.43",
 "g": "5.2",
 "s": 3,
 "z": "PersonFS.addon.tgz",
 "rm": [
 "gedcomx_v1",
 "packaging",
-"requests",
-"fake-useragent"
+"requests"
 ]
 },
 {
@@ -36,15 +34,14 @@
 "i": "FS Gramplet",
 "t": 10,
 "d": "Interface para o FamilySearch",
-"v": "beta 2.0.40",
+"v": "beta 2.0.43",
 "g": "5.2",
 "s": 3,
 "z": "PersonFS.addon.tgz",
 "rm": [
 "gedcomx_v1",
 "packaging",
-"requests",
-"fake-useragent"
+"requests"
 ]
 },
 {

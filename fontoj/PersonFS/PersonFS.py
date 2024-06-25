@@ -26,7 +26,6 @@ fs Gramplet.
 import json
 import re
 import email.utils
-from fake_useragent import UserAgent
 
 #-------------------------------------------------------------------------
 #
@@ -65,7 +64,7 @@ except ValueError:
 _ = _trans.gettext
 
 # gedcomx_v1 biblioteko. Instalu kun `pip install --user --upgrade --break-system-packages gedcomx_v1`
-mingedcomx="1.0.22"
+mingedcomx="1.0.23"
 import importlib
 from importlib.metadata import version
 try:
