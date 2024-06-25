@@ -26,6 +26,7 @@ fs Gramplet.
 import json
 import re
 import email.utils
+from fake_useragent import UserAgent
 
 #-------------------------------------------------------------------------
 #
@@ -64,7 +65,7 @@ except ValueError:
 _ = _trans.gettext
 
 # gedcomx_v1 biblioteko. Instalu kun `pip install --user --upgrade --break-system-packages gedcomx_v1`
-mingedcomx="1.0.21"
+mingedcomx="1.0.22"
 import importlib
 from importlib.metadata import version
 try:
@@ -82,6 +83,10 @@ import gedcomx_v1
 from constants import GRAMPS_GEDCOMX_FAKTOJ
 import fs_db
 import komparo
+try:
+  import minibrowser
+except:
+  pass
 import tree
 import utila
 import Importo
@@ -94,54 +99,6 @@ import time
 
 #from objbrowser import browse ;browse(locals())
 #import pdb; pdb.set_trace()
-
-
-import gi
-gi.require_version("Gtk", "3.0")		# GUI toolkit
-gi.require_version("WebKit2", "4.0")	# Web content engine
-from gi.repository import Gtk, WebKit2
-
-class miniBrowser():
-
-    def __init__(self, *args, **kwargs):
-        self.code=''
-        # create window
-        self.main_window = Gtk.Window(title = "My Browser")
-        self.main_window.connect('destroy', Gtk.main_quit)	# connect the "destroy" trigger to Gtk.main_quit procedure
-        self.main_window.set_default_size(800, 800)		# set window size
-
-        # Create view for webpage
-        self.web_view = WebKit2.WebView()				# initialize webview
-        if len(args) >= 1:
-          self.web_view.load_uri(args[0])	# default homepage
-        else :
-          self.web_view.load_uri('https://google.com')	# default homepage
-        self.web_view.connect('notify::title', self.change_title)	# trigger: title change
-        self.web_view.connect('notify::uri', self.change_uri)	# trigger: webpage is loading
-        self.scrolled_window = Gtk.ScrolledWindow()		# scrolling window widget
-        self.scrolled_window.add(self.web_view)
-
-        # Add everything and initialize
-        self.vbox_container = Gtk.VBox()		# vertical box container
-        self.vbox_container.pack_start(self.scrolled_window, True, True, 0)
-        
-        self.main_window.add(self.vbox_container)
-        self.main_window.show_all()
-        Gtk.main()
-
-    def change_title(self, widget, frame):
-        print("change_title:"+self.web_view.get_title())
-        self.main_window.set_title(self.web_view.get_title())
-
-    def change_uri(self, widget, frame):
-        uri = self.web_view.get_uri()
-        print("change_uri:"+uri);
-        if uri[0:10]=='https://mi':
-          poscode=uri.find('code=')
-          if poscode>0 :
-            self.code= uri[poscode+5:]
-            print("change_url:code="+self.code)
-          self.main_window.close()
 
 
 #-------------------------------------------------------------------------
@@ -167,6 +124,10 @@ class PersonFS(Gramplet):
   fs_sn = CONFIG.get("preferences.fs_sn")
   fs_pasvorto = ''
   fs_pasvorto = CONFIG.get("preferences.fs_pasvorto") #
+  if fs_pasvorto == '':
+    fs_pasvorto_konservi = False
+  else :
+    fs_pasvorto_konservi = True
   fs_client_id = CONFIG.get("preferences.fs_client_id") #
   # fs_etikedado = True se ne definita
   fs_etikedado = not CONFIG.get("preferences.fs_etikedado") == 'False'
@@ -188,53 +149,56 @@ class PersonFS(Gramplet):
   if not lingvo :
     lingvo = glocale.language[0]
 
-  def login_openid(self,vorteco) :
-        # !!!! tests !!!! ne marche pas
-        # voir https://github.com/misbach/fs-auth/blob/master/index_raw.html
-        print("!!!Désolé, l'authentification de type «openid» n'a pas été testée")
-        tree._FsSeanco.logged = False
-        tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_LOGIN
-        appKey = 'a02j000000KTRjpAAH'
-        redirect = 'https://misbach.github.io/fs-auth/index_raw.html'
-        url = 'https://ident.familysearch.org/cis-web/oauth2/v3/authorization?response_type=code&scope=openid profile email qualifies_for_affiliate_account country&client_id='+appKey+'&redirect_uri='+redirect+'&username='+ tree._FsSeanco.username
-        # ouvrir une fenêtre de navigation
-        print("url= "+url)
-        main = miniBrowser(url)
-        print("code="+main.code)
-        headers= {"Accept": "application/json"}
-        headers.update ( {"Content-Type": "application/x-www-form-urlencoded"})
-        data = {
-                   "grant_type": 'authorization_code',
-                   "client_id": appKey,
-                   "code": main.code,
-                   "redirect_uri": redirect,
-                 }
-        url = 'https://ident.familysearch.org/cis-web/oauth2/v3/token'
-        r = tree._FsSeanco.post_url(url,data,headers)
-        if vorteco and r :
-          print(" étape client_credentials, r="+str(r))
-          print("        , r.text="+r.text)
-        if r :
-          json = r.json()
-          if json and json.get('access_token') :
-            tree._FsSeanco.access_token = r.json()['access_token']
-            print("FamilySearch-ĵetono akirita")
-            tree._FsSeanco.logged = True
-            tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_KONEKTITA
-            return True
-          else:
-            print(" échec de connexion")
-            print("        , r.text="+r.text)
-            tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_PASVORTA_ERARO
-            return False
-        else:
-          print(" échec de connexion")
-          tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_PASVORTA_ERARO
-          return False
+  def login_browser(self,vorteco) :
+    try:
+      import minibrowser
+    except:
+      return False
+    # voir https://github.com/misbach/fs-auth/blob/master/index_raw.html
+    tree._FsSeanco.logged = False
+    tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_LOGIN
+    appKey = 'a02j000000KTRjpAAH'
+    redirect = 'https://misbach.github.io/fs-auth/index_raw.html'
+    url = 'https://ident.familysearch.org/cis-web/oauth2/v3/authorization?response_type=code&scope=openid profile email qualifies_for_affiliate_account country&client_id='+appKey+'&redirect_uri='+redirect+'&username='+ tree._FsSeanco.username
+    # ouvrir une fenêtre de navigation
+    print("url= "+url)
+    main = minibrowser.miniBrowser(url)
+    print("code="+main.code)
+    headers= {"Accept": "application/json"}
+    headers.update ( {"Content-Type": "application/x-www-form-urlencoded"})
+    data = {
+               "grant_type": 'authorization_code',
+               "client_id": appKey,
+               "code": main.code,
+               "redirect_uri": redirect,
+             }
+    url = 'https://ident.familysearch.org/cis-web/oauth2/v3/token'
+    r = tree._FsSeanco.post_url(url,data,headers)
+    if vorteco and r :
+      print(" étape client_credentials, r="+str(r))
+      print("        , r.text="+r.text)
+    if r :
+      json = r.json()
+      if json and json.get('access_token') :
+        tree._FsSeanco.access_token = r.json()['access_token']
+        print("FamilySearch-ĵetono akirita")
+        tree._FsSeanco.logged = True
+        tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_KONEKTITA
+        return True
+      else:
+        print(" échec de connexion")
+        print("        , r.text="+r.text)
+        tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_PASVORTA_ERARO
+        return False
+    else:
+      print(" échec de connexion")
+      tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_PASVORTA_ERARO
+      return False
+
 
   def aki_sesio(vokanto,vorteco=5):
     if not tree._FsSeanco:
-      if PersonFS.fs_sn == '' : #or PersonFS.fs_pasvorto == '':
+      if PersonFS.fs_sn == '' or PersonFS.fs_pasvorto == '':
         import locale, os
         gtk = Gtk.Builder()
         gtk.set_translation_domain("addon")
@@ -261,6 +225,8 @@ class PersonFS(Gramplet):
         xfsid.set_text(PersonFS.fs_sn)
         fspv = gtk.get_object("fspv_eniro")
         fspv.set_text(PersonFS.fs_pasvorto)
+        fspvk = gtk.get_object("fspv_konservi")
+        fspvk.set_active(PersonFS.fs_pasvorto_konservi)
         fsetik = gtk.get_object("fsetik_eniro")
         fsetik.set_active(PersonFS.fs_etikedado)
         top.show()
@@ -270,9 +236,10 @@ class PersonFS(Gramplet):
           PersonFS.fs_sn = xfsid.get_text()
           PersonFS.fs_pasvorto = fspv.get_text()
           PersonFS.fs_etikedado = fsetik.get_active()
-          print("PersonFS.fs_etikedado="+str(PersonFS.fs_etikedado))
           CONFIG.set("preferences.fs_sn", PersonFS.fs_sn)
-          #CONFIG.set("preferences.fs_pasvorto", PersonFS.fs_pasvorto) #
+          PersonFS.fs_pasvorto_konservi = fspvk.get_active()
+          if PersonFS.fs_pasvorto_konservi :
+            CONFIG.set("preferences.fs_pasvorto", PersonFS.fs_pasvorto) #
           CONFIG.set("preferences.fs_etikedado", str(PersonFS.fs_etikedado))
           CONFIG.save()
           if vorteco >= 3:
@@ -294,8 +261,11 @@ class PersonFS(Gramplet):
           tree._FsSeanco.client_id=PersonFS.fs_client_id
           tree._FsSeanco.login_password()
         else :
-          self.login_openid(vorteco)
-          #tree._FsSeanco.login()
+          tree._FsSeanco.login()
+          if not tree._FsSeanco.logged :
+            tree._FsSeanco.login_openid('a02j000000KTRjpAAH','https://misbach.github.io/fs-auth/index_raw.html')
+          if not tree._FsSeanco.logged :
+            self.login_browser(vorteco)
       print(" langage session FS = "+tree._FsSeanco.lingvo);
       if tree._FsSeanco.stato == gedcomx_v1.fs_session.STATO_PASVORTA_ERARO :
          WarningDialog(_('Pasvorta erraro. La funkcioj de FamilySearch ne estos disponeblaj.'))
@@ -318,7 +288,7 @@ class PersonFS(Gramplet):
 
 
   def konekti_FS(self):
-    if PersonFS.fs_sn == '' : #or PersonFS.fs_pasvorto == '':
+    if PersonFS.fs_sn == '' or PersonFS.fs_pasvorto == '':
       self.pref_clicked(None)
     if not tree._FsSeanco:
       print("konektas al FS")
@@ -328,8 +298,11 @@ class PersonFS(Gramplet):
       tree._FsSeanco.client_id=PersonFS.fs_client_id
       tree._FsSeanco.login_password()
     else :
-      self.login_openid(0)
-      #tree._FsSeanco.login()
+      tree._FsSeanco.login()
+      if not tree._FsSeanco.logged :
+        tree._FsSeanco.login_openid('a02j000000KTRjpAAH','https://misbach.github.io/fs-auth/index_raw.html')
+      if not tree._FsSeanco.logged :
+        self.login_browser(0)
     if tree._FsSeanco.stato == gedcomx_v1.fs_session.STATO_PASVORTA_ERARO :
       WarningDialog(_('Pasvorta eraro. La funkcioj de FamilySearch ne estos disponeblaj.'))
       return
@@ -1529,8 +1502,9 @@ class PersonFS(Gramplet):
     fssn.set_text(PersonFS.fs_sn)
     fspv = self.top.get_object("fspv_eniro")
     fspv.set_text(PersonFS.fs_pasvorto)
+    fspvk = self.top.get_object("fspv_konservi")
+    fspvk.set_active(PersonFS.fs_pasvorto_konservi)
     fsetik = self.top.get_object("fsetik_eniro")
-    print("fs_etikedado="+str(PersonFS.fs_etikedado))
     fsetik.set_active(PersonFS.fs_etikedado)
     top.show()
     res = top.run()
@@ -1541,7 +1515,9 @@ class PersonFS(Gramplet):
       PersonFS.fs_etikedado = fsetik.get_active()
       print("fs_etikedado="+str(PersonFS.fs_etikedado))
       CONFIG.set("preferences.fs_sn", PersonFS.fs_sn)
-      #CONFIG.set("preferences.fs_pasvorto", PersonFS.fs_pasvorto) #
+      PersonFS.fs_pasvorto_konservi = fspvk.get_active()
+      if PersonFS.fs_pasvorto_konservi :
+        CONFIG.set("preferences.fs_pasvorto", PersonFS.fs_pasvorto) #
       CONFIG.set("preferences.fs_etikedado", str(PersonFS.fs_etikedado))
       CONFIG.save()
       self.konekti_FS()
