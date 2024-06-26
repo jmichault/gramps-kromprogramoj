@@ -1088,8 +1088,8 @@ def kompariFsGr(fsPersono,grPersono,db,model=None,dupdok=False):
     if r and r.status_code != 200 :
       FS_Dup = False
     # Serĉi ĉu FamilySearch ofertas dokumentoj
-    mendo = "/service/tree/tree-data/record-matches/"+fsPersono.id
-    r = tree._FsSeanco.get_url( mendo ,{"Accept": "application/json,*/*"})
+    mendo = "https://www.familysearch.org/service/tree/tree-data/record-matches/"+fsPersono.id
+    r = tree._FsSeanco.get_url( mendo ,{"Accept": "application/json"})
     if r and r.status_code == 200 :
       try:
         j = r.json()

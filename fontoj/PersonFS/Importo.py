@@ -379,7 +379,7 @@ def akFontDatoj(fsTree):
     sd._collectionUri = None
     sd._collection = None
     
-    r = tree._FsSeanco.get_url("/service/tree/links/source/%s" % sd.id,{"Accept": "application/json"})
+    r = tree._FsSeanco.get_url("https://www.familysearch.org/service/tree/links/source/%s" % sd.id,{"Accept": "application/json"})
     if r and r.text :
       datumoj = r.json()
       print("akFonto : res="+str(datumoj))
