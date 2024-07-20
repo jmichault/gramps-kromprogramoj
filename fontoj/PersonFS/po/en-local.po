@@ -118,7 +118,7 @@ msgstr "«FamilySearch» Existing ID"
 #: PersonFS/Importo.py:831 PersonFS/Importo.py:835
 #, python-format
 msgid "«FamilySearch» duplikata ID : %s "
-msgstr "«FamilySearch» Duplicate ID: %S"
+msgstr "«FamilySearch» Duplicate ID: %s"
 
 #: PersonFS/Importo.py:834
 msgid "Duplikata FSFTID"
@@ -126,11 +126,11 @@ msgstr "Duplicate fsftid"
 
 #: PersonFS/Importo.py:836
 msgid "_Daŭru averton"
-msgstr "_Al a warning"
+msgstr "_Continue warning"
 
 #: PersonFS/Importo.py:836
 msgid "_Ĉesu averton"
-msgstr "_ Cell a warning"
+msgstr "_Stop warning"
 
 #: PersonFS/Importo.py:844
 msgid "Ne konekta al FamilySearch"
