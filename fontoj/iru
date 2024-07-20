@@ -18,6 +18,10 @@ if [ $# -gt 0 ] ; then
  fi
 fi
 
+if [ $# -gt 1 ] ; then
+  GREFFONS="$2"
+fi
+
 if [ $IRU_L == 1 ] ; then
  for G in $GREFFONS ; do
   # met à jour les fichiers .pot
