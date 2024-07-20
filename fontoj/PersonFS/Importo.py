@@ -149,12 +149,12 @@ def aldLoko(db, txn, pl):
     try:
       datumoj = r.json()
     except Exception as e:
-      self.write_log("WARNING: corrupted file from %s, error: %s" % (mendo, e))
+      print("WARNING: corrupted file from %s, error: %s" % (mendo, e))
       print(r.content)
       return None
   else:
     if r :
-      self.write_log("WARNING: Status code: %s" % r.status_code)
+      print("WARNING: Status code: %s" % r.status_code)
     return None
   if not 'places' in datumoj : return
   t = gedcomx_v1.Gedcomx()

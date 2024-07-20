@@ -1852,6 +1852,7 @@ class PersonFS(Gramplet):
       #    self.modelKomp.add(['white',_('Familio'),'','============================',fsTitolo,fsTeksto,'',False,'NotoF',None,None,fsFam.id,fsNoto.id] )
     elif regximo == 'REG_bildoj' :
       datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/persons/%s/memories" % fsPerso.id)
+      print("memories="+ json.dumps(datumoj))
       gedcomx_v1.maljsonigi(PersonFS.fs_Tree,datumoj)
       if not PersonFS.fs_Tree:
         colFS = _('Ne konektita al FamilySearch')

@@ -1093,14 +1093,14 @@ def kompariFsGr(fsPersono,grPersono,db,model=None,dupdok=False):
     if r and r.status_code == 200 :
       try:
         j = r.json()
-        if ( 'data' in j
+        if ( j and 'data' in j
             and 'matches' in j['data'] 
             and len(j['data']['matches']) >= 1 ) :
           FS_Dok = True
         else:
           FS_Dok = False
       except Exception as e:
-        self.write_log("WARNING: corrupted file from %s, error: %s" % (mendo, e))
+        print("WARNING: corrupted file from %s, error: %s" % (mendo, e))
         print(r.content)
   dbPersono.stat_dato = int(time.time())
   if ( FS_Identa 
