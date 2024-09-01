@@ -311,7 +311,10 @@ def aldFakto(db, txn, fsFakto, obj):
     e = db.get_event_from_handle(fakto.ref)
     grTipo = int(e.type) or e.type
     if ( grTipo == evtType ) :
-      if ( e.get_date_object() == grDato ):
+      if ( e.get_date_object() == grDato 
+           and ( e.get_place_handle() == grLokoHandle or (not e.get_place_handle() and not grLokoHandle))
+           and ( e.description == fsFaktoPriskribo or (not e.description and not fsFaktoPriskribo))
+         ):
         return e
       elif ( ( e.get_date_object().is_empty() and not grDato)
            and ( e.get_place_handle() == grLokoHandle or (not e.get_place_handle() and not grLokoHandle))
