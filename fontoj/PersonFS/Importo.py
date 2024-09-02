@@ -454,8 +454,8 @@ class MezaFonto:
   #
   def deFS(self, fsSD, fsSR):
     self.id = fsSD.id
-    self.deponejo = None
-    self.sTitolo = None
+    self.deponejo = 'FamilySearch'
+    self.sTitolo = 'FamilySearch'
     self.cTitolo = None
     self.posizio = None
     self.konfido = None
@@ -472,7 +472,12 @@ class MezaFonto:
     FSCitation = None
     if len(fsSD.citations):
       FSCitation = next(iter(fsSD.citations)).value
-    if fsSD.resourceType == 'FSREADONLY':
+    if fsSD.resourceType != 'FSREADONLY' and fsSD.resourceType != 'LEGACY' and fsSD.resourceType != 'DEFAULT' and fsSD.resourceType != 'IGI' :
+      print(" Type de ressource inconnu !!! : "+fsSD.resourceType)
+    if fsSD.resourceType == 'LEGACY':
+      self.sTitolo='Legacy NFS Sources'
+    #if fsSD.resourceType == 'FSREADONLY':
+    if fsSD.resourceType != 'DEFAULT':
       self.deponejo = 'FamilySearch'
       if FSCitation :
         linioj = FSCitation.split("\"") 
@@ -788,7 +793,7 @@ class FsAlGr:
     # fontoj
     for fsFonto in fsPersono.sources :
       c = aldFonto(db, txn, fsFonto.descriptionId,grPerson,grPerson.citation_list)
-      db.commit_person(grPerson,txn)
+      #db.commit_person(grPerson,txn)
     # FARINDAĴOJ : memoroj
     #for fsMemoro in fsPersono.memories :
       #print("memorie :")
