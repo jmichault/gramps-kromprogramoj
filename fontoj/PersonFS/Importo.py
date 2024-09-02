@@ -385,8 +385,7 @@ def akFontDatoj(fsTree):
     r = tree._FsSeanco.get_url("https://www.familysearch.org/service/tree/links/source/%s" % sd.id,{"Accept": "application/json"})
     if r and r.text :
       datumoj = r.json()
-      print("akFonto : res="+str(datumoj))
-      #gedcomx_v1.maljsonigi(fsTree,datumoj)
+      #print("akFonto : res="+str(datumoj))
       e = datumoj.get('event')
       if e:
         strFormal = e.get('eventDate')
@@ -941,7 +940,7 @@ class FsAlGr:
       self.fs_TreeImp.add_spouses(todo)
     # notoj , fontoj kaj memoroj
     if self.notoj or self.fontoj:
-      progress.set_pass(_('Elŝutante notojn… (7/11)'),len(self.fs_TreeImp.persons))
+      progress.set_pass(_('Elŝutante notojn… (7/11)'),len(self.fs_TreeImp.persons)+len(self.fs_TreeImp.relationships))
       print(_("Elŝutante notojn kaj fontojn…"))
       for fsPersono in self.fs_TreeImp.persons :
         progress.step()
@@ -951,12 +950,14 @@ class FsAlGr:
         gedcomx_v1.maljsonigi(self.fs_TreeImp,datumoj)
         datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/persons/%s/memories" % fsPersono.id)
         gedcomx_v1.maljsonigi(self.fs_TreeImp,datumoj)
+        akFontDatoj(self.fs_TreeImp)
       for fsFam in self.fs_TreeImp.relationships :
+        progress.step()
         datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/couple-relationships/%s/notes" % fsFam.id)
         gedcomx_v1.maljsonigi(self.fs_TreeImp,datumoj)
         datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/couple-relationships/%s/sources" % fsFam.id)
         gedcomx_v1.maljsonigi(self.fs_TreeImp,datumoj)
-      akFontDatoj(self.fs_TreeImp)
+        akFontDatoj(self.fs_TreeImp)
     if self.vorteco >= 3:
       rezulto = gedcomx_v1.jsonigi(self.fs_TreeImp)
       f = open('importo.out.json','w')
