@@ -472,7 +472,7 @@ class MezaFonto:
     if len(fsSD.citations):
       FSCitation = next(iter(fsSD.citations)).value
     if fsSD.resourceType != 'FSREADONLY' and fsSD.resourceType != 'LEGACY' and fsSD.resourceType != 'DEFAULT' and fsSD.resourceType != 'IGI' :
-      print(" Type de ressource inconnu !!! : "+fsSD.resourceType)
+      print(" Type de ressource inconnu !!! : "+str(fsSD.resourceType))
     if fsSD.resourceType == 'LEGACY':
       self.sTitolo='Legacy NFS Sources'
     #if fsSD.resourceType == 'FSREADONLY':

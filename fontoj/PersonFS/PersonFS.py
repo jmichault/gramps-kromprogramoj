@@ -51,7 +51,7 @@ from gramps.gen.plug import Gramplet, PluginRegister
 from gramps.gen.utils.db import get_birth_or_fallback, get_death_or_fallback
 
 from gramps.gui.dialog import OptionDialog, OkDialog , WarningDialog
-from gramps.gui.editors import EditCitation, EditNote, EditPerson, EditEvent
+from gramps.gui.editors import EditCitation, EditNote, EditPerson, EditEvent, EditMedia, EditMediaRef
 from gramps.gui.listmodel import ListModel, NOSORT, COLOR, TOGGLE
 from gramps.gui.viewmanager import run_plugin
 from gramps.gui.widgets.buttons import IconButton
@@ -85,6 +85,7 @@ import komparo
 try:
   import minibrowser
 except:
+  print (_('PersonFS : minibrowser ne havebla.'))
   pass
 import tree
 import utila
@@ -352,19 +353,25 @@ class PersonFS(Gramplet):
       return
     tipo=model.get_value(iter_, 8)
     handle = model.get_value(iter_, 9)
-    if ( handle
-         and ( tipo == 'infano' or tipo == 'patro'
-            or tipo == 'patrino' or tipo == 'edzo')) :
+    if not handle :
+      return
+    if ( tipo == 'infano' or tipo == 'patro'
+            or tipo == 'patrino' or tipo == 'edzo') :
       person = self.dbstate.db.get_person_from_handle(handle)
       try:
         EditPerson(self.dbstate, self.uistate, [], person)
       except WindowActiveError:
         pass
-    elif ( handle
-         and (tipo == 'fakto' or tipo == 'edzoFakto')) :
+    elif (tipo == 'fakto' or tipo == 'edzoFakto') :
       event = self.dbstate.db.get_event_from_handle(handle)
       try:
         EditEvent(self.dbstate, self.uistate, [], event)
+      except WindowActiveError:
+        pass
+    elif (tipo == 'Bildo' ) :
+      m = self.dbstate.db.get_media_from_handle(handle)
+      try:
+        EditMedia(self.dbstate, self.uistate, [],m)
       except WindowActiveError:
         pass
 
@@ -386,7 +393,7 @@ class PersonFS(Gramplet):
      l = [x]
      l.extend(x.iterchildren())
      for linio in l :
-      if linio[7] : 
+      if linio[7] : # si la ligne est cochée
         tipolinio = linio[8]
         if ( (tipolinio == 'fakto' or tipolinio == 'edzoFakto')
              and linio[9] ) :
@@ -519,7 +526,7 @@ class PersonFS(Gramplet):
           fsTP.persons.add(fsP)
         elif ( (tipolinio == 'edzo' )
              and linio[9] ) :
-          grEdzo = self.dbstate.db.get_person_from_handle(linio[8])
+          grEdzo = self.dbstate.db.get_person_from_handle(linio[9])
           fsTR = gedcomx_v1.Gedcomx()
           grFamilyHandle = linio[11]
           RSfsid = linio[12]
@@ -573,18 +580,28 @@ class PersonFS(Gramplet):
             fsCPRS.parent1 = gedcomx_v1.ResourceReference()
             fsCPRS.parent1.resourceId = utila.get_fsftid(gepatro1)
             fsCPRS.parent1.resource = "https://api.familysearch.org/platform/tree/persons/" + fsCPRS.parent1.resourceId
+            #fact1 = gedcomx_v1.Fact()
+            #fact1.type = "http://gedcomx.org/BiologicalParent"
+            #fact1.id = "C.1"
+            #fsCPRS.parent1Facts.add(fact1)
           spouse_handle = grFamily.get_mother_handle()
           if spouse_handle :
             gepatro2 = self.dbstate.db.get_person_from_handle(spouse_handle)
             fsCPRS.parent2 = gedcomx_v1.ResourceReference()
             fsCPRS.parent2.resourceId = utila.get_fsftid(gepatro2)
             fsCPRS.parent2.resource = "https://api.familysearch.org/platform/tree/persons/" + fsCPRS.parent2.resourceId
+            #fact2 = gedcomx_v1.Fact()
+            #fact2.type = "http://gedcomx.org/BiologicalParent"
+            #fact2.id = "C.2"
+            #fsCPRS.parent2Facts.add(fact2)
           fsTR.childAndParentsRelationships.add(fsCPRS)
           peto = gedcomx_v1.jsonigi(fsTR)
           jsonpeto = json.dumps(peto)
-          res = tree._FsSeanco.post_url( "/platform/tree/relationships", jsonpeto )
+          # exemple ici : https://www.familysearch.org/developers/docs/api/tree/Create_Child_and_Parents_Relationship_usecase
+          res = tree._FsSeanco.post_url( "/platform/tree/relationships", jsonpeto, headers={"Content-Type": "application/x-fs-v1+json"})
           if res and (res.status_code == 201 or res.status_code == 204):
             print("ĝisdatigo sukceso")
+            print(" jsonpeto = "+jsonpeto)
           elif not res :
             print("la ĝisdatigo ne havis rezulton por:")
             print(" jsonpeto = "+jsonpeto)
@@ -727,6 +744,8 @@ class PersonFS(Gramplet):
           fsP.sources.add(fsFontoRef)
           fsP.id = self.FSID
           fsTP.persons.add(fsP)
+        elif (tipolinio == 'Bildo' ) :
+          pass
      # FARINDAĴO : gepatroj, infanoj,…
 
     if len(fsTP.persons) >0 :
@@ -747,6 +766,51 @@ class PersonFS(Gramplet):
     if len(fsTP.persons) >0 or len(fsTR.relationships) >0 :
       self.ButRefresxigi_clicked(None)
     
+  def ligi(self, treeview):
+    print("ligi")
+    nbElek = 0
+    nbGr =0
+    nbFs =0
+    tipo1 = 'x'
+    tipo2 = 'y'
+    grHandle = None
+    fsid = None
+    model = self.modelKomp.model
+    for x in model:
+     l = [x]
+     l.extend(x.iterchildren())
+     for linio in l :
+      if linio[7] :
+        nbElek = nbElek + 1
+      else :
+        continue
+      tipolinio = linio[8]
+      if nbElek == 1 :
+        tipo1 = tipolinio
+      if nbElek == 2 :
+        tipo2 = tipolinio
+      gr_Handle = linio[9]
+      if gr_Handle :
+        grHandle = gr_Handle
+        nbGr = nbGr + 1
+      fs_id = linio[10]
+      if fs_id :
+        fsid = fs_id
+        nbFs = nbFs + 1
+    if nbElek==2 and nbGr==1 and nbFs==1 and tipo1 == tipo2 :
+      grObjekto = None
+      match tipo1 :
+        case 'Person'|'patro'|'patrino'|'edzo'|'infano' :
+          grObjekto = self.dbstate.db.get_person_from_handle(grHandle)
+        case 'fakto'|'edzoFakto' :
+          grObjekto = self.dbstate.db.get_event_from_handle(grHandle)
+        case 'Fonto' :
+          grObjekto = self.dbstate.db.get_citation_from_handle(grHandle)
+      utila.ligi_gr_fs(self.dbstate.db, grObjekto, fsid)
+      self.ButRefresxigi_clicked(None)
+      
+
+
   def kopii_al_gramps(self, treeview):
     print("kopii_al_gramps")
     model = self.modelKomp.model
@@ -897,12 +961,44 @@ class PersonFS(Gramplet):
          and (    tipo == 'infano' or tipo == 'patro'
                or tipo == 'patrino' or tipo == 'edzo'
                or tipo == 'fakto' or tipo == 'edzoFakto'
+               or tipo == 'Bildo'
             )) :
         item  = Gtk.MenuItem(label=_('Redakti : %s - %s - %s')% (model.get_value(iter_,1),model.get_value(iter_,2),model.get_value(iter_,3)))
         item.set_sensitive(1)
         item.connect("activate",lambda obj: self.redakti(treeview))
         item.show()
         menu.append(item)
+    model = self.modelKomp.model
+    nbElek = 0
+    nbGr =0
+    nbFs =0
+    tipo1 = 'x'
+    tipo2 = 'y'
+    for x in model:
+     l = [x]
+     l.extend(x.iterchildren())
+     for linio in l :
+      if linio[7] : 
+        nbElek = nbElek + 1
+      else :
+        continue
+      tipolinio = linio[8]
+      if nbElek == 1 :
+        tipo1 = tipolinio
+      if nbElek == 2 :
+        tipo2 = tipolinio
+      grHandle = linio[9]
+      if grHandle :
+        nbGr = nbGr + 1
+      fs_id = linio[10]
+      if fs_id :
+        nbFs = nbFs + 1
+    if nbElek==2 and nbGr==1 and nbFs==1 and tipo1 == tipo2 :
+      item  = Gtk.MenuItem(label=_('Ligi la du.'))
+      item.set_sensitive(1)
+      item.connect("activate",lambda obj: self.ligi(treeview))
+      item.show()
+      menu.append(item)
     item  = Gtk.MenuItem(label=_('Kopii elekton de gramps al FS'))
     item.set_sensitive(1)
     item.connect("activate",lambda obj: self.kopii_al_FS(treeview))
@@ -1852,7 +1948,6 @@ class PersonFS(Gramplet):
       #    self.modelKomp.add(['white',_('Familio'),'','============================',fsTitolo,fsTeksto,'',False,'NotoF',None,None,fsFam.id,fsNoto.id] )
     elif regximo == 'REG_bildoj' :
       datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/persons/%s/memories" % fsPerso.id)
-      print("memories="+ json.dumps(datumoj))
       gedcomx_v1.maljsonigi(PersonFS.fs_Tree,datumoj)
       if not PersonFS.fs_Tree:
         colFS = _('Ne konektita al FamilySearch')
@@ -1861,11 +1956,40 @@ class PersonFS(Gramplet):
       mrl = grPersono.get_media_list()
       for mr in mrl :
         m = self.dbstate.db.get_media_from_handle(mr.ref)
-        self.modelKomp.add(['white',m.desc,m.path,mr.ref,'==========',colFS,'',False,'Bildo',None,None,None,None]  )
+        dato = utila.grdato_al_formal(m.date)
+        self.modelKomp.add(['white',m.desc,dato,m.path,'==========',colFS,'',False,'Bildo',mr.ref,None,None,None]  )
       for e in fsPerso.evidence :
         print("evidence : resource="+e.resource)
         print("           resourceid="+e.resourceId)
-        self.modelKomp.add(['white','','==========','============================','==========',e.resource,'',False,'Bildo',None,None,None,None]  )
+        posTir = e.resourceId.find('-')
+        sdid = e.resourceId[0:posTir]
+        datumoj = tree._FsSeanco.get_jsonurl("/platform/memories/memories?mids=" + sdid)
+        gedcomx_v1.maljsonigi(PersonFS.fs_Tree,datumoj)
+        sd = gedcomx_v1.SourceDescription()
+        for x in PersonFS.fs_Tree.sourceDescriptions :
+          if x.id == sdid :
+            sd=x
+            break
+        md = gedcomx_v1.artifactMetadata()
+        for x in sd.artifactMetadata :
+          md = x
+          break
+        fsNomo = md.filename
+        coverage = gedcomx_v1.Coverage()
+        for x in sd.coverage :
+          coverage = x
+          break
+        fsTitolo=''
+        for x in sd.titles :
+          fsTitolo = x.value
+          break
+        fsDato = str(coverage.temporal)
+        fsLokoDesk = coverage.spatial.description
+        for x in coverage.spatial.names :
+          fsLoko = x.value
+          break
+        #from objbrowser import browse ;import pdb; pdb.set_trace()
+        self.modelKomp.add(['white',fsTitolo,'==========','============================',fsDato,fsNomo,'',False,'Bildo',None,None,None,None]  )
       # FARINDAĴO
     else : # REG_cxefa
       kompRet = komparo.kompariFsGr(fsPerso, grPersono, self.dbstate.db, self.modelKomp,getfs)
