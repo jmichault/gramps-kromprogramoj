@@ -1177,7 +1177,8 @@ class PersonFS(Gramplet):
         sd.citations=set()
       if PersonFS.fs_Tree and self.FSID in PersonFS.fs_Tree._persons :
         PersonFS.fs_Tree._persons.pop(self.FSID)
-      PersonFS.fs_Tree.add_persons([self.FSID])
+      if PersonFS.fs_Tree and self.FSID :
+        PersonFS.fs_Tree.add_persons([self.FSID])
     #rezulto = gedcomx_v1.jsonigi(PersonFS.fs_Tree)
     #f = open('arbo2.out.json','w')
     #json.dump(rezulto,f,indent=2)
@@ -1988,7 +1989,6 @@ class PersonFS(Gramplet):
         for x in coverage.spatial.names :
           fsLoko = x.value
           break
-        #from objbrowser import browse ;import pdb; pdb.set_trace()
         self.modelKomp.add(['white',fsTitolo,'==========','============================',fsDato,fsNomo,'',False,'Bildo',None,None,None,None]  )
       # FARINDAĴO
     else : # REG_cxefa
