@@ -56,6 +56,7 @@ from gramps.gui.listmodel import ListModel, NOSORT, COLOR, TOGGLE
 from gramps.gui.viewmanager import run_plugin
 from gramps.gui.widgets.buttons import IconButton
 from gramps.gui.widgets.styledtexteditor import StyledTextEditor
+from gramps.gui.utils import ProgressMeter
 
 try:
     _trans = glocale.get_addon_translator(__file__)
@@ -261,11 +262,12 @@ class PersonFS(Gramplet):
           tree._FsSeanco.client_id=PersonFS.fs_client_id
           tree._FsSeanco.login_password()
         else :
-          tree._FsSeanco.login()
-          if not tree._FsSeanco.logged :
-            tree._FsSeanco.login_openid('a02j000000KTRjpAAH','https://misbach.github.io/fs-auth/index_raw.html')
-          if not tree._FsSeanco.logged :
-            self.login_browser(vorteco)
+          #tree._FsSeanco.login()
+          #if not tree._FsSeanco.logged :
+          #  tree._FsSeanco.login_openid('a02j000000KTRjpAAH','https://misbach.github.io/fs-auth/index_raw.html')
+          #if not tree._FsSeanco.logged :
+          #  self.login_browser(vorteco)
+          self.login_browser(vorteco)
       print(" langage session FS = "+tree._FsSeanco.lingvo);
       if tree._FsSeanco.stato == gedcomx_v1.fs_session.STATO_PASVORTA_ERARO :
          WarningDialog(_('Pasvorta erraro. La funkcioj de FamilySearch ne estos disponeblaj.'))
@@ -298,11 +300,12 @@ class PersonFS(Gramplet):
       tree._FsSeanco.client_id=PersonFS.fs_client_id
       tree._FsSeanco.login_password()
     else :
-      tree._FsSeanco.login()
-      if not tree._FsSeanco.logged :
-        tree._FsSeanco.login_openid('a02j000000KTRjpAAH','https://misbach.github.io/fs-auth/index_raw.html')
-      if not tree._FsSeanco.logged :
-        self.login_browser(0)
+      #tree._FsSeanco.login()
+      #if not tree._FsSeanco.logged :
+      #  tree._FsSeanco.login_openid('a02j000000KTRjpAAH','https://misbach.github.io/fs-auth/index_raw.html')
+      #if not tree._FsSeanco.logged :
+      #  self.login_browser(0)
+      self.login_browser(0)
     if tree._FsSeanco.stato == gedcomx_v1.fs_session.STATO_PASVORTA_ERARO :
       WarningDialog(_('Pasvorta eraro. La funkcioj de FamilySearch ne estos disponeblaj.'))
       return
@@ -832,9 +835,10 @@ class PersonFS(Gramplet):
        l = [x]
        l.extend(x.iterchildren())
        for linio in l :
+        if not linio[7] : # si la ligne n'est pas cochée
+          continue
         tipolinio = linio[8]
         if ( (tipolinio == 'fakto' )
-             and linio[7] 
              and linio[10] ) :
             fsFakto_id = linio[10]
             grFaktoH = linio[9]
@@ -864,7 +868,6 @@ class PersonFS(Gramplet):
                 elif event.type == EventType.DEATH :
                   grPersono.set_death_ref(er)
         elif ( (tipolinio == 'edzoFakto')
-             and linio[7] 
              and linio[10] 
              and linio[11] ) :
             grFaktoH = linio[9]
@@ -894,7 +897,6 @@ class PersonFS(Gramplet):
       
             self.dbstate.db.commit_family(grParo,txn)
         elif ( (tipolinio == 'nomo' or tipolinio == 'nomo1')
-             and linio[7] 
              and linio[10] ) :
             grNomo_str = linio[9]
             fsNomo_id = linio[10]
@@ -902,7 +904,6 @@ class PersonFS(Gramplet):
               if fsNomo.id == fsNomo_id : break
             Importo.aldNomo(self.dbstate.db, txn, fsNomo, grPersono)
         elif ( (tipolinio == 'NotoF' )
-             and linio[7] 
               and linio[4] and linio[12] ) :
             print("NotoF FS-->gramps")
             # self.modelKomp.add(['white',_('Familio'),titolo,teksto,fsTitolo,fsTeksto,'',False,'NotoF',family_handle,nh,fsParoId,fsNoto.id] )
@@ -924,7 +925,6 @@ class PersonFS(Gramplet):
             grParo.add_note(grNoto.handle)
             self.dbstate.db.commit_family(grParo,txn)
         elif ( (tipolinio == 'NotoP' )
-             and linio[7] 
               and linio[6] and linio[12] ) :
             print("NotoP FS-->gramps")
             nh=linio[10]
@@ -941,11 +941,26 @@ class PersonFS(Gramplet):
               self.dbstate.db.add_note(grNoto, txn)
             self.dbstate.db.commit_note(grNoto, txn)
             grPersono.add_note(grNoto.handle)
-        elif ( (tipolinio == 'Fonto' ) and linio[10] and linio[7]) :
+        elif ( (tipolinio == 'Fonto' ) and linio[10] ) :
           fsSdId = linio[10]
           fh = linio[9]
           print(" fonto FS --> gramps, id="+fsSdId)
           citation = Importo.aldFonto(self.dbstate.db,txn,fsSdId,grPersono,grPersono.citation_list)
+        elif ( (  tipolinio == 'infano'  or tipolinio == 'patro'
+               or tipolinio == 'patrino' or tipolinio == 'edzo')
+             and linio[10] ) :
+          fsid = linio[10]
+          importilo = Importo.FsAlGr()
+          importilo.nereimporti = False
+          if (tipolinio !=  'infano') :
+            importilo.asc = 0
+          if (tipolinio !=  'patro' and tipolinio !=  'patrino') :
+            importilo.desc = 0
+          if (tipolinio !=  'edzo') :
+            importilo.edz = False
+          importilo.refresxigxo = False
+          importilo.importi(self, fsid)
+          print(" infano FS --> gramps")
       self.dbstate.db.commit_person(grPersono,txn)
       self.dbstate.db.transaction_commit(txn)
     self.ButRefresxigi_clicked(None)
@@ -1322,10 +1337,16 @@ class PersonFS(Gramplet):
       fsid = model.get_value(iter_, 1)
       #print(fsid)
       self.top.get_object("LinkoButonoDup").set_label(fsid)
-      lien = 'https://familysearch.org/tree/person/' + fsid
+      if self.lingvo == 'fr':
+        lien = 'https://familysearch.org/fr/tree/person/' + fsid
+      else :
+        lien = 'https://familysearch.org/tree/person/' + fsid
       self.top.get_object("LinkoButonoDup").set_uri(lien)
       self.top.get_object("LinkoButonoKunfando").set_label(self.FSID+'+'+fsid)
-      lien = 'https://familysearch.org/tree/person/merge/verify/' +self.FSID+'/'  + fsid
+      if self.lingvo == 'fr':
+        lien = 'https://familysearch.org/fr/tree/person/merge/verify/' +self.FSID+'/'  + fsid
+      else:
+        lien = 'https://familysearch.org/tree/person/merge/verify/' +self.FSID+'/'  + fsid
       self.top.get_object("LinkoButonoKunfando").set_uri(lien)
     else :
       self.top.get_object("LinkoButonoDup").set_label('xxxx-xxx')
@@ -1583,6 +1604,8 @@ class PersonFS(Gramplet):
     grPersono = self.dbstate.db.get_person_from_handle(active_handle)
     importilo = Importo.FsAlGr()
     fsid = get_fsftid(grPersono)
+    importilo.nereimporti = False
+    importilo.refresxigxo = False
     importilo.importi(self, fsid)
     #import cProfile
     #cProfile.runctx('importilo.importi(self, fsid)',globals(),locals())
@@ -1674,7 +1697,10 @@ class PersonFS(Gramplet):
       fsid = 'xxxx-xxx'
       lien = 'https://familysearch.org/'
     else :
-      lien = 'https://familysearch.org/tree/person/' + fsid
+      if self.lingvo == 'fr':
+        lien = 'https://familysearch.org/fr/tree/person/' + fsid
+      else :
+        lien = 'https://familysearch.org/tree/person/' + fsid
     self.top.get_object("LinkoButono").set_label(fsid)
     self.top.get_object("LinkoButono").set_uri(lien)
     ## Se fsid ne estas specifita: nenio pli :

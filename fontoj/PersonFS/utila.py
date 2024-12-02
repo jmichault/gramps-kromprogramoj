@@ -1,6 +1,7 @@
 from gramps.gen.db import DbTxn
 from gramps.gen.lib import Attribute, EventRoleType, Date, SrcAttribute
 from gramps.gen.lib.date import gregorian
+from gramps.gui.dialog import WarningDialog, QuestionDialog2
 
 from gramps.gen.const import GRAMPS_LOCALE as glocale
 
@@ -9,6 +10,42 @@ try:
 except ValueError:
     _trans = glocale.translation
 _ = _trans.gettext
+
+
+fs_gr = None
+fs_gr_lokoj = None
+
+def konstrui_fs_gr(vokanto,progress,nbPas) :
+  global fs_gr
+  global fs_gr_lokoj
+  dupAverto = True
+  fs_gr = dict()
+  progress.set_pass(_('Konstrui FSID listo (1/'+str(nbPas)+')'), vokanto.dbstate.db.get_number_of_people())
+  for person_handle in vokanto.dbstate.db.get_person_handles() :
+    progress.step()
+    person = vokanto.dbstate.db.get_person_from_handle(person_handle)
+    fsid = get_fsftid(person)
+    if fs_gr.get(fsid) :
+      print(_('«FamilySearch» duplikata ID : %s ')%(fsid))
+      if dupAverto :
+        qd = QuestionDialog2(
+              _('Duplikata FSFTID')
+            , _('«FamilySearch» duplikata ID : %s ')%(fsid)
+            , _('_Daŭru averton'), _('_Ĉesu averton')
+            , parent=vokanto.uistate.window)
+        if not qd.run():
+          dupAverto = False
+
+    elif fsid != '' :
+      fs_gr[fsid] = person_handle
+  progress.set_pass(_('Konstrui FSID listo por lokoj (2/'+str(nbPas)+')'), vokanto.dbstate.db.get_number_of_places())
+  fs_gr_lokoj = dict()
+  for place_handle in vokanto.dbstate.db.get_place_handles() :
+    progress.step()
+    place = vokanto.dbstate.db.get_place_from_handle(place_handle)
+    for url in place.urls :
+      if str(url.type) == 'FamilySearch' :
+        fs_gr_lokoj[url.path] = place_handle
 
 def fsdato_al_gr( fsDato) :
   if fsDato:
@@ -135,6 +172,8 @@ def get_grevent(db, person, event_type):
   return None
 
 def ligi_gr_fs(db,grObjekto,fsid):
+  global fs_gr
+  global fs_gr_lokoj
   attr = None
   if db.transaction :
     intr = True
@@ -160,6 +199,8 @@ def ligi_gr_fs(db,grObjekto,fsid):
   match  grObjekto.__class__.__name__ :
     case 'Person' :
       db.commit_person(grObjekto,txn)
+      if fs_gr :
+        fs_gr[fsid] = grObjekto.get_handle()
     case 'Event' :
       db.commit_event(grObjekto,txn)
     case 'Citation' :
@@ -168,3 +209,4 @@ def ligi_gr_fs(db,grObjekto,fsid):
       print ("utila.ligi_gr_fs : klaso ne trakta : " + grObjekto.__class__.__name__)
   if not intr :
     db.transaction_commit(txn)
+    del txn
