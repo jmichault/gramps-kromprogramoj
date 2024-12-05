@@ -64,20 +64,35 @@ except ValueError:
     _trans = glocale.translation
 _ = _trans.gettext
 
-# gedcomx_v1 biblioteko. Instalu kun `pip install --user --upgrade --break-system-packages gedcomx_v1`
-mingedcomx="1.0.23"
-import importlib
-from importlib.metadata import version
-try:
-  v = version('gedcomx_v1')
-except :
-  v="0.0.0"
-from packaging.version import parse
-if parse(v) < parse(mingedcomx) :
-  print (_('gedcomx_v1 ne trovita aŭ < %s' % mingedcomx))
-  import pip
-  pip.main(['install', '--user', '--upgrade', '--break-system-packages', 'gedcomx_v1'])
+import instdep
+instdep.instDep('gedcomx_v1','1.0.23')
+instdep.instDep('undetected_chromedriver','3.5.5')
+
+## gedcomx_v1 biblioteko. Instalu kun `pip install --user --upgrade --break-system-packages gedcomx_v1`
+#mingedcomx="1.0.23"
+#import importlib
+#from importlib.metadata import version
+#try:
+#  v = version('gedcomx_v1')
+#except :
+#  v="0.0.0"
+#from packaging.version import parse
+#if parse(v) < parse(mingedcomx) :
+#  print (_('gedcomx_v1 ne trovita aŭ < %s' % mingedcomx))
+#  import pip
+#  pip.main(['install', '--user', '--upgrade', '--break-system-packages', 'gedcomx_v1'])
 import gedcomx_v1
+#
+## undetected_chromedriver biblioteko. Instalu kun `pip install --user --upgrade --break-system-packages undetected_chromedriver`
+#minuc="3.5.5"
+#try:
+#  v = version('undetected_chromedriver')
+#except :
+#  v="0.0.0"
+#if parse(v) < parse(minuc) :
+#  print (_('undetected_chromedriver ne trovita aŭ < %s' % mingedcomx))
+#  import pip
+#  pip.main(['install', '--user', '--upgrade', '--break-system-packages', 'undetected_chromedriver'])
 
 # lokaloj importadoj
 from constants import GRAMPS_GEDCOMX_FAKTOJ
@@ -87,6 +102,11 @@ try:
   import minibrowser
 except:
   print (_('PersonFS : minibrowser ne havebla.'))
+  pass
+try:
+  import getcode
+except:
+  print (_('PersonFS : getcode ne havebla.'))
   pass
 import tree
 import utila
@@ -150,6 +170,24 @@ class PersonFS(Gramplet):
   if not lingvo :
     lingvo = glocale.language[0]
 
+  def login_selenium(self,vorteco) :
+    try:
+      import getcode
+    except:
+      return False
+    token = getcode.getcode(PersonFS.fs_sn,PersonFS.fs_pasvorto)
+    print("token="+str(token))
+    if token is not None and token != '' :
+      tree._FsSeanco.access_token = token
+      print("FamilySearch-ĵetono akirita")
+      tree._FsSeanco.logged = True
+      tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_KONEKTITA
+      return True
+    else:
+      print(" échec de connexion")
+      tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_PASVORTA_ERARO
+      return False
+
   def login_browser(self,vorteco) :
     try:
       import minibrowser
@@ -165,12 +203,17 @@ class PersonFS(Gramplet):
     print("url= "+url)
     main = minibrowser.miniBrowser(url)
     print("code="+main.code)
+    return self.get_token(main.code,vorteco)
+
+  def get_token(self,code,vorteco):
     headers= {"Accept": "application/json"}
     headers.update ( {"Content-Type": "application/x-www-form-urlencoded"})
+    appKey = 'a02j000000KTRjpAAH'
+    redirect = 'https://misbach.github.io/fs-auth/index_raw.html'
     data = {
                "grant_type": 'authorization_code',
                "client_id": appKey,
-               "code": main.code,
+               "code": code,
                "redirect_uri": redirect,
              }
     url = 'https://ident.familysearch.org/cis-web/oauth2/v3/token'
@@ -267,7 +310,9 @@ class PersonFS(Gramplet):
           #  tree._FsSeanco.login_openid('a02j000000KTRjpAAH','https://misbach.github.io/fs-auth/index_raw.html')
           #if not tree._FsSeanco.logged :
           #  self.login_browser(vorteco)
-          self.login_browser(vorteco)
+          self.login_selenium(vorteco)
+          if not tree._FsSeanco.logged :
+            self.login_browser(vorteco)
       print(" langage session FS = "+tree._FsSeanco.lingvo);
       if tree._FsSeanco.stato == gedcomx_v1.fs_session.STATO_PASVORTA_ERARO :
          WarningDialog(_('Pasvorta erraro. La funkcioj de FamilySearch ne estos disponeblaj.'))
@@ -305,7 +350,9 @@ class PersonFS(Gramplet):
       #  tree._FsSeanco.login_openid('a02j000000KTRjpAAH','https://misbach.github.io/fs-auth/index_raw.html')
       #if not tree._FsSeanco.logged :
       #  self.login_browser(0)
-      self.login_browser(0)
+      self.login_selenium(0)
+      if not tree._FsSeanco.logged :
+        self.login_browser(0)
     if tree._FsSeanco.stato == gedcomx_v1.fs_session.STATO_PASVORTA_ERARO :
       WarningDialog(_('Pasvorta eraro. La funkcioj de FamilySearch ne estos disponeblaj.'))
       return
