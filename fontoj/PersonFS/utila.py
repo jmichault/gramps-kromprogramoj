@@ -74,6 +74,8 @@ def fsdato_al_gr( fsDato) :
             jaro2 = fsDato.formal.finalaDato.jaro
             monato2 = fsDato.formal.finalaDato.monato
             tago2 = fsDato.formal.finalaDato.tago
+    if jaro == 0 and monato == 0 and tago == 0 :
+      return None
     if grDato.modifier == Date.MOD_RANGE :
       grDato.set(value=(tago, monato, jaro, 0, tago2, monato2, jaro2, 0),text=fsDato.original or '',newyear=Date.NEWYEAR_JAN1)
     else : 

@@ -68,46 +68,22 @@ import instdep
 instdep.instDep('gedcomx_v1','1.0.23')
 instdep.instDep('undetected_chromedriver','3.5.5')
 
-## gedcomx_v1 biblioteko. Instalu kun `pip install --user --upgrade --break-system-packages gedcomx_v1`
-#mingedcomx="1.0.23"
-#import importlib
-#from importlib.metadata import version
-#try:
-#  v = version('gedcomx_v1')
-#except :
-#  v="0.0.0"
-#from packaging.version import parse
-#if parse(v) < parse(mingedcomx) :
-#  print (_('gedcomx_v1 ne trovita aŭ < %s' % mingedcomx))
-#  import pip
-#  pip.main(['install', '--user', '--upgrade', '--break-system-packages', 'gedcomx_v1'])
 import gedcomx_v1
-#
-## undetected_chromedriver biblioteko. Instalu kun `pip install --user --upgrade --break-system-packages undetected_chromedriver`
-#minuc="3.5.5"
-#try:
-#  v = version('undetected_chromedriver')
-#except :
-#  v="0.0.0"
-#if parse(v) < parse(minuc) :
-#  print (_('undetected_chromedriver ne trovita aŭ < %s' % mingedcomx))
-#  import pip
-#  pip.main(['install', '--user', '--upgrade', '--break-system-packages', 'undetected_chromedriver'])
 
 # lokaloj importadoj
 from constants import GRAMPS_GEDCOMX_FAKTOJ
 import fs_db
 import komparo
+
 try:
   import minibrowser
 except:
   print (_('PersonFS : minibrowser ne havebla.'))
-  pass
 try:
   import getcode
 except:
   print (_('PersonFS : getcode ne havebla.'))
-  pass
+
 import tree
 import utila
 import Importo
@@ -1384,16 +1360,10 @@ class PersonFS(Gramplet):
       fsid = model.get_value(iter_, 1)
       #print(fsid)
       self.top.get_object("LinkoButonoDup").set_label(fsid)
-      if self.lingvo == 'fr':
-        lien = 'https://familysearch.org/fr/tree/person/' + fsid
-      else :
-        lien = 'https://familysearch.org/tree/person/' + fsid
+      lien = 'https://familysearch.org/tree/person/' + fsid
       self.top.get_object("LinkoButonoDup").set_uri(lien)
       self.top.get_object("LinkoButonoKunfando").set_label(self.FSID+'+'+fsid)
-      if self.lingvo == 'fr':
-        lien = 'https://familysearch.org/fr/tree/person/merge/verify/' +self.FSID+'/'  + fsid
-      else:
-        lien = 'https://familysearch.org/tree/person/merge/verify/' +self.FSID+'/'  + fsid
+      lien = 'https://familysearch.org/tree/person/merge/verify/' +self.FSID+'/'  + fsid
       self.top.get_object("LinkoButonoKunfando").set_uri(lien)
     else :
       self.top.get_object("LinkoButonoDup").set_label('xxxx-xxx')
@@ -1744,10 +1714,7 @@ class PersonFS(Gramplet):
       fsid = 'xxxx-xxx'
       lien = 'https://familysearch.org/'
     else :
-      if self.lingvo == 'fr':
-        lien = 'https://familysearch.org/fr/tree/person/' + fsid
-      else :
-        lien = 'https://familysearch.org/tree/person/' + fsid
+      lien = 'https://familysearch.org/tree/person/' + fsid
     self.top.get_object("LinkoButono").set_label(fsid)
     self.top.get_object("LinkoButono").set_uri(lien)
     ## Se fsid ne estas specifita: nenio pli :

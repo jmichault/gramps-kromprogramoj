@@ -1,3 +1,5 @@
+""" modulo reakirante la aŭtentikigkodon kun undetected_chromedriver """
+
 import json
 import time
 import undetected_chromedriver as uc
@@ -8,11 +10,17 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 def getcode(username,password) :
+  """ getcode reakirante la aŭtentikigkodon kun undetected_chromedriver """
   try :
     driver = uc.Chrome(headless=False,use_subprocess=False)
-  except:
+  except Exception:
     return ""
-  url = 'https://ident.familysearch.org/cis-web/oauth2/v3/authorization?response_type=code&scope=openid profile email qualifies_for_affiliate_account country&client_id=a02j000000KTRjpAAH&redirect_uri=https://misbach.github.io/fs-auth/index_raw.html&username='+username
+  url = 'https://ident.familysearch.org/cis-web/oauth2/v3/authorization'
+  url += '?response_type=code'
+  url += '&scope=openid profile email qualifies_for_affiliate_account country'
+  url += '&client_id=' + 'a02j000000KTRjpAAH'
+  url += '&redirect_uri=' + 'https://misbach.github.io/fs-auth/index_raw.html'
+  url += '&username='+username
   driver.get(url)
   #time.sleep(0.5)
   elem = WebDriverWait(driver, 10).until(
@@ -31,11 +39,9 @@ def getcode(username,password) :
   jwt = driver.find_element(By.ID,'jwt')
   token = None
   try :
-    js = json.loads(jwt.text)
-    token = js['sessionId']
-  except :
+    tekstoj = json.loads(jwt.text)
+    token = tekstoj['sessionId']
+  except Exception:
     print("token pas trouvé.")
-    pass
   driver.quit()
   return token
-  
