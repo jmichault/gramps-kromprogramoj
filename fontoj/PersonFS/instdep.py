@@ -1,26 +1,28 @@
-
+"""  modulo ebliganta vin instali dependecojn per pip 
+  pylint options :
+         --indent-string "  " 
+         --function-naming-style 'camelCase' 
+         --const-naming-style='PascalCase'
+"""
 
 try:
-  import importlib
   from importlib.metadata import version
   from packaging.version import parse
   import pip
   HavPip=True
-except:
+except ImportError:
   HavPip=False
-  pass
 
 def instDep(modulo,versio):
-  global HavPip
+  """ instDep provas instali dependecon kiel argumenton """
   if not HavPip:
     return
-  try:
-    v = version(modulo)
-  except :
-    v="0.0.0"
-  if parse(v) < parse(versio) :
-    print ('dependeco %s ne trovita aŭ < %s' % ( modulo , versio))
+  #try:
+  v_0 = version(modulo)
+  #except Exception:
+  #  v_0="0.0.0"
+  if parse(v_0) < parse(versio) :
+    print (f'dependeco {modulo} ne trovita aŭ < {versio}')
     pip.main(['install', '--user', '--upgrade', '--break-system-packages', modulo])
   #else:
   #  print( "dependeco %s trovita, versio %s" % (modulo , v))
-
