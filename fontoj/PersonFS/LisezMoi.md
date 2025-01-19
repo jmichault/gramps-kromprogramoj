@@ -14,6 +14,7 @@ Cette extension est prévue pour gramps version 5.2.
 Elle a besoin de gir1.2-webkit2-4.0 .
 Le gramplet utilise les modules python «requests» et «gedcomx\_v1» (>=1.0.12).  
 Vous pouvez installer «requests» et «gedcomx\_v1» manuellement, ou laisser le gramplet les installer automatiquement (nécessite pip).
+En raison des changements intervenus sur le site FamilySearch, ce plugin ne fonctionne plus sous Windows.
 
 ## ajout du projet dans le gestionnaire de greffons
 * ouvrez le gestionnaire de greffons (icône «puzzle», ou menu Édition-->Gestionnaire de greffons)

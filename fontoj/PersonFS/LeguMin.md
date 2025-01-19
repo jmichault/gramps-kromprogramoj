@@ -13,6 +13,7 @@ Por povi uzi la gramplet vi bezonas _familysearch_-konton, ĉi tio estas enigota
 gir1.2-webkit2-4.0 devas esti instalita.
 La gramplet uzas "requests" kaj "gedcomx\_v1" (>=1.0.19) python-modulojn.  
 Vi povas instali 'requests' kaj 'gedcomx\_v1' permane, aŭ lasi la gramplet instali ilin aŭtomate (postulas pip).  
+Pro ŝanĝoj al la retejo FamilySearch, ĉi tiu kromaĵo ne plu funkcias en Windows.
 
 ## aldonante la projekton al la aldonaĵadministranto
 * Malfermu la aldonaĵadministranton ("puzlo" ikono aŭ Redakti menuon --> Aldonaĵadministrilon)
