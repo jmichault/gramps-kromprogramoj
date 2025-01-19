@@ -116,7 +116,7 @@ msgid "Nur 10 kongruecoj estas montritaj.\nPor vidi pliajn rezultojn, premu la s
 msgstr ""
 "Only 10 matches are shown. \n"
 " To view more results, press the search button again. \n"
-"or try to change the title with more details, as a country."
+"or try to change the title with more details, such as adding a country."
 
 #: Lokpurigado/lokpurigado.py:353 Lokpurigado/lokpurigado.py:358
 msgid "Problemo akiri datumojn de retejo"
@@ -124,7 +124,7 @@ msgstr "Problem to get data from website"
 
 #: Lokpurigado/lokpurigado.py:359
 msgid "TTT-peto elĉerpita, vi povas provi denove…"
-msgstr "Web request exhausted, you can try again ..."
+msgstr "Web request timed out, you can try again…"
 
 #: Lokpurigado/lokpurigado.py:406
 msgid "Lokciklo detektita"
@@ -140,7 +140,7 @@ msgstr "INSEE Code"
 
 #: Lokpurigado/lokpurigado.py:523 Lokpurigado/lokpurigado.glade:65
 msgid "Poŝtkodo"
-msgstr "Postcode"
+msgstr "Postal Code"
 
 #: Lokpurigado/lokpurigado.py:713
 #, python-format
@@ -168,15 +168,15 @@ msgstr "This place is not used!"
 
 #: Lokpurigado/lokpurigado.py:972
 msgid "Vi devus forigi ĝin aŭ, se ĝi enhavas utilajn notojn aŭ aliajn datumojn, uzu serĉon por kunfandi ĝin kun valida loko."
-msgstr "You should delete it or, if it contains useful notes or other data, use a search to merge it with a valid location."
+msgstr "You should delete it or, if it contains useful notes or other data, search to merge it with a valid location."
 
 #: Lokpurigado/lokpurigado.glade:27
 msgid "Urbo, Graflando, Ŝtato, Lando"
-msgstr "City, county, state, country"
+msgstr "City, County, State, Country"
 
 #: Lokpurigado/lokpurigado.glade:52
 msgid "Ĉefa Nomo"
-msgstr "Main name"
+msgstr "Primary Name"
 
 #: Lokpurigado/lokpurigado.glade:78 Lokpurigado/lokpurigado.glade:958
 msgid "Tipo"
@@ -188,15 +188,15 @@ msgstr "The current name."
 
 #: Lokpurigado/lokpurigado.glade:102
 msgid "La poŝtkodo por la loko, se ekzistas."
-msgstr "The zip code for the place if there is."
+msgstr "The postal code for the location, if any."
 
 #: Lokpurigado/lokpurigado.glade:114
 msgid "La speco de loko ĝi estas. Ekzemple: 'Urbo', 'lando', …"
-msgstr "The kind of place it is. For example: 'city', 'country', ..."
+msgstr "The kind of place it is. For example: 'city', 'country', …"
 
 #: Lokpurigado/lokpurigado.glade:133
 msgid "Marku ĉi tiun skatolon se vi volas konservi la originalan poŝtkodon."
-msgstr "Mark this box if you want to keep the original postcode."
+msgstr "Mark this box if you want to keep the original postal code."
 
 #: Lokpurigado/lokpurigado.glade:148
 msgid "Marku ĉi tiun skatolon se vi volas konservi la originan LokTipon."
@@ -221,25 +221,25 @@ msgstr "Check this box if you want to keep the original latitude and longitude."
 
 #: Lokpurigado/lokpurigado.glade:295
 msgid "The Gramps ID.."
-msgstr "The gramps id .."
+msgstr "The Gramps ID.."
 
 #: Lokpurigado/lokpurigado.glade:310
 msgid "ID"
-msgstr "Id"
+msgstr "ID"
 
 #: Lokpurigado/lokpurigado.glade:322
 msgid "Check this box if you want to keep the original Gramps ID."
-msgstr "Check this box if you want to keep the original gramps id."
+msgstr "Check this box if you want to keep the original Gramps ID."
 
 #: Lokpurigado/lokpurigado.glade:391
 msgid "Alterative Names\nSelect one or more rows and press 'Keep' button to toggle the 'include into place' status ."
 msgstr ""
 "Alterative names \n"
-"select one or more rows and press 'keep' button to toggle the 'include into place' status."
+"select one or more rows and press the 'keep' button to toggle the 'include into place' status."
 
 #: Lokpurigado/lokpurigado.glade:406
 msgid "Inc"
-msgstr "INC"
+msgstr "Inc"
 
 #: Lokpurigado/lokpurigado.glade:426
 msgid "Name"
@@ -303,11 +303,11 @@ msgstr "Keep Web Links"
 
 #: Lokpurigado/lokpurigado.glade:681
 msgid "Puts web links (typically wikipedia) into your place."
-msgstr "Puts Web Links (Typically Wikipedia) into your place."
+msgstr "Puts web links (typically Wikipedia) into your place."
 
 #: Lokpurigado/lokpurigado.glade:695
 msgid "Alternative Names Languages to keep"
-msgstr "Alternative Names Languages To Keep"
+msgstr "Alternative Names Languages to Keep"
 
 #: Lokpurigado/lokpurigado.glade:707
 msgid "Enter the two or three letter codes for the languages you wish to keep, seperated by spaces.\nFor example \"fr oc eo\".\nThese languages will initially be checked off on the Names result display.\nIf you often see an un-checked name in a specific language you want, add the language code here."
@@ -323,7 +323,7 @@ msgstr "Title"
 msgid "Current Place title.\nYou can edit this to help find other places, particularly to reduce the number of results."
 msgstr ""
 "Current place title. \n"
-"you can edit this to help find other places, particularly to reduce the number of results."
+"You can edit this to help find other places, particularly to reduce the number of results."
 
 #: Lokpurigado/lokpurigado.glade:770
 msgid "Helpo"
@@ -335,7 +335,7 @@ msgstr "Find"
 
 #: Lokpurigado/lokpurigado.glade:802
 msgid "Search your local places and OSM for a match."
-msgstr "Search Your Local Places and OSM for a Match."
+msgstr "Search your local places and OSM for a match."
 
 #: Lokpurigado/lokpurigado.glade:818
 msgid "Continue to merge (for local places), or to complete a place (for OSM)."
@@ -347,7 +347,7 @@ msgstr "Edit"
 
 #: Lokpurigado/lokpurigado.glade:835
 msgid "Split up Title, Edit manually, and enclose with next level of hierarchy.  For use when the initial component of the Title is too detailed to be found in the gazetteer."
-msgstr "Split up title, edit manually, and enclose with next level of hierarchy. For use when the initial component of the title is too detailed to be found in the newspaper."
+msgstr "Split up title, edit manually, and enclose with next level of hierarchy. For use when the initial component of the title is too detailed to be found in the gazetter."
 
 #: Lokpurigado/lokpurigado.glade:861
 msgid "Sekva loko"
@@ -373,4 +373,4 @@ msgstr "Search result places"
 msgid "No\nMatches"
 msgstr ""
 "No \n"
-"matches"
+"Matches"
