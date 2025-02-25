@@ -4,8 +4,8 @@
 "i": "FamilySearch komparo",
 "t": 2,
 "d": "FamilySearch: Compare Gramps com pessoas com FS.",
-"v": "beta 2.0.50",
-"g": "5.2",
+"v": "beta 2.0.51",
+"g": "6.0",
 "s": 3,
 "z": "PersonFS.addon.tgz",
 "rm": [
@@ -19,8 +19,8 @@
 "i": "Importo de FamilySearch",
 "t": 2,
 "d": "FamilySearch.",
-"v": "beta 2.0.50",
-"g": "5.2",
+"v": "beta 2.0.51",
+"g": "6.0",
 "s": 3,
 "z": "PersonFS.addon.tgz",
 "rm": [
@@ -34,8 +34,8 @@
 "i": "FS Gramplet",
 "t": 10,
 "d": "Interface para o FamilySearch",
-"v": "beta 2.0.50",
-"g": "5.2",
+"v": "beta 2.0.51",
+"g": "6.0",
 "s": 3,
 "z": "PersonFS.addon.tgz",
 "rm": [
@@ -49,8 +49,8 @@
 "i": "Lokpurigado",
 "t": 10,
 "d": "A limpeza do local ajuda a completar locais usando o OpenStreetMap.",
-"v": "1.0.21",
-"g": "5.2",
+"v": "1.0.22",
+"g": "6.0",
 "s": 3,
 "z": "Lokpurigado.addon.tgz",
 "h": "Addon:Lokpurigado"
@@ -60,8 +60,8 @@
 "i": "PlaceFrCog Gramplet",
 "t": 10,
 "d": "Gramplet para tirar munic\u00edpios do banco de dados INSEE",
-"v": "1.0.34",
-"g": "5.2",
+"v": "1.0.35",
+"g": "6.0",
 "s": 3,
 "z": "PlaceFrCog.addon.tgz"
 }

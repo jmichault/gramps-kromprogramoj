@@ -1,5 +1,5 @@
 
-greffons pour gramps 5.2
+greffons pour gramps 6.0
 
 # installation :
 * ouvrez le gestionnaire de greffons (icône «puzzle», ou menu Édition-->Gestionnaire de greffons)

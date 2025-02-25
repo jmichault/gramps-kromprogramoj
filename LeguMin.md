@@ -1,4 +1,4 @@
-iuj kromprogramoj por "gramps" 5.2
+iuj kromprogramoj por "gramps" 6.0
 
 # instalado :
 * Malfermu la aldonaĵadministranton ("puzlo" ikono aŭ Redakti menuon --> Aldonaĵadministrilon)

@@ -1,4 +1,4 @@
-plugins for gramps 5.2
+plugins for gramps 6.0
 
 # install :
 * open the plugin manager («puzzle» icon, or Edit menu-->Plugin manager)

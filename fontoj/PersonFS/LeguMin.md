@@ -9,7 +9,7 @@ Por povi uzi la gramplet vi bezonas _familysearch_-konton, ĉi tio estas enigota
 
 # instalado
 ## antaŭkondiĉoj
-Ĉi tiu kromprogramo estas destinita por gramps-versio 5.2.
+Ĉi tiu kromprogramo estas destinita por gramps-versio 6.0.
 gir1.2-webkit2-4.0 devas esti instalita.
 La gramplet uzas "requests" kaj "gedcomx\_v1" (>=1.0.19) python-modulojn.  
 Vi povas instali 'requests' kaj 'gedcomx\_v1' permane, aŭ lasi la gramplet instali ilin aŭtomate (postulas pip).  
