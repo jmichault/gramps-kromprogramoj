@@ -21,7 +21,7 @@ En raison des changements intervenus sur le site FamilySearch, ce plugin ne fonc
 * allez à l'onglet «Projets»
   * cliquez sur «+»
     * Nom du Projet : jmichault (ou ce que vous voulez)
-    * URL : https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps52
+    * URL : https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps60
     * cliquez sur «Valider»
 * allez à l'onglet «Greffons»
   * cherchez PersonFS

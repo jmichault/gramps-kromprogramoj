@@ -20,8 +20,8 @@ Pro ŝanĝoj al la retejo FamilySearch, ĉi tiu kromaĵo ne plu funkcias en Wind
 * iru al la langeto "Projektoj".
   * alklaku la butonon + (maldekstre malsupre), kaj enigu:
     * "Nomo de la projekto:": "jmichault" (aŭ kion ajn vi volas)
-    * "URL:": "<https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps52>"
-    * «URL :» : «<https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps52>»
+    * "URL:": "<https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps60>"
+    * «URL :» : «<https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps60>»
     * alklaku "Valigiti"
     * marku la skatolon maldekstre de la nova projekto por aktivigi ĝin.
        La projektaj kromaĵoj nun haveblas en la langeto "Kromaĵoj".

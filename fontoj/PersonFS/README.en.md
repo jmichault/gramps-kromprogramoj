@@ -18,7 +18,7 @@ Due to changes to the FamilySearch website, this plugin no longer works on Windo
 * go to “Projects” tab
    * click on “+”
      * Project Name: jmichault (or whatever you want)
-     * URL: https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps52
+     * URL: https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps60
      * click on “Validate”
 * go to the “Plugins” tab
    * search for PersonFS
