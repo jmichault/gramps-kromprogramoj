@@ -66,7 +66,10 @@ _ = _trans.gettext
 
 import instdep
 instdep.instDep('gedcomx_v1','1.0.23')
-instdep.instDep('undetected_chromedriver','3.5.5')
+instdep.instDep('undetected_chromedriver','3.1.6')
+#instdep.instDep('stantdard-distutils','0.0.1')
+#instdep.instDep('wsgiref','0.0.1')
+instdep.instDep('pywebview','3.4')
 
 import gedcomx_v1
 
@@ -75,12 +78,30 @@ from constants import GRAMPS_GEDCOMX_FAKTOJ
 import fs_db
 import komparo
 
+appKey = 'a02j000000KTRjpAAH'
+redirect = 'https://misbach.github.io/fs-auth/index_raw.html'
+#appKey = '3Z3L-Z4GK-J7ZS-YT3Z-Q4KY-YN66-ZX5K-176R'
+#redirect = 'https://www.familysearch.org/auth/familysearch/callback'
+
+havasMinibrowser=False
+havasMinibrowser3=False
+havasSelenium=False
+
 try:
   import minibrowser
+  havasMinibrowser=True
 except:
   print (_('PersonFS : minibrowser ne havebla.'))
+
+try:
+  import minibrowser2
+  havasMinibrowser2=True
+except:
+  print (_('PersonFS : minibrowser2 ne havebla.'))
+
 try:
   import getcode
+  havasSelenium=True
 except:
   print (_('PersonFS : getcode ne havebla.'))
 
@@ -147,10 +168,12 @@ class PersonFS(Gramplet):
     lingvo = glocale.language[0]
 
   def login_selenium(self,vorteco) :
+    print(" login_selenium")
     try:
       import getcode
     except:
       return False
+    print(" appel getcode")
     token = getcode.getcode(PersonFS.fs_sn,PersonFS.fs_pasvorto)
     print("token="+str(token))
     if token is not None and token != '' :
@@ -165,27 +188,24 @@ class PersonFS(Gramplet):
       return False
 
   def login_browser(self,vorteco) :
-    try:
-      import minibrowser
-    except:
+    if havasMinibrowser:
+      print(" appel minibrowser")
+      from minibrowser import miniBrowser
+    elif havasMinibrowser2:
+      print(" appel minibrowser2")
+      from minibrowser2 import miniBrowser
+    else:
       return False
-    # voir https://github.com/misbach/fs-auth/blob/master/index_raw.html
     tree._FsSeanco.logged = False
     tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_LOGIN
-    appKey = 'a02j000000KTRjpAAH'
-    redirect = 'https://misbach.github.io/fs-auth/index_raw.html'
-    url = 'https://ident.familysearch.org/cis-web/oauth2/v3/authorization?response_type=code&scope=openid profile email qualifies_for_affiliate_account country&client_id='+appKey+'&redirect_uri='+redirect+'&username='+ tree._FsSeanco.username
     # ouvrir une fenêtre de navigation
-    print("url= "+url)
-    main = minibrowser.miniBrowser(url)
+    main = miniBrowser(appKey=appKey,redirect=redirect,username=tree._FsSeanco.username)
     print("code="+main.code)
     return self.get_token(main.code,vorteco)
 
   def get_token(self,code,vorteco):
     headers= {"Accept": "application/json"}
     headers.update ( {"Content-Type": "application/x-www-form-urlencoded"})
-    appKey = 'a02j000000KTRjpAAH'
-    redirect = 'https://misbach.github.io/fs-auth/index_raw.html'
     data = {
                "grant_type": 'authorization_code',
                "client_id": appKey,
@@ -218,7 +238,7 @@ class PersonFS(Gramplet):
 
   def aki_sesio(vokanto,vorteco=5):
     if not tree._FsSeanco:
-      if PersonFS.fs_sn == '' or PersonFS.fs_pasvorto == '':
+      if PersonFS.fs_sn == '' :
         import locale, os
         gtk = Gtk.Builder()
         gtk.set_translation_domain("addon")
@@ -311,7 +331,7 @@ class PersonFS(Gramplet):
 
 
   def konekti_FS(self):
-    if PersonFS.fs_sn == '' or PersonFS.fs_pasvorto == '':
+    if PersonFS.fs_sn == '' :
       self.pref_clicked(None)
     if not tree._FsSeanco:
       print("konektas al FS")
