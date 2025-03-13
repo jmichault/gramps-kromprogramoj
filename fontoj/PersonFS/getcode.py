@@ -9,34 +9,50 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+appKey = 'a02j000000KTRjpAAH'
+redirect = 'https://misbach.github.io/fs-auth/index_raw.html'
+
 def getcode(username,password) :
   """ getcode reakirante la aŭtentikigkodon kun undetected_chromedriver """
   try :
-    driver = uc.Chrome(headless=False,use_subprocess=False)
+    driver = uc.Chrome()
   except Exception:
+    print("échec de chargement de chrome")
     return ""
-  url = 'https://ident.familysearch.org/cis-web/oauth2/v3/authorization'
-  url += '?response_type=code'
-  url += '&scope=openid profile email qualifies_for_affiliate_account country'
-  url += '&client_id=' + 'a02j000000KTRjpAAH'
-  url += '&redirect_uri=' + 'https://misbach.github.io/fs-auth/index_raw.html'
-  url += '&username='+username
+  print("essai cx avec selenium")
+  url = 'https://ident.familysearch.org/cis-web/oauth2/v3/authorization?response_type=code'
+  url = url + '&client_id='+appKey
+  url = url + '&redirect_uri='+redirect
+  if username is not None :
+    url = url + '&username=' + username
   driver.get(url)
-  #time.sleep(0.5)
-  elem = WebDriverWait(driver, 10).until(
-          EC.presence_of_element_located((By.ID, "password"))
-      )
-  #time.sleep(1.1)
-  elem.send_keys(password)
-  #time.sleep(0.5)
-  elem.send_keys(Keys.RETURN)
-  elem = WebDriverWait(driver, 10).until(
+  driver.implicitly_wait(10)
+  elem = driver.find_element(By.ID,"password")
+
+  timeout = 30
+  if password is not None and password != '' :
+    elem.send_keys(password)
+    elem.send_keys(Keys.RETURN)
+    timeout = 3
+  try :
+    elem = WebDriverWait(driver, timeout).until(
           EC.presence_of_element_located((By.ID, "jwt"))
       )
-  get_url = driver.current_url
-  print("The current url is:"+str(get_url))
-  time.sleep(0.5)
-  jwt = driver.find_element(By.ID,'jwt')
+  except Exception as e:
+    print(f"exception : {e}")
+    driver.quit()
+    return None
+  if elem.text == '' :
+    driver.get('https://ident.familysearch.org/cis-web/oauth2/v3/authorization?response_type=code&scope=openid%20profile%20email%20qualifies_for_affiliate_account%20country&client_id=a02j000000KTRjpAAH&redirect_uri=https://misbach.github.io/fs-auth/index_raw.html')
+  try :
+    jwt = WebDriverWait(driver, timeout).until(
+          EC.visibility_of_element_located((By.ID, "jwt"))
+      )
+  except Exception as e:
+    print(f"exception : {e}")
+    driver.quit()
+    return None
+
   token = None
   try :
     tekstoj = json.loads(jwt.text)
@@ -45,3 +61,7 @@ def getcode(username,password) :
     print("token pas trouvé.")
   driver.quit()
   return token
+
+if __name__ == '__main__':
+  token = getcode('xxx','')
+  print("token="+str(token))
