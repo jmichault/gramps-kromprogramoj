@@ -84,7 +84,7 @@ redirect = 'https://misbach.github.io/fs-auth/index_raw.html'
 #redirect = 'https://www.familysearch.org/auth/familysearch/callback'
 
 havasMinibrowser=False
-havasMinibrowser3=False
+havasMinibrowser2=False
 havasSelenium=False
 
 try:
