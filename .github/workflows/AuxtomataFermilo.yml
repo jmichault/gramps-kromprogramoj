@@ -1,0 +1,23 @@
+name: Fermi neaktivajn aferojn
+on:
+  schedule:
+    - cron: "18 4 * * *"
+
+jobs:
+  close-issues:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/stale@v9
+        with:
+          days-before-issue-stale: 30
+          days-before-issue-close: 14
+          stale-issue-label: "malfresxa"
+          stale-issue-message: "Ĉi tiu afero estas malfreŝa ĉar ĝi estis malfermita dum 30 tagoj sen aktiveco."
+          close-issue-message: "Ĉi tiu afero estis fermita ĉar ĝi estis neaktiva dum 14 tagoj ekde kiam ĝi estis markita kiel malnoviĝinta."
+          days-before-pr-stale: -1
+          days-before-pr-close: -1
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
