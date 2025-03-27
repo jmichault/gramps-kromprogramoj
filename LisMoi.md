@@ -18,3 +18,4 @@ greffons pour gramps 6.0
   * [PersonFS](fontoj/PersonFS/LisezMoi.md) : une interface avec FamilySearch.
   * [PlaceFrCog](fontoj/PlaceFrCog/README.md) : un gramplet pour récupérer les communes française depuis la base INSEE (base COG : Code Officiel Géographique).
   * [Lokpurigado](fontoj/Lokpurigado/LisMoi.md) : une version modifiée de PlaceCleanup qui utilise openstreetmap au lieu de geonames, et qui récupère les codes INSEE au lieu du code postal.
+  * [recent-items](fontoj/recent-items/README.md) : un portage vers Gramps 6.0 de l'addon recent-items de kkujansuu (https://github.com/kkujansuu/gramps/tree/master/addons/recent-items)
