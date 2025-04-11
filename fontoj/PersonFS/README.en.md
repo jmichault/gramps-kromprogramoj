@@ -11,7 +11,6 @@ To be able to use the extension you need a familysearch account, this will be re
 gir1.2-webkit2-4.0 must be installed.
 The gramplet uses “requests” and “gedcomx\_v1” (>=1.0.12) python modules.  
 You can install 'requests' and 'gedcomx\_v1' manually, or let the gramplet install them automatically (requires pip).  
-Due to changes to the FamilySearch website, this plugin no longer works on Windows.
 
 ## adding the project to the plugin manager
 * open the plugin manager (“puzzle” icon, or Edit menu-->Plugin manager)
