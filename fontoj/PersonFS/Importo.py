@@ -55,18 +55,8 @@ _ = _trans.gettext
 
 
 # gedcomx_v1 biblioteko. Instalu kun `pip install --user --upgrade --break-system-packages gedcomx_v1`
-mingedcomx="1.0.21"
-import importlib
-from importlib.metadata import version
-try:
-  v = version('gedcomx_v1')
-except :
-  v="0.0.0"
-from packaging.version import parse
-if parse(v) < parse(mingedcomx) :
-  print (_('gedcomx_v1 ne trovita aŭ < %s' % mingedcomx))
-  import pip
-  pip.main(['install', '--user', '--upgrade', '--break-system-packages', 'gedcomx_v1'])
+import instdep
+instdep.instDep('gedcomx_v1','1.0.24')
 import gedcomx_v1
 
 
