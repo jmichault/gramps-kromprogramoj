@@ -13,6 +13,8 @@ try:
 except ImportError:
   HavPip=False
 
+from gramps.gen.const import LIB_PATH
+
 def instDep(modulo,versio):
   """ instDep provas instali dependecon kiel argumenton """
   if not HavPip:
@@ -23,7 +25,7 @@ def instDep(modulo,versio):
     v_0="0.0.0"
   if parse(v_0) < parse(versio) :
     print (f'dependeco {modulo} ne trovita aŭ < {versio}')
-    pip.main(['install', '--user', '--upgrade', '--break-system-packages', modulo])
-    pip.main(['install', '--user', '--upgrade', '--break-system-packages', modulo,'--only-binary',':all:'])
+    pip.main(['install', '--target', LIB_PATH, '--upgrade', '--break-system-packages', modulo])
+    pip.main(['install', '--target', LIB_PATH, '--upgrade', '--break-system-packages', modulo,'--only-binary',':all:'])
   #else:
   #  print( "dependeco %s trovita, versio %s" % (modulo , v))
