@@ -74,7 +74,7 @@ instdep.instDep('pywebview','3.4')
 import gedcomx_v1
 
 # lokaloj importadoj
-from constants import GRAMPS_GEDCOMX_FAKTOJ
+from fs_constants import GRAMPS_GEDCOMX_FAKTOJ
 import fs_db
 import komparo
 

@@ -42,7 +42,7 @@ from gramps.gui.utils import ProgressMeter
 import fs_db
 import PersonFS
 import utila
-from constants import GEDCOMX_GRAMPS_FAKTOJ, GEDCOMX_GRAMPS_LOKOJ
+from fs_constants import GEDCOMX_GRAMPS_FAKTOJ, GEDCOMX_GRAMPS_LOKOJ
 import tree
 import komparo
 from utila import fsdato_al_gr, get_fsftid

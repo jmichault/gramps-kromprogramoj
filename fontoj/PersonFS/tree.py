@@ -30,7 +30,7 @@ from urllib.parse import unquote
 import gedcomx_v1
 
 # local imports
-from constants import (
+from fs_constants import (
     MAX_PERSONS,
 )
 from gedcomx_v1.dateformal import DateFormal

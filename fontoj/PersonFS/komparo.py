@@ -47,7 +47,7 @@ import PersonFS
 import fs_db
 import tree
 import utila
-from constants import GEDCOMX_GRAMPS_FAKTOJ,GRAMPS_GEDCOMX_FAKTOJ
+from fs_constants import GEDCOMX_GRAMPS_FAKTOJ,GRAMPS_GEDCOMX_FAKTOJ
 
 #from objbrowser import browse ;browse(locals())
 #import pdb; pdb.set_trace()
