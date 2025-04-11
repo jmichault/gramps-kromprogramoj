@@ -65,8 +65,8 @@ except ValueError:
 _ = _trans.gettext
 
 import instdep
-instdep.instDep('gedcomx_v1','1.0.23')
-instdep.instDep('undetected_chromedriver','3.1.6')
+instdep.instDep('gedcomx_v1','1.0.24')
+instdep.instDep('undetected_chromedriver','3.5.5')
 #instdep.instDep('stantdard-distutils','0.0.1')
 #instdep.instDep('wsgiref','0.0.1')
 instdep.instDep('pywebview','3.4')
@@ -302,11 +302,12 @@ class PersonFS(Gramplet):
           tree._FsSeanco.login_password()
         else :
           #tree._FsSeanco.login()
-          #if not tree._FsSeanco.logged :
-          #  tree._FsSeanco.login_openid('a02j000000KTRjpAAH','https://misbach.github.io/fs-auth/index_raw.html')
+          if not tree._FsSeanco.logged :
+            tree._FsSeanco.login_openid('a02j000000KTRjpAAH','https://misbach.github.io/fs-auth/index_raw.html')
           #if not tree._FsSeanco.logged :
           #  self.login_browser(vorteco)
-          self.login_selenium(vorteco)
+          if not tree._FsSeanco.logged :
+            self.login_selenium(vorteco)
           if not tree._FsSeanco.logged :
             self.login_browser(vorteco)
       print(" langage session FS = "+tree._FsSeanco.lingvo);
@@ -342,11 +343,10 @@ class PersonFS(Gramplet):
       tree._FsSeanco.login_password()
     else :
       #tree._FsSeanco.login()
-      #if not tree._FsSeanco.logged :
-      #  tree._FsSeanco.login_openid('a02j000000KTRjpAAH','https://misbach.github.io/fs-auth/index_raw.html')
-      #if not tree._FsSeanco.logged :
-      #  self.login_browser(0)
-      self.login_selenium(0)
+      if not tree._FsSeanco.logged :
+        tree._FsSeanco.login_openid('a02j000000KTRjpAAH','https://misbach.github.io/fs-auth/index_raw.html')
+      if not tree._FsSeanco.logged :
+        self.login_selenium(0)
       if not tree._FsSeanco.logged :
         self.login_browser(0)
     if tree._FsSeanco.stato == gedcomx_v1.fs_session.STATO_PASVORTA_ERARO :
