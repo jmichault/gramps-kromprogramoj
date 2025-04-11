@@ -88,6 +88,8 @@ def grdato_al_formal( dato) :
   " konvertas gramps-daton al «formal» dato
   "   «formal» dato : <https://github.com/FamilySearch/gedcomx/blob/master/specifications/date-format-specification.md>
   """
+  if dato is None :
+    return None;
   res=''
   gdato = gregorian(dato)
   if gdato.modifier == Date.MOD_ABOUT :
