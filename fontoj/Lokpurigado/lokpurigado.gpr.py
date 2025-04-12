@@ -21,6 +21,7 @@
 """
 Lokpurigado Gramplet.
 """
+from gramps.version import major_version
 
 register(
     GRAMPLET,
@@ -29,7 +30,7 @@ register(
     description = _("Lokpurigado helpas kompletigi lokojn uzante OpenStreetMap."),
     status = STABLE,
     version = '1.0.22',
-    gramps_target_version = '6.0',
+    gramps_target_version= major_version,
     fname = "lokpurigado.py",
     gramplet = 'Lokpurigado',
     navtypes=["Place"],
