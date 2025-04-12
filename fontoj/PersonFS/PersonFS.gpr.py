@@ -24,6 +24,7 @@
 # FS Gramplet
 #
 #------------------------------------------------------------------------
+from gramps.version import major_version
 
 register(GRAMPLET,
          id = "FS Gramplet",
@@ -38,7 +39,7 @@ register(GRAMPLET,
          detached_width = 500,
          detached_height = 500,
          version = 'beta 2.0.54',
-         gramps_target_version= '6.0',
+         gramps_target_version= major_version
          navtypes=["Person"],
          requires_mod=["gedcomx_v1","packaging","requests"],
          )
