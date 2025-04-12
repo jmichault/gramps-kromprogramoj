@@ -67,7 +67,6 @@ _ = _trans.gettext
 
 import instdep
 instdep.instDep('gedcomx_v1','1.0.24')
-instdep.instDep('aes128','0.0.1')
 
 if not win() :
   instdep.instDep('undetected_chromedriver','3.5.5')
