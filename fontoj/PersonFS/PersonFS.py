@@ -42,6 +42,7 @@ from gi.repository import Gtk, Gdk
 from gramps.gen.db import DbTxn
 from gramps.gen.config import config
 from gramps.gen.const import GRAMPS_LOCALE as glocale
+from gramps.gen.constfunc import win
 from gramps.gen.datehandler import get_date
 from gramps.gen.display.name import displayer as name_displayer
 from gramps.gen.display.place import displayer as _pd
@@ -66,10 +67,11 @@ _ = _trans.gettext
 
 import instdep
 instdep.instDep('gedcomx_v1','1.0.24')
-instdep.instDep('undetected_chromedriver','3.5.5')
-#instdep.instDep('stantdard-distutils','0.0.1')
-#instdep.instDep('wsgiref','0.0.1')
-instdep.instDep('pywebview','3.4')
+instdep.instDep('aes128','0.0.1')
+
+if not win() :
+  instdep.instDep('undetected_chromedriver','3.5.5')
+  instdep.instDep('pywebview','3.4')
 
 import gedcomx_v1
 
