@@ -1,4 +1,4 @@
-GREFFONS="Lokpurigado  PersonFS  PlaceFrCog recent-items"
+GREFFONS="Lokpurigado  PersonFS PersonGN PlaceFrCog recent-items"
 LINGVOJ="fr nl en he pt_BR"
 GRPATH="../../gramps"
 
