@@ -42,7 +42,7 @@ from gramps.gui.utils import ProgressMeter
 import fs_db
 import PersonFS
 import utila
-from constants import GEDCOMX_GRAMPS_FAKTOJ, GEDCOMX_GRAMPS_LOKOJ
+from fs_constants import GEDCOMX_GRAMPS_FAKTOJ, GEDCOMX_GRAMPS_LOKOJ
 import tree
 import komparo
 from utila import fsdato_al_gr, get_fsftid
@@ -55,18 +55,8 @@ _ = _trans.gettext
 
 
 # gedcomx_v1 biblioteko. Instalu kun `pip install --user --upgrade --break-system-packages gedcomx_v1`
-mingedcomx="1.0.21"
-import importlib
-from importlib.metadata import version
-try:
-  v = version('gedcomx_v1')
-except :
-  v="0.0.0"
-from packaging.version import parse
-if parse(v) < parse(mingedcomx) :
-  print (_('gedcomx_v1 ne trovita aŭ < %s' % mingedcomx))
-  import pip
-  pip.main(['install', '--user', '--upgrade', '--break-system-packages', 'gedcomx_v1'])
+import instdep
+instdep.instDep('gedcomx_v1','1.0.24')
 import gedcomx_v1
 
 
@@ -120,9 +110,9 @@ def kreiLoko(db, txn, fsPlace, parent):
   db.add_place(place, txn)
   db.commit_place(place, txn)
   fsPlace._handle = place.handle
-  if FsAlGr.fs_gr_lokoj :
-    FsAlGr.fs_gr_lokoj[url.path] = place.handle
-    FsAlGr.fs_gr_lokoj[url2.path] = place.handle
+  if utila.fs_gr_lokoj :
+    utila.fs_gr_lokoj[url.path] = place.handle
+    utila.fs_gr_lokoj[url2.path] = place.handle
   return place
 
 
@@ -149,12 +139,12 @@ def aldLoko(db, txn, pl):
     try:
       datumoj = r.json()
     except Exception as e:
-      self.write_log("WARNING: corrupted file from %s, error: %s" % (mendo, e))
+      print("WARNING: corrupted file from %s, error: %s" % (mendo, e))
       print(r.content)
       return None
   else:
     if r :
-      self.write_log("WARNING: Status code: %s" % r.status_code)
+      print("WARNING: Status code: %s" % r.status_code)
     return None
   if not 'places' in datumoj : return
   t = gedcomx_v1.Gedcomx()
@@ -183,9 +173,9 @@ def aldLoko(db, txn, pl):
     tp.add_url(url)
     tp.add_url(url2)
     grLoko2._merge_url_list(tp)
-    if FsAlGr.fs_gr_lokoj :
-      FsAlGr.fs_gr_lokoj[url.path] = grLoko2.handle
-      FsAlGr.fs_gr_lokoj[url2.path] = grLoko2.handle
+    if utila.fs_gr_lokoj :
+      utila.fs_gr_lokoj[url.path] = grLoko2.handle
+      utila.fs_gr_lokoj[url2.path] = grLoko2.handle
     db.commit_place(grLoko2, txn)
     return grLoko2
 
@@ -203,10 +193,10 @@ def akiriLokoPerId(db, fsLoko):
     s_url2 = fsLoko.links['place'].href.removesuffix('?flag=fsh')
   else :
     s_url2 = None
-  if FsAlGr.fs_gr_lokoj :
-    place_handle=FsAlGr.fs_gr_lokoj.get(s_url)
+  if utila.fs_gr_lokoj :
+    place_handle=utila.fs_gr_lokoj.get(s_url)
     if not place_handle :
-      place_handle=FsAlGr.fs_gr_lokoj.get(s_url2)
+      place_handle=utila.fs_gr_lokoj.get(s_url2)
     if place_handle :
       try :
         return db.get_place_from_handle(place_handle)
@@ -216,16 +206,17 @@ def akiriLokoPerId(db, fsLoko):
       return None
     
   # krei fs_gr_lokoj
-  print(_('Konstrui FSID listo por lokoj'))
-  FsAlGr.fs_gr_lokoj = dict()
-  #print ("sercxi url:"+s_url)
-  for handle in db.get_place_handles():
-    place = db.get_place_from_handle(handle)
-    for url in place.urls :
-      if str(url.type) == 'FamilySearch' :
-          FsAlGr.fs_gr_lokoj[url.path] = handle
+  if not utila.fs_gr_lokoj :
+    print(_('Konstrui FSID listo por lokoj'))
+    utila.fs_gr_lokoj = dict()
+    #print ("sercxi url:"+s_url)
+    for handle in db.get_place_handles():
+      place = db.get_place_from_handle(handle)
+      for url in place.urls :
+        if str(url.type) == 'FamilySearch' :
+          utila.fs_gr_lokoj[url.path] = handle
   # sercxi por loko kun cî «id»
-  place_handle=FsAlGr.fs_gr_lokoj.get(s_url)
+  place_handle=utila.fs_gr_lokoj.get(s_url)
   if place_handle :
     return db.get_place_from_handle(place_handle)
   return None
@@ -311,7 +302,10 @@ def aldFakto(db, txn, fsFakto, obj):
     e = db.get_event_from_handle(fakto.ref)
     grTipo = int(e.type) or e.type
     if ( grTipo == evtType ) :
-      if ( e.get_date_object() == grDato ):
+      if ( e.get_date_object() == grDato 
+           and ( e.get_place_handle() == grLokoHandle or (not e.get_place_handle() and not grLokoHandle))
+           and ( e.description == fsFaktoPriskribo or (not e.description and not fsFaktoPriskribo))
+         ):
         return e
       elif ( ( e.get_date_object().is_empty() and not grDato)
            and ( e.get_place_handle() == grLokoHandle or (not e.get_place_handle() and not grLokoHandle))
@@ -379,11 +373,10 @@ def akFontDatoj(fsTree):
     sd._collectionUri = None
     sd._collection = None
     
-    r = tree._FsSeanco.get_url("/service/tree/links/source/%s" % sd.id,{"Accept": "application/json"})
+    r = tree._FsSeanco.get_url("https://www.familysearch.org/service/tree/links/source/%s" % sd.id,{"Accept": "application/json"})
     if r and r.text :
       datumoj = r.json()
-      print("akFonto : res="+str(datumoj))
-      #gedcomx_v1.maljsonigi(fsTree,datumoj)
+      #print("akFonto : res="+str(datumoj))
       e = datumoj.get('event')
       if e:
         strFormal = e.get('eventDate')
@@ -451,25 +444,33 @@ class MezaFonto:
   #
   def deFS(self, fsSD, fsSR):
     self.id = fsSD.id
-    self.deponejo = None
-    self.sTitolo = None
+    self.deponejo = 'FamilySearch'
+    self.sTitolo = 'FamilySearch'
     self.cTitolo = None
     self.posizio = None
     self.konfido = None
     self.url = fsSD.about
     self.dato = None
     self.noto = '\n'
-    self.kolekto = fsSD._collection
-    if self.kolekto :
-      self.kolektoUrl = 'https://www.familysearch.org/search/collection/'+self.kolekto
+    if hasattr(fsSD,'_collection') :
+      self.kolekto = fsSD._collection
     else :
+      self.kolekto = None
+    if self.kolekto is not None :
+      self.kolektoUrl = 'https://www.familysearch.org/search/collection/'+self.kolekto
+    else:
       self.kolektoUrl = None
     if len(fsSD.titles):
       self.cTitolo = next(iter(fsSD.titles)).value
     FSCitation = None
     if len(fsSD.citations):
       FSCitation = next(iter(fsSD.citations)).value
-    if fsSD.resourceType == 'FSREADONLY':
+    if fsSD.resourceType != 'FSREADONLY' and fsSD.resourceType != 'LEGACY' and fsSD.resourceType != 'DEFAULT' and fsSD.resourceType != 'IGI' :
+      print(" Type de ressource inconnu !!! : "+str(fsSD.resourceType))
+    if fsSD.resourceType == 'LEGACY':
+      self.sTitolo='Legacy NFS Sources'
+    #if fsSD.resourceType == 'FSREADONLY':
+    if fsSD.resourceType != 'DEFAULT':
       self.deponejo = 'FamilySearch'
       if FSCitation :
         linioj = FSCitation.split("\"") 
@@ -701,6 +702,7 @@ class MezaFonto:
         tags=[]
         n.set_type(NoteType(NoteType.CITATION))
         n.append(self.cTitolo or '')
+        n.append('\n\n')
         tags.append(StyledTextTag(StyledTextTagType.BOLD, True,[(0, len(self.cTitolo))]))
         n.append(self.noto or '')
         n.text.set_tags(tags)
@@ -719,8 +721,6 @@ class MezaFonto:
 class FsAlGr:
   # 
   fs_TreeImp = None
-  fs_gr = None
-  fs_gr_lokoj = None
   active_handle = None
   # opcionoj
   nereimporti = False
@@ -731,9 +731,20 @@ class FsAlGr:
   fontoj = False
   vorteco = 0
   aldonaPersono = False
+  refresxigxo = True
+  def __init__(self) :
+    self.nereimporti = False
+    self.asc = 1
+    self.desc = 1
+    self.edz = True
+    self.notoj = False
+    self.fontoj = False
+    self.vorteco = 0
+    self.aldonaPersono = False
+    self.refresxigxo = True
   def aldPersono(self, db, txn, fsPersono):
     fsid = fsPersono.id
-    grPersonoHandle = self.fs_gr.get(fsid)
+    grPersonoHandle = utila.fs_gr.get(fsid)
     if not grPersonoHandle:
       grPerson = Person()
       aldNomoj( db, txn, fsPersono, grPerson)
@@ -745,15 +756,15 @@ class FsAlGr:
         grPerson.set_gender(Person.FEMALE)
       else :
         grPerson.set_gender(Person.UNKNOWN)
-      attr = Attribute()
-      attr.set_type('_FSFTID')
-      attr.set_value(fsid)
-      grPerson.add_attribute(attr)
-  
+      # attr = Attribute()
+      # attr.set_type('_FSFTID')
+      # attr.set_value(fsid)
+      # grPerson.add_attribute(attr)
       db.add_person(grPerson,txn)
       self.aldonaPersono = True
-      db.commit_person(grPerson,txn)
-      self.fs_gr[fsid] = grPerson.handle
+      utila.ligi_gr_fs(db,grPerson,fsid)
+      # db.commit_person(grPerson,txn)
+      utila.fs_gr[fsid] = grPerson.handle
     else :
       if self.nereimporti :
         return
@@ -785,7 +796,7 @@ class FsAlGr:
     # fontoj
     for fsFonto in fsPersono.sources :
       c = aldFonto(db, txn, fsFonto.descriptionId,grPerson,grPerson.citation_list)
-      db.commit_person(grPerson,txn)
+      #db.commit_person(grPerson,txn)
     # FARINDAĴOJ : memoroj
     #for fsMemoro in fsPersono.memories :
       #print("memorie :")
@@ -802,8 +813,8 @@ class FsAlGr:
       #grPerson.add_citation(citation.handle)
       #continue
       
-    db.commit_person(grPerson,txn)
     komparo.kompariFsGr(fsPersono,grPerson,db,None)
+    db.commit_person(grPerson,txn)
   
   def importi( self, vokanto, FSFTID):
 
@@ -814,43 +825,16 @@ class FsAlGr:
     progress = ProgressMeter(_("FamilySearch Importo"), _trans.gettext('Starting'),
                                       parent=vokanto.uistate.window)
     vokanto.uistate.set_busy_cursor(True)
-    vokanto.dbstate.db.disable_signals()
+    if self.refresxigxo :
+      vokanto.dbstate.db.disable_signals()
     cnt=0
-    dupAverto=True
-    self.fs_gr = dict()
     # sercxi ĉi tiun numeron en «gramps».
     # kaj plenigas fs_gr vortaro.
-    progress.set_pass(_('Konstrui FSID listo (1/11)'), vokanto.dbstate.db.get_number_of_people())
-    for person_handle in vokanto.dbstate.db.get_person_handles() :
-      progress.step()
-      person = vokanto.dbstate.db.get_person_from_handle(person_handle)
-      fsid = get_fsftid(person)
-      if fsid  ==self.FS_ID :
-          print(_('«FamilySearch» ekzistanta ID'))
-      if self.fs_gr.get(fsid) :
-        print(_('«FamilySearch» duplikata ID : %s ')%(fsid))
-        if dupAverto :
-          qd = QuestionDialog2(
-                _('Duplikata FSFTID')
-              , _('«FamilySearch» duplikata ID : %s ')%(fsid)
-              , _('_Daŭru averton'), _('_Ĉesu averton')
-              , parent=vokanto.uistate.window)
-          if not qd.run():
-            dupAverto = False
-
-      elif fsid != '' :
-        self.fs_gr[fsid] = person_handle
     if not PersonFS.PersonFS.aki_sesio(vokanto,self.vorteco):
       WarningDialog(_('Ne konekta al FamilySearch'))
       return
-    progress.set_pass(_('Konstrui FSID listo por lokoj (2/11)'), vokanto.dbstate.db.get_number_of_places())
-    FsAlGr.fs_gr_lokoj = dict()
-    for place_handle in vokanto.dbstate.db.get_place_handles() :
-      progress.step()
-      place = vokanto.dbstate.db.get_place_from_handle(place_handle)
-      for url in place.urls :
-        if str(url.type) == 'FamilySearch' :
-          FsAlGr.fs_gr_lokoj[url.path] = place_handle
+    if not utila.fs_gr :
+      utila.konstrui_fs_gr(vokanto,progress,11)
     #if not tree._FsSeanco:
     #  if PersonFS.PersonFS.fs_sn == '' or PersonFS.PersonFS.fs_pasvorto == '':
     #    import locale, os
@@ -933,7 +917,7 @@ class FsAlGr:
       self.fs_TreeImp.add_spouses(todo)
     # notoj , fontoj kaj memoroj
     if self.notoj or self.fontoj:
-      progress.set_pass(_('Elŝutante notojn… (7/11)'),len(self.fs_TreeImp.persons))
+      progress.set_pass(_('Elŝutante notojn… (7/11)'),len(self.fs_TreeImp.persons)+len(self.fs_TreeImp.relationships))
       print(_("Elŝutante notojn kaj fontojn…"))
       for fsPersono in self.fs_TreeImp.persons :
         progress.step()
@@ -943,12 +927,14 @@ class FsAlGr:
         gedcomx_v1.maljsonigi(self.fs_TreeImp,datumoj)
         datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/persons/%s/memories" % fsPersono.id)
         gedcomx_v1.maljsonigi(self.fs_TreeImp,datumoj)
+        akFontDatoj(self.fs_TreeImp)
       for fsFam in self.fs_TreeImp.relationships :
+        progress.step()
         datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/couple-relationships/%s/notes" % fsFam.id)
         gedcomx_v1.maljsonigi(self.fs_TreeImp,datumoj)
         datumoj = tree._FsSeanco.get_jsonurl("/platform/tree/couple-relationships/%s/sources" % fsFam.id)
         gedcomx_v1.maljsonigi(self.fs_TreeImp,datumoj)
-      akFontDatoj(self.fs_TreeImp)
+        akFontDatoj(self.fs_TreeImp)
     if self.vorteco >= 3:
       rezulto = gedcomx_v1.jsonigi(self.fs_TreeImp)
       f = open('importo.out.json','w')
@@ -963,20 +949,27 @@ class FsAlGr:
     if PersonFS.PersonFS.fs_etikedado :
       fs_db.create_tags(self.dbstate.db)
     self.aldonaPersono = False
-    with DbTxn("FamilySearch import", vokanto.dbstate.db) as txn:
-      self.txn = txn
+    if vokanto.dbstate.db.transaction is not None :
+      intr = True
+      self.txn = vokanto.dbstate.db.transaction
+    else :
+      intr = False
+      self.txn = DbTxn("FamilySearch import", vokanto.dbstate.db)
+      vokanto.dbstate.db.transaction_begin(self.txn)
+    #with DbTxn("FamilySearch import", vokanto.dbstate.db) as txn:
+    if True :
       # importi lokoj
       progress.set_pass(_('Importado de lokoj… (8/11)'),len(self.fs_TreeImp.places))
       print(_("Importado de lokoj…"))
       for pl in self.fs_TreeImp.places :
         progress.step()
-        aldLoko( vokanto.dbstate.db, txn, pl)
+        aldLoko( vokanto.dbstate.db, self.txn, pl)
       progress.set_pass(_('Importado de personoj… (9/11)'),len(self.fs_TreeImp.persons))
       print(_("Importado de personoj…"))
       # importi personoj
       for fsPersono in self.fs_TreeImp.persons :
         progress.step()
-        self.aldPersono(vokanto.dbstate.db, txn, fsPersono)
+        self.aldPersono(vokanto.dbstate.db, self.txn, fsPersono)
       progress.set_pass(_('Importado de familioj… (10/11)'),len(self.fs_TreeImp.relationships))
       print(_("Importado de familioj…"))
       # importi familioj
@@ -990,23 +983,26 @@ class FsAlGr:
       for fsCpr in self.fs_TreeImp.childAndParentsRelationships :
         progress.step()
         self.aldInfano(fsCpr)
-      self.txn = None
-      vokanto.dbstate.db.transaction_commit(txn)
+    if not intr :
+      vokanto.dbstate.db.transaction_commit(self.txn)
+      del self.txn
+    self.txn = None
     print("import fini.")
     vokanto.uistate.set_busy_cursor(False)
     progress.close()
-    vokanto.dbstate.db.enable_signals()
+    if self.refresxigxo :
+      vokanto.dbstate.db.enable_signals()
 #   FARINDAĴO : 
-    if self.aldonaPersono :
-      vokanto.dbstate.db.request_rebuild()
+      if self.aldonaPersono :
+        vokanto.dbstate.db.request_rebuild()
 
   def aldInfano(self,fsCpr):
     if fsCpr.parent1:
-      grPatroHandle = self.fs_gr.get(fsCpr.parent1.resourceId)
+      grPatroHandle = utila.fs_gr.get(fsCpr.parent1.resourceId)
     else:
       grPatroHandle = None
     if fsCpr.parent2:
-      grPatrinoHandle = self.fs_gr.get(fsCpr.parent2.resourceId) 
+      grPatrinoHandle = utila.fs_gr.get(fsCpr.parent2.resourceId) 
     else:
       grPatrinoHandle = None
     familio = None
@@ -1048,7 +1044,7 @@ class FsAlGr:
       if grPatrino:
         grPatrino.add_family_handle(familio.get_handle())
         self.dbstate.db.commit_person(grPatrino, self.txn)
-    infanoHandle = self.fs_gr.get(fsCpr.child.resourceId)
+    infanoHandle = utila.fs_gr.get(fsCpr.child.resourceId)
     if not infanoHandle: return
     found = False
     for cr in familio.get_child_ref_list() :
@@ -1066,34 +1062,54 @@ class FsAlGr:
 
   def aldFamilio(self,fsFam):
     familio = None
-    grPatroHandle = self.fs_gr.get(fsFam.person1.resourceId)
-    grPatrinoHandle = self.fs_gr.get(fsFam.person2.resourceId) 
+    grPatroHandle = utila.fs_gr.get(fsFam.person1.resourceId)
     if grPatroHandle :
       grPatro = self.dbstate.db.get_person_from_handle(grPatroHandle)
-      if grPatrinoHandle :
-        grPatrino = self.dbstate.db.get_person_from_handle(grPatrinoHandle)
-      else :
-        grPatrino = None
+    else :
+      grPatro = None
+    grPatrinoHandle = utila.fs_gr.get(fsFam.person2.resourceId) 
+    if grPatrinoHandle :
+      grPatrino = self.dbstate.db.get_person_from_handle(grPatrinoHandle)
+    else :
+      grPatrino = None
+    f_fsid = None
+    if grPatroHandle :
       for family_handle in grPatro.get_family_handle_list():
         if not family_handle: continue
         f = self.dbstate.db.get_family_from_handle(family_handle)
         if f.get_mother_handle() == grPatrinoHandle :
           familio = f
           break
-    elif grPatrinoHandle :
-      grPatro = None
-      grPatrino = self.dbstate.db.get_person_from_handle(grPatrinoHandle)
+        f_fsid = get_fsftid(f)
+        if f_fsid == fsFam.id :
+          familio = f
+          break
+    if not familio and grPatrinoHandle :
       for family_handle in grPatrino.get_family_handle_list():
         if not family_handle: continue
         f = self.dbstate.db.get_family_from_handle(family_handle)
-        if f.get_father_handle() == None :
+        if f.get_father_handle() == grPatroHandle :
           familio = f
           break
-    else:
+        f_fsid = get_fsftid(f)
+        if f_fsid == fsFam.id :
+          familio = f
+          break
+    if not grPatroHandle and not grPatrinoHandle :
       print(_('sengepatra familio ???'))
       return
-    if not grPatro and fsFam.person1.resourceId: return
-    if not grPatrino and fsFam.person2.resourceId: return
+    if familio and not familio.get_father_handle() and grPatroHandle :
+      familio.set_father_handle(grPatroHandle)
+      grPatro.add_family_handle(familio.get_handle())
+      self.dbstate.db.commit_person(grPatro, self.txn)
+    if familio and not familio.get_mother_handle() and grPatrinoHandle :
+      familio.set_mother_handle(grPatrinoHandle)
+      grPatrino.add_family_handle(familio.get_handle())
+      self.dbstate.db.commit_person(grPatrino, self.txn)
+    if not grPatro and fsFam.person1.resourceId:
+       return
+    if not grPatrino and fsFam.person2.resourceId:
+       return
     if not familio :
       familio = Family()
       familio.set_father_handle(grPatroHandle)

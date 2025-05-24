@@ -30,7 +30,7 @@ from urllib.parse import unquote
 import gedcomx_v1
 
 # local imports
-from constants import (
+from fs_constants import (
     MAX_PERSONS,
 )
 from gedcomx_v1.dateformal import DateFormal
@@ -61,7 +61,7 @@ class Tree(gedcomx_v1.Gedcomx):
     try:
       data = r.json()
     except Exception as e:
-      self.write_log("WARNING: corrupted file from %s, error: %s" % (url, e))
+      print("WARNING: corrupted file from %s, error: %s" % (url, e))
       print(r.content)
       data = None
 

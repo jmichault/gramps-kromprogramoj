@@ -64,14 +64,14 @@ def create_tags(db):
     txn = None
   for t in stato_tags:
     if not db.get_tag_from_name(t[0]):
-      if txn == None :
+      if txn is None :
         txn = DbTxn(_("FamilySearch : krei etikadojn"), db) 
       tag = Tag()
       tag.set_name(t[0])
       tag.set_color(t[1])
       db.add_tag(tag, txn)
       db.commit_tag(tag, txn)
-  if txn != None and not intr :
+  if txn is not None and not intr :
     db.transaction_commit(txn)
     del txn
 

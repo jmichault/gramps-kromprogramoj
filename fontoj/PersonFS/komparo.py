@@ -47,7 +47,7 @@ import PersonFS
 import fs_db
 import tree
 import utila
-from constants import GEDCOMX_GRAMPS_FAKTOJ,GRAMPS_GEDCOMX_FAKTOJ
+from fs_constants import GEDCOMX_GRAMPS_FAKTOJ,GRAMPS_GEDCOMX_FAKTOJ
 
 #from objbrowser import browse ;browse(locals())
 #import pdb; pdb.set_trace()
@@ -862,9 +862,6 @@ def aldAliajFaktojKomp(db, person, fsPerso ) :
     fsFaktoLoko = ''
     fsFaktoPriskribo = ''
     # chercher d'abord un fait avec le même id
-    #from objbrowser import browse
-    #import pdb; pdb.set_trace()
-    #from objbrowser import browse ;browse(locals())
     for fsFakto in fsFaktoj :
       if fsFakto.id == grFaktoId :
         fsFakto_id = fsFakto.id
@@ -1088,19 +1085,19 @@ def kompariFsGr(fsPersono,grPersono,db,model=None,dupdok=False):
     if r and r.status_code != 200 :
       FS_Dup = False
     # Serĉi ĉu FamilySearch ofertas dokumentoj
-    mendo = "/service/tree/tree-data/record-matches/"+fsPersono.id
-    r = tree._FsSeanco.get_url( mendo ,{"Accept": "application/json,*/*"})
+    mendo = "https://www.familysearch.org/service/tree/tree-data/record-matches/"+fsPersono.id
+    r = tree._FsSeanco.get_url( mendo ,{"Accept": "application/json"})
     if r and r.status_code == 200 :
       try:
         j = r.json()
-        if ( 'data' in j
+        if ( j and 'data' in j
             and 'matches' in j['data'] 
             and len(j['data']['matches']) >= 1 ) :
           FS_Dok = True
         else:
           FS_Dok = False
       except Exception as e:
-        self.write_log("WARNING: corrupted file from %s, error: %s" % (mendo, e))
+        print("WARNING: corrupted file from %s, error: %s" % (mendo, e))
         print(r.content)
   dbPersono.stat_dato = int(time.time())
   if ( FS_Identa 
@@ -1119,10 +1116,10 @@ def kompariFsGr(fsPersono,grPersono,db,model=None,dupdok=False):
   ret = list() 
   fsid = utila.get_fsftid(grPersono)
   if fsid != '' and PersonFS.PersonFS.fs_etikedado :
-   if db.transaction :
-     intr = True
-   else :
+   if db.transaction is None :
      intr = False
+   else :
+     intr = True
    # «tags»
    for t in fs_db.stato_tags:
      val = locals().get(t[0])
@@ -1138,13 +1135,9 @@ def kompariFsGr(fsPersono,grPersono,db,model=None,dupdok=False):
      dbPersono.fs_datomod = fsPersono._last_modified
    dbPersono.konf_esenco = not FS_Esenco
    if not intr :
-     with (db.transaction or DbTxn(_("FamilySearch etikedoj"), db)) as txn :
+     with DbTxn(_("FamilySearch etikedoj"), db) as txn :
        db.commit_person(grPersono, txn, grPersono.change)
        dbPersono.commit(txn)
-   # if not intr :
-   #   print("fin dbtxn FamilySearch etikedoj") 
-   #   #db.transaction_commit(txn)
-   #   del txn
   return ret
 
   # FARINDAĴOJ : fontoj, notoj, memoroj, attributoj …

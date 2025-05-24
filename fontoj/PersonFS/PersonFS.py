@@ -26,7 +26,6 @@ fs Gramplet.
 import json
 import re
 import email.utils
-from fake_useragent import UserAgent
 
 #-------------------------------------------------------------------------
 #
@@ -43,6 +42,7 @@ from gi.repository import Gtk, Gdk
 from gramps.gen.db import DbTxn
 from gramps.gen.config import config
 from gramps.gen.const import GRAMPS_LOCALE as glocale
+from gramps.gen.constfunc import win
 from gramps.gen.datehandler import get_date
 from gramps.gen.display.name import displayer as name_displayer
 from gramps.gen.display.place import displayer as _pd
@@ -52,11 +52,12 @@ from gramps.gen.plug import Gramplet, PluginRegister
 from gramps.gen.utils.db import get_birth_or_fallback, get_death_or_fallback
 
 from gramps.gui.dialog import OptionDialog, OkDialog , WarningDialog
-from gramps.gui.editors import EditCitation, EditNote, EditPerson, EditEvent
+from gramps.gui.editors import EditCitation, EditNote, EditPerson, EditEvent, EditMedia, EditMediaRef
 from gramps.gui.listmodel import ListModel, NOSORT, COLOR, TOGGLE
 from gramps.gui.viewmanager import run_plugin
 from gramps.gui.widgets.buttons import IconButton
 from gramps.gui.widgets.styledtexteditor import StyledTextEditor
+from gramps.gui.utils import ProgressMeter
 
 try:
     _trans = glocale.get_addon_translator(__file__)
@@ -64,29 +65,47 @@ except ValueError:
     _trans = glocale.translation
 _ = _trans.gettext
 
-# gedcomx_v1 biblioteko. Instalu kun `pip install --user --upgrade --break-system-packages gedcomx_v1`
-mingedcomx="1.0.22"
-import importlib
-from importlib.metadata import version
-try:
-  v = version('gedcomx_v1')
-except :
-  v="0.0.0"
-from packaging.version import parse
-if parse(v) < parse(mingedcomx) :
-  print (_('gedcomx_v1 ne trovita aŭ < %s' % mingedcomx))
-  import pip
-  pip.main(['install', '--user', '--upgrade', '--break-system-packages', 'gedcomx_v1'])
+import instdep
+instdep.instDep('gedcomx_v1','1.0.24')
+
+if not win() :
+  instdep.instDep('undetected_chromedriver','3.5.5')
+  instdep.instDep('pywebview','3.4')
+
 import gedcomx_v1
 
 # lokaloj importadoj
-from constants import GRAMPS_GEDCOMX_FAKTOJ
+from fs_constants import GRAMPS_GEDCOMX_FAKTOJ
 import fs_db
 import komparo
+
+appKey = 'a02j000000KTRjpAAH'
+redirect = 'https://misbach.github.io/fs-auth/index_raw.html'
+#appKey = '3Z3L-Z4GK-J7ZS-YT3Z-Q4KY-YN66-ZX5K-176R'
+#redirect = 'https://www.familysearch.org/auth/familysearch/callback'
+
+havasMinibrowser=False
+havasMinibrowser2=False
+havasSelenium=False
+
 try:
   import minibrowser
+  havasMinibrowser=True
 except:
-  pass
+  print (_('PersonFS : minibrowser ne havebla.'))
+
+try:
+  import minibrowser2
+  havasMinibrowser2=True
+except:
+  print (_('PersonFS : minibrowser2 ne havebla.'))
+
+try:
+  import getcode
+  havasSelenium=True
+except:
+  print (_('PersonFS : getcode ne havebla.'))
+
 import tree
 import utila
 import Importo
@@ -149,27 +168,49 @@ class PersonFS(Gramplet):
   if not lingvo :
     lingvo = glocale.language[0]
 
-  def login_browser(self,vorteco) :
+  def login_selenium(self,vorteco) :
+    print(" login_selenium")
     try:
-      import minibrowser
+      import getcode
     except:
       return False
-    # voir https://github.com/misbach/fs-auth/blob/master/index_raw.html
+    print(" appel getcode")
+    token = getcode.getcode(PersonFS.fs_sn,PersonFS.fs_pasvorto)
+    print("token="+str(token))
+    if token is not None and token != '' :
+      tree._FsSeanco.access_token = token
+      print("FamilySearch-ĵetono akirita")
+      tree._FsSeanco.logged = True
+      tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_KONEKTITA
+      return True
+    else:
+      print(" échec de connexion")
+      tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_PASVORTA_ERARO
+      return False
+
+  def login_browser(self,vorteco) :
+    if havasMinibrowser:
+      print(" appel minibrowser")
+      from minibrowser import miniBrowser
+    elif havasMinibrowser2:
+      print(" appel minibrowser2")
+      from minibrowser2 import miniBrowser
+    else:
+      return False
     tree._FsSeanco.logged = False
     tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_LOGIN
-    appKey = 'a02j000000KTRjpAAH'
-    redirect = 'https://misbach.github.io/fs-auth/index_raw.html'
-    url = 'https://ident.familysearch.org/cis-web/oauth2/v3/authorization?response_type=code&scope=openid profile email qualifies_for_affiliate_account country&client_id='+appKey+'&redirect_uri='+redirect+'&username='+ tree._FsSeanco.username
     # ouvrir une fenêtre de navigation
-    print("url= "+url)
-    main = minibrowser.miniBrowser(url)
+    main = miniBrowser(appKey=appKey,redirect=redirect,username=tree._FsSeanco.username)
     print("code="+main.code)
+    return self.get_token(main.code,vorteco)
+
+  def get_token(self,code,vorteco):
     headers= {"Accept": "application/json"}
     headers.update ( {"Content-Type": "application/x-www-form-urlencoded"})
     data = {
                "grant_type": 'authorization_code',
                "client_id": appKey,
-               "code": main.code,
+               "code": code,
                "redirect_uri": redirect,
              }
     url = 'https://ident.familysearch.org/cis-web/oauth2/v3/token'
@@ -198,7 +239,7 @@ class PersonFS(Gramplet):
 
   def aki_sesio(vokanto,vorteco=5):
     if not tree._FsSeanco:
-      if PersonFS.fs_sn == '' or PersonFS.fs_pasvorto == '':
+      if PersonFS.fs_sn == '' :
         import locale, os
         gtk = Gtk.Builder()
         gtk.set_translation_domain("addon")
@@ -261,9 +302,13 @@ class PersonFS(Gramplet):
           tree._FsSeanco.client_id=PersonFS.fs_client_id
           tree._FsSeanco.login_password()
         else :
-          tree._FsSeanco.login()
+          #tree._FsSeanco.login()
           if not tree._FsSeanco.logged :
             tree._FsSeanco.login_openid('a02j000000KTRjpAAH','https://misbach.github.io/fs-auth/index_raw.html')
+          #if not tree._FsSeanco.logged :
+          #  self.login_browser(vorteco)
+          if not tree._FsSeanco.logged :
+            self.login_selenium(vorteco)
           if not tree._FsSeanco.logged :
             self.login_browser(vorteco)
       print(" langage session FS = "+tree._FsSeanco.lingvo);
@@ -288,7 +333,7 @@ class PersonFS(Gramplet):
 
 
   def konekti_FS(self):
-    if PersonFS.fs_sn == '' or PersonFS.fs_pasvorto == '':
+    if PersonFS.fs_sn == '' :
       self.pref_clicked(None)
     if not tree._FsSeanco:
       print("konektas al FS")
@@ -298,9 +343,11 @@ class PersonFS(Gramplet):
       tree._FsSeanco.client_id=PersonFS.fs_client_id
       tree._FsSeanco.login_password()
     else :
-      tree._FsSeanco.login()
+      #tree._FsSeanco.login()
       if not tree._FsSeanco.logged :
         tree._FsSeanco.login_openid('a02j000000KTRjpAAH','https://misbach.github.io/fs-auth/index_raw.html')
+      if not tree._FsSeanco.logged :
+        self.login_selenium(0)
       if not tree._FsSeanco.logged :
         self.login_browser(0)
     if tree._FsSeanco.stato == gedcomx_v1.fs_session.STATO_PASVORTA_ERARO :
@@ -353,19 +400,25 @@ class PersonFS(Gramplet):
       return
     tipo=model.get_value(iter_, 8)
     handle = model.get_value(iter_, 9)
-    if ( handle
-         and ( tipo == 'infano' or tipo == 'patro'
-            or tipo == 'patrino' or tipo == 'edzo')) :
+    if not handle :
+      return
+    if ( tipo == 'infano' or tipo == 'patro'
+            or tipo == 'patrino' or tipo == 'edzo') :
       person = self.dbstate.db.get_person_from_handle(handle)
       try:
         EditPerson(self.dbstate, self.uistate, [], person)
       except WindowActiveError:
         pass
-    elif ( handle
-         and (tipo == 'fakto' or tipo == 'edzoFakto')) :
+    elif (tipo == 'fakto' or tipo == 'edzoFakto') :
       event = self.dbstate.db.get_event_from_handle(handle)
       try:
         EditEvent(self.dbstate, self.uistate, [], event)
+      except WindowActiveError:
+        pass
+    elif (tipo == 'Bildo' ) :
+      m = self.dbstate.db.get_media_from_handle(handle)
+      try:
+        EditMedia(self.dbstate, self.uistate, [],m)
       except WindowActiveError:
         pass
 
@@ -387,7 +440,7 @@ class PersonFS(Gramplet):
      l = [x]
      l.extend(x.iterchildren())
      for linio in l :
-      if linio[7] : 
+      if linio[7] : # si la ligne est cochée
         tipolinio = linio[8]
         if ( (tipolinio == 'fakto' or tipolinio == 'edzoFakto')
              and linio[9] ) :
@@ -520,7 +573,7 @@ class PersonFS(Gramplet):
           fsTP.persons.add(fsP)
         elif ( (tipolinio == 'edzo' )
              and linio[9] ) :
-          grEdzo = self.dbstate.db.get_person_from_handle(linio[8])
+          grEdzo = self.dbstate.db.get_person_from_handle(linio[9])
           fsTR = gedcomx_v1.Gedcomx()
           grFamilyHandle = linio[11]
           RSfsid = linio[12]
@@ -574,18 +627,28 @@ class PersonFS(Gramplet):
             fsCPRS.parent1 = gedcomx_v1.ResourceReference()
             fsCPRS.parent1.resourceId = utila.get_fsftid(gepatro1)
             fsCPRS.parent1.resource = "https://api.familysearch.org/platform/tree/persons/" + fsCPRS.parent1.resourceId
+            #fact1 = gedcomx_v1.Fact()
+            #fact1.type = "http://gedcomx.org/BiologicalParent"
+            #fact1.id = "C.1"
+            #fsCPRS.parent1Facts.add(fact1)
           spouse_handle = grFamily.get_mother_handle()
           if spouse_handle :
             gepatro2 = self.dbstate.db.get_person_from_handle(spouse_handle)
             fsCPRS.parent2 = gedcomx_v1.ResourceReference()
             fsCPRS.parent2.resourceId = utila.get_fsftid(gepatro2)
             fsCPRS.parent2.resource = "https://api.familysearch.org/platform/tree/persons/" + fsCPRS.parent2.resourceId
+            #fact2 = gedcomx_v1.Fact()
+            #fact2.type = "http://gedcomx.org/BiologicalParent"
+            #fact2.id = "C.2"
+            #fsCPRS.parent2Facts.add(fact2)
           fsTR.childAndParentsRelationships.add(fsCPRS)
           peto = gedcomx_v1.jsonigi(fsTR)
           jsonpeto = json.dumps(peto)
-          res = tree._FsSeanco.post_url( "/platform/tree/relationships", jsonpeto )
+          # exemple ici : https://www.familysearch.org/developers/docs/api/tree/Create_Child_and_Parents_Relationship_usecase
+          res = tree._FsSeanco.post_url( "/platform/tree/relationships", jsonpeto, headers={"Content-Type": "application/x-fs-v1+json"})
           if res and (res.status_code == 201 or res.status_code == 204):
             print("ĝisdatigo sukceso")
+            print(" jsonpeto = "+jsonpeto)
           elif not res :
             print("la ĝisdatigo ne havis rezulton por:")
             print(" jsonpeto = "+jsonpeto)
@@ -728,6 +791,8 @@ class PersonFS(Gramplet):
           fsP.sources.add(fsFontoRef)
           fsP.id = self.FSID
           fsTP.persons.add(fsP)
+        elif (tipolinio == 'Bildo' ) :
+          pass
      # FARINDAĴO : gepatroj, infanoj,…
 
     if len(fsTP.persons) >0 :
@@ -748,6 +813,51 @@ class PersonFS(Gramplet):
     if len(fsTP.persons) >0 or len(fsTR.relationships) >0 :
       self.ButRefresxigi_clicked(None)
     
+  def ligi(self, treeview):
+    print("ligi")
+    nbElek = 0
+    nbGr =0
+    nbFs =0
+    tipo1 = 'x'
+    tipo2 = 'y'
+    grHandle = None
+    fsid = None
+    model = self.modelKomp.model
+    for x in model:
+     l = [x]
+     l.extend(x.iterchildren())
+     for linio in l :
+      if linio[7] :
+        nbElek = nbElek + 1
+      else :
+        continue
+      tipolinio = linio[8]
+      if nbElek == 1 :
+        tipo1 = tipolinio
+      if nbElek == 2 :
+        tipo2 = tipolinio
+      gr_Handle = linio[9]
+      if gr_Handle :
+        grHandle = gr_Handle
+        nbGr = nbGr + 1
+      fs_id = linio[10]
+      if fs_id :
+        fsid = fs_id
+        nbFs = nbFs + 1
+    if nbElek==2 and nbGr==1 and nbFs==1 and tipo1 == tipo2 :
+      grObjekto = None
+      match tipo1 :
+        case 'Person'|'patro'|'patrino'|'edzo'|'infano' :
+          grObjekto = self.dbstate.db.get_person_from_handle(grHandle)
+        case 'fakto'|'edzoFakto' :
+          grObjekto = self.dbstate.db.get_event_from_handle(grHandle)
+        case 'Fonto' :
+          grObjekto = self.dbstate.db.get_citation_from_handle(grHandle)
+      utila.ligi_gr_fs(self.dbstate.db, grObjekto, fsid)
+      self.ButRefresxigi_clicked(None)
+      
+
+
   def kopii_al_gramps(self, treeview):
     print("kopii_al_gramps")
     model = self.modelKomp.model
@@ -769,9 +879,10 @@ class PersonFS(Gramplet):
        l = [x]
        l.extend(x.iterchildren())
        for linio in l :
+        if not linio[7] : # si la ligne n'est pas cochée
+          continue
         tipolinio = linio[8]
         if ( (tipolinio == 'fakto' )
-             and linio[7] 
              and linio[10] ) :
             fsFakto_id = linio[10]
             grFaktoH = linio[9]
@@ -801,7 +912,6 @@ class PersonFS(Gramplet):
                 elif event.type == EventType.DEATH :
                   grPersono.set_death_ref(er)
         elif ( (tipolinio == 'edzoFakto')
-             and linio[7] 
              and linio[10] 
              and linio[11] ) :
             grFaktoH = linio[9]
@@ -831,7 +941,6 @@ class PersonFS(Gramplet):
       
             self.dbstate.db.commit_family(grParo,txn)
         elif ( (tipolinio == 'nomo' or tipolinio == 'nomo1')
-             and linio[7] 
              and linio[10] ) :
             grNomo_str = linio[9]
             fsNomo_id = linio[10]
@@ -839,7 +948,6 @@ class PersonFS(Gramplet):
               if fsNomo.id == fsNomo_id : break
             Importo.aldNomo(self.dbstate.db, txn, fsNomo, grPersono)
         elif ( (tipolinio == 'NotoF' )
-             and linio[7] 
               and linio[4] and linio[12] ) :
             print("NotoF FS-->gramps")
             # self.modelKomp.add(['white',_('Familio'),titolo,teksto,fsTitolo,fsTeksto,'',False,'NotoF',family_handle,nh,fsParoId,fsNoto.id] )
@@ -861,7 +969,6 @@ class PersonFS(Gramplet):
             grParo.add_note(grNoto.handle)
             self.dbstate.db.commit_family(grParo,txn)
         elif ( (tipolinio == 'NotoP' )
-             and linio[7] 
               and linio[6] and linio[12] ) :
             print("NotoP FS-->gramps")
             nh=linio[10]
@@ -878,11 +985,26 @@ class PersonFS(Gramplet):
               self.dbstate.db.add_note(grNoto, txn)
             self.dbstate.db.commit_note(grNoto, txn)
             grPersono.add_note(grNoto.handle)
-        elif ( (tipolinio == 'Fonto' ) and linio[10] and linio[7]) :
+        elif ( (tipolinio == 'Fonto' ) and linio[10] ) :
           fsSdId = linio[10]
           fh = linio[9]
           print(" fonto FS --> gramps, id="+fsSdId)
           citation = Importo.aldFonto(self.dbstate.db,txn,fsSdId,grPersono,grPersono.citation_list)
+        elif ( (  tipolinio == 'infano'  or tipolinio == 'patro'
+               or tipolinio == 'patrino' or tipolinio == 'edzo')
+             and linio[10] ) :
+          fsid = linio[10]
+          importilo = Importo.FsAlGr()
+          importilo.nereimporti = False
+          if (tipolinio !=  'infano') :
+            importilo.asc = 0
+          if (tipolinio !=  'patro' and tipolinio !=  'patrino') :
+            importilo.desc = 0
+          if (tipolinio !=  'edzo') :
+            importilo.edz = False
+          importilo.refresxigxo = False
+          importilo.importi(self, fsid)
+          print(" infano FS --> gramps")
       self.dbstate.db.commit_person(grPersono,txn)
       self.dbstate.db.transaction_commit(txn)
     self.ButRefresxigi_clicked(None)
@@ -898,12 +1020,44 @@ class PersonFS(Gramplet):
          and (    tipo == 'infano' or tipo == 'patro'
                or tipo == 'patrino' or tipo == 'edzo'
                or tipo == 'fakto' or tipo == 'edzoFakto'
+               or tipo == 'Bildo'
             )) :
         item  = Gtk.MenuItem(label=_('Redakti : %s - %s - %s')% (model.get_value(iter_,1),model.get_value(iter_,2),model.get_value(iter_,3)))
         item.set_sensitive(1)
         item.connect("activate",lambda obj: self.redakti(treeview))
         item.show()
         menu.append(item)
+    model = self.modelKomp.model
+    nbElek = 0
+    nbGr =0
+    nbFs =0
+    tipo1 = 'x'
+    tipo2 = 'y'
+    for x in model:
+     l = [x]
+     l.extend(x.iterchildren())
+     for linio in l :
+      if linio[7] : 
+        nbElek = nbElek + 1
+      else :
+        continue
+      tipolinio = linio[8]
+      if nbElek == 1 :
+        tipo1 = tipolinio
+      if nbElek == 2 :
+        tipo2 = tipolinio
+      grHandle = linio[9]
+      if grHandle :
+        nbGr = nbGr + 1
+      fs_id = linio[10]
+      if fs_id :
+        nbFs = nbFs + 1
+    if nbElek==2 and nbGr==1 and nbFs==1 and tipo1 == tipo2 :
+      item  = Gtk.MenuItem(label=_('Ligi la du.'))
+      item.set_sensitive(1)
+      item.connect("activate",lambda obj: self.ligi(treeview))
+      item.show()
+      menu.append(item)
     item  = Gtk.MenuItem(label=_('Kopii elekton de gramps al FS'))
     item.set_sensitive(1)
     item.connect("activate",lambda obj: self.kopii_al_FS(treeview))
@@ -1082,7 +1236,8 @@ class PersonFS(Gramplet):
         sd.citations=set()
       if PersonFS.fs_Tree and self.FSID in PersonFS.fs_Tree._persons :
         PersonFS.fs_Tree._persons.pop(self.FSID)
-      PersonFS.fs_Tree.add_persons([self.FSID])
+      if PersonFS.fs_Tree and self.FSID :
+        PersonFS.fs_Tree.add_persons([self.FSID])
     #rezulto = gedcomx_v1.jsonigi(PersonFS.fs_Tree)
     #f = open('arbo2.out.json','w')
     #json.dump(rezulto,f,indent=2)
@@ -1487,6 +1642,8 @@ class PersonFS(Gramplet):
     grPersono = self.dbstate.db.get_person_from_handle(active_handle)
     importilo = Importo.FsAlGr()
     fsid = get_fsftid(grPersono)
+    importilo.nereimporti = False
+    importilo.refresxigxo = False
     importilo.importi(self, fsid)
     #import cProfile
     #cProfile.runctx('importilo.importi(self, fsid)',globals(),locals())
@@ -1861,11 +2018,39 @@ class PersonFS(Gramplet):
       mrl = grPersono.get_media_list()
       for mr in mrl :
         m = self.dbstate.db.get_media_from_handle(mr.ref)
-        self.modelKomp.add(['white',m.desc,m.path,mr.ref,'==========',colFS,'',False,'Bildo',None,None,None,None]  )
+        dato = utila.grdato_al_formal(m.date)
+        self.modelKomp.add(['white',m.desc,dato,m.path,'==========',colFS,'',False,'Bildo',mr.ref,None,None,None]  )
       for e in fsPerso.evidence :
         print("evidence : resource="+e.resource)
         print("           resourceid="+e.resourceId)
-        self.modelKomp.add(['white','','==========','============================','==========',e.resource,'',False,'Bildo',None,None,None,None]  )
+        posTir = e.resourceId.find('-')
+        sdid = e.resourceId[0:posTir]
+        datumoj = tree._FsSeanco.get_jsonurl("/platform/memories/memories?mids=" + sdid)
+        gedcomx_v1.maljsonigi(PersonFS.fs_Tree,datumoj)
+        sd = gedcomx_v1.SourceDescription()
+        for x in PersonFS.fs_Tree.sourceDescriptions :
+          if x.id == sdid :
+            sd=x
+            break
+        md = gedcomx_v1.artifactMetadata()
+        for x in sd.artifactMetadata :
+          md = x
+          break
+        fsNomo = md.filename
+        coverage = gedcomx_v1.Coverage()
+        for x in sd.coverage :
+          coverage = x
+          break
+        fsTitolo=''
+        for x in sd.titles :
+          fsTitolo = x.value
+          break
+        fsDato = str(coverage.temporal)
+        fsLokoDesk = coverage.spatial.description
+        for x in coverage.spatial.names :
+          fsLoko = x.value
+          break
+        self.modelKomp.add(['white',fsTitolo,'==========','============================',fsDato,fsNomo,'',False,'Bildo',None,None,None,None]  )
       # FARINDAĴO
     else : # REG_cxefa
       kompRet = komparo.kompariFsGr(fsPerso, grPersono, self.dbstate.db, self.modelKomp,getfs)

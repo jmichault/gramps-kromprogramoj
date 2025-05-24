@@ -670,7 +670,7 @@ PersonFS uzos ĉi tiujn informojn konforme al iliaj respektivaj servokondiĉoj k
                   <item id="REG_cxefa" translatable="yes">Ĉefa</item>
                   <item id="REG_notoj" translatable="yes">Notoj</item>
                   <item id="REG_fontoj" translatable="yes">Fontoj</item>
-                  <item id="REG_bildoj" translatable="yes">Bildoj</item>
+<!-- <item id="REG_bildoj" translatable="yes">Bildoj</item> -->
                 </items>
                 <signal name="changed" handler="on_CB_Regximo_changed" swapped="no"/>
               </object>

@@ -10,7 +10,8 @@ Pour pouvoir utiliser l'extension il vous faut un compte _familysearch_, celui-c
 
 # installation
 ## prérequis
-Cette extension est prévue pour gramps version 5.2.
+Cette extension est prévue pour gramps version 6.0.
+Elle a besoin de gir1.2-webkit2-4.0 .
 Le gramplet utilise les modules python «requests» et «gedcomx\_v1» (>=1.0.12).  
 Vous pouvez installer «requests» et «gedcomx\_v1» manuellement, ou laisser le gramplet les installer automatiquement (nécessite pip).
 
@@ -19,7 +20,7 @@ Vous pouvez installer «requests» et «gedcomx\_v1» manuellement, ou laisser l
 * allez à l'onglet «Projets»
   * cliquez sur «+»
     * Nom du Projet : jmichault (ou ce que vous voulez)
-    * URL : https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps52
+    * URL : https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps60
     * cliquez sur «Valider»
 * allez à l'onglet «Greffons»
   * cherchez PersonFS

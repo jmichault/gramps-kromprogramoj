@@ -1,4 +1,4 @@
-GREFFONS="Lokpurigado  PersonFS  PlaceFrCog"
+GREFFONS="Lokpurigado  PersonFS  PlaceFrCog recent-items"
 LINGVOJ="fr nl en he pt_BR"
 GRPATH="../../gramps"
 
@@ -16,6 +16,10 @@ if [ $# -gt 0 ] ; then
    IRU_L=1
    IRU_D=1
  fi
+fi
+
+if [ $# -gt 1 ] ; then
+  GREFFONS="$2"
 fi
 
 if [ $IRU_L == 1 ] ; then

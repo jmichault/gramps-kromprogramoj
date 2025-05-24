@@ -9,7 +9,8 @@ Por povi uzi la gramplet vi bezonas _familysearch_-konton, ĉi tio estas enigota
 
 # instalado
 ## antaŭkondiĉoj
-Ĉi tiu kromprogramo estas destinita por gramps-versio 5.2.
+Ĉi tiu kromprogramo estas destinita por gramps-versio 6.0.
+gir1.2-webkit2-4.0 devas esti instalita.
 La gramplet uzas "requests" kaj "gedcomx\_v1" (>=1.0.19) python-modulojn.  
 Vi povas instali 'requests' kaj 'gedcomx\_v1' permane, aŭ lasi la gramplet instali ilin aŭtomate (postulas pip).  
 
@@ -18,8 +19,8 @@ Vi povas instali 'requests' kaj 'gedcomx\_v1' permane, aŭ lasi la gramplet inst
 * iru al la langeto "Projektoj".
   * alklaku la butonon + (maldekstre malsupre), kaj enigu:
     * "Nomo de la projekto:": "jmichault" (aŭ kion ajn vi volas)
-    * "URL:": "<https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps52>"
-    * «URL :» : «<https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps52>»
+    * "URL:": "<https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps60>"
+    * «URL :» : «<https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps60>»
     * alklaku "Valigiti"
     * marku la skatolon maldekstre de la nova projekto por aktivigi ĝin.
        La projektaj kromaĵoj nun haveblas en la langeto "Kromaĵoj".
