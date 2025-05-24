@@ -1,7 +1,9 @@
+#!/usr/bin/env python
+# coding: utf-8
 #
-# Gramplet - GN (interfaco por GeneaNet)
+# Gramplet - PersonGN (interfaco por GeneaNet)
 #
-# Kopirajto © 2022 Jean Michault
+# Kopirajto © 2025 Jean Michault
 # Licenco «GPL-3.0-or-later»
 #
 # Ĉi tiu programo estas libera programaro; vi povas redistribui ĝin kaj/aŭ modifi
@@ -110,17 +112,24 @@ def kreiLokoDeOsm(db, txn, osmDatoj, parento=None) :
      case '4' : # Régions : Aquitaine, Nouvelle-Aquitaine, …
       place.place_type = PlaceType(PlaceType.REGION)
       place.gramps_id = 'FrCogReg%s' % refI
-     #case 5 : # Circonscription départementale
+     case 5 : # Circonscription départementale
+      place.place_type = PlaceType('Circonscription départementale')
+      place.gramps_id = 'FrCogCir%s' % refI
      case '6' : # Départements
       place.place_type = PlaceType(PlaceType.DEPARTMENT)
       place.gramps_id = 'FrCogDep%s' % refI
-     #case 7 : # Arrondissements
+     case 7 : # Arrondissements départementaux
+      place.place_type = PlaceType('Arrondissement départemental')
+      place.gramps_id = 'FrCogArr%s' % refI
      case '8' : # communes
       place.place_type = PlaceType(PlaceType.MUNICIPALITY)
       place.gramps_id = 'FrCogCom%s' % refI
-     #case 9 : # Arrondissements municipaux (à Paris, Lyon, Marseille ), ou communes associées, ou communes déléguées
+     case 9 : # Arrondissements municipaux (à Paris, Lyon, Marseille ), ou communes associées, ou communes déléguées
+      place.place_type = PlaceType('Arrondissement municipal')
+      place.gramps_id = 'FrCogCom%s' % refI
      case '10' : # quartier
       place.place_type = PlaceType(PlaceType.BOROUGH)
+      place.gramps_id = 'FrCogQua%s' % refI
   if not place.place_type or place.place_type.value == PlaceType.UNKNOWN : # autres pays, on se cale sur les USA
     match al :
      case '2' :
@@ -161,7 +170,7 @@ def akiriOsmLoko(db, txn, osmDatoj, parento=None) :
   #  4. sinon et si le parent est renseigné : même parent avec même lien internet
   #  finalement : si le c'est un pays ou si le parent est renseigné : on crée le lieu
   nomo = osmDatoj['tags'].get('name')
-  print("akiriOsmLoko : %s" % nomo)
+  #print("akiriOsmLoko : %s" % nomo)
   loko = db.get_place_from_gramps_id(osmDatoj.get('gramps_id'))
   if loko :
     return loko
@@ -199,7 +208,7 @@ def akiriOsmLoko(db, txn, osmDatoj, parento=None) :
   return None
 
 def akiriLoko(db, txn, nomo) :
-  print("akiriLoko : %s" % nomo)
+  #print("akiriLoko : %s" % nomo)
   if nomo is None or nomo.strip()=='' :
     return None
   # si on a déjà un lieu avec ce nom, on le prend :
@@ -213,22 +222,22 @@ def akiriLoko(db, txn, nomo) :
   lieudit = kodo = None
   if partoj[0].find(' - ') >= 0 :  # on a un lieu-dit
     x = partoj[0].split(' - ')
-    lieudit=x[0].strip(" []")
+    lieudit=x[0].strip(" []()")
     partoj[0]=x[1].strip()
   for x in partoj :
-    if x.strip().isdecimal() :
-      kodo = int(x.strip())
+    if x.strip(" []()").isdecimal() :
+      kodo = int(x.strip(" []()"))
       partoj.remove(x)
-  print("partoj = %s" % partoj)
+  #print("partoj = %s" % partoj)
   # on tente de trouver le lieu sur openstreetmap :
   osmLokoj = LokoGN.osmSearch(nomo)
-  print("résultat osm = %s" %osmLokoj)
-  if osmLokoj is None or len(osmLokoj) == 0 :  # osm n'a rien trouvé : on tente de trouver la commune
+  #print("résultat osm = %s" %osmLokoj)
+  if osmLokoj is None or len(osmLokoj) != 1 :  # osm n'a rien trouvé ou trop : on tente de trouver la commune
     komunumo = ''.join(partoj)
     osmLokoj = LokoGN.osmSearch(komunumo)
   else : # lieu complet trouvé sur osm, on n'a plus besoin du lieu-dit
     lieudit = None
-  if osmLokoj is None or len(osmLokoj) == 0 :  # Perdu, osm n'a rien trouvé : on crée le lieu tel que
+  if osmLokoj is None or len(osmLokoj) != 1 :  # Perdu, osm n'a rien trouvé, ou trop : on crée le lieu tel que
     place = Place()
     place_name = PlaceName()
     place_name.set_value( nomo.strip() )
@@ -239,8 +248,8 @@ def akiriLoko(db, txn, nomo) :
     return place
   antNomo = nomo.split(',')[0].strip()
   osmLoko = LokoGN.osmParse(osmLokoj[0])
-  print("résultat détaillé osm = %s" %osmLoko.osmDatoj)
-  print("  gramps_id=%s" % osmLoko.gramps_id)
+  #print("résultat détaillé osm = %s" %osmLoko.osmDatoj)
+  #print("  gramps_id=%s" % osmLoko.gramps_id)
   #print("    parents = %s" % osmLoko.parentoj)
 
   loko = db.get_place_from_gramps_id(osmLoko.gramps_id)
@@ -280,18 +289,19 @@ def htmlAlStyled(teksto) :
   teksto = teksto.replace('<br>\n','\n')
   return(convert_to_styled(teksto))
 
-def aldFaktoj( db, txn, extPersono, grPerson) :
+def aldFaktoj( db, txn, extPersono, grPerson, progress) :
   faktoj = extPersono['person'].get('events')
   if faktoj is None or len(faktoj) == 0 :
     return
   for f in faktoj.get('elements') :
     if f.get('type') == "EFAM_MARRIAGE" :
       continue
+    progress.step()
     event = Event()
     evtType = GN_GRAMPS_FAKTOJ.get(unquote(f.get('type')))
     if not evtType:
       evtType = unquote(f.get('name'))
-    print("ajout évènement %s" % evtType)
+    #print("ajout évènement %s" % evtType)
     event.set_type( evtType )
     dato = f.get('dateLong')
     if dato :
@@ -305,9 +315,10 @@ def aldFaktoj( db, txn, extPersono, grPerson) :
       grLoko = akiriLoko(db, txn, loko)
       event.set_place_handle(grLoko.handle)
       db.commit_event(event, txn)
+    progress.step()
     noto = f.get('note')
     if noto :
-      print("   note evt :%s" % noto)
+      #print("   note evt :%s" % noto)
       grNoto = Note()
       grNoto.set_type(NoteType(_('note geneanet %s') % extPersono['person'].get('baseprefix')))
       st = htmlAlStyled(noto)
@@ -316,9 +327,10 @@ def aldFaktoj( db, txn, extPersono, grPerson) :
       db.commit_note(grNoto, txn)
       event.add_note(grNoto.handle)
       db.commit_event(event, txn)
+    progress.step()
     src = f.get('src')
     if src :
-      print("   src evt :%s" % src)
+      #print("   src evt :%s" % src)
       citation = Citation()
       citation.set_confidence_level(Citation.CONF_LOW)
       attr = SrcAttribute()
@@ -340,6 +352,7 @@ def aldFaktoj( db, txn, extPersono, grPerson) :
       citation.add_note(n.handle)
       db.commit_citation(citation,txn)
       event.add_citation(citation.get_handle())
+    progress.step()
     er = EventRef()
     er.set_role(EventRoleType.PRIMARY)
     er.set_reference_handle(event.get_handle())
@@ -351,7 +364,7 @@ def aldFaktoj( db, txn, extPersono, grPerson) :
       grPerson.set_death_ref(er)
     db.commit_person(grPerson, txn)
 
-def aldPersono(db, txn, extPersono) :
+def aldPersono(db, txn, extPersono, progress) :
   grPerson = Person()
   aldNomoj( db, txn, extPersono, grPerson)
   s = extPersono['person'].get('sex')
@@ -381,11 +394,13 @@ def aldPersono(db, txn, extPersono) :
     db.add_repository(r, txn)
     db.commit_repository(r,txn)
     rh = r.handle
+  progress.step()
   # récupération ou création de la source geneanet/arbre
   db.dbapi.execute("select handle from source where gramps_id=?",['geneanet_%s' % extPersono['person'].get('baseprefix')])
   datumoj = db.dbapi.fetchone()
   s = None
   while datumoj and datumoj[0] :
+    progress.step()
     s = db.get_source_from_handle(datumoj[0])
     break
     #datumoj = db.dbapi.fetchone()
@@ -404,6 +419,7 @@ def aldPersono(db, txn, extPersono) :
       s.add_repo_reference(rr)
     db.add_source(s,txn)
     db.commit_source(s,txn)
+  progress.step()
   # on met de coté la source pour la suite :
   extPersono['grFonto'] = s
   # création d'une citation
@@ -417,6 +433,7 @@ def aldPersono(db, txn, extPersono) :
   citation.set_reference_handle(s.get_handle())
   db.add_citation(citation,txn)
   db.commit_citation(citation,txn)
+  progress.step()
   src = extPersono.get('src')
   if src :
     n = Note()
@@ -428,7 +445,8 @@ def aldPersono(db, txn, extPersono) :
     citation.add_note(n.handle)
   db.commit_citation(citation,txn)
   grPerson.add_citation(citation.get_handle())
+  progress.step()
   # ajout des évènements :
-  aldFaktoj( db, txn, extPersono, grPerson)
+  aldFaktoj( db, txn, extPersono, grPerson, progress)
   return grPerson
 

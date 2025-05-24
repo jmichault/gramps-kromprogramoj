@@ -1,5 +1,7 @@
+#!/usr/bin/env python
+# coding: utf-8
 #
-# Gramplet - Geneanet
+# Gramplet - PersonGN (interfaco por GeneaNet)
 #
 # Kopirajto © 2025 Jean Michault
 # Licenco «GPL-3.0-or-later»

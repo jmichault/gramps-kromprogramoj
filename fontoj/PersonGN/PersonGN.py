@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # coding: utf-8
 #
-# Gramplet - GN (interfaco por GeneaNet)
+# Gramplet - PersonGN (interfaco por GeneaNet)
 #
-# Kopirajto © 2022 Jean Michault
+# Kopirajto © 2025 Jean Michault
 # Licenco «GPL-3.0-or-later»
 #
 # Ĉi tiu programo estas libera programaro; vi povas redistribui ĝin kaj/aŭ modifi
@@ -169,12 +169,14 @@ class PersonGN(Gramplet):
     extPersono = self.getPersono(url)
     row = self.modelKomp.model.get_iter((path,))
     tipo=self.modelKomp.model.get_value(row, 8)
-    if (     tipo != 'fakto' and tipo != 'nomo' and tipo != 'nomo1' and tipo != 'edzo'
+    if (     tipo != 'edzo'
          and tipo != 'infano' and tipo != 'patro' and tipo != 'patrino'
+         #and tipo != 'fakto' and tipo != 'nomo' and tipo != 'nomo1'
          ) :
       self.modelKomp.model.set_value(row, 7, False)
-      OkDialog(_('Pardonu, nur edzaj, eventaj, patraj, nomaj aŭ infanaj linioj povas esti elektitaj.'))
-      print("  toggled:tipo="+str(tipo))
+      #OkDialog(_('Pardonu, nur edzaj, eventaj, patraj, nomaj aŭ infanaj linioj povas esti elektitaj.'))
+      OkDialog(_('Pardonu, nur edzaj, patraj, aŭ infanaj linioj povas esti elektitaj.'))
+      #print("  toggled:tipo="+str(tipo))
 
   def l_duobla_klako(self, treeview):
     (model, iter_) = treeview.get_selection().get_selected()
@@ -209,7 +211,10 @@ class PersonGN(Gramplet):
         pass
 
   def kopii_al_gramps(self, treeview):
-    print("kopii_al_gramps")
+    #print("kopii_al_gramps")
+    self.uistate.set_busy_cursor(True)
+    progress = ProgressMeter(_("Geneanet Kopio"), _('Kopio'),can_cancel=True,parent=self.uistate.window)
+    progress.set_pass(_('Kopiante… ') , mode= ProgressMeter.MODE_ACTIVITY)
     model = self.modelKomp.model
     active_handle = self.get_active('Person')
     grPersono = self.dbstate.db.get_person_from_handle(active_handle)
@@ -223,26 +228,28 @@ class PersonGN(Gramplet):
       for x in model:
        l = [x]
        l.extend(x.iterchildren())
+       progress.set_pass(_('Kopiante… ') , mode= ProgressMeter.MODE_ACTIVITY)
        for linio in l :
+        progress.step()
         if not linio[7] : # si la ligne n'est pas cochée
           continue
         tipolinio = linio[8]
         if ( (tipolinio == 'nomo' or tipolinio == 'nomo1')
              and linio[5] ) :
           grNomo_str = linio[9]
-          print(" import de nom pas encore implémenté_")
+          print(_("nomimporto ankoraŭ ne efektivigita_"))
           #ImportoGN.aldNomo(db, txn, fsNomo, grPersono)
         elif tipolinio == 'patro' :
           extPatro = extPersono['person']['father']  # fiche simplifiée du père
           urlPatro = geneanet.id2url(extPatro)
           extPatro = self.getPersono(urlPatro)  # fiche détaillée du père
-          grPatro = aldPersono(db, txn, extPatro)
+          grPatro = aldPersono(db, txn, extPatro, progress)
           family_handle = grPersono.get_main_parents_family_handle()
           if family_handle:
             familio = db.get_family_from_handle(family_handle)
             father_handle = familio.get_father_handle()
             if father_handle:
-              OkDialog(_('Cet individu a déjà un père'))
+              OkDialog(_('Ĉi tiu persono jam havas patron'))
               continue
             familio.set_father_handle(grPatro.get_handle())
             grPatro.add_family_handle(familio.get_handle())
@@ -265,13 +272,13 @@ class PersonGN(Gramplet):
           extPatrino = extPersono['person']['mother']  # fiche simplifiée de la mère
           urlPatrino = geneanet.id2url(extPatrino)
           extPatrino = self.getPersono(urlPatrino)  # fiche détaillée de la mère
-          grPatrino = aldPersono(db, txn, extPatrino)
+          grPatrino = aldPersono(db, txn, extPatrino, progress)
           family_handle = grPersono.get_main_parents_family_handle()
           if family_handle:
             familio = db.get_family_from_handle(family_handle)
             mother_handle = familio.get_mother_handle()
             if mother_handle:
-              OkDialog(_('Cet individu a déjà une mère'))
+              OkDialog(_('Ĉi tiu individuo jam havas patrinon'))
               continue
             familio.set_mother_handle(grPatrino.get_handle())
             grPatrino.add_family_handle(familio.get_handle())
@@ -299,7 +306,7 @@ class PersonGN(Gramplet):
           extEdzo = extFamilio.get('spouse')  # fiche simplifiée du conjoint
           urlEdzo = geneanet.id2url(extEdzo)
           extEdzo = self.getPersono(urlEdzo)  # fiche détaillée du conjoint
-          grEdzo = aldPersono(db, txn, extEdzo)
+          grEdzo = aldPersono(db, txn, extEdzo, progress)
           familio = Family()
           db.add_family(familio, txn)
           if grPersono.get_gender() == Person.MALE :
@@ -341,7 +348,7 @@ class PersonGN(Gramplet):
         elif tipolinio == 'infano' :
           urlInfano = linio[10]
           extInfano = self.getPersono(urlInfano)  # fiche détaillée de l'enfant
-          grInfano = aldPersono(db, txn, extInfano)
+          grInfano = aldPersono(db, txn, extInfano, progress)
           family_handle = linio[11]
           if family_handle:
             familio = db.get_family_from_handle(family_handle)
@@ -356,6 +363,8 @@ class PersonGN(Gramplet):
       db.commit_person(grPersono,txn)
     db.enable_signals()
     db.request_rebuild()
+    progress.close()
+    self.uistate.set_busy_cursor(False)
     self.ButRefresxigi_clicked(None)
 
   def l_dekstra_klako(self, treeview, event):
@@ -545,13 +554,13 @@ class PersonGN(Gramplet):
     loko = self.top.get_object("gn_loko_eniro").get_text()
     if loko :
       mendo += "&place__0__="+quote_plus(loko)
-    print ("Genanet Serĉo : %s." % mendo )
+    #print ("Genanet Serĉo : %s." % mendo )
     r = self.gn.urlopen(mendo)
     progress.step()
     if r == None :
       print(_('Eraro: neniuj datumoj.'))
     else :
-      print("réception ok")
+      #print("réception ok")
       try:
         tree = html.fromstring(r.decode('utf-8'))
       except:
@@ -562,13 +571,13 @@ class PersonGN(Gramplet):
       for r in tableau :
         if progress.get_cancelled():
           break;
-        progress.set_header(_('Elŝutante personojn… (%s/10)' % linio) )
+        progress.set_header(_('Elŝutante personojn… (%s/10)') % linio )
         linio += 1
         url = r.xpath('attribute::href')[0]
         if url == PrevUrl :
           continue
         PrevUrl = url
-        print(" url=",url)
+        #print(" url=",url)
         p = self.getPersono(url)
         sosa=''
         parents = ''
@@ -705,7 +714,7 @@ class PersonGN(Gramplet):
     self.ButLancxi_clicked(None)
     self.Sercxi.show()
     res = self.Sercxi.run()
-    print ("res = " + str(res))
+    #print ("res = " + str(res))
     self.Sercxi.hide()
     #"""
     return

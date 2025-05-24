@@ -1,3 +1,26 @@
+#!/usr/bin/env python
+# coding: utf-8
+#
+# Gramplet - PersonGN (interfaco por GeneaNet)
+#
+# Kopirajto © 2025 Jean Michault
+# Licenco «GPL-3.0-or-later»
+#
+# Ĉi tiu programo estas libera programaro; vi povas redistribui ĝin kaj/aŭ modifi
+# ĝi laŭ la kondiĉoj de la Ĝenerala Publika Permesilo de GNU kiel eldonita de
+# la Free Software Foundation; ĉu versio 3 de la Licenco, aŭ
+# (laŭ via elekto) ajna posta versio.
+#
+# Ĉi tiu programo estas distribuata kun la espero, ke ĝi estos utila,
+# sed SEN AJN GARANTIO; sen eĉ la implicita garantio de
+# KOMERCEBLECO aŭ TAĜECO POR APARTA CELO. Vidu la
+# GNU Ĝenerala Publika Permesilo por pliaj detaloj.
+#
+# Vi devus esti ricevinta kopion de la Ĝenerala Publika Permesilo de GNU
+# kune kun ĉi tiu programo; se ne, skribu al 
+# Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
 
 import json
 import socket
@@ -111,8 +134,8 @@ def osmParse(json_datoj):
     # 'is_in(46.6121074,0.5541073)->.a;relation["admin_level"~"8|7|6|5|4|3|2"](pivot.a);out tags center;'
     while admin_level>1 :
       if json_datoj['display_name'].endswith('France') :
-        # en France, on saute les arrondissements (niveau 7) et la France Métropolitaine (niveau 3) :
-        if admin_level==8 or admin_level == 4 :
+        # en France, on saute les arrondissements (niveau 7), les circonscriptions départementales(5) et la France Métropolitaine (niveau 3) :
+        if admin_level==8 or admin_level==6 or admin_level == 4 :
           admin_level = admin_level - 1
       osm_datoj= '[timeout:10][out:json];is_in('+str(newplace.lat)+','+str(newplace.long)+')->.a;relation["admin_level"="'+str(admin_level-1)+'"](pivot.a);out tags center;'
       osm_url = ('https://overpass-api.de/api/interpreter')

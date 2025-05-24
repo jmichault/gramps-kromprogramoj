@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# coding: utf-8
 # 
 # Gramplet - PersonGN (interfaco por geneanet)
 #   

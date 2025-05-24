@@ -1,24 +1,25 @@
+#!/usr/bin/env python
+# coding: utf-8
 #
-# Gramps - a GTK+/GNOME based genealogy program
+# Gramplet - PersonGN (interfaco por GeneaNet)
 #
-# Copyright (C) 2025      Jean Michault
+# Kopirajto © 2025 Jean Michault
+# Licenco «GPL-3.0-or-later»
 #
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
+# Ĉi tiu programo estas libera programaro; vi povas redistribui ĝin kaj/aŭ modifi
+# ĝi laŭ la kondiĉoj de la Ĝenerala Publika Permesilo de GNU kiel eldonita de
+# la Free Software Foundation; ĉu versio 3 de la Licenco, aŭ
+# (laŭ via elekto) ajna posta versio.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# Ĉi tiu programo estas distribuata kun la espero, ke ĝi estos utila,
+# sed SEN AJN GARANTIO; sen eĉ la implicita garantio de
+# KOMERCEBLECO aŭ TAĜECO POR APARTA CELO. Vidu la
+# GNU Ĝenerala Publika Permesilo por pliaj detaloj.
 #
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+# Vi devus esti ricevinta kopion de la Ĝenerala Publika Permesilo de GNU
+# kune kun ĉi tiu programo; se ne, skribu al 
+# Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
-# $Id$
-
 
 #-------------------------------------------------------------------------
 #
