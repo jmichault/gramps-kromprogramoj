@@ -386,6 +386,7 @@ elif command == "build":
                 system('''cd %s; python3 setup.py --build''' % addon)
                 continue
             patts = [r('''%(addon)s/*.py'''), r('''%(addon)s/*.glade'''),
+                     r('''%(addon)s/*/*.py'''),
                      r('''%(addon)s/*.xml'''), r('''%(addon)s/*.txt'''),
                      r('''%(addon)s/locale/*/LC_MESSAGES/*.mo''')]
             if os.path.isfile(r('''%(addon)s/MANIFEST''')):
@@ -457,6 +458,7 @@ elif command == "as-needed":
         tgz = os.path.join("..", "download",
                            addon + ".addon.tgz")
         patts = [r('''%(addon)s/*.py'''), r('''%(addon)s/*.glade'''),
+                 r('''%(addon)s/*/*.py'''),
                  r('''%(addon)s/*.xml'''), r('''%(addon)s/*.txt'''),
                  r('''%(addon)s/locale/*/LC_MESSAGES/*.mo''')]
         if os.path.isfile(r('''%(addon)s/MANIFEST''')):
