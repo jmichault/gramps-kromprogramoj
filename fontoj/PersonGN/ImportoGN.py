@@ -36,13 +36,13 @@ from gramps.plugins.tool.changenames import ChangeNames
 from gramps.gen.datehandler import LANG_TO_PARSER
 parserEn = LANG_TO_PARSER['en']()
 
+from gramps.version import VERSION_TUPLE
+
+import pickle
 from urllib.parse import unquote
 from html import unescape
 
 from gn_constants import GN_GRAMPS_FAKTOJ
-  
-#from objbrowser import browse ;browse(locals())
-#import pdb; pdb.set_trace()
 import PersonGN
 import LokoGN
 from geneanet import id2url
@@ -53,6 +53,9 @@ try:
 except ValueError:
     _trans = glocale.translation
 _ = _trans.gettext
+
+#from objbrowser import browse ;browse(locals())
+#import pdb; pdb.set_trace()
 
 def aldNomo(db, txn, grPerson, extNomo, extANomo) :
   nomo = Name()
@@ -70,6 +73,24 @@ def aldNomoj( db, txn, extPersono, grPerson) :
 
 def get_place_from_titolo(db, titolo, parento = None) -> Place:
   
+ if VERSION_TUPLE < (6, 0, 0):
+  db.dbapi.execute(
+            f"SELECT blob_data FROM place WHERE title = ?",
+            [titolo.strip(" ,")],
+        )   
+  while True :
+    row = db.dbapi.fetchone()
+    if row:
+      place = Place.create(pickle.loads(row[0]))
+      if not parento :
+        return place
+      rl = place.get_placeref_list()
+      if parento.handle in rl :
+         return place
+    else :
+      return None
+  return None
+ else:    
   db.dbapi.execute(
             f"SELECT {db.serializer.data_field} FROM place WHERE title = ?",
             [titolo.strip(" ,")],
@@ -157,7 +178,7 @@ def kreiLokoDeOsm(db, txn, osmDatoj, parento=None) :
   if parento :
     placeref = PlaceRef()
     placeref.set_reference_handle(parento.handle)
-    place.set_placeref_list([placeref])
+    place.add_placeref(placeref)
   db.add_place(place, txn)
   db.commit_place(place, txn)
   return place
@@ -207,7 +228,7 @@ def akiriOsmLoko(db, txn, osmDatoj, parento=None) :
       
   return None
 
-def akiriLoko(db, txn, nomo) :
+def akiriLoko(db, txn, nomo, gn_osm) :
   #print("akiriLoko : %s" % nomo)
   if nomo is None or nomo.strip()=='' :
     return None
@@ -223,75 +244,103 @@ def akiriLoko(db, txn, nomo) :
   if partoj[0].find(' - ') >= 0 :  # on a un lieu-dit
     x = partoj[0].split(' - ')
     lieudit=x[0].strip(" []()")
-    partoj[0]=x[1].strip()
-  for x in partoj :
+    partoj[0]=x[1].strip(" []()")
+  for x in partoj : # suppression et mise de côté d'un éventuel code
     if x.strip(" []()").isdecimal() :
       kodo = int(x.strip(" []()"))
       partoj.remove(x)
   #print("partoj = %s" % partoj)
-  # on tente de trouver le lieu sur openstreetmap :
-  osmLokoj = LokoGN.osmSearch(nomo)
-  #print("résultat osm = %s" %osmLokoj)
-  if osmLokoj is None or len(osmLokoj) != 1 :  # osm n'a rien trouvé ou trop : on tente de trouver la commune
-    komunumo = ''.join(partoj)
-    osmLokoj = LokoGN.osmSearch(komunumo)
-  else : # lieu complet trouvé sur osm, on n'a plus besoin du lieu-dit
-    lieudit = None
-  if osmLokoj is None or len(osmLokoj) != 1 :  # Perdu, osm n'a rien trouvé, ou trop : on crée le lieu tel que
-    place = Place()
+  # on cherhe/crée la hiérarchie du lieu
+  parento = loko = None
+  aTraiter = partoj.copy()
+  while (len(aTraiter)) :
+    nomo = aTraiter.pop().strip(" []()")
+    loko = get_place_from_titolo(db,nomo)
+    if loko:
+      parento = loko
+      continue
+    loko = Place()
     place_name = PlaceName()
-    place_name.set_value( nomo.strip() )
-    place.set_name(place_name)
-    place.set_title(nomo)
-    db.add_place(place, txn)
-    db.commit_place(place, txn)
-    return place
-  antNomo = nomo.split(',')[0].strip()
-  osmLoko = LokoGN.osmParse(osmLokoj[0])
-  #print("résultat détaillé osm = %s" %osmLoko.osmDatoj)
-  #print("  gramps_id=%s" % osmLoko.gramps_id)
-  #print("    parents = %s" % osmLoko.parentoj)
+    place_name.set_value( nomo )
+    loko.set_name(place_name)
+    loko.set_title(nomo)
+    if parento is not None :
+      placeref = PlaceRef()
+      placeref.set_reference_handle(parento.handle)
+      loko.add_placeref(placeref)
+    db.add_place(loko, txn)
+    db.commit_place(loko, txn)
+  return loko
 
-  loko = db.get_place_from_gramps_id(osmLoko.gramps_id)
-  if loko :
-    return loko
 
-  # on cherche les parents, on les crée si nécessaire
-  parento = None
-  osmParentoj = osmLoko.parentoj.copy()
-  while (len(osmParentoj)) :
-    osmParento = osmParentoj.pop()
-    parento = akiriOsmLoko(db, txn, osmParento, parento)
-  # on cherche ou crée le lieu trouvé par osm :
-  loko = akiriOsmLoko(db, txn, osmLoko.osmDatoj , parento)
-  if lieudit is None :
-    return loko
-  # si le lieu à chercher est un lieu-dit enfant du lieu trouvé dans osm, il faut aller plus loin
-  parento = loko
-  loko = get_place_from_titolo(db,lieudit,parento)
-  if loko :
-    return loko
-  place = Place()
-  place_name = PlaceName()
-  place_name.set_value( nomo.strip() )
-  place.set_name(place_name)
-  place.set_title(nomo)
-  placeref = PlaceRef()
-  placeref.set_reference_handle(parento.handle)
-  place.set_placeref_list([placeref])
-  db.add_place(place, txn)
-  db.commit_place(place, txn)
-  return place
+#  # on tente de trouver le lieu sur openstreetmap :
+#  if gn_osm :
+#    osmLokoj = LokoGN.osmSearch(nomo)
+#    #print("résultat osm = %s" %osmLokoj)
+#    if osmLokoj is None or len(osmLokoj) != 1 :  # osm n'a rien trouvé ou trop : on tente de trouver la commune
+#      komunumo = ''.join(partoj)
+#      osmLokoj = LokoGN.osmSearch(komunumo)
+#    else : # lieu complet trouvé sur osm, on n'a plus besoin du lieu-dit
+#      lieudit = None
+#  else :
+#    osmLokoj = None
+#  if osmLokoj is None or len(osmLokoj) != 1 :  # Perdu, osm n'a rien trouvé, ou trop : on crée le lieu tel que
+#    place = Place()
+#    place_name = PlaceName()
+#    place_name.set_value( nomo.strip() )
+#    place.set_name(place_name)
+#    place.set_title(nomo)
+#    db.add_place(place, txn)
+#    db.commit_place(place, txn)
+#    return place
+#  antNomo = nomo.split(',')[0].strip()
+#  osmLoko = LokoGN.osmParse(osmLokoj[0])
+#  #print("résultat détaillé osm = %s" %osmLoko.osmDatoj)
+#  #print("  gramps_id=%s" % osmLoko.gramps_id)
+#  #print("    parents = %s" % osmLoko.parentoj)
+#  if osmLoko :
+#    loko = db.get_place_from_gramps_id(osmLoko.gramps_id)
+#    if loko :
+#      return loko
+#
+#  # on cherche les parents, on les crée si nécessaire
+#  parento = None
+#  osmParentoj = osmLoko.parentoj.copy()
+#  while (len(osmParentoj)) :
+#    osmParento = osmParentoj.pop()
+#    parento = akiriOsmLoko(db, txn, osmParento, parento)
+#  # on cherche ou crée le lieu trouvé par osm :
+#  loko = akiriOsmLoko(db, txn, osmLoko.osmDatoj , parento)
+#  if lieudit is None :
+#    return loko
+#  # si le lieu à chercher est un lieu-dit enfant du lieu trouvé dans osm, il faut aller plus loin
+#  parento = loko
+#  loko = get_place_from_titolo(db,lieudit,parento)
+#  if loko :
+#    return loko
+#  place = Place()
+#  place_name = PlaceName()
+#  place_name.set_value( nomo.strip() )
+#  place.set_name(place_name)
+#  place.set_title(nomo)
+#  placeref = PlaceRef()
+#  placeref.set_reference_handle(parento.handle)
+#  place.add_placeref(placeref)
+#  db.add_place(place, txn)
+#  db.commit_place(place, txn)
+#  return place
 
 def htmlAlStyled(teksto) :
+  teksto = teksto.replace('<p>\n','')
   teksto = teksto.replace('<p>','')
+  teksto = teksto.replace('</p>\n','')
   teksto = teksto.replace('</p>','')
   teksto = teksto.replace('<br>\n','\n')
   return(convert_to_styled(teksto))
 
-def aldFaktoj( db, txn, extPersono, grPerson, progress) :
+def aldFaktoj( db, txn, extPersono, grPerson, progress, gn_fontoj, gn_notoj, gn_osm) :
   faktoj = extPersono['person'].get('events')
-  if faktoj is None or len(faktoj) == 0 :
+  if faktoj is None or len(faktoj) == 0 or faktoj.get('elements') is None :
     return
   for f in faktoj.get('elements') :
     if f.get('type') == "EFAM_MARRIAGE" :
@@ -309,10 +358,9 @@ def aldFaktoj( db, txn, extPersono, grPerson, progress) :
       if grDato :
         event.set_date_object( grDato )
     db.add_event(event, txn)
-    db.commit_event(event, txn)
     loko = unescape(f.get('place') or '')
     if loko :
-      grLoko = akiriLoko(db, txn, loko)
+      grLoko = akiriLoko(db, txn, loko, gn_osm)
       event.set_place_handle(grLoko.handle)
       db.commit_event(event, txn)
     progress.step()
@@ -323,13 +371,18 @@ def aldFaktoj( db, txn, extPersono, grPerson, progress) :
       grNoto.set_type(NoteType(_('note geneanet %s') % extPersono['person'].get('baseprefix')))
       st = htmlAlStyled(noto)
       grNoto.set_styledtext(st)
-      db.add_note(grNoto, txn)
-      db.commit_note(grNoto, txn)
-      event.add_note(grNoto.handle)
-      db.commit_event(event, txn)
+      if f.get('type') == "EPERS_OCCUPATION" :
+        # on prend la première ligne de la note comme description
+        teksto = grNoto.get()  # texte sans formatage
+        event.set_description ( teksto.splitlines(keepends=False)[0] )
+      if gn_notoj :
+        db.add_note(grNoto, txn)
+        db.commit_note(grNoto, txn)
+        event.add_note(grNoto.handle)
+    db.commit_event(event, txn)
     progress.step()
     src = f.get('src')
-    if src :
+    if src and gn_fontoj :
       #print("   src evt :%s" % src)
       citation = Citation()
       citation.set_confidence_level(Citation.CONF_LOW)
@@ -364,7 +417,7 @@ def aldFaktoj( db, txn, extPersono, grPerson, progress) :
       grPerson.set_death_ref(er)
     db.commit_person(grPerson, txn)
 
-def aldPersono(db, txn, extPersono, progress) :
+def aldPersono(db, txn, extPersono, progress, gn_fontoj, gn_notoj, gn_osm) :
   grPerson = Person()
   aldNomoj( db, txn, extPersono, grPerson)
   s = extPersono['person'].get('sex')
@@ -447,6 +500,6 @@ def aldPersono(db, txn, extPersono, progress) :
   grPerson.add_citation(citation.get_handle())
   progress.step()
   # ajout des évènements :
-  aldFaktoj( db, txn, extPersono, grPerson, progress)
+  aldFaktoj( db, txn, extPersono, grPerson, progress, gn_fontoj, gn_notoj, gn_osm)
   return grPerson
 

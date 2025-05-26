@@ -111,10 +111,17 @@ class Api:
       data = data.encode('ascii')
     req = request.Request(url,data=data,headers=headers)
     #response = request.urlopen(req, timeout=10)
-    response = self.opener.open(req, timeout=10)
-    out=response.read()
+    try:
+      response = self.opener.open(req, timeout=10)
+      out=response.read()
+    except HTTPError as e:
+      # do something
+      print('Error code: ', e.code)
+    except URLError as e:
+      # do something
+      print('Reason: ', e.reason)
     status_code = response.status
-    if b'Sign up for free' in out:
+    if status_code == 403 or b'Sign up for free' in out:
       del self.opener
       self.opener = request.build_opener(request.HTTPCookieProcessor())
       req = request.Request(url,data=data,headers=headers)
@@ -653,3 +660,8 @@ def parse_pb_base_zip(filename):
         if idx[i]:
           data['families'][i]['comment'] = parse_pb_base_notes(myfile, idx[i])
   return data
+
+if __name__ == '__main__':
+  g = Api()
+  js = g.getPerson({'n': 'libaros', 'p': 'pierre', 'tree': 'jmt'})
+  print(json.dumps(js, indent=2, default = str))

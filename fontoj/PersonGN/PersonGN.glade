@@ -89,10 +89,12 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">GeneaNet identeco :</property>
+          <object class="GtkCheckButton" id="gn_osm">
+            <property name="label" translatable="yes">Uzi OpenStreetMap</property>
+            <property name="visible">False</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="draw-indicator">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -101,45 +103,8 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="gnsn_eniro">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">GeneaNet pasvorto :</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">5</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkEntry" id="gnpv_eniro">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="visibility">False</property>
-            <property name="invisible-char">*</property>
-            <property name="input-purpose">password</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">6</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkCheckButton" id="gnpv_konservi">
-            <property name="label" translatable="yes">Konservi mian pasvorton, mi konscias pri la riskoj.</property>
+          <object class="GtkCheckButton" id="gn_notoj">
+            <property name="label" translatable="yes">Importi notoj</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
@@ -148,8 +113,28 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">7</property>
+            <property name="position">4</property>
           </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="gn_fontoj">
+            <property name="label" translatable="yes">Importi fontoj</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+            <property name="draw-indicator">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">5</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
         </child>
         <child>
           <object class="GtkSeparator">

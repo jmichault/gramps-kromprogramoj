@@ -157,7 +157,50 @@ def grperso_datoj (db, grPersono) :
   return res
 
 def extperso_datoj(extPersono) :
-  return ''
+  res=''
+  if extPersono is None :
+    return res
+  dato = extPersono.get('birthDateConv')
+  if dato is None : dato = extPersono.get('birthShortDate')
+  grBirth = None
+  if dato :
+    grBirth = parserEn.parse(dato)
+  if grBirth :
+    if grBirth.modifier == Date.MOD_ABOUT :
+      res = '~'
+    elif grBirth.modifier == Date.MOD_BEFORE:
+      res = '/'
+    else :
+      res = ' '
+    val = "%04d" % ( grBirth.dateval[Date._POS_YR] )
+    if val == '0000' :
+      val = '....'
+    if grBirth.modifier == Date.MOD_AFTER:
+      res = res + val + '/-'
+    else :
+      res = res + val + '-'
+  else :
+    res = ' ....-'
+  dato = extPersono.get('deathDateConv')
+  if dato is None : dato = extPersono.get('deathShortDate')
+  grDeath = None
+  if dato :
+    grDeath = parserEn.parse(dato)
+  if grDeath :
+    if grDeath.modifier == Date.MOD_ABOUT :
+      res = res + '~'
+    elif grDeath.modifier == Date.MOD_BEFORE:
+      res = res + '/'
+    val = "%04d" % ( grDeath.dateval[Date._POS_YR] )
+    if val == '0000' :
+      val = '....'
+    if grDeath.modifier == Date.MOD_AFTER:
+      res = res + val + '/'
+    else :
+      res = res + val
+  else :
+    res = res + '....'
+  return res
 
 
 def GepKomp(db, grPersono, extPersono ) :
@@ -185,10 +228,10 @@ def GepKomp(db, grPersono, extPersono ) :
   extFather = extPersono['person'].get('father')
   ext_patro_nomo = extPatUrl = ''
   if extFather :
-    ext_patro_nomo = extFather.get('lastname')+' '+extFather.get('firstname')
+    ext_patro_nomo = extFather.get('lastname')+', '+extFather.get('firstname')
     extPatUrl = geneanet.id2url(extFather)
   koloro = "orange"
-  if father_name == ext_patro_nomo :
+  if father_name.upper() == ext_patro_nomo.upper() :
     koloro = "green"
   if father is not None or extFather is not None :
     res.append ( [ koloro , _trans.gettext('Father')
@@ -199,10 +242,10 @@ def GepKomp(db, grPersono, extPersono ) :
   extMother = extPersono['person'].get('mother')
   ext_patrino_nomo = extMatUrl = ''
   if extMother :
-    ext_patrino_nomo = extMother.get('lastname')+' '+extMother.get('firstname')
+    ext_patrino_nomo = extMother.get('lastname')+', '+extMother.get('firstname')
     extMatUrl = geneanet.id2url(extMother)
   koloro = "orange"
-  if mother_name == ext_patrino_nomo :
+  if mother_name.upper() == ext_patrino_nomo.upper() :
     koloro = "green"
   if mother is not None or extMother is not None :
     res.append ( [ koloro , _trans.gettext('Mother')
@@ -281,20 +324,22 @@ def kompariGrExt(grPersono,extPersono,db,model):
         if event.type == EventType.MARRIAGE :
           geJaro = event.date.get_year()
       # serĉi cî familio en extFamilioj
-      extEdzDatoj = extEdzJaro = extEdzNomoj = ''
+      extEdzDato = extEdzDatoj = extEdzJaro = extEdzNomoj = ''
       extEdzUrl = extFamIndekso = None
       indekso = 0
       extFam = None
       extParoId = None
       for f in extFamilioj :
         extEdzNomo = f['spouse'].get('lastname')
-        extEdzDato = f.get('marriageDate')
-        tmpDato = parserEn.parse(extEdzDato)
+        tmpEdzDato = f.get('marriageDate') or ''
+        tmpDato = parserEn.parse(tmpEdzDato)
         extEdzJaro = tmpDato.get_year()
         if (geJaro>0 and geJaro == extEdzJaro) \
           or (extEdzNomo.upper() == edzoNomo.upper() ) :
+          extEdzDato = f.get('marriageDate') or ''
           extEdzUrl = geneanet.id2url(f['spouse'])
           extParoId = f.get('index')
+          extEdzDatoj = extperso_datoj(f['spouse'])
           extEdzNomoj = (f['spouse'].get('lastname') or '?') +', '+(f['spouse'].get('firstname') or '?')
           extFam = f
           koloro = "green"
@@ -317,40 +362,26 @@ def kompariGrExt(grPersono,extPersono,db,model):
         infano = db.get_person_from_handle(child_ref.ref)
         infanoNomo = infano.primary_name
         infanoANomo = infano.primary_name.first_name
-        extInfanoUrl = extParoId = None
+        extInfano = extInfanoUrl = extParoId = None
         extInfDatoj = extInfNomoj = ''
+        koloro = "yellow"
         for c in extInfanoj :
           tmpANomo = c.get('firstname')
           if tmpANomo.upper() == infanoANomo.upper() :
-            pass
-      #  for triopo in extInfanoj :
-      #    if ( (   ((triopo.parent1 and triopo.parent1.resourceId == extid)
-      #              and ( (triopo.parent2 and triopo.parent2.resourceId == extEdzoId)
-      #                 or (not triopo.parent2 and extEdzoId=='')))
-      #           or((triopo.parent2 and triopo.parent2.resourceId == extid)
-      #              and ( (triopo.parent1 and triopo.parent1.resourceId == extEdzoId)
-      #                 or (not triopo.parent1 and extEdzoId==''))) )
-      #        and triopo.child.resourceId == infanoFsid ) :
-      #      extInfanoId = infanoFsid
-      #      extInfanoj.remove(triopo)
-      #      break
-        koloro = "yellow"
+            koloro = "green"
+            extInfDatoj = extperso_datoj(c)
+            extInfNomoj = (c.get('lastname') or '?')+', '+(c.get('firstname') or '?')
+            extInfano = c
+            extInfanoj.remove(c)
         extNomo = ''
-      #  if extInfanoId != '' and extInfanoId == infanoFsid :
-      #    koloro = "green"
-      #  if PersonFS.PersonFS.ext_Tree :
-      #    extInfano = PersonFS.PersonFS.ext_Tree._persons.get(extInfanoId) or gedcomx_v1.Person()
-      #  else :
-      #    extInfano = gedcomx_v1.Person()
-      #  extNomo = extInfano.akPrefNomo()
         model.add( [ koloro ,'    '+ _trans.gettext('Child')
                 , grperso_datoj(db, infano) , infanoNomo.get_surname() + ', ' + infanoNomo.first_name
                 , extInfDatoj, extInfNomoj , ''
           , False, 'infano', child_ref.ref  ,str(extInfanoUrl), family.handle, str(extParoId)
            ],node=edzo_nodo )
       for c in extInfanoj :
-        extInfDatoj = extInfNomoj = ''
-        extInfNomoj = (c.get('lastname') or '?')+' '+(c.get('firstname') or '?')
+        extInfDatoj = extperso_datoj(c)
+        extInfNomoj = (c.get('lastname') or '?')+', '+(c.get('firstname') or '?')
         extInfUrl = geneanet.id2url(c)
         model.add( [ koloro ,'    '+ _trans.gettext('Child')
                 , '' , ''

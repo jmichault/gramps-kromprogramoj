@@ -31,6 +31,8 @@ from gramps.gen.display.place import displayer as _pd
 from gramps.gen.config import config
 from gramps.gen.lib import Place, PlaceName, PlaceType, Url, UrlType
 
+vorteco = 0
+
 def geneanetCoord(placename):
   data = '{"place": "%s"}' % placename
   headers = {"user-agent": UserAgent().firefox }
@@ -43,8 +45,9 @@ def geneanetCoord(placename):
     return coords[placename]
 
 def osmGetUrl(osm_url, osm_datoj=None):
+  print( "osmGetUrl %s" % osm_url )
   try:
-    with request.urlopen(osm_url,data=osm_datoj, timeout=20) as response:
+    with request.urlopen(osm_url,data=osm_datoj, timeout=10) as response:
       data = response.read()
       rezultoj=json.loads(data)
   except request.URLError as err:
@@ -133,13 +136,14 @@ def osmParse(json_datoj):
     # obtenir tous les parents administratifs :
     # 'is_in(46.6121074,0.5541073)->.a;relation["admin_level"~"8|7|6|5|4|3|2"](pivot.a);out tags center;'
     while admin_level>1 :
-      if json_datoj['display_name'].endswith('France') :
-        # en France, on saute les arrondissements (niveau 7), les circonscriptions départementales(5) et la France Métropolitaine (niveau 3) :
-        if admin_level==8 or admin_level==6 or admin_level == 4 :
-          admin_level = admin_level - 1
-      osm_datoj= '[timeout:10][out:json];is_in('+str(newplace.lat)+','+str(newplace.long)+')->.a;relation["admin_level"="'+str(admin_level-1)+'"](pivot.a);out tags center;'
+      osm_datoj= '[timeout:10][out:json];is_in('+str(newplace.lat)+','+str(newplace.long)+')->.a;relation["admin_level"~"8|6|4|2"](pivot.a);out tags center;'
+      #if json_datoj['display_name'].endswith('France') :
+      #  # en France, on saute les arrondissements (niveau 7), les circonscriptions départementales(5) et la France Métropolitaine (niveau 3) :
+      #  if admin_level==8 or admin_level==6 or admin_level == 4 :
+      #    admin_level = admin_level - 1
+      #osm_datoj= '[timeout:10][out:json];is_in('+str(newplace.lat)+','+str(newplace.long)+')->.a;relation["admin_level"="'+str(admin_level-1)+'"](pivot.a);out tags center;'
       osm_url = ('https://overpass-api.de/api/interpreter')
-      #print("requête overpass %s" % osm_datoj)
+      if vorteco>0 : print("requête overpass %s" % osm_datoj)
       res = osmGetUrl(osm_url,bytes(osm_datoj,'utf-8'))
       if not res or not len(res) :
         continue
@@ -148,7 +152,9 @@ def osmParse(json_datoj):
         res = None
         continue;
       rezultoj=res.get("elements")
-      #print("   parent=%s" % rezultoj)
+      if vorteco>0 : print("   parent=%s" % rezultoj)
+      print("   parent=%s" % rezultoj)
+      return None
       if len(rezultoj)==0 :
         admin_level = admin_level - 1
         res = None
@@ -202,3 +208,7 @@ class NewPlace():
       """ Add names to names list without repeats """
       for name in names:
           self.add_name(name)
+
+if __name__ == '__main__':
+  res = osmSearch('9ème arrondissement, Paris, Paris, Île-de-France, France')
+  print(res)

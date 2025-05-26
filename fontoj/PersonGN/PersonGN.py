@@ -72,6 +72,21 @@ except ValueError:
     _trans = glocale.translation
 _ = _trans.gettext
 
+#-------------------------------------------------------------------------
+#
+# configuration
+#
+#-------------------------------------------------------------------------
+
+GRAMPLET_CONFIG_NAME = "PersonGN"
+CONFIG = config.register_manager(GRAMPLET_CONFIG_NAME)
+# salutnomo kaj pasvorto por FamilySearch
+CONFIG.register("preferences.gn_osm", '')
+CONFIG.register("preferences.gn_notoj", '')
+CONFIG.register("preferences.gn_fontoj", '')
+CONFIG.load()
+
+
 #from objbrowser import browse ;browse(locals())
 #import pdb; pdb.set_trace()
 
@@ -80,6 +95,10 @@ class PersonGN(Gramplet):
   Sercxi = None
   modelRes = None
   GnPersonoj = dict() # pour mémoriser les résultats de getPerson
+  # préférences :
+  gn_osm = (CONFIG.get("preferences.gn_osm") == 'True' )
+  gn_notoj = (CONFIG.get("preferences.gn_notoj") == 'True' )
+  gn_fontoj = not CONFIG.get("preferences.gn_fontoj") == 'False'
   try:
       lingvo = config.get('preferences.place-lang')
   except AttributeError:
@@ -133,14 +152,6 @@ class PersonGN(Gramplet):
             "on_CB_Regximo_changed"      : self.CB_Regximo_changed,
             "on_ButRefresxigi_clicked"      : self.ButRefresxigi_clicked,
 	})
-    """
-            "on_ButImp1K_clicked"      : self.ButImp1K_clicked,
-            "on_kopii_clicked"      : self.ButKopii_clicked,
-            "on_ButDup_clicked"      : self.ButDup_clicked,
-            "on_ButAldoni_clicked"      : self.ButAldoni_clicked,
-            "on_ButImporti_clicked"      : self.ButImporti_clicked,
-            "on_CB_Regximo_changed"      : self.CB_Regximo_changed,
-    """
     titles_komp = [
         (_('Koloro'), 1, 40,COLOR),
         ( _('Propreco'), 2, 100),
@@ -243,7 +254,7 @@ class PersonGN(Gramplet):
           extPatro = extPersono['person']['father']  # fiche simplifiée du père
           urlPatro = geneanet.id2url(extPatro)
           extPatro = self.getPersono(urlPatro)  # fiche détaillée du père
-          grPatro = aldPersono(db, txn, extPatro, progress)
+          grPatro = aldPersono(db, txn, extPatro, progress, PersonGN.gn_fontoj, PersonGN.gn_notoj, PersonGN.gn_osm)
           family_handle = grPersono.get_main_parents_family_handle()
           if family_handle:
             familio = db.get_family_from_handle(family_handle)
@@ -272,7 +283,7 @@ class PersonGN(Gramplet):
           extPatrino = extPersono['person']['mother']  # fiche simplifiée de la mère
           urlPatrino = geneanet.id2url(extPatrino)
           extPatrino = self.getPersono(urlPatrino)  # fiche détaillée de la mère
-          grPatrino = aldPersono(db, txn, extPatrino, progress)
+          grPatrino = aldPersono(db, txn, extPatrino, progress, PersonGN.gn_fontoj, PersonGN.gn_notoj, PersonGN.gn_osm)
           family_handle = grPersono.get_main_parents_family_handle()
           if family_handle:
             familio = db.get_family_from_handle(family_handle)
@@ -306,7 +317,7 @@ class PersonGN(Gramplet):
           extEdzo = extFamilio.get('spouse')  # fiche simplifiée du conjoint
           urlEdzo = geneanet.id2url(extEdzo)
           extEdzo = self.getPersono(urlEdzo)  # fiche détaillée du conjoint
-          grEdzo = aldPersono(db, txn, extEdzo, progress)
+          grEdzo = aldPersono(db, txn, extEdzo, progress, PersonGN.gn_fontoj, PersonGN.gn_notoj, PersonGN.gn_osm)
           familio = Family()
           db.add_family(familio, txn)
           if grPersono.get_gender() == Person.MALE :
@@ -330,7 +341,7 @@ class PersonGN(Gramplet):
                 event.set_date_object( grDato )
             loko = unescape(extFamilio.get('marriagePlace') or '')
             if loko != '' :
-              grLoko = akiriLoko(db, txn, loko)
+              grLoko = akiriLoko(db, txn, loko, PersonGN.gn_osm)
               event.set_place_handle(grLoko.handle)
             if extFamilio.get('marriageType') == "MARRIED" :
               event.set_type(EventType.MARRIAGE)
@@ -348,7 +359,7 @@ class PersonGN(Gramplet):
         elif tipolinio == 'infano' :
           urlInfano = linio[10]
           extInfano = self.getPersono(urlInfano)  # fiche détaillée de l'enfant
-          grInfano = aldPersono(db, txn, extInfano, progress)
+          grInfano = aldPersono(db, txn, extInfano, progress, PersonGN.gn_fontoj, PersonGN.gn_notoj, PersonGN.gn_osm)
           family_handle = linio[11]
           if family_handle:
             familio = db.get_family_from_handle(family_handle)
@@ -361,8 +372,8 @@ class PersonGN(Gramplet):
         else :
           print(" import de %s pas encore implémenté_" % tipolinio)
       db.commit_person(grPersono,txn)
+      db.transaction_commit(txn)
     db.enable_signals()
-    db.request_rebuild()
     progress.close()
     self.uistate.set_busy_cursor(False)
     self.ButRefresxigi_clicked(None)
@@ -459,7 +470,7 @@ class PersonGN(Gramplet):
   def SerSelCxangxo(self, dummy):
     model, iter_ = self.top.get_object("PersonGNResRes").get_selection().get_selected()
     if iter_ :
-      lien = model.get_value(iter_, 0)
+      lien = 'https://gw.geneanet.org/'+model.get_value(iter_, 0)
       self.top.get_object("LinkoButonoSercxi").set_label('voir sur geneanet')
       self.top.get_object("LinkoButonoSercxi").set_uri(lien)
     else :
@@ -516,7 +527,28 @@ class PersonGN(Gramplet):
     self.modelKomp.clear()
 
   def pref_clicked(self, dummy):
-    pass
+    top = self.top.get_object("PersonGNPrefDialogo")
+    top.set_transient_for(self.uistate.window)
+    parent_modal = self.uistate.window.get_modal()
+    if parent_modal:
+      self.uistate.window.set_modal(False)
+    gn_osm = self.top.get_object("gn_osm")
+    gn_osm.set_active(PersonGN.gn_osm)
+    gn_notoj = self.top.get_object("gn_notoj")
+    gn_notoj.set_active(PersonGN.gn_notoj)
+    gn_fontoj = self.top.get_object("gn_fontoj")
+    gn_fontoj.set_active(PersonGN.gn_fontoj)
+    top.show()
+    res = top.run()
+    top.hide()
+    if res == -3: 
+      PersonGN.gn_osm = gn_osm.get_active()
+      CONFIG.set("preferences.gn_osm", str(PersonGN.gn_osm))
+      PersonGN.gn_notoj = gn_notoj.get_active()
+      CONFIG.set("preferences.gn_notoj", str(PersonGN.gn_notoj))
+      PersonGN.gn_fontoj = gn_fontoj.get_active()
+      CONFIG.set("preferences.gn_fontoj", str(PersonGN.gn_fontoj))
+      CONFIG.save()
 
   def CB_Regximo_changed(self, dummy):
     self.ButRefresxigi_clicked(dummy)
@@ -601,7 +633,6 @@ class PersonGN(Gramplet):
           if 'deathPlace' in p['person'] :
             deces += '\n'+ p['person']['deathPlace']
           if 'families' in p['person'] :
-            #import pdb; pdb.set_trace()
             for f in p['person']['families'] :
               if 'children' in f :
                 nbInfanoj = len(f['children'])
@@ -615,7 +646,7 @@ class PersonGN(Gramplet):
                 conjoints += str(nbInfanoj) + ', ' + ( sp.get('lastname') or '?' ) + ' ' + ( sp.get('firstname') or '?' )
         else :
           nom = ( p.get('n') or '?' ) +' ' + ( p.get('p') or '?' )
-        self.modelRes.add( (url,sosa,nom,naissance,deces,parents,conjoints));
+        self.modelRes.add( (url.removeprefix('https://gw.geneanet.org/'),sosa,nom,naissance,deces,parents,conjoints));
         progress.step()
     self.uistate.set_busy_cursor(False)
     progress.close()
@@ -624,7 +655,7 @@ class PersonGN(Gramplet):
   def ButAldoni_clicked(self, dummy):
     model, iter_ = self.top.get_object("PersonGNResRes").get_selection().get_selected()
     if iter_ :
-      lien = model.get_value(iter_, 0)
+      lien = 'https://gw.geneanet.org/'+model.get_value(iter_, 0)
       active_handle = self.get_active('Person')
       grPersono = self.dbstate.db.get_person_from_handle(active_handle)
       self.Sercxi.hide()
