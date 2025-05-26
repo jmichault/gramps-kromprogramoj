@@ -45,6 +45,19 @@
 ]
 },
 {
+"n": "PersonGN",
+"i": "Geneanet Gramplet",
+"t": 10,
+"d": "interfaco por Geneanet",
+"v": "beta 0.0.2",
+"g": "6.0",
+"s": 3,
+"z": "PersonGN.addon.tgz",
+"rm": [
+"requests"
+]
+},
+{
 "n": "Coloque a limpeza",
 "i": "Lokpurigado",
 "t": 10,

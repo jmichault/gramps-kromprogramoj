@@ -45,6 +45,19 @@
 ]
 },
 {
+"n": "PersonGN",
+"i": "Geneanet Gramplet",
+"t": 10,
+"d": "interfaco por Geneanet",
+"v": "beta 0.0.2",
+"g": "6.0",
+"s": 3,
+"z": "PersonGN.addon.tgz",
+"rm": [
+"requests"
+]
+},
+{
 "n": "\u05e0\u05d9\u05e7\u05d5\u05d9 \u05de\u05e7\u05d5\u05dd",
 "i": "Lokpurigado",
 "t": 10,

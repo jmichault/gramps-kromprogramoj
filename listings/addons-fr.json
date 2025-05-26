@@ -45,6 +45,19 @@
 ]
 },
 {
+"n": "PersonGN",
+"i": "Geneanet Gramplet",
+"t": 10,
+"d": "interface pour Geneanet",
+"v": "beta 0.0.2",
+"g": "6.0",
+"s": 3,
+"z": "PersonGN.addon.tgz",
+"rm": [
+"requests"
+]
+},
+{
 "n": "Am\u00e9lioration des lieux",
 "i": "Lokpurigado",
 "t": 10,
