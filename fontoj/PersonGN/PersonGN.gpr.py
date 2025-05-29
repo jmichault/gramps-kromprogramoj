@@ -43,6 +43,6 @@ register(GRAMPLET,
          version = 'beta 0.0.3',
          gramps_target_version= major_version,
          navtypes=["Person"],
-         requires_mod=["requests"],
+         requires_mod=["urllib"],
          )
 
