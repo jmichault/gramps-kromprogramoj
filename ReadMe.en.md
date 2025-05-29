@@ -1,4 +1,4 @@
-plugins for gramps 6.0
+plugins for gramps 5.2 or 6.0
 
 # install :
 * open the plugin manager («puzzle» icon, or Edit menu-->Plugin manager)
@@ -17,4 +17,4 @@ plugins for gramps 6.0
 * PersonFS: an interface with FamilySearch.
 * PlaceFrCog: a gramplet to retrieve French municipalities from the INSEE database (COG database: Official Geographic Code).
 * Lokpurigado: a modified version of PlaceCleanup which uses openstreetmap instead of geonames, and which retrieves INSEE codes instead of the postal code.
-* [recent-items](fontoj/recent-items/README.md) : a port to Gramps 6.0 of kkujansuu's recent-items addon (https://github.com/kkujansuu/gramps/tree/master/addons/recent-items)
+* PersonGN: an interface with Geneanet.

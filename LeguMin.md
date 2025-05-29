@@ -1,4 +1,4 @@
-iuj kromprogramoj por "gramps" 6.0
+iuj kromprogramoj por "gramps" 5.2 aŭ 6.0
 
 # instalado :
 * Malfermu la aldonaĵadministranton ("puzlo" ikono aŭ Redakti menuon --> Aldonaĵadministrilon)
@@ -18,5 +18,4 @@ iuj kromprogramoj por "gramps" 6.0
   * PersonFS: interfaco kun FamilySearch.
   * PlaceFrCog: gramplet por preni francajn municipojn el la datumbazo INSEE (COG-datumbazo: Code Officiel Géographique (Oficiala Geografia Kodo)).
   * Lokpurigado: modifita versio de PlaceCleanup kiu uzas openstreetmap anstataŭ geonames, kaj kiu prenas INSEE-kodojn anstataŭe de la poŝtkodo.
-  * recent-items: haveno al Gramps 6.0 de la "recent-items" aldonaĵo de kkujansuu
-  * [recent-items](fontoj/recent-items/README.md) :  haveno al Gramps 6.0 de la "recent-items" aldonaĵo de kkujansuu (https://github.com/kkujansuu/gramps/tree/master/addons/recent-items)
+  * PersonGN: interfaco kun Geneanet.
