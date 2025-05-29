@@ -30,6 +30,7 @@ GeneaNet Gramplet.
 from gramps.gen.lib import Citation, Date, Event, EventRef, EventRoleType, EventType, Name, NameType, Note, NoteType
 from gramps.gen.lib import  Person, Place, PlaceName, PlaceRef, PlaceType , RepoRef, Repository, RepositoryType, Source, SourceMediaType, SrcAttribute, Url , UrlType
 from gramps.gen.const import GRAMPS_LOCALE as glocale
+from gramps.gen.lib.date import Today
 from gramps.gen.datehandler import parser
 from gramps.plugins.tool.changenames import ChangeNames
 
@@ -487,15 +488,18 @@ def aldPersono(db, txn, extPersono, progress, gn_notoj, gn_osm) :
   db.add_citation(citation,txn)
   db.commit_citation(citation,txn)
   progress.step()
+  n = Note()
+  n.set_type(NoteType(NoteType.CITATION))
+  teksto = _('persono importita el la geneanet-dosiero je la %s') % str(Today())
   src = extPersono.get('src')
   if src :
-    n = Note()
-    n.set_type(NoteType(NoteType.CITATION))
-    st = htmlAlStyled(src)
+    st = htmlAlStyled(teksto+'<br><br>'+src)
     n.set_styledtext(st)
-    db.add_note(n, txn)
-    db.commit_note(n, txn)
-    citation.add_note(n.handle)
+  else :
+    n.set(teksto)
+  db.add_note(n, txn)
+  db.commit_note(n, txn)
+  citation.add_note(n.handle)
   db.commit_citation(citation,txn)
   grPerson.add_citation(citation.get_handle())
   progress.step()

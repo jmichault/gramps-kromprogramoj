@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gramps-kromprogramoj. 60\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-26 18:36+0200\n"
+"POT-Creation-Date: 2025-05-29 18:11+0200\n"
 "PO-Revision-Date: 2025-05-24 11:36+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -17,20 +17,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: PersonGN/ImportoGN.py:371
+#: PersonGN/ImportoGN.py:372
 #, python-format
 msgid "note geneanet %s"
 msgstr "note geneanet %s"
 
-#: PersonGN/ImportoGN.py:390 PersonGN/ImportoGN.py:465
-#: PersonGN/ImportoGN.py:482 PersonGN/utilaGN.py:50
+#: PersonGN/ImportoGN.py:391 PersonGN/ImportoGN.py:466
+#: PersonGN/ImportoGN.py:483 PersonGN/utilaGN.py:50
 msgid "Internet Address"
 msgstr "Adresse Internet"
 
-#: PersonGN/ImportoGN.py:463
+#: PersonGN/ImportoGN.py:464
 #, python-format
 msgid "arbre geneanet %s"
 msgstr "arbre geneanet %s"
+
+#: PersonGN/ImportoGN.py:493
+#, python-format
+msgid "persono importita el la geneanet-dosiero je la %s"
+msgstr "personne importée de geneanet le %s"
 
 #: PersonGN/PersonGN.gpr.py:33
 msgid "PersonGN"
@@ -44,145 +49,145 @@ msgstr "interface pour Geneanet"
 msgid "Geneanet"
 msgstr "Geneanet"
 
-#: PersonGN/PersonGN.py:156
+#: PersonGN/PersonGN.py:158
 msgid "Koloro"
 msgstr "Couleur"
 
-#: PersonGN/PersonGN.py:157
+#: PersonGN/PersonGN.py:159
 msgid "Propreco"
 msgstr "Propriété"
 
-#: PersonGN/PersonGN.py:158
+#: PersonGN/PersonGN.py:160
 msgid "Dato"
 msgstr "Date"
 
-#: PersonGN/PersonGN.py:159
+#: PersonGN/PersonGN.py:161
 msgid "Gramps Valoro"
 msgstr "Valeur"
 
-#: PersonGN/PersonGN.py:160
+#: PersonGN/PersonGN.py:162
 msgid "GN Dato"
 msgstr "Date GN"
 
-#: PersonGN/PersonGN.py:161
+#: PersonGN/PersonGN.py:163
 msgid "GN Valoro"
 msgstr "Valeur GN"
 
-#: PersonGN/PersonGN.py:164
+#: PersonGN/PersonGN.py:166
 msgid "xTipo"
 msgstr "xTipo"
 
-#: PersonGN/PersonGN.py:165
+#: PersonGN/PersonGN.py:167
 msgid "xGr"
 msgstr "xGr"
 
-#: PersonGN/PersonGN.py:166
+#: PersonGN/PersonGN.py:168
 msgid "xGn"
 msgstr "xGn"
 
-#: PersonGN/PersonGN.py:167
+#: PersonGN/PersonGN.py:169
 msgid "xGr2"
 msgstr "xgr2"
 
-#: PersonGN/PersonGN.py:168
+#: PersonGN/PersonGN.py:170
 msgid "xGn2"
 msgstr "xGn2"
 
-#: PersonGN/PersonGN.py:189
+#: PersonGN/PersonGN.py:191
 msgid "Pardonu, nur edzaj, patraj, aŭ infanaj linioj povas esti elektitaj."
 msgstr "Désolé, seuls les conjoints, parents ou enfants peuvent être sélectionnés."
 
-#: PersonGN/PersonGN.py:227
+#: PersonGN/PersonGN.py:229
 msgid "Geneanet Kopio"
 msgstr "Copie Geneanet"
 
-#: PersonGN/PersonGN.py:227
+#: PersonGN/PersonGN.py:229
 msgid "Kopio"
 msgstr "Copie"
 
-#: PersonGN/PersonGN.py:228 PersonGN/PersonGN.py:242
+#: PersonGN/PersonGN.py:230 PersonGN/PersonGN.py:244
 msgid "Kopiante… "
 msgstr "Copie en cours"
 
-#: PersonGN/PersonGN.py:238
+#: PersonGN/PersonGN.py:240
 msgid "kopii al gramps"
 msgstr "copier vers gramps"
 
-#: PersonGN/PersonGN.py:251
+#: PersonGN/PersonGN.py:253
 msgid "nomimporto ankoraŭ ne efektivigita_"
 msgstr "L'import de nom n'est pas implémenté…"
 
-#: PersonGN/PersonGN.py:263
+#: PersonGN/PersonGN.py:265
 msgid "Ĉi tiu persono jam havas patron"
 msgstr "Cet individu a déjà un père"
 
-#: PersonGN/PersonGN.py:292
+#: PersonGN/PersonGN.py:294
 msgid "Ĉi tiu individuo jam havas patrinon"
 msgstr "Cet individu a déjà une mère"
 
-#: PersonGN/PersonGN.py:393
+#: PersonGN/PersonGN.py:395
 msgid "Kopii json-datumojn al tondujo"
 msgstr "Copier les données json dans le presse-papiers"
 
-#: PersonGN/PersonGN.py:404
+#: PersonGN/PersonGN.py:406
 #, python-format
 msgid "Redakti : %s - %s - %s"
 msgstr "Éditer : %s - %s - %s"
 
-#: PersonGN/PersonGN.py:425
+#: PersonGN/PersonGN.py:427
 msgid "Kopii elekton de Geneanet al gramps"
 msgstr "Copier la sélection de Geneanet vers gramps"
 
-#: PersonGN/PersonGN.py:560
+#: PersonGN/PersonGN.py:558
 msgid "Geneanet Serĉo"
 msgstr "Recherche Geneanet"
 
-#: PersonGN/PersonGN.py:560
+#: PersonGN/PersonGN.py:558
 msgid "Serĉante"
 msgstr "Recherche en cours"
 
-#: PersonGN/PersonGN.py:562
+#: PersonGN/PersonGN.py:560
 msgid "Serĉante… "
 msgstr "Recherche en cours… "
 
-#: PersonGN/PersonGN.py:593
+#: PersonGN/PersonGN.py:591
 msgid "Eraro: neniuj datumoj."
 msgstr "Erreur: pas de données."
 
-#: PersonGN/PersonGN.py:599
+#: PersonGN/PersonGN.py:597
 msgid "Unable to perform HTML analysis"
 msgstr "Impossible d'analyser le code HTML"
 
-#: PersonGN/PersonGN.py:606
+#: PersonGN/PersonGN.py:604
 #, python-format
 msgid "Elŝutante personojn… (%s/10)"
 msgstr "Chargement des individus… (%s/10)"
 
-#: PersonGN/PersonGN.py:667
+#: PersonGN/PersonGN.py:665
 msgid "URL"
 msgstr "URL"
 
-#: PersonGN/PersonGN.py:668
+#: PersonGN/PersonGN.py:666
 msgid "Sosa"
 msgstr "Sosa"
 
-#: PersonGN/PersonGN.py:669
+#: PersonGN/PersonGN.py:667
 msgid "Nomo, antaŭnomo"
 msgstr "Nom, prénom"
 
-#: PersonGN/PersonGN.py:670
+#: PersonGN/PersonGN.py:668
 msgid "Naskiĝo"
 msgstr "Naissance"
 
-#: PersonGN/PersonGN.py:671
+#: PersonGN/PersonGN.py:669
 msgid "Morto"
 msgstr "Décès"
 
-#: PersonGN/PersonGN.py:672 PersonGN/komparoGN.py:299
+#: PersonGN/PersonGN.py:670 PersonGN/komparoGN.py:299
 msgid "Gepatroj"
 msgstr "Parents"
 
-#: PersonGN/PersonGN.py:673
+#: PersonGN/PersonGN.py:671
 msgid "Nb Inf., Geedzoj"
 msgstr "Nb Enf., Conjoints"
 
@@ -240,78 +245,77 @@ msgstr "Utiliser OpenStreetMap"
 msgid "Importi notoj"
 msgstr "Importer les notes"
 
-#: PersonGN/PersonGN.glade:121
-msgid "Importi fontoj"
-msgstr "Importer les sources"
-
-#: PersonGN/PersonGN.glade:176
+#: PersonGN/PersonGN.glade:162
 msgid "xxxx-xxx"
 msgstr "xxxx-xxx"
 
-#: PersonGN/PersonGN.glade:193
+#: PersonGN/PersonGN.glade:179
 msgid "Kompari"
 msgstr "Comparer"
 
-#: PersonGN/PersonGN.glade:229
+#: PersonGN/PersonGN.glade:215
 msgid "Nomo :"
 msgstr "Nom :"
 
-#: PersonGN/PersonGN.glade:250
+#: PersonGN/PersonGN.glade:236
 msgid "Antaŭnomo :"
 msgstr "Prénom :"
 
-#: PersonGN/PersonGN.glade:271
+#: PersonGN/PersonGN.glade:257
 msgid "Sekso :"
 msgstr "Sexe :"
 
-#: PersonGN/PersonGN.glade:292
+#: PersonGN/PersonGN.glade:278
 msgid "Dato inter :"
 msgstr "Date entre :"
 
-#: PersonGN/PersonGN.glade:313
+#: PersonGN/PersonGN.glade:299
 msgid "Loko :"
 msgstr "Lieu :"
 
-#: PersonGN/PersonGN.glade:332
+#: PersonGN/PersonGN.glade:318
 msgid "Lanĉi"
 msgstr "Exécuter"
 
-#: PersonGN/PersonGN.glade:347
+#: PersonGN/PersonGN.glade:333
 msgid "kaj"
 msgstr "et"
 
-#: PersonGN/PersonGN.glade:528
+#: PersonGN/PersonGN.glade:514
 msgid "URL :  "
 msgstr "URL : "
 
-#: PersonGN/PersonGN.glade:537
+#: PersonGN/PersonGN.glade:523
 msgid "Serĉi"
 msgstr "Chercher"
 
-#: PersonGN/PersonGN.glade:602
+#: PersonGN/PersonGN.glade:588
 msgid "Statuso de esencaj informoj (precipa nomo/antaŭnomo, sekso, datoj de naskiĝo kaj morto)"
 msgstr "Statut des informations vitales (nom/prénom, sexe, dates de naissance et de décès)"
 
-#: PersonGN/PersonGN.glade:622
+#: PersonGN/PersonGN.glade:608
 msgid "Statuso de familiaj ligoj (gepatroj, geedzoj, infanoj)"
 msgstr "Statut des liens familiaux (parents, conjoints, enfants)"
 
-#: PersonGN/PersonGN.glade:642
+#: PersonGN/PersonGN.glade:628
 msgid "Statuso de eventoj"
 msgstr "Statut des évènements"
 
-#: PersonGN/PersonGN.glade:662
+#: PersonGN/PersonGN.glade:648
 msgid "Statuso de dokumentoj"
 msgstr "Statut des documents"
 
-#: PersonGN/PersonGN.glade:682
+#: PersonGN/PersonGN.glade:668
 msgid "Statuso de duploj"
 msgstr "Statut des doublons"
 
-#: PersonGN/PersonGN.glade:701
+#: PersonGN/PersonGN.glade:687
 msgid "refreŝigi"
 msgstr "rafraîchir"
 
-#: PersonGN/PersonGN.glade:720
+#: PersonGN/PersonGN.glade:706
 msgid "  "
 msgstr "  "
+
+#~ msgid "Importi fontoj"
+#~ msgstr "Importer les sources"

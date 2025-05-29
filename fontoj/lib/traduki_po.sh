@@ -8,6 +8,7 @@ src=eo
 
 FIC=$1
 dst=$(grep '^"Language: .*\n"$' "$FIC" | sed 's/^"Language: //;s/.n"$//')
+echo dst=$dst
 
 awk -v "BASEDIR=$BASEDIR" -v "src=$src" -v "dst=$dst" '{
   if (CONTMSG==1 && substr($1,1,1) != "\"")
@@ -36,8 +37,10 @@ awk -v "BASEDIR=$BASEDIR" -v "src=$src" -v "dst=$dst" '{
       getline nextline
       if (nextline == "")
       {
+        print ("traduction msgid " MSGID) >2;
         print ("msgid " MSGID);
         printf("msgstr \"");
+        print (" commande =" BASEDIR"/traduko.sh " src " " dst " " MSGID) >2;
         MSG=system(BASEDIR"/traduko.sh " src " " dst " " MSGID)
         printf("\"\n\n");
       }
