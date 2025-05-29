@@ -55,6 +55,8 @@ from gramps.gen.datehandler import LANG_TO_PARSER
 parserEn = LANG_TO_PARSER['en']()
 
 #---
+import instdepGN
+instdepGN.instDep('protobuf','4.21.1')
 from html import unescape
 from lxml import html
 from urllib.parse import urlparse, parse_qs , quote_plus
