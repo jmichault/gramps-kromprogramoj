@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gramps-kromprogramoj. 60\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-29 18:11+0200\n"
+"POT-Creation-Date: 2025-05-29 18:42+0200\n"
 "PO-Revision-Date: 2025-05-24 11:37+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -23,17 +23,22 @@ msgstr ""
 msgid "note geneanet %s"
 msgstr "Observe a geneanet %s"
 
-#: PersonGN/ImportoGN.py:391 PersonGN/ImportoGN.py:466
-#: PersonGN/ImportoGN.py:483 PersonGN/utilaGN.py:50
+#: PersonGN/ImportoGN.py:388 PersonGN/ImportoGN.py:469
+#: PersonGN/ImportoGN.py:486 PersonGN/utilaGN.py:50
 msgid "Internet Address"
 msgstr "Editor de endereço de Internet"
 
-#: PersonGN/ImportoGN.py:464
+#: PersonGN/ImportoGN.py:399
+#, python-format
+msgid "okazaĵo importita el la geneanet-dosiero je la %s"
+msgstr "um evento importado do arquivo geneanet no %s"
+
+#: PersonGN/ImportoGN.py:467
 #, python-format
 msgid "arbre geneanet %s"
 msgstr "ARBRE GeneAnet %s"
 
-#: PersonGN/ImportoGN.py:493
+#: PersonGN/ImportoGN.py:496
 #, python-format
 msgid "persono importita el la geneanet-dosiero je la %s"
 msgstr "uma pessoa importada do arquivo geneanet no %s"

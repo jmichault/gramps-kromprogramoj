@@ -45,16 +45,16 @@
 ]
 },
 {
-"n": "PersonGN",
+"n": "Personn",
 "i": "Geneanet Gramplet",
 "t": 10,
-"d": "interfaco por Geneanet",
-"v": "beta 0.0.3",
+"d": "interface para geneanet",
+"v": "beta 0.0.4",
 "g": "6.0",
 "s": 3,
 "z": "PersonGN.addon.tgz",
 "rm": [
-"requests"
+"urllib"
 ]
 },
 {
