@@ -57,6 +57,7 @@ parserEn = LANG_TO_PARSER['en']()
 #---
 import instdepGN
 instdepGN.instDep('protobuf','4.21.1')
+
 from html import unescape
 from lxml import html
 from urllib.parse import urlparse, parse_qs , quote_plus
@@ -74,6 +75,7 @@ except ValueError:
     _trans = glocale.translation
 _ = _trans.gettext
 
+
 #-------------------------------------------------------------------------
 #
 # configuration
@@ -85,7 +87,6 @@ CONFIG = config.register_manager(GRAMPLET_CONFIG_NAME)
 # salutnomo kaj pasvorto por FamilySearch
 CONFIG.register("preferences.gn_osm", '')
 CONFIG.register("preferences.gn_notoj", '')
-CONFIG.register("preferences.gn_fontoj", '')
 CONFIG.load()
 
 
@@ -100,7 +101,6 @@ class PersonGN(Gramplet):
   # préférences :
   gn_osm = (CONFIG.get("preferences.gn_osm") == 'True' )
   gn_notoj = (CONFIG.get("preferences.gn_notoj") == 'True' )
-  gn_fontoj = not CONFIG.get("preferences.gn_fontoj") == 'False'
   try:
       lingvo = config.get('preferences.place-lang')
   except AttributeError:
@@ -256,7 +256,7 @@ class PersonGN(Gramplet):
           extPatro = extPersono['person']['father']  # fiche simplifiée du père
           urlPatro = geneanet.id2url(extPatro)
           extPatro = self.getPersono(urlPatro)  # fiche détaillée du père
-          grPatro = aldPersono(db, txn, extPatro, progress, PersonGN.gn_fontoj, PersonGN.gn_notoj, PersonGN.gn_osm)
+          grPatro = aldPersono(db, txn, extPatro, progress, PersonGN.gn_notoj, PersonGN.gn_osm)
           family_handle = grPersono.get_main_parents_family_handle()
           if family_handle:
             familio = db.get_family_from_handle(family_handle)
@@ -285,7 +285,7 @@ class PersonGN(Gramplet):
           extPatrino = extPersono['person']['mother']  # fiche simplifiée de la mère
           urlPatrino = geneanet.id2url(extPatrino)
           extPatrino = self.getPersono(urlPatrino)  # fiche détaillée de la mère
-          grPatrino = aldPersono(db, txn, extPatrino, progress, PersonGN.gn_fontoj, PersonGN.gn_notoj, PersonGN.gn_osm)
+          grPatrino = aldPersono(db, txn, extPatrino, progress, PersonGN.gn_notoj, PersonGN.gn_osm)
           family_handle = grPersono.get_main_parents_family_handle()
           if family_handle:
             familio = db.get_family_from_handle(family_handle)
@@ -319,7 +319,7 @@ class PersonGN(Gramplet):
           extEdzo = extFamilio.get('spouse')  # fiche simplifiée du conjoint
           urlEdzo = geneanet.id2url(extEdzo)
           extEdzo = self.getPersono(urlEdzo)  # fiche détaillée du conjoint
-          grEdzo = aldPersono(db, txn, extEdzo, progress, PersonGN.gn_fontoj, PersonGN.gn_notoj, PersonGN.gn_osm)
+          grEdzo = aldPersono(db, txn, extEdzo, progress, PersonGN.gn_notoj, PersonGN.gn_osm)
           familio = Family()
           db.add_family(familio, txn)
           if grPersono.get_gender() == Person.MALE :
@@ -361,7 +361,7 @@ class PersonGN(Gramplet):
         elif tipolinio == 'infano' :
           urlInfano = linio[10]
           extInfano = self.getPersono(urlInfano)  # fiche détaillée de l'enfant
-          grInfano = aldPersono(db, txn, extInfano, progress, PersonGN.gn_fontoj, PersonGN.gn_notoj, PersonGN.gn_osm)
+          grInfano = aldPersono(db, txn, extInfano, progress, PersonGN.gn_notoj, PersonGN.gn_osm)
           family_handle = linio[11]
           if family_handle:
             familio = db.get_family_from_handle(family_handle)
@@ -538,8 +538,6 @@ class PersonGN(Gramplet):
     gn_osm.set_active(PersonGN.gn_osm)
     gn_notoj = self.top.get_object("gn_notoj")
     gn_notoj.set_active(PersonGN.gn_notoj)
-    gn_fontoj = self.top.get_object("gn_fontoj")
-    gn_fontoj.set_active(PersonGN.gn_fontoj)
     top.show()
     res = top.run()
     top.hide()
@@ -548,8 +546,6 @@ class PersonGN(Gramplet):
       CONFIG.set("preferences.gn_osm", str(PersonGN.gn_osm))
       PersonGN.gn_notoj = gn_notoj.get_active()
       CONFIG.set("preferences.gn_notoj", str(PersonGN.gn_notoj))
-      PersonGN.gn_fontoj = gn_fontoj.get_active()
-      CONFIG.set("preferences.gn_fontoj", str(PersonGN.gn_fontoj))
       CONFIG.save()
 
   def CB_Regximo_changed(self, dummy):

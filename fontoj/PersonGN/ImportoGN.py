@@ -338,7 +338,7 @@ def htmlAlStyled(teksto) :
   teksto = teksto.replace('<br>\n','\n')
   return(convert_to_styled(teksto))
 
-def aldFaktoj( db, txn, extPersono, grPerson, progress, gn_fontoj, gn_notoj, gn_osm) :
+def aldFaktoj( db, txn, extPersono, grPerson, progress, gn_notoj, gn_osm) :
   faktoj = extPersono['person'].get('events')
   if faktoj is None or len(faktoj) == 0 or faktoj.get('elements') is None :
     return
@@ -382,7 +382,7 @@ def aldFaktoj( db, txn, extPersono, grPerson, progress, gn_fontoj, gn_notoj, gn_
     db.commit_event(event, txn)
     progress.step()
     src = f.get('src')
-    if src and gn_fontoj :
+    if src :
       #print("   src evt :%s" % src)
       citation = Citation()
       citation.set_confidence_level(Citation.CONF_LOW)
@@ -417,7 +417,7 @@ def aldFaktoj( db, txn, extPersono, grPerson, progress, gn_fontoj, gn_notoj, gn_
       grPerson.set_death_ref(er)
     db.commit_person(grPerson, txn)
 
-def aldPersono(db, txn, extPersono, progress, gn_fontoj, gn_notoj, gn_osm) :
+def aldPersono(db, txn, extPersono, progress, gn_notoj, gn_osm) :
   grPerson = Person()
   aldNomoj( db, txn, extPersono, grPerson)
   s = extPersono['person'].get('sex')
@@ -500,6 +500,6 @@ def aldPersono(db, txn, extPersono, progress, gn_fontoj, gn_notoj, gn_osm) :
   grPerson.add_citation(citation.get_handle())
   progress.step()
   # ajout des évènements :
-  aldFaktoj( db, txn, extPersono, grPerson, progress, gn_fontoj, gn_notoj, gn_osm)
+  aldFaktoj( db, txn, extPersono, grPerson, progress, gn_notoj, gn_osm)
   return grPerson
 
