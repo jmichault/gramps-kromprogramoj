@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GRAMPS 5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-25 21:36+0100\n"
+"POT-Creation-Date: 2025-05-30 11:27+0200\n"
 "PO-Revision-Date: 2023-08-05 19:36+0000\n"
 "Last-Translator: Nick Hall <nick-h@gramps-project.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/gramps-project/gramps/pt_BR/>\n"
@@ -27,15 +27,15 @@ msgstr ""
 "X-Poedit-Basepath: ../gramps-master/gramps\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: PlaceFrCog/placefrcog.gpr.py:30
+#: PlaceFrCog/placefrcog.gpr.py:31
 msgid "Lokoj : Franca Oficiala Geografia Kodo"
 msgstr "Lugares: código geográfico oficial francês"
 
-#: PlaceFrCog/placefrcog.gpr.py:31
+#: PlaceFrCog/placefrcog.gpr.py:32
 msgid "Gramplet por preni municipojn de la datumbazo Insee"
 msgstr "Gramplet para tirar municípios do banco de dados INSEE"
 
-#: PlaceFrCog/placefrcog.gpr.py:37
+#: PlaceFrCog/placefrcog.gpr.py:38
 msgid "Fr COG"
 msgstr "Frg"
 

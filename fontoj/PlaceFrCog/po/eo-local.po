@@ -1,120 +1,111 @@
-# Hebrew translation for Gramps
-# This file is distributed under the same license as the Gramps package.
-# Copyright (C) 2009
-# First Translator: Igal Shapira <igal.shapira@gmail.com>, 2009, 2010, 2011.
-# Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>, 2019, 2021, 2022, 2023.
-# Nick Hall <nick-h@gramps-project.org>, 2021, 2023.
-# Omer I.S. <omeritzicschwartz@gmail.com>, 2021, 2022, 2023.
-# Yaron Shahrabani <sh.yaron@gmail.com>, 2023.
+# Esperanto translations for gramps-kromprogramoj. package.
+# Copyright (C) 2025 THE gramps-kromprogramoj.'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the gramps-kromprogramoj. package.
+# Automatically generated, 2025.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: Gramps 5.1.2\n"
+"Project-Id-Version: gramps-kromprogramoj. 60\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-30 11:27+0200\n"
-"PO-Revision-Date: 2023-10-06 15:54+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
-"Language-Team: Hebrew <https://hosted.weblate.org/projects/gramps-project/gramps/he/>\n"
-"Language: he\n"
+"PO-Revision-Date: 2025-05-30 11:27+0200\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: eo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 5.1-dev\n"
-"X-Poedit-Bookmarks: 1508,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: PlaceFrCog/placefrcog.gpr.py:31
 msgid "Lokoj : Franca Oficiala Geografia Kodo"
-msgstr "מקומות: קוד גיאוגרפי הרשמי הצרפתי"
+msgstr "Lokoj : Franca Oficiala Geografia Kodo"
 
 #: PlaceFrCog/placefrcog.gpr.py:32
 msgid "Gramplet por preni municipojn de la datumbazo Insee"
-msgstr "Gramplet לקחת עיריות ממסד הנתונים של Insee"
+msgstr "Gramplet por preni municipojn de la datumbazo Insee"
 
 #: PlaceFrCog/placefrcog.gpr.py:38
 msgid "Fr COG"
-msgstr "FR COG"
+msgstr "Fr COG"
 
 #: PlaceFrCog/placefrcog.py:96
 msgid "Enigu la INSEE-numeron de la komunumo: (aŭ plurajn nombrojn apartigitajn per spacoj)"
-msgstr "הזן את מספר ה- InSee של הקהילה: (או מספר מספרים המופרדים על ידי רווחים)"
+msgstr "Enigu la INSEE-numeron de la komunumo: (aŭ plurajn nombrojn apartigitajn per spacoj)"
 
 #: PlaceFrCog/placefrcog.py:101
 msgid "Ŝargi per kodo"
-msgstr "טען בקוד"
+msgstr "Ŝargi per kodo"
 
 #: PlaceFrCog/placefrcog.py:106
 msgid "Ŝargi per kodo (anstataŭe)"
-msgstr "טען בקוד (במקום זאת)"
+msgstr "Ŝargi per kodo (anstataŭe)"
 
 #: PlaceFrCog/placefrcog.py:113
 msgid "Enigu la nomon de la komunumo:"
-msgstr "הזן את שם הקהילה:"
+msgstr "Enigu la nomon de la komunumo:"
 
 #: PlaceFrCog/placefrcog.py:118
 msgid "Ŝarĝi per nomo"
-msgstr "טען בשם"
+msgstr "Ŝarĝi per nomo"
 
 #: PlaceFrCog/placefrcog.py:123
 msgid "Ŝarĝi per nomo (anstataŭe)"
-msgstr "טען בשם (במקום זאת)"
+msgstr "Ŝarĝi per nomo (anstataŭe)"
 
 #: PlaceFrCog/placefrcog.py:159 PlaceFrCog/placefrcog.py:258
 #, python-format
 msgid "Ĝisdatigo de loko kun INSEE-id %s"
-msgstr "עדכון המקום עם INEE ID %s"
+msgstr "Ĝisdatigo de loko kun INSEE-id %s"
 
 #: PlaceFrCog/placefrcog.py:183 PlaceFrCog/placefrcog.py:247
 msgid "Ekzistanta kodo"
-msgstr "קוד קיים"
+msgstr "Ekzistanta kodo"
 
 #: PlaceFrCog/placefrcog.py:183 PlaceFrCog/placefrcog.py:247
 msgid "Ĉi tiu kodo jam ekzistas en la datumbazo."
-msgstr "קוד זה כבר קיים במסד הנתונים."
+msgstr "Ĉi tiu kodo jam ekzistas en la datumbazo."
 
 #: PlaceFrCog/placefrcog.py:193
 #, python-format
 msgid "Aldono de loko kun INSEE-id %s"
-msgstr "הוספת מקום עם INEE-ID %s"
+msgstr "Aldono de loko kun INSEE-id %s"
 
 #: PlaceFrCog/placefrcog.py:222
 msgid "Nekonato nomo"
-msgstr "שם לא ידוע"
+msgstr "Nekonato nomo"
 
 #: PlaceFrCog/placefrcog.py:222
 msgid "Ĉi tiu nomo ne estis trovita en la INSEE-datumbazo: "
-msgstr "שם זה לא נמצא במסד הנתונים של Insee:"
+msgstr "Ĉi tiu nomo ne estis trovita en la INSEE-datumbazo:"
 
 #: PlaceFrCog/placefrcog.py:229
 #, python-format
 msgid "%d rezultoj"
-msgstr "%d תוצאות"
+msgstr "%d rezultoj"
 
 #: PlaceFrCog/placefrcog.py:229
 #, python-format
 msgid "Unua rezulto :\n\t%s ; kodo=%s. \n\n\t\tImporti ?\n"
-msgstr ""
-"תוצאה ראשונה :\n"
-"\t%s ; קוד=%s. \n"
-"\n"
-"\t\tייבא ?\n"
+msgstr "Unua rezulto :\n\t%s ; kodo=%s. \n\n\t\tImporti ?\n"
 
 #: PlaceFrCog/placefrcog.py:230
 msgid "Jes, Importi"
-msgstr "כן, לייבא"
+msgstr "Jes, Importi"
 
 #: PlaceFrCog/placefrcog.py:230
 msgid "Venonta"
-msgstr "הַבָּא"
+msgstr "Venonta"
 
 #: PlaceFrCog/placefrcog.py:254 PlaceFrCog/placefrcog.py:384
 msgid "Nekonata kodo"
-msgstr "קוד לא ידוע"
+msgstr "Nekonata kodo"
 
 #: PlaceFrCog/placefrcog.py:254 PlaceFrCog/placefrcog.py:384
 msgid "Ĉi tiu kodo ne estis trovita en la INSEE-datumbazo: "
-msgstr "קוד זה לא נמצא במסד הנתונים של Insee:"
+msgstr "Ĉi tiu kodo ne estis trovita en la INSEE-datumbazo:"
 
 #: PlaceFrCog/placefrcog.py:293
 #, python-format
 msgid "Aldono de loko %s"
-msgstr "הוספת מקום %s"
+msgstr "Aldono de loko %s"

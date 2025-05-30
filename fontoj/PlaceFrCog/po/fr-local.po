@@ -43,7 +43,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-25 21:36+0100\n"
+"POT-Creation-Date: 2025-05-30 11:27+0200\n"
 "PO-Revision-Date: 2023-08-26 20:29+0000\n"
 "Last-Translator: Jean-Marc <m.balthazar@posteo.net>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gramps-project/gramps/fr/>\n"
@@ -54,15 +54,15 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Generator: Weblate 5.0.1-dev\n"
 
-#: PlaceFrCog/placefrcog.gpr.py:30
+#: PlaceFrCog/placefrcog.gpr.py:31
 msgid "Lokoj : Franca Oficiala Geografia Kodo"
 msgstr "Lieux : Code Officiel Géographique français"
 
-#: PlaceFrCog/placefrcog.gpr.py:31
+#: PlaceFrCog/placefrcog.gpr.py:32
 msgid "Gramplet por preni municipojn de la datumbazo Insee"
 msgstr "Gramplet pour récupérer les communes de la base Insee"
 
-#: PlaceFrCog/placefrcog.gpr.py:37
+#: PlaceFrCog/placefrcog.gpr.py:38
 msgid "Fr COG"
 msgstr "Fr COG"
 

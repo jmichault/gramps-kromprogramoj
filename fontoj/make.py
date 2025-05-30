@@ -533,9 +533,9 @@ elif command == "as-needed":
             gpr_bad = False  # to flag a bad gpr
             do_list = False  # to avoid multiple pass per lang if not listing
             for gpr in glob.glob(r('''%(addon)s/*.gpr.py''')):
-                # Make fallback language English (rather than current LANG)
+                # Make fallback language Esperanto (rather than current LANG)
                 local_gettext = glocale.get_addon_translator(
-                    gpr, languages=[lang, "en.UTF-8"]).gettext
+                    gpr, languages=[lang, "eo.UTF-8"]).gettext
                 plugins = []
                 with open(gpr.encode("utf-8", errors="backslashreplace")) as f:
                     code = compile(
@@ -727,7 +727,7 @@ elif command == "check":
     # go through all gpr's, check their build versions
     for gpr in glob.glob(r('''*/*.gpr.py''')):
         local_gettext = glocale.get_addon_translator(
-            gpr, languages=["en", "en.UTF-8"]).gettext
+            gpr, languages=["eo", "eo.UTF-8"]).gettext
         plugins = []
         with open(gpr.encode("utf-8", errors="backslashreplace")) as f:
             code = compile(f.read(),
@@ -791,9 +791,9 @@ elif command == "listing":
         listings = []
         for addon in dirs:
             for gpr in glob.glob(r('''%(addon)s/*.gpr.py''')):
-                # Make fallback language English (rather than current LANG)
+                # Make fallback language Esperanto (rather than current LANG)
                 local_gettext = glocale.get_addon_translator(
-                    gpr, languages=[lang, "en.UTF-8"]).gettext
+                    gpr, languages=[lang, "eo.UTF-8"]).gettext
                 plugins = []
                 with open(gpr.encode("utf-8", errors="backslashreplace")) as f:
                     code = compile(

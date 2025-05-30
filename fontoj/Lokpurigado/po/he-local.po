@@ -39,7 +39,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gramps 5.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-25 21:35+0100\n"
+"POT-Creation-Date: 2025-05-30 11:26+0200\n"
 "PO-Revision-Date: 2024-03-06 20:39+0200\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew (Israel) <https://hosted.weblate.org/projects/gramps-project/gramps/he/>\n"
@@ -50,11 +50,11 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5);\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: Lokpurigado/lokpurigado.gpr.py:28 Lokpurigado/lokpurigado.gpr.py:40
+#: Lokpurigado/lokpurigado.gpr.py:29 Lokpurigado/lokpurigado.gpr.py:41
 msgid "Lokpurigado"
 msgstr "ניקוי מקום"
 
-#: Lokpurigado/lokpurigado.gpr.py:29
+#: Lokpurigado/lokpurigado.gpr.py:30
 msgid "Lokpurigado helpas kompletigi lokojn uzante OpenStreetMap."
 msgstr "ניקוי מקום עוזר להשלים פרטים על המקום באמצעות OpenStreetMap."
 

@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gramps 5.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-25 21:36+0100\n"
+"POT-Creation-Date: 2025-05-30 11:27+0200\n"
 "PO-Revision-Date: 2023-09-12 11:02+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gramps-project/gramps/nl/>\n"
@@ -28,15 +28,15 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.0.1-dev\n"
 
-#: PlaceFrCog/placefrcog.gpr.py:30
+#: PlaceFrCog/placefrcog.gpr.py:31
 msgid "Lokoj : Franca Oficiala Geografia Kodo"
 msgstr "Plaatsen: Franse officiële geografische code"
 
-#: PlaceFrCog/placefrcog.gpr.py:31
+#: PlaceFrCog/placefrcog.gpr.py:32
 msgid "Gramplet por preni municipojn de la datumbazo Insee"
 msgstr "Grampet om gemeenten uit de Insee -database te nemen"
 
-#: PlaceFrCog/placefrcog.gpr.py:37
+#: PlaceFrCog/placefrcog.gpr.py:38
 msgid "Fr COG"
 msgstr "Fr COG"
 

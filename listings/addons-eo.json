@@ -1,10 +1,10 @@
 [
 {
-"n": "FamilySearch: Compare",
+"n": "FamilySearch : kompari",
 "i": "FamilySearch komparo",
 "t": 2,
-"d": "FamilySearch: Compare Gramps people with FS people.",
-"v": "beta 2.0.57",
+"d": "FamilySearch : kompari gramps personojn kun FS personojn.",
+"v": "beta 2.0.59",
 "g": "6.0",
 "s": 3,
 "z": "PersonFS.addon.tgz",
@@ -15,11 +15,11 @@
 ]
 },
 {
-"n": "Import of FamilySearch data",
+"n": "Importo de FamilySearch datumoj",
 "i": "Importo de FamilySearch",
 "t": 2,
 "d": "FamilySearch.",
-"v": "beta 2.0.57",
+"v": "beta 2.0.59",
 "g": "6.0",
 "s": 3,
 "z": "PersonFS.addon.tgz",
@@ -33,8 +33,8 @@
 "n": "PersonFS",
 "i": "FS Gramplet",
 "t": 10,
-"d": "Interface for FamilySearch",
-"v": "beta 2.0.57",
+"d": "interfaco por FamilySearch",
+"v": "beta 2.0.59",
 "g": "6.0",
 "s": 3,
 "z": "PersonFS.addon.tgz",
@@ -45,35 +45,36 @@
 ]
 },
 {
-"n": "PersonGN",
-"i": "Geneanet Gramplet",
-"t": 10,
-"d": "interfaco por Geneanet",
-"v": "beta 0.0.4",
-"g": "6.0",
-"s": 3,
-"z": "PersonGN.addon.tgz",
-"rm": [
-"urllib"
-]
-},
-{
-"n": "Place cleaning",
+"n": "Lokpurigado",
 "i": "Lokpurigado",
 "t": 10,
-"d": "Place cleaning helps complete locations using OpenStreetMap.",
-"v": "1.0.23",
+"d": "Lokpurigado helpas kompletigi lokojn uzante OpenStreetMap.",
+"v": "1.0.24",
 "g": "6.0",
 "s": 3,
 "z": "Lokpurigado.addon.tgz",
 "h": "Addon:Lokpurigado"
 },
 {
-"n": "Places: French Official Geographic Code",
+"n": "Geneanet Gramplet",
+"i": "PersonGN",
+"t": 10,
+"d": "interfaco por Geneanet",
+"v": "beta 0.0.5",
+"g": "6.0",
+"s": 3,
+"z": "PersonGN.addon.tgz",
+"rm": [
+"urllib",
+"fake_useragent"
+]
+},
+{
+"n": "Lokoj : Franca Oficiala Geografia Kodo",
 "i": "PlaceFrCog Gramplet",
 "t": 10,
-"d": "Gramplet to take municipalities from the INSEE database",
-"v": "1.0.36",
+"d": "Gramplet por preni municipojn de la datumbazo Insee",
+"v": "1.0.38",
 "g": "6.0",
 "s": 3,
 "z": "PlaceFrCog.addon.tgz"

@@ -43,7 +43,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-25 21:35+0100\n"
+"POT-Creation-Date: 2025-05-30 11:26+0200\n"
 "PO-Revision-Date: 2023-08-26 20:29+0000\n"
 "Last-Translator: Jean-Marc <m.balthazar@posteo.net>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gramps-project/gramps/fr/>\n"
@@ -54,11 +54,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Generator: Weblate 5.0.1-dev\n"
 
-#: Lokpurigado/lokpurigado.gpr.py:28 Lokpurigado/lokpurigado.gpr.py:40
+#: Lokpurigado/lokpurigado.gpr.py:29 Lokpurigado/lokpurigado.gpr.py:41
 msgid "Lokpurigado"
 msgstr "Amélioration des lieux"
 
-#: Lokpurigado/lokpurigado.gpr.py:29
+#: Lokpurigado/lokpurigado.gpr.py:30
 msgid "Lokpurigado helpas kompletigi lokojn uzante OpenStreetMap."
 msgstr "Le nettoyage du lieu aide à compléter les emplacements à l'aide d'OpenStreetMap."
 

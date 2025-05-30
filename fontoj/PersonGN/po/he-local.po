@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gramps-kromprogramoj. 60\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-29 18:42+0200\n"
+"POT-Creation-Date: 2025-05-30 23:41+0200\n"
 "PO-Revision-Date: 2025-05-24 11:37+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -17,34 +17,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: PersonGN/ImportoGN.py:372
+#: PersonGN/ImportoGN.py:398
 #, python-format
 msgid "note geneanet %s"
 msgstr "הערה geneanet %s"
 
-#: PersonGN/ImportoGN.py:388 PersonGN/ImportoGN.py:469
-#: PersonGN/ImportoGN.py:486 PersonGN/utilaGN.py:50
+#: PersonGN/ImportoGN.py:414 PersonGN/ImportoGN.py:495
+#: PersonGN/ImportoGN.py:512 PersonGN/utilaGN.py:50
 msgid "Internet Address"
 msgstr "כתובת מרשתת"
 
-#: PersonGN/ImportoGN.py:399
+#: PersonGN/ImportoGN.py:425
 #, python-format
 msgid "okazaĵo importita el la geneanet-dosiero je la %s"
 msgstr "אירוע המיובא מקובץ GeneAnet ב- %s"
 
-#: PersonGN/ImportoGN.py:467
+#: PersonGN/ImportoGN.py:493
 #, python-format
 msgid "arbre geneanet %s"
 msgstr "arbre geneanet %s"
 
-#: PersonGN/ImportoGN.py:496
+#: PersonGN/ImportoGN.py:522
 #, python-format
 msgid "persono importita el la geneanet-dosiero je la %s"
 msgstr "אדם המיובא מקובץ GeneAnet ב- %s"
 
 #: PersonGN/PersonGN.gpr.py:33
-msgid "PersonGN"
-msgstr "אישי"
+msgid "Geneanet Gramplet"
+msgstr "Geneanet Gramplet"
 
 #: PersonGN/PersonGN.gpr.py:34
 msgid "interfaco por Geneanet"
@@ -110,89 +110,96 @@ msgstr "עותק GeneAnet"
 msgid "Kopio"
 msgstr "לְהַעְתִיק"
 
-#: PersonGN/PersonGN.py:230 PersonGN/PersonGN.py:244
+#: PersonGN/PersonGN.py:230 PersonGN/PersonGN.py:245
 msgid "Kopiante… "
 msgstr "העתקה ..."
 
-#: PersonGN/PersonGN.py:240
+#: PersonGN/PersonGN.py:241
 msgid "kopii al gramps"
 msgstr "העתקה לגרמפס"
 
-#: PersonGN/PersonGN.py:253
+#: PersonGN/PersonGN.py:254
 msgid "nomimporto ankoraŭ ne efektivigita_"
 msgstr "Nomompporto עדיין לא מיושם_"
 
-#: PersonGN/PersonGN.py:265
+#: PersonGN/PersonGN.py:266
 msgid "Ĉi tiu persono jam havas patron"
 msgstr "לאדם הזה כבר יש אב"
 
-#: PersonGN/PersonGN.py:294
+#: PersonGN/PersonGN.py:295
 msgid "Ĉi tiu individuo jam havas patrinon"
 msgstr "לאדם הזה יש כבר אמא"
 
-#: PersonGN/PersonGN.py:395
+#: PersonGN/PersonGN.py:384
+msgid "\tLa jenaj lokoj estis kreitaj dum la importado,\n vi devus kontroli ilin nun:\n\n"
+msgstr ""
+"\tla המקומות הבאים נוצרו במהלך היבוא, \n"
+" כדאי לבדוק אותם עכשיו: \n"
+" \n"
+
+#: PersonGN/PersonGN.py:399
 msgid "Kopii json-datumojn al tondujo"
 msgstr "העתק נתוני JSON ללוח"
 
-#: PersonGN/PersonGN.py:406
+#: PersonGN/PersonGN.py:410
 #, python-format
 msgid "Redakti : %s - %s - %s"
 msgstr "עריכה: %s - %s - %s"
 
-#: PersonGN/PersonGN.py:427
+#: PersonGN/PersonGN.py:431
 msgid "Kopii elekton de Geneanet al gramps"
 msgstr "העתק בחירה מג'נאנט לגרמפים"
 
-#: PersonGN/PersonGN.py:558
+#: PersonGN/PersonGN.py:562
 msgid "Geneanet Serĉo"
 msgstr "חיפוש GeneAnet"
 
-#: PersonGN/PersonGN.py:558
+#: PersonGN/PersonGN.py:562
 msgid "Serĉante"
 msgstr "בחיפוש אחר"
 
-#: PersonGN/PersonGN.py:560
+#: PersonGN/PersonGN.py:564
 msgid "Serĉante… "
 msgstr "מחפש ..."
 
-#: PersonGN/PersonGN.py:591
+#: PersonGN/PersonGN.py:595
 msgid "Eraro: neniuj datumoj."
 msgstr "שגיאה: אין נתונים."
 
-#: PersonGN/PersonGN.py:597
+#: PersonGN/PersonGN.py:601
 msgid "Unable to perform HTML analysis"
 msgstr "לא ניתן לבצע ניתוח HTML"
 
-#: PersonGN/PersonGN.py:604
+#: PersonGN/PersonGN.py:608
 #, python-format
 msgid "Elŝutante personojn… (%s/10)"
 msgstr "הורדת אנשים ... (%s/10)"
 
-#: PersonGN/PersonGN.py:665
+#: PersonGN/PersonGN.py:669
 msgid "URL"
 msgstr "מען URL"
 
-#: PersonGN/PersonGN.py:666
+#: PersonGN/PersonGN.py:670
 msgid "Sosa"
 msgstr "סוסה"
 
-#: PersonGN/PersonGN.py:667
+#: PersonGN/PersonGN.py:671
 msgid "Nomo, antaŭnomo"
 msgstr "שם משפחה, שם פרטי"
 
-#: PersonGN/PersonGN.py:668
+#: PersonGN/PersonGN.py:672
 msgid "Naskiĝo"
 msgstr "הוּלֶדֶת"
 
-#: PersonGN/PersonGN.py:669
+#: PersonGN/PersonGN.py:673
 msgid "Morto"
 msgstr "מָוֶת"
 
-#: PersonGN/PersonGN.py:670 PersonGN/komparoGN.py:299
+#: PersonGN/PersonGN.py:674 PersonGN/komparoGN.py:299
 msgid "Gepatroj"
 msgstr "הורים"
 
-#: PersonGN/PersonGN.py:671
+#: PersonGN/PersonGN.py:675
 msgid "Nb Inf., Geedzoj"
 msgstr "Nb inf., בני זוג"
 
@@ -320,6 +327,9 @@ msgstr "רענון"
 #: PersonGN/PersonGN.glade:706
 msgid "  "
 msgstr "[null,null,eo"
+
+#~ msgid "PersonGN"
+#~ msgstr "אישי"
 
 #~ msgid "Konservi mian pasvorton, mi konscias pri la riskoj."
 #~ msgstr "שמור את הסיסמה שלי, אני מודע לסיכונים."

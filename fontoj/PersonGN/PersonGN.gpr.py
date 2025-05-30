@@ -29,8 +29,8 @@
 from gramps.version import major_version
 
 register(GRAMPLET,
-         id = "Geneanet Gramplet",
-         name = _("PersonGN"),
+         id = "PersonGN",
+         name = _("Geneanet Gramplet"),
          description = _("interfaco por Geneanet"),
          status = STABLE,
          fname="PersonGN.py",
@@ -40,9 +40,9 @@ register(GRAMPLET,
          gramplet_title=_("Geneanet"),
          detached_width = 500,
          detached_height = 500,
-         version = 'beta 0.0.4',
+         version = 'beta 0.0.5',
          gramps_target_version= major_version,
          navtypes=["Person"],
-         requires_mod=["urllib"],
+         requires_mod=["urllib","fake_useragent"],
          )
 
