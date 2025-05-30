@@ -56,7 +56,7 @@ parserEn = LANG_TO_PARSER['en']()
 
 #---
 import instdepGN
-instdepGN.instDep('protobuf','4.21.1')
+instdepGN.instDep('protobuf','6.31.1')
 
 from html import unescape
 from lxml import html
@@ -237,6 +237,7 @@ class PersonGN(Gramplet):
       print("??? transaction en cours ???")
       self.dbstate.db.transaction_commit(self.dbstate.db.transaction)
     db = self.dbstate.db
+    novLokoj = dict()
     with DbTxn(_("kopii al gramps"), db) as txn:
       for x in model:
        l = [x]
@@ -256,7 +257,7 @@ class PersonGN(Gramplet):
           extPatro = extPersono['person']['father']  # fiche simplifiée du père
           urlPatro = geneanet.id2url(extPatro)
           extPatro = self.getPersono(urlPatro)  # fiche détaillée du père
-          grPatro = aldPersono(db, txn, extPatro, progress, PersonGN.gn_notoj, PersonGN.gn_osm)
+          grPatro = aldPersono(novLokoj, db, txn, extPatro, progress, PersonGN.gn_notoj, PersonGN.gn_osm)
           family_handle = grPersono.get_main_parents_family_handle()
           if family_handle:
             familio = db.get_family_from_handle(family_handle)
@@ -285,7 +286,7 @@ class PersonGN(Gramplet):
           extPatrino = extPersono['person']['mother']  # fiche simplifiée de la mère
           urlPatrino = geneanet.id2url(extPatrino)
           extPatrino = self.getPersono(urlPatrino)  # fiche détaillée de la mère
-          grPatrino = aldPersono(db, txn, extPatrino, progress, PersonGN.gn_notoj, PersonGN.gn_osm)
+          grPatrino = aldPersono(novLokoj, db, txn, extPatrino, progress, PersonGN.gn_notoj, PersonGN.gn_osm)
           family_handle = grPersono.get_main_parents_family_handle()
           if family_handle:
             familio = db.get_family_from_handle(family_handle)
@@ -319,7 +320,7 @@ class PersonGN(Gramplet):
           extEdzo = extFamilio.get('spouse')  # fiche simplifiée du conjoint
           urlEdzo = geneanet.id2url(extEdzo)
           extEdzo = self.getPersono(urlEdzo)  # fiche détaillée du conjoint
-          grEdzo = aldPersono(db, txn, extEdzo, progress, PersonGN.gn_notoj, PersonGN.gn_osm)
+          grEdzo = aldPersono(novLokoj, db, txn, extEdzo, progress, PersonGN.gn_notoj, PersonGN.gn_osm)
           familio = Family()
           db.add_family(familio, txn)
           if grPersono.get_gender() == Person.MALE :
@@ -343,7 +344,7 @@ class PersonGN(Gramplet):
                 event.set_date_object( grDato )
             loko = unescape(extFamilio.get('marriagePlace') or '')
             if loko != '' :
-              grLoko = akiriLoko(db, txn, loko, PersonGN.gn_osm)
+              grLoko = akiriLoko(novLokoj, db, txn, loko, PersonGN.gn_osm)
               event.set_place_handle(grLoko.handle)
             if extFamilio.get('marriageType') == "MARRIED" :
               event.set_type(EventType.MARRIAGE)
@@ -361,7 +362,7 @@ class PersonGN(Gramplet):
         elif tipolinio == 'infano' :
           urlInfano = linio[10]
           extInfano = self.getPersono(urlInfano)  # fiche détaillée de l'enfant
-          grInfano = aldPersono(db, txn, extInfano, progress, PersonGN.gn_notoj, PersonGN.gn_osm)
+          grInfano = aldPersono(novLokoj, db, txn, extInfano, progress, PersonGN.gn_notoj, PersonGN.gn_osm)
           family_handle = linio[11]
           if family_handle:
             familio = db.get_family_from_handle(family_handle)
@@ -379,6 +380,9 @@ class PersonGN(Gramplet):
     progress.close()
     self.uistate.set_busy_cursor(False)
     self.ButRefresxigi_clicked(None)
+    if len(novLokoj) > 0 :
+      WarningDialog(_('\tLa jenaj lokoj estis kreitaj dum la importado,\n vi devus kontroli ilin nun:\n\n')
+         , '\n'.join(['%s : %s' % kv for kv in novLokoj.items()]))
 
   def l_dekstra_klako(self, treeview, event):
     menu = Gtk.Menu()

@@ -72,8 +72,7 @@ def aldNomoj( db, txn, extPersono, grPerson) :
   extANomo = extPersono['person'].get('firstname')
   aldNomo(db, txn, grPerson, extNomo, extANomo)
 
-def get_place_from_titolo(db, titolo, parento = None) -> Place:
-  
+def get_place_from_titolo(db, titolo, parento ) -> Place:
  if VERSION_TUPLE < (6, 0, 0):
   db.dbapi.execute(
             f"SELECT blob_data FROM place WHERE title = ?",
@@ -85,9 +84,18 @@ def get_place_from_titolo(db, titolo, parento = None) -> Place:
       place = Place.create(pickle.loads(row[0]))
       if not parento :
         return place
+      # ce lieu est-il un fils de parento ?
       rl = place.get_placeref_list()
-      if parento.handle in rl :
-         return place
+      for pr in rl :
+        if pr.ref == parento.handle :
+          return place
+      # ce lieu est-il un petit-fils de parento ?
+      for pr in rl :
+        p2 = db.get_place_from_handle(pr.ref)
+        rl2 = p2.get_placeref_list()
+        for pr2 in rl2 :
+          if pr2.ref == parento.handle :
+            return place
     else :
       return None
   return None
@@ -102,9 +110,18 @@ def get_place_from_titolo(db, titolo, parento = None) -> Place:
       datoj = db.serializer.string_to_data(row[0])
       if not parento :
         return datoj
+      # ce lieu est-il un fils de parento ?
       rl = datoj.get('placeref_list')
-      if parento.handle in rl :
-         return datoj
+      for pr in rl :
+        if pr.get('ref') == parento.handle :
+          return datoj
+      # ce lieu est-il un petit-fils de parento ?
+      for pr in rl :
+        p2 = db.get_place_from_handle(pr.ref)
+        rl2 = p2.get_placeref_list()
+        for pr2 in rl2 :
+          if pr2.ref == parento.handle :
+            return datoj
     else :
       return None
   return None
@@ -218,7 +235,6 @@ def akiriOsmLoko(db, txn, osmDatoj, parento=None) :
       if u.get('path') == url :
          return loko
   if parento :
-    #import pdb; pdb.set_trace()
     for rl in parento.get_placeref_list() :
       loko = db.get_place_from_handle(rl.ref)
       for curl in loko.urls :
@@ -229,14 +245,10 @@ def akiriOsmLoko(db, txn, osmDatoj, parento=None) :
       
   return None
 
-def akiriLoko(db, txn, nomo, gn_osm) :
+def akiriLoko(novLokoj, db, txn, nomo, gn_osm) :
   #print("akiriLoko : %s" % nomo)
   if nomo is None or nomo.strip()=='' :
     return None
-  # si on a déjà un lieu avec ce nom, on le prend :
-  loko = get_place_from_titolo(db,nomo)
-  if loko:
-    return loko
   # le format de lieu recommandé par geneanet est :
   #    «[Lieu-dit, paroisse, abréviation] - Commune, code ville (INSEE ou postal - facultatif), Sous-région (Département), Région (facultatif), Pays»
   #   on va donc couper le nom selon les virgules, et éventuellement le premier élément selon le '-'
@@ -244,22 +256,34 @@ def akiriLoko(db, txn, nomo, gn_osm) :
   lieudit = kodo = None
   if partoj[0].find(' - ') >= 0 :  # on a un lieu-dit
     x = partoj[0].split(' - ')
-    lieudit=x[0].strip(" []()")
-    partoj[0]=x[1].strip(" []()")
-  for x in partoj : # suppression et mise de côté d'un éventuel code
-    if x.strip(" []()").isdecimal() :
-      kodo = int(x.strip(" []()"))
-      partoj.remove(x)
-  #print("partoj = %s" % partoj)
-  # on cherhe/crée la hiérarchie du lieu
+    lieudit=x[0].strip(" [](),")
+    partoj[0]=x[1].strip(" [](),")
+    partoj.insert(0,lieudit)
+  partoj2=list()
+  for x in partoj : # suppression et mise de côté d'un éventuel code, suppression des chaînes vides
+    if x.strip(" [](),").isdecimal() :
+      kodo = int(x.strip(" [](),"))
+      continue
+    elif x.strip(" [](),") == '' :
+      continue
+    partoj2.append(x.strip(" [](),0123456789-"))
+  # on cherche la hiérarchie du lieu
   parento = loko = None
-  aTraiter = partoj.copy()
+  aTraiter = partoj2.copy()
   while (len(aTraiter)) :
-    nomo = aTraiter.pop().strip(" []()")
-    loko = get_place_from_titolo(db,nomo)
+    nomo = aTraiter.pop()
+    loko = get_place_from_titolo(db,nomo,parento)
     if loko:
       parento = loko
       continue
+    # suite de la hiérarchie pas trouvée, on s'arrête là
+    aTraiter.append(nomo) # on remet le lieu non trouvé dans aTraiter
+    nomo =  ','.join(aTraiter) # on concatène tout ce qui reste dans aTraiter
+    # si on a déjà un lieu avec ce nom, on le prend :
+    loko = get_place_from_titolo(db,nomo,None)
+    if loko :
+      return loko
+    # sinon on le crée :
     loko = Place()
     place_name = PlaceName()
     place_name.set_value( nomo )
@@ -271,6 +295,8 @@ def akiriLoko(db, txn, nomo, gn_osm) :
       loko.add_placeref(placeref)
     db.add_place(loko, txn)
     db.commit_place(loko, txn)
+    novLokoj[loko.gramps_id] =  nomo
+    break
   return loko
 
 
@@ -339,7 +365,7 @@ def htmlAlStyled(teksto) :
   teksto = teksto.replace('<br>\n','\n')
   return(convert_to_styled(teksto))
 
-def aldFaktoj( db, txn, extPersono, grPerson, progress, gn_notoj, gn_osm) :
+def aldFaktoj(novLokoj,  db, txn, extPersono, grPerson, progress, gn_notoj, gn_osm) :
   faktoj = extPersono['person'].get('events')
   if faktoj is None or len(faktoj) == 0 or faktoj.get('elements') is None :
     return
@@ -361,7 +387,7 @@ def aldFaktoj( db, txn, extPersono, grPerson, progress, gn_notoj, gn_osm) :
     db.add_event(event, txn)
     loko = unescape(f.get('place') or '')
     if loko :
-      grLoko = akiriLoko(db, txn, loko, gn_osm)
+      grLoko = akiriLoko(novLokoj, db, txn, loko, gn_osm)
       event.set_place_handle(grLoko.handle)
       db.commit_event(event, txn)
     progress.step()
@@ -421,7 +447,7 @@ def aldFaktoj( db, txn, extPersono, grPerson, progress, gn_notoj, gn_osm) :
     db.commit_person(grPerson, txn)
     progress.step()
 
-def aldPersono(db, txn, extPersono, progress, gn_notoj, gn_osm) :
+def aldPersono(novLokoj, db, txn, extPersono, progress, gn_notoj, gn_osm) :
   grPerson = Person()
   aldNomoj( db, txn, extPersono, grPerson)
   s = extPersono['person'].get('sex')
@@ -507,6 +533,6 @@ def aldPersono(db, txn, extPersono, progress, gn_notoj, gn_osm) :
   grPerson.add_citation(citation.get_handle())
   progress.step()
   # ajout des évènements :
-  aldFaktoj( db, txn, extPersono, grPerson, progress, gn_notoj, gn_osm)
+  aldFaktoj(novLokoj,  db, txn, extPersono, grPerson, progress, gn_notoj, gn_osm)
   return grPerson
 
