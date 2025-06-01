@@ -124,7 +124,7 @@ class FSKomparo(PluginWindows.ToolManagedWindowBatch):
     tagoj = self.options.menu.get_option_by_name('gui_tagoj').get_value()
     devigi = self.options.menu.get_option_by_name('gui_deviga').get_value()
     maks_dato = int(time.time()) - tagoj*24*3600
-    self.plist = set(filter_.apply(self.db, self.db.iter_person_handles()))
+    self.plist = set(filter_.apply(self.db, self.db.iter_person_handles(),user=self._user))
     pOrdList = list()
     progress.set_pass(_('Konstruante la ordigitan liston (1/2)'), len(self.plist))
     print("liste filtrée : "+str(len(self.plist)))
@@ -150,8 +150,9 @@ class FSKomparo(PluginWindows.ToolManagedWindowBatch):
       return ero[0]
     pOrdList.sort(key=akiUnua)
     # procesi
-    progress.set_pass(_('Procesante la liston (2/2)'), len(pOrdList))
-    print("liste triée : "+str(len(pOrdList)))
+    nbOrdList = len(pOrdList)
+    progress.set_pass(_('Procesante la liston (2/2)'), nbOrdList)
+    print("liste triée : "+str(nbOrdList))
     kop_etik = PersonFS.PersonFS.fs_etikedado
     PersonFS.PersonFS.fs_etikedado = True
     import asyncio
@@ -198,8 +199,10 @@ class FSKomparo(PluginWindows.ToolManagedWindowBatch):
         kompariFsGr(fsPersono,grPersono,self.db,dupdok=True)
       else:
         print (' kompari_paro_p2 : '+_('FS ID %s ne trovita') % (fsid))
-    #cnt=0
+    cnt=0
     #paroj=list()
+    pbar = progress._ProgressMeter__pbar
+    pbar.set_show_text(True)
     for paro in pOrdList:
       if progress.get_cancelled() :
         self.uistate.set_busy_cursor(False)
@@ -209,10 +212,12 @@ class FSKomparo(PluginWindows.ToolManagedWindowBatch):
         PersonFS.PersonFS.fs_etikedado = kop_etik
         return
       progress.step()
+      #progress._ProgressMeter__lbl.set_text(_('Procesante la liston (2/2)')+' %s/%s' % (cnt , nbOrdList))
+      pbar.set_text('%d%% (%s/%s)' % (int(100*cnt/nbOrdList),cnt , nbOrdList))
       kompari_paro_p1(paro)
       kompari_paro_p2(paro)
       #paroj.append(paro)
-      #cnt = cnt+1
+      cnt = cnt+1
       #if cnt >= 10 :
       #  loop = asyncio.get_event_loop()
       #  loop.run_until_complete( kompari_paroj_p1(loop,paroj))
