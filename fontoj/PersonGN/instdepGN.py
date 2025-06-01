@@ -19,13 +19,22 @@ def instDep(modulo,versio):
   """ instDep provas instali dependecon kiel argumenton """
   if not HavPip:
     return
+  if parse(pip.__version__) >= parse('23.1') :
+    pipHavBreak = True
+  else :
+    pipHavBreak = False
   try:
     v_0 = version(modulo)
   except Exception:
     v_0="0.0.0"
   if parse(v_0) < parse(versio) :
     print (f'dependeco {modulo} ne trovita aŭ < {versio}')
-    pip.main(['install', '--target', LIB_PATH, '--upgrade', '--break-system-packages', modulo])
-    pip.main(['install', '--target', LIB_PATH, '--upgrade', '--break-system-packages', modulo,'--only-binary',':all:'])
+    if pipHavBreak :
+      pip.main(['install', '--target', LIB_PATH, '--upgrade', '--break-system-packages', modulo])
+      pip.main(['install', '--target', LIB_PATH, '--upgrade', '--break-system-packages', modulo,'--only-binary',':all:'])
+    else :
+      pip.main(['install', '--target', LIB_PATH, '--upgrade', modulo])
+      pip.main(['install', '--target', LIB_PATH, '--upgrade', modulo,'--only-binary',':all:'])
+  importlib.invalidate_caches()
   #else:
   #  print( "dependeco %s trovita, versio %s" % (modulo , v))
