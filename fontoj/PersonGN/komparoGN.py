@@ -81,7 +81,7 @@ def NomojKomp(grPersono, extPersono ) :
         ])
     return res
 
-def FaktoKomp(db, grPersono, extPerso, grEvent , extFact ) :
+def FaktoKomp(db, grPersono, extPerso, grEvent , extFaktoTipo ) :
   grFakto = utilaGN.get_grevent(db, grPersono, EventType(grEvent))
   grFakto_handle = None
   titolo = str(EventType(grEvent))
@@ -97,8 +97,8 @@ def FaktoKomp(db, grPersono, extPerso, grEvent , extFact ) :
   else :
     grFaktoDato = ''
     grFaktoLoko = ''
-  extFaktoDato = utilaGN.extdato_al_formal(extPerso['person'].get(extFact+'Date'))
-  extFaktoLoko = extPerso['person'].get(extFact+'Place')
+  extFaktoDato = utilaGN.extdato_al_formal(extPerso['person'].get(extFaktoTipo+'Date'))
+  extFaktoLoko = extPerso['person'].get(extFaktoTipo+'Place')
   if grFakto is None and extFaktoDato == '' and extFaktoLoko is None :
     return None
   if grEvent == EventType.BIRTH or grEvent == EventType.DEATH :
@@ -116,7 +116,7 @@ def FaktoKomp(db, grPersono, extPerso, grEvent , extFact ) :
   return ( koloro , titolo
         , grFaktoDato , grFaktoLoko
         , extFaktoDato , extFaktoLoko , ''
-        , False, 'fakto', grFakto_handle, None
+        , False, 'fakto', grFakto_handle, extFaktoTipo, None, None
         )
 
 def grperso_datoj (db, grPersono) :

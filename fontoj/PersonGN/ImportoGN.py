@@ -48,6 +48,7 @@ import PersonGN
 import LokoGN
 from geneanet import id2url
 from NoteGN import convert_to_styled
+import utilaGN
 
 try:
     _trans = glocale.get_addon_translator(__file__)
@@ -117,7 +118,7 @@ def get_place_from_titolo(db, titolo, parento ) -> Place:
           return datoj
       # ce lieu est-il un petit-fils de parento ?
       for pr in rl :
-        p2 = db.get_place_from_handle(pr.ref)
+        p2 = db.get_place_from_handle(pr.get('ref'))
         rl2 = p2.get_placeref_list()
         for pr2 in rl2 :
           if pr2.ref == parento.handle :
@@ -364,6 +365,78 @@ def htmlAlStyled(teksto) :
   teksto = teksto.replace('</p>','')
   teksto = teksto.replace('<br>\n','\n')
   return(convert_to_styled(teksto))
+
+def akFakDetalo(extPersono,extFaktoTipo) :
+  x = extPersono['person'].get('events')
+  if x is None : return None
+  eventoj = x.get('elements')
+  if eventoj is None : return None
+  for event in eventoj :
+    if event['type'] == 'EPERS_'+extFaktoTipo.upper() :
+      return event
+  return None
+  
+
+def updFakto(novLokoj, db, txn, grPersono, extPersono, grEvent, extFaktoTipo, extFakto) :
+  if extFakto is None :
+    extFakto = akFakDetalo(extPersono,extFaktoTipo)
+  if extFakto is not None:
+    dato = extFakto.get('dateLong')
+    loko = extFakto.get('place')
+  else :
+    dato = extPersono['person'].get(extFaktoTipo+'Date')
+    loko = extPersono['person'].get(extFaktoTipo+'Place')
+  if dato :
+    grDato = parserEn.parse(dato)
+    if grDato :
+      grEvent.set_date_object( grDato )
+  # on ne copie le lieu que s'il est vide
+  loko1H = grEvent.get_place_handle()
+  if (loko1H or '') == '' :
+    if loko :
+      grLoko = akiriLoko(novLokoj, db, txn, loko, False)
+      grEvent.set_place_handle(grLoko.handle)
+  db.commit_event(grEvent, txn)
+    
+
+def aldFakto(novLokoj, db, txn, grPersono,extPersono,extFaktoTipo) :
+  event = Event()
+  extFakto = akFakDetalo(extPersono,extFaktoTipo)
+#import pdb; pdb.set_trace()
+  evtType = GN_GRAMPS_FAKTOJ.get(extFakto.get('type'))
+  if not evtType:
+    evtType = extFaktoTipo
+  event.set_type( evtType )
+  db.add_event(event, txn)
+  updFakto(novLokoj, db, txn, grPersono, extPersono, event, extFaktoTipo, extFakto)
+  citation = Citation()
+  citation.set_confidence_level(Citation.CONF_LOW)
+  attr = SrcAttribute()
+  attr.set_type(_("Internet Address"))
+  url = id2url(extPersono)
+  attr.set_value(url)
+  citation.add_attribute(attr)
+  s = extPersono.get('grFonto')
+  if s :
+    citation.set_reference_handle(s.get_handle())
+  db.add_citation(citation,txn)
+  db.commit_citation(citation,txn)
+  n = Note()
+  n.set_type(NoteType(NoteType.CITATION))
+  teksto = _('okazaĵo importita el la geneanet-dosiero je la %s') % str(Today())
+  src = extFakto.get('src')
+  if src :
+    st = htmlAlStyled(teksto+'<br><br>'+src)
+    n.set_styledtext(st)
+  else :
+    n.set(teksto)
+  db.add_note(n, txn)
+  db.commit_note(n, txn)
+  citation.add_note(n.handle)
+  db.commit_citation(citation,txn)
+  event.add_citation(citation.get_handle())
+  db.commit_event(event, txn)
+  return event
 
 def aldFaktoj(novLokoj,  db, txn, extPersono, grPerson, progress, gn_notoj, gn_osm) :
   faktoj = extPersono['person'].get('events')

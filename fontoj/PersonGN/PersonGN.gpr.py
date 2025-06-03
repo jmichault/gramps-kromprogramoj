@@ -43,6 +43,6 @@ register(GRAMPLET,
          version = 'beta 0.0.5',
          gramps_target_version= major_version,
          navtypes=["Person"],
-         requires_mod=["urllib","fake_useragent"],
+         #requires_mod=["urllib","fake_useragent"],
          )
 

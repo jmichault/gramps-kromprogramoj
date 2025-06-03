@@ -6,7 +6,7 @@
 """
 
 try:
-  from importlib.metadata import version
+  from importlib.metadata import version, invalidate_caches
   from packaging.version import parse
   import pip
   HavPip=True
@@ -35,6 +35,6 @@ def instDep(modulo,versio):
     else :
       pip.main(['install', '--target', LIB_PATH, '--upgrade', modulo])
       pip.main(['install', '--target', LIB_PATH, '--upgrade', modulo,'--only-binary',':all:'])
-  importlib.invalidate_caches()
+  invalidate_caches()
   #else:
   #  print( "dependeco %s trovita, versio %s" % (modulo , v))

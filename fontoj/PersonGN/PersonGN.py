@@ -25,6 +25,10 @@
 GeneaNet Gramplet.
 """
 
+#---
+import instdepGN
+instdepGN.instDep('protobuf','6.31.1')
+
 #-------------------------------------------------------------------------
 #
 # GTK modules
@@ -49,14 +53,11 @@ from gramps.gen.lib import Citation, Date, Event, EventRef, EventType, EventRole
 from gramps.gen.lib import ChildRef, Family
 from gramps.gen.plug import Gramplet, PluginRegister
 from gramps.gui.dialog import OptionDialog, OkDialog , WarningDialog
+from gramps.gui.editors import EditCitation, EditNote, EditPerson, EditEvent
 from gramps.gui.listmodel import ListModel, NOSORT, COLOR, TOGGLE
 from gramps.gui.utils import ProgressMeter
 from gramps.gen.datehandler import LANG_TO_PARSER
 parserEn = LANG_TO_PARSER['en']()
-
-#---
-import instdepGN
-instdepGN.instDep('protobuf','6.31.1')
 
 from html import unescape
 from lxml import html
@@ -67,7 +68,7 @@ from utilaGN import get_grevent
 
 import geneanet
 from komparoGN import kompariGrExt
-from ImportoGN import aldPersono, akiriLoko
+from ImportoGN import aldPersono, akiriLoko, aldFakto, updFakto
 
 try:
     _trans = glocale.get_addon_translator(__file__)
@@ -184,11 +185,12 @@ class PersonGN(Gramplet):
     tipo=self.modelKomp.model.get_value(row, 8)
     if (     tipo != 'edzo'
          and tipo != 'infano' and tipo != 'patro' and tipo != 'patrino'
+         and tipo != 'fakto' 
          #and tipo != 'fakto' and tipo != 'nomo' and tipo != 'nomo1'
          ) :
       self.modelKomp.model.set_value(row, 7, False)
       #OkDialog(_('Pardonu, nur edzaj, eventaj, patraj, nomaj aŭ infanaj linioj povas esti elektitaj.'))
-      OkDialog(_('Pardonu, nur edzaj, patraj, aŭ infanaj linioj povas esti elektitaj.'))
+      OkDialog(_('Pardonu, nur edzaj, eventaj, patraj, aŭ infanaj linioj povas esti elektitaj.'))
       #print("  toggled:tipo="+str(tipo))
 
   def l_duobla_klako(self, treeview):
@@ -311,6 +313,29 @@ class PersonGN(Gramplet):
             db.commit_family(familio, txn)
             db.commit_person(grPatrino, txn)
             db.commit_person(grPersono, txn)
+        elif tipolinio == 'fakto' and linio[10] :
+          extFaktoTipo = linio[10]
+          grFaktoH = linio[9]
+          if grFaktoH :
+            event = db.get_event_from_handle(grFaktoH)
+            updFakto(novLokoj, db,txn,grPersono,extPersono,event,extFaktoTipo, None)
+          else :
+            event = aldFakto(novLokoj, db,txn,grPersono,extPersono,extFaktoTipo)
+          found = False
+          for er in grPersono.get_event_ref_list():
+            if er.ref == event.handle:
+              found = True
+              break
+          if not found:
+            er = EventRef()
+            er.set_role(EventRoleType.PRIMARY)
+            er.set_reference_handle(event.get_handle())
+            self.dbstate.db.commit_event(event, txn)
+            grPersono.add_event_ref(er)
+          if event.type == EventType.BIRTH :
+            grPersono.set_birth_ref(er)
+          elif event.type == EventType.DEATH :
+            grPersono.set_death_ref(er)
         elif tipolinio == 'edzo' and linio[12] :
           extFamId = int(linio[12])
           for f in extPersono['person'].get('families') :
@@ -423,9 +448,12 @@ class PersonGN(Gramplet):
         continue
       tipolinio = linio[8]
       grHandle = linio[9]
-      if ( ( (tipolinio == 'patro' or tipolinio=='patrino' or tipolinio=='edzo' or tipolinio=='infano')
+      if ( ( (tipolinio == 'patro' or tipolinio=='patrino' or tipolinio=='edzo' or tipolinio=='infano'
+             )
              and grHandle is None)
          ) :
+        cpt += 1
+      elif ( tipolinio == 'fakto' and linio[10] ) :
         cpt += 1
     if cpt >0 :
       item = Gtk.MenuItem(label=_('Kopii elekton de Geneanet al gramps'))
