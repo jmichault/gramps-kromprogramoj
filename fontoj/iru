@@ -2,6 +2,9 @@ GREFFONS="Lokpurigado  PersonFS PersonGN PlaceFrCog"
 LINGVOJ="eo fr nl en he pt_BR"
 GRPATH="../../gramps"
 
+BASEDIR=$(dirname $(readlink -f $0))
+cd "$BASEDIR"
+
 IRU_L=0
 IRU_D=0
 

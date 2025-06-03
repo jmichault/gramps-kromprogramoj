@@ -4,7 +4,7 @@
 "i": "FamilySearch komparo",
 "t": 2,
 "d": "FamilySearch: Compare Gramps people with FS people.",
-"v": "beta 2.0.59",
+"v": "beta 2.0.61",
 "g": "6.0",
 "s": 3,
 "z": "PersonFS.addon.tgz",
@@ -19,7 +19,7 @@
 "i": "Importo de FamilySearch",
 "t": 2,
 "d": "FamilySearch.",
-"v": "beta 2.0.59",
+"v": "beta 2.0.61",
 "g": "6.0",
 "s": 3,
 "z": "PersonFS.addon.tgz",
@@ -34,7 +34,7 @@
 "i": "FS Gramplet",
 "t": 10,
 "d": "Interface for FamilySearch",
-"v": "beta 2.0.59",
+"v": "beta 2.0.61",
 "g": "6.0",
 "s": 3,
 "z": "PersonFS.addon.tgz",
@@ -60,14 +60,10 @@
 "i": "PersonGN",
 "t": 10,
 "d": "interface for geneanet",
-"v": "beta 0.0.5",
+"v": "beta 0.0.6",
 "g": "6.0",
 "s": 3,
-"z": "PersonGN.addon.tgz",
-"rm": [
-"urllib",
-"fake_useragent"
-]
+"z": "PersonGN.addon.tgz"
 },
 {
 "n": "Places: French Official Geographic Code",
