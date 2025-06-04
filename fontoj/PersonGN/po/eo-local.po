@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gramps-kromprogramoj. 60\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-03 18:30+0200\n"
+"POT-Creation-Date: 2025-06-04 18:26+0200\n"
 "PO-Revision-Date: 2025-05-30 11:24+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -54,154 +54,192 @@ msgstr "interfaco por Geneanet"
 msgid "Geneanet"
 msgstr "Geneanet"
 
-#: PersonGN/PersonGN.py:159
+#: PersonGN/PersonGN.py:74
+msgid "lxml kaj protobuf."
+msgstr "lxml kaj protobuf."
+
+#: PersonGN/PersonGN.py:76
+msgid "lxml."
+msgstr "lxml."
+
+#: PersonGN/PersonGN.py:78
+msgid "protobuf."
+msgstr "protobuf."
+
+#: PersonGN/PersonGN.py:79
+msgid "Se vi uzas Debian aŭ Ubuntu, provu:\nsudo apt install python3-lxml python3-pip python3-protobuf"
+msgstr "Se vi uzas Debian aŭ Ubuntu, provu:sudo apt install python3-lxml python3-pip python3-protobuf"
+
+#: PersonGN/PersonGN.py:80
+msgid "Se vi uzas fedora, provu:\nsudo dnf install python3-lxml python3-pip python3-protobuf"
+msgstr "Se vi uzas fedora, provu:sudo dnf install python3-lxml python3-pip python3-protobuf"
+
+#: PersonGN/PersonGN.py:81
+msgid "La geneanet-grampleto havas neplenumitajn dependecojn."
+msgstr "La geneanet-grampleto havas neplenumitajn dependecojn."
+
+#: PersonGN/PersonGN.py:182
 msgid "Koloro"
 msgstr "Koloro"
 
-#: PersonGN/PersonGN.py:160
+#: PersonGN/PersonGN.py:183
 msgid "Propreco"
 msgstr "Propreco"
 
-#: PersonGN/PersonGN.py:161
+#: PersonGN/PersonGN.py:184
 msgid "Dato"
 msgstr "Dato"
 
-#: PersonGN/PersonGN.py:162
+#: PersonGN/PersonGN.py:185
 msgid "Gramps Valoro"
 msgstr "Gramps Valoro"
 
-#: PersonGN/PersonGN.py:163
+#: PersonGN/PersonGN.py:186
 msgid "GN Dato"
 msgstr "GN Dato"
 
-#: PersonGN/PersonGN.py:164
+#: PersonGN/PersonGN.py:187
 msgid "GN Valoro"
 msgstr "GN Valoro"
 
-#: PersonGN/PersonGN.py:167
+#: PersonGN/PersonGN.py:190
 msgid "xTipo"
 msgstr "xTipo"
 
-#: PersonGN/PersonGN.py:168
+#: PersonGN/PersonGN.py:191
 msgid "xGr"
 msgstr "xGr"
 
-#: PersonGN/PersonGN.py:169
+#: PersonGN/PersonGN.py:192
 msgid "xGn"
 msgstr "xGn"
 
-#: PersonGN/PersonGN.py:170
+#: PersonGN/PersonGN.py:193
 msgid "xGr2"
 msgstr "xGr2"
 
-#: PersonGN/PersonGN.py:171
+#: PersonGN/PersonGN.py:194
 msgid "xGn2"
 msgstr "xGn2"
 
-#: PersonGN/PersonGN.py:193
+#: PersonGN/PersonGN.py:216
 msgid "Pardonu, nur edzaj, eventaj, patraj, aŭ infanaj linioj povas esti elektitaj."
 msgstr "Pardonu, nur edzaj, eventaj, patraj, aŭ infanaj linioj povas esti elektitaj."
 
-#: PersonGN/PersonGN.py:231
+#: PersonGN/PersonGN.py:254
 msgid "Geneanet Kopio"
 msgstr "Geneanet Kopio"
 
-#: PersonGN/PersonGN.py:231
+#: PersonGN/PersonGN.py:254
 msgid "Kopio"
 msgstr "Kopio"
 
-#: PersonGN/PersonGN.py:232 PersonGN/PersonGN.py:247
+#: PersonGN/PersonGN.py:255 PersonGN/PersonGN.py:270
 msgid "Kopiante… "
 msgstr "Kopiante…"
 
-#: PersonGN/PersonGN.py:243
+#: PersonGN/PersonGN.py:266
 msgid "kopii al gramps"
 msgstr "kopii al gramps"
 
-#: PersonGN/PersonGN.py:256
+#: PersonGN/PersonGN.py:279
 msgid "nomimporto ankoraŭ ne efektivigita_"
 msgstr "nomimporto ankoraŭ ne efektivigita_"
 
-#: PersonGN/PersonGN.py:268
+#: PersonGN/PersonGN.py:291
 msgid "Ĉi tiu persono jam havas patron"
 msgstr "Ĉi tiu persono jam havas patron"
 
-#: PersonGN/PersonGN.py:297
+#: PersonGN/PersonGN.py:320
 msgid "Ĉi tiu individuo jam havas patrinon"
 msgstr "Ĉi tiu individuo jam havas patrinon"
 
-#: PersonGN/PersonGN.py:409
+#: PersonGN/PersonGN.py:432
 msgid "\tLa jenaj lokoj estis kreitaj dum la importado,\n vi devus kontroli ilin nun:\n\n"
 msgstr ""
 "\tLa jenaj lokoj estis kreitaj dum la importado,\n"
 " vi devus kontroli ilin nun:\n"
 "\n"
 
-#: PersonGN/PersonGN.py:424
+#: PersonGN/PersonGN.py:447
 msgid "Kopii json-datumojn al tondujo"
 msgstr "Kopii json-datumojn al tondujo"
 
-#: PersonGN/PersonGN.py:435
+#: PersonGN/PersonGN.py:458
 #, python-format
 msgid "Redakti : %s - %s - %s"
 msgstr "Redakti : %s - %s - %s"
 
-#: PersonGN/PersonGN.py:459
+#: PersonGN/PersonGN.py:482
 msgid "Kopii elekton de Geneanet al gramps"
 msgstr "Kopii elekton de Geneanet al gramps"
 
-#: PersonGN/PersonGN.py:590
+#: PersonGN/PersonGN.py:613
 msgid "Geneanet Serĉo"
 msgstr "Geneanet Serĉo"
 
-#: PersonGN/PersonGN.py:590
+#: PersonGN/PersonGN.py:613
 msgid "Serĉante"
 msgstr "Serĉante"
 
-#: PersonGN/PersonGN.py:592
+#: PersonGN/PersonGN.py:615
 msgid "Serĉante… "
 msgstr "Serĉante…"
 
-#: PersonGN/PersonGN.py:623
+#: PersonGN/PersonGN.py:646
 msgid "Eraro: neniuj datumoj."
 msgstr "Eraro: neniuj datumoj."
 
-#: PersonGN/PersonGN.py:629
+#: PersonGN/PersonGN.py:652
 msgid "Unable to perform HTML analysis"
 msgstr "Unable to perform HTML analysis"
 
-#: PersonGN/PersonGN.py:636
+#: PersonGN/PersonGN.py:659
 #, python-format
 msgid "Elŝutante personojn… (%s/10)"
 msgstr "Elŝutante personojn… (%s/10)"
 
-#: PersonGN/PersonGN.py:697
+#: PersonGN/PersonGN.py:720
 msgid "URL"
 msgstr "URL"
 
-#: PersonGN/PersonGN.py:698
+#: PersonGN/PersonGN.py:721
 msgid "Sosa"
 msgstr "Sosa"
 
-#: PersonGN/PersonGN.py:699
+#: PersonGN/PersonGN.py:722
 msgid "Nomo, antaŭnomo"
 msgstr "Nomo, antaŭnomo"
 
-#: PersonGN/PersonGN.py:700
+#: PersonGN/PersonGN.py:723
 msgid "Naskiĝo"
 msgstr "Naskiĝo"
 
-#: PersonGN/PersonGN.py:701
+#: PersonGN/PersonGN.py:724
 msgid "Morto"
 msgstr "Morto"
 
-#: PersonGN/PersonGN.py:702 PersonGN/komparoGN.py:299
+#: PersonGN/PersonGN.py:725 PersonGN/komparoGN.py:299
 msgid "Gepatroj"
 msgstr "Gepatroj"
 
-#: PersonGN/PersonGN.py:703
+#: PersonGN/PersonGN.py:726
 msgid "Nb Inf., Geedzoj"
 msgstr "Nb Inf., Geedzoj"
+
+#: PersonGN/instdepGN.py:31
+msgid "PersonGN : pip ne trovita."
+msgstr "PersonGN : pip ne trovita."
+
+#: PersonGN/instdepGN.py:59
+#, python-format
+msgid "dependeco %s ne trovita"
+msgstr "dependeco %s ne trovita"
+
+#: PersonGN/instdepGN.py:62
+#, python-format
+msgid "dependeco %s instalita, versio %s"
+msgstr "dependeco %s instalita, versio %s"
 
 #: PersonGN/komparoGN.py:48 PersonGN/komparoGN.py:57
 msgid "male"

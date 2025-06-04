@@ -27,7 +27,10 @@ import time
 from urllib.parse import unquote
 
 # gedcomx_v1 biblioteko. Instalu kun `pip install gedcomx_v1`
-import gedcomx_v1
+try :
+  import gedcomx_v1
+except :
+  pass
 
 # local imports
 from fs_constants import (

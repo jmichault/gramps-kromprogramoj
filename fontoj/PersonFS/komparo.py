@@ -41,7 +41,10 @@ except ValueError:
     _trans = glocale.translation
 _ = _trans.gettext
 
-import gedcomx_v1
+try :
+  import gedcomx_v1
+except :
+  pass
 
 import PersonFS
 import fs_db

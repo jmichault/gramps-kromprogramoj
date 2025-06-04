@@ -22,15 +22,17 @@
 #
 
 
-from google.protobuf.json_format import MessageToJson, MessageToDict
-from google.protobuf.message import DecodeError
-from geneanet_pb import api_saisie_read_pb2, api_saisie_write_pb2, api_app_pb2, api_stats_pb2
+try :
+  from google.protobuf.json_format import MessageToJson, MessageToDict
+  from google.protobuf.message import DecodeError
+  from geneanet_pb import api_saisie_read_pb2, api_saisie_write_pb2, api_app_pb2, api_stats_pb2
+except :
+  pass
 
 from urllib.parse import unquote_plus, unquote_to_bytes as unquote
 from urllib.parse import quote, urlencode, urlparse, parse_qs
 
 from html import unescape as htmlunescape
-from fake_useragent import UserAgent
 from urllib import request
 
 import json

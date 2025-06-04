@@ -4,52 +4,37 @@
 "i": "FamilySearch komparo",
 "t": 2,
 "d": "FamilySearch: Compare Gramps com pessoas com FS.",
-"v": "beta 2.0.61",
+"v": "beta 2.0.64",
 "g": "6.0",
 "s": 3,
-"z": "PersonFS.addon.tgz",
-"rm": [
-"gedcomx_v1",
-"packaging",
-"requests"
-]
+"z": "PersonFS.addon.tgz"
 },
 {
 "n": "Importar dados de pesquisa em fam\u00edlia",
 "i": "Importo de FamilySearch",
 "t": 2,
 "d": "FamilySearch.",
-"v": "beta 2.0.61",
+"v": "beta 2.0.64",
 "g": "6.0",
 "s": 3,
-"z": "PersonFS.addon.tgz",
-"rm": [
-"gedcomx_v1",
-"packaging",
-"requests"
-]
+"z": "PersonFS.addon.tgz"
 },
 {
 "n": "Personfs",
 "i": "FS Gramplet",
 "t": 10,
 "d": "Interface para o FamilySearch",
-"v": "beta 2.0.61",
+"v": "beta 2.0.64",
 "g": "6.0",
 "s": 3,
-"z": "PersonFS.addon.tgz",
-"rm": [
-"gedcomx_v1",
-"packaging",
-"requests"
-]
+"z": "PersonFS.addon.tgz"
 },
 {
 "n": "Coloque a limpeza",
 "i": "Lokpurigado",
 "t": 10,
 "d": "A limpeza do local ajuda a completar locais usando o OpenStreetMap.",
-"v": "1.0.24",
+"v": "1.0.27",
 "g": "6.0",
 "s": 3,
 "z": "Lokpurigado.addon.tgz",
@@ -60,7 +45,7 @@
 "i": "PersonGN",
 "t": 10,
 "d": "interface para geneanet",
-"v": "beta 0.0.6",
+"v": "beta 0.0.9",
 "g": "6.0",
 "s": 3,
 "z": "PersonGN.addon.tgz"
@@ -70,7 +55,7 @@
 "i": "PlaceFrCog Gramplet",
 "t": 10,
 "d": "Gramplet para tirar munic\u00edpios do banco de dados INSEE",
-"v": "1.0.38",
+"v": "1.0.41",
 "g": "6.0",
 "s": 3,
 "z": "PlaceFrCog.addon.tgz"

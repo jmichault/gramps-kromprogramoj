@@ -57,7 +57,10 @@ _ = _trans.gettext
 # gedcomx_v1 biblioteko. Instalu kun `pip install --user --upgrade --break-system-packages gedcomx_v1`
 import instdep
 instdep.instDep('gedcomx_v1','1.0.24')
-import gedcomx_v1
+try :
+  import gedcomx_v1
+except :
+  pass
 
 
 # tutmondaj variabloj

@@ -26,7 +26,6 @@ import json
 import socket
 
 from urllib import request
-from fake_useragent import UserAgent
 from gramps.gen.display.place import displayer as _pd
 from gramps.gen.config import config
 from gramps.gen.lib import Place, PlaceName, PlaceType, Url, UrlType
@@ -35,7 +34,11 @@ vorteco = 0
 
 def geneanetCoord(placename):
   data = '{"place": "%s"}' % placename
-  headers = {"user-agent": UserAgent().firefox }
+  try :
+    from fake_useragent import UserAgent
+    headers = {"user-agent": UserAgent().firefox }
+  except:
+    headers = {"user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36" }
   headers.update ( {"content-Type": "application/json;charset=UTF-8"} )
   headers.update ( {"DNT": "1"})
   req=request.Request('https://www.geneanet.org/geo/api/coordinates', data=data.encode('ascii'),headers=headers)

@@ -67,12 +67,16 @@ _ = _trans.gettext
 
 import instdep
 instdep.instDep('gedcomx_v1','1.0.24')
+instdep.instDep('requests','0.0.1')
 
 if not win() :
   instdep.instDep('undetected_chromedriver','3.5.5')
   instdep.instDep('pywebview','3.4')
 
-import gedcomx_v1
+try :
+  import gedcomx_v1
+except :
+  pass
 
 # lokaloj importadoj
 from fs_constants import GRAMPS_GEDCOMX_FAKTOJ

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gramps-kromprogramoj. 60\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-30 11:27+0200\n"
+"POT-Creation-Date: 2025-06-04 18:00+0200\n"
 "PO-Revision-Date: 2025-05-30 11:27+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -87,7 +87,11 @@ msgstr "%d rezultoj"
 #: PlaceFrCog/placefrcog.py:229
 #, python-format
 msgid "Unua rezulto :\n\t%s ; kodo=%s. \n\n\t\tImporti ?\n"
-msgstr "Unua rezulto :\n\t%s ; kodo=%s. \n\n\t\tImporti ?\n"
+msgstr ""
+"Unua rezulto :\n"
+"\t%s ; kodo=%s. \n"
+"\n"
+"\t\tImporti ?\n"
 
 #: PlaceFrCog/placefrcog.py:230
 msgid "Jes, Importi"

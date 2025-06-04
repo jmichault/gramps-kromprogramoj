@@ -4,52 +4,37 @@
 "i": "FamilySearch komparo",
 "t": 2,
 "d": "FamilySearch : kompari gramps personojn kun FS personojn.",
-"v": "beta 2.0.61",
+"v": "beta 2.0.64",
 "g": "6.0",
 "s": 3,
-"z": "PersonFS.addon.tgz",
-"rm": [
-"gedcomx_v1",
-"packaging",
-"requests"
-]
+"z": "PersonFS.addon.tgz"
 },
 {
 "n": "Importo de FamilySearch datumoj",
 "i": "Importo de FamilySearch",
 "t": 2,
 "d": "FamilySearch.",
-"v": "beta 2.0.61",
+"v": "beta 2.0.64",
 "g": "6.0",
 "s": 3,
-"z": "PersonFS.addon.tgz",
-"rm": [
-"gedcomx_v1",
-"packaging",
-"requests"
-]
+"z": "PersonFS.addon.tgz"
 },
 {
 "n": "PersonFS",
 "i": "FS Gramplet",
 "t": 10,
 "d": "interfaco por FamilySearch",
-"v": "beta 2.0.61",
+"v": "beta 2.0.64",
 "g": "6.0",
 "s": 3,
-"z": "PersonFS.addon.tgz",
-"rm": [
-"gedcomx_v1",
-"packaging",
-"requests"
-]
+"z": "PersonFS.addon.tgz"
 },
 {
 "n": "Lokpurigado",
 "i": "Lokpurigado",
 "t": 10,
 "d": "Lokpurigado helpas kompletigi lokojn uzante OpenStreetMap.",
-"v": "1.0.24",
+"v": "1.0.27",
 "g": "6.0",
 "s": 3,
 "z": "Lokpurigado.addon.tgz",
@@ -60,7 +45,7 @@
 "i": "PersonGN",
 "t": 10,
 "d": "interfaco por Geneanet",
-"v": "beta 0.0.6",
+"v": "beta 0.0.9",
 "g": "6.0",
 "s": 3,
 "z": "PersonGN.addon.tgz"
@@ -70,7 +55,7 @@
 "i": "PlaceFrCog Gramplet",
 "t": 10,
 "d": "Gramplet por preni municipojn de la datumbazo Insee",
-"v": "1.0.38",
+"v": "1.0.41",
 "g": "6.0",
 "s": 3,
 "z": "PlaceFrCog.addon.tgz"

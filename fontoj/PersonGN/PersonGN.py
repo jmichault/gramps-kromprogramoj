@@ -27,7 +27,11 @@ GeneaNet Gramplet.
 
 #---
 import instdepGN
-instdepGN.instDep('protobuf','6.31.1')
+# dépendances obligatoires :
+havLxml = instdepGN.instDep('lxml','0.1.1')
+havProtobuf = instdepGN.instDep('protobuf','6.31.1')
+# dépendances facultatives :
+instdepGN.instDep('fake_useragent','0.1.1')
 
 #-------------------------------------------------------------------------
 #
@@ -44,6 +48,11 @@ from gi.repository import Gtk, Gdk
 from gramps.gen.db import DbTxn
 from gramps.gen.config import config
 from gramps.gen.const import GRAMPS_LOCALE as glocale
+try:
+    _trans = glocale.get_addon_translator(__file__)
+except ValueError:
+    _trans = glocale.translation
+_ = _trans.gettext
 from gramps.gen.constfunc import win
 from gramps.gen.datehandler import get_date
 from gramps.gen.display.name import displayer as name_displayer
@@ -59,22 +68,36 @@ from gramps.gui.utils import ProgressMeter
 from gramps.gen.datehandler import LANG_TO_PARSER
 parserEn = LANG_TO_PARSER['en']()
 
+if not havLxml or not havProtobuf :
+  teksto=''
+  if not havLxml and not havProtobuf :
+    teksto = _('lxml kaj protobuf.')
+  elif not havLxml :
+    teksto = _('lxml.')
+  else :
+    teksto = _('protobuf.')
+  teksto = teksto + '\n\n' + _('Se vi uzas Debian aŭ Ubuntu, provu:\nsudo apt install python3-lxml python3-pip python3-protobuf')
+  teksto = teksto + '\n\n' + _('Se vi uzas fedora, provu:\nsudo dnf install python3-lxml python3-pip python3-protobuf')
+  WarningDialog(_('La geneanet-grampleto havas neplenumitajn dependecojn.')
+          ,teksto)
+
 from html import unescape
-from lxml import html
+try :
+  from lxml import html
+except :
+  pass
 from urllib.parse import urlparse, parse_qs , quote_plus
 import json
 
 from utilaGN import get_grevent
 
-import geneanet
+try :
+  import geneanet
+except :
+  pass
 from komparoGN import kompariGrExt
 from ImportoGN import aldPersono, akiriLoko, aldFakto, updFakto
 
-try:
-    _trans = glocale.get_addon_translator(__file__)
-except ValueError:
-    _trans = glocale.translation
-_ = _trans.gettext
 
 
 #-------------------------------------------------------------------------
