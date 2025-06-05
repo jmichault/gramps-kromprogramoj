@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gramps-kromprogramoj. 60\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-04 18:26+0200\n"
+"POT-Creation-Date: 2025-06-05 17:52+0200\n"
 "PO-Revision-Date: 2025-05-24 11:37+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -17,27 +17,27 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: PersonGN/ImportoGN.py:415 PersonGN/ImportoGN.py:487
-#: PersonGN/ImportoGN.py:568 PersonGN/ImportoGN.py:585 PersonGN/utilaGN.py:50
+#: PersonGN/ImportoGN.py:396 PersonGN/ImportoGN.py:468
+#: PersonGN/ImportoGN.py:549 PersonGN/ImportoGN.py:566 PersonGN/utilaGN.py:52
 msgid "Internet Address"
 msgstr "Internet Adres"
 
-#: PersonGN/ImportoGN.py:426 PersonGN/ImportoGN.py:498
+#: PersonGN/ImportoGN.py:407 PersonGN/ImportoGN.py:479
 #, python-format
 msgid "okazaĵo importita el la geneanet-dosiero je la %s"
 msgstr "een gebeurtenis geïmporteerd uit het Geneanet -bestand bij de %s"
 
-#: PersonGN/ImportoGN.py:471
+#: PersonGN/ImportoGN.py:452
 #, python-format
 msgid "note geneanet %s"
 msgstr "Let op geneanet %s"
 
-#: PersonGN/ImportoGN.py:566
+#: PersonGN/ImportoGN.py:547
 #, python-format
 msgid "arbre geneanet %s"
 msgstr "arbre geneanet %s"
 
-#: PersonGN/ImportoGN.py:595
+#: PersonGN/ImportoGN.py:576
 #, python-format
 msgid "persono importita el la geneanet-dosiero je la %s"
 msgstr "een persoon geïmporteerd uit het Geneanet -bestand bij de %s"
@@ -223,7 +223,7 @@ msgstr "Geboorte"
 msgid "Morto"
 msgstr "Dood"
 
-#: PersonGN/PersonGN.py:725 PersonGN/komparoGN.py:299
+#: PersonGN/PersonGN.py:725 PersonGN/komparoGN.py:310
 msgid "Gepatroj"
 msgstr "Ouders"
 
@@ -231,60 +231,64 @@ msgstr "Ouders"
 msgid "Nb Inf., Geedzoj"
 msgstr "Nb inf., Echtgenoten"
 
-#: PersonGN/instdepGN.py:31
+#: PersonGN/instdepGN.py:43
 msgid "PersonGN : pip ne trovita."
 msgstr "Persoon: Pip niet gevonden."
 
-#: PersonGN/instdepGN.py:59
+#: PersonGN/instdepGN.py:71
 #, python-format
 msgid "dependeco %s ne trovita"
 msgstr "Afhankelijkheid %s niet gevonden"
 
-#: PersonGN/instdepGN.py:62
+#: PersonGN/instdepGN.py:74
 #, python-format
 msgid "dependeco %s instalita, versio %s"
 msgstr "Afhankelijkheid %s geïnstalleerd, versie %s"
 
-#: PersonGN/komparoGN.py:48 PersonGN/komparoGN.py:57
+#: PersonGN/komparoGN.py:49 PersonGN/komparoGN.py:58
 msgid "male"
 msgstr "mannelijk"
 
-#: PersonGN/komparoGN.py:50 PersonGN/komparoGN.py:59
+#: PersonGN/komparoGN.py:51 PersonGN/komparoGN.py:60
 msgid "female"
 msgstr "vrouwelijk"
 
-#: PersonGN/komparoGN.py:52 PersonGN/komparoGN.py:53
+#: PersonGN/komparoGN.py:53 PersonGN/komparoGN.py:54
 msgid "unknown"
 msgstr "onbekend"
 
-#: PersonGN/komparoGN.py:63
+#: PersonGN/komparoGN.py:64
 msgid "Sekso:"
 msgstr "Seks:"
 
-#: PersonGN/komparoGN.py:77
+#: PersonGN/komparoGN.py:78
 msgid "Name"
 msgstr "Naam"
 
-#: PersonGN/komparoGN.py:237
+#: PersonGN/komparoGN.py:248
 msgid "Father"
 msgstr "Vader"
 
-#: PersonGN/komparoGN.py:251
+#: PersonGN/komparoGN.py:262
 msgid "Mother"
 msgstr "Moeder"
 
-#: PersonGN/komparoGN.py:288 PersonGN/komparoGN.py:290
+#: PersonGN/komparoGN.py:299 PersonGN/komparoGN.py:301
 msgid "Esenco"
 msgstr "Essence"
 
-#: PersonGN/komparoGN.py:351 PersonGN/komparoGN.py:400
+#: PersonGN/komparoGN.py:362 PersonGN/komparoGN.py:411
 msgid "Spouse"
 msgstr "Partner"
 
-#: PersonGN/komparoGN.py:377 PersonGN/komparoGN.py:386
-#: PersonGN/komparoGN.py:416
+#: PersonGN/komparoGN.py:388 PersonGN/komparoGN.py:397
+#: PersonGN/komparoGN.py:427
 msgid "Child"
 msgstr "Kind"
+
+#: PersonGN/komparoGN.py:497
+msgid "Faktoj"
+msgstr "Feiten"
 
 #: PersonGN/PersonGN.glade:56
 msgid "PersonGN Preferoj"
