@@ -33,6 +33,8 @@ try:
 except ValueError:
     _trans = glocale.translation
 _ = _trans.gettext
+from gramps.gen.datehandler import LANG_TO_PARSER
+parserEn = LANG_TO_PARSER['en']()
 
 
 def get_fsftid(grObj) :
@@ -121,6 +123,9 @@ def grdato_al_formal( dato) :
 def extdato_al_formal(dato) :
   if dato is None:
     return ''
+  grDato = parserEn.parse(dato)
+  return grdato_al_formal( grDato)
+"""
   splt = dato.split(' ')
   if len(splt) == 3 :
     res = '+'+splt[2]
@@ -155,3 +160,4 @@ def extdato_al_formal(dato) :
     return res
   else:
     return dato
+"""

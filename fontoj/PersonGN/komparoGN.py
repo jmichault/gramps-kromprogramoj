@@ -23,13 +23,14 @@
 
 from gramps.gen.display.name import displayer as name_displayer
 from gramps.gen.display.place import displayer as _pd
-from gramps.gen.lib import Date, EventType, Person
+from gramps.gen.lib import Date, EventRoleType, EventType, Person
 from gramps.gen.const import GRAMPS_LOCALE as glocale
 from gramps.gen.display.name import displayer as name_displayer
 from gramps.gen.datehandler import parser
 from gramps.gen.datehandler import LANG_TO_PARSER
 parserEn = LANG_TO_PARSER['en']()
 
+from gn_constants import GN_GRAMPS_FAKTOJ
 import utilaGN
 import geneanet
 
@@ -81,7 +82,7 @@ def NomojKomp(grPersono, extPersono ) :
         ])
     return res
 
-def FaktoKomp(db, grPersono, extPerso, grEvent , extFaktoTipo ) :
+def FaktoKomp(db, grPersono, extPersono, grEvent , extFaktoTipo ) :
   grFakto = utilaGN.get_grevent(db, grPersono, EventType(grEvent))
   grFakto_handle = None
   titolo = str(EventType(grEvent))
@@ -97,8 +98,17 @@ def FaktoKomp(db, grPersono, extPerso, grEvent , extFaktoTipo ) :
   else :
     grFaktoDato = ''
     grFaktoLoko = ''
-  extFaktoDato = utilaGN.extdato_al_formal(extPerso['person'].get(extFaktoTipo+'Date'))
-  extFaktoLoko = extPerso['person'].get(extFaktoTipo+'Place')
+  extFakto=''
+  x = extPersono['person'].get('events')
+  if x is not None :
+    eventoj = x.get('elements') or list()
+    for e in eventoj :
+      if e['type'] == 'EPERS_'+extFaktoTipo.upper() :
+         extFakto = e
+         break
+
+  extFaktoDato = utilaGN.extdato_al_formal(extPersono['person'].get(extFaktoTipo+'Date'))
+  extFaktoLoko = extPersono['person'].get(extFaktoTipo+'Place')
   if grFakto is None and extFaktoDato == '' and extFaktoLoko is None :
     return None
   if grEvent == EventType.BIRTH or grEvent == EventType.DEATH :
@@ -113,10 +123,11 @@ def FaktoKomp(db, grPersono, extPerso, grEvent , extFaktoTipo ) :
     koloro = "yellow"
   if grFaktoDato == '' and extFaktoDato != '':
     koloro = "yellow3"
+
   return ( koloro , titolo
         , grFaktoDato , grFaktoLoko
         , extFaktoDato , extFaktoLoko , ''
-        , False, 'fakto', grFakto_handle, extFaktoTipo, None, None
+        , False, 'fakto', grFakto_handle, str(extFakto), None, None
         )
 
 def grperso_datoj (db, grPersono) :
@@ -305,6 +316,7 @@ def kompariGrExt(grPersono,extPersono,db,model):
   for family_handle in grPersono.get_family_handle_list():
     family = db.get_family_from_handle(family_handle)
     if family :
+      koloro = "yellow"
       if family.mother_handle == grPersono.handle :
         edzo_handle = family.father_handle
       elif family.father_handle == grPersono.handle :
@@ -336,7 +348,7 @@ def kompariGrExt(grPersono,extPersono,db,model):
         extEdzJaro = tmpDato.get_year()
         if (geJaro>0 and geJaro == extEdzJaro) \
           or (extEdzNomo.upper() == edzoNomo.upper() ) :
-          extEdzDato = f.get('marriageDate') or ''
+          extEdzDato = extEdzJaro
           extEdzUrl = geneanet.id2url(f['spouse'])
           extParoId = f.get('index')
           extEdzDatoj = extperso_datoj(f['spouse'])
@@ -347,7 +359,6 @@ def kompariGrExt(grPersono,extPersono,db,model):
           break
         indekso += 1
       # Ekrano
-      koloro = "yellow"
       edzo_nodo = model.add( [ koloro , _trans.gettext('Spouse')
                 , str(geJaro) , edzoNomoj+' ('+grperso_datoj(db, edzo)+')'
           , str(extEdzDato) , extEdzNomoj +' ('+extEdzDatoj+')', ''
@@ -418,6 +429,75 @@ def kompariGrExt(grPersono,extPersono,db,model):
                 , extInfDatoj, extInfNomoj , ''
           , False, 'infano', None  ,str(extInfUrl), None, str(extParoId)
            ],node=edzo_nodo )
+  # Ekrano de aliaj faktoj
+  res = list()
+  grFaktoj = grPersono.event_ref_list
+  extFaktoj = ((extPersono['person'].get('events') or dict()).get('elements') or list()).copy()
+  koloro = "white"
+  for grFaktoRef in grFaktoj :
+    if int(grFaktoRef.get_role()) != EventRoleType.PRIMARY:
+      continue
+    grFakto = db.get_event_from_handle(grFaktoRef.ref)
+    if grFakto.type == EventType.BIRTH or grFakto.type == EventType.DEATH or grFakto.type == EventType.BAPTISM or grFakto.type == EventType.BURIAL :
+      continue
+    titolo = str(EventType(grFakto.type))
+    grFaktoPriskribo = grFakto.description or ''
+    grFaktoDato = utilaGN.grdato_al_formal(grFakto.date)
+    grFaktoId = utilaGN.get_fsftid(grFakto)
+    if grFakto.place and grFakto.place != None :
+      place = db.get_place_from_handle(grFakto.place)
+      #grFaktoLoko = place.name.value
+      grFaktoLoko = _pd.display(db,place)
+    else :
+      grFaktoLoko = ''
+    # FARINDAĴO : norma loknomo
+    if grFaktoLoko == '' :
+      grValoro = grFaktoPriskribo
+    else :
+      grValoro = grFaktoPriskribo +' @ '+ grFaktoLoko
+    koloro="yellow"
+    extFakto = dict()
+    for ef in extFaktoj :
+      efDato = utilaGN.extdato_al_formal(ef.get('dateLong'))
+      efTipo = GN_GRAMPS_FAKTOJ.get(ef.get('type'))
+      if not efTipo:
+        efTipo = ef.get('type')
+      if efTipo == grFakto.type and grFaktoDato == efDato :
+        koloro="green"
+        extFakto = ef
+        extFaktoj.remove(ef)
+    extFaktoDato = utilaGN.extdato_al_formal(extFakto.get('dateLong'))
+    extFaktoLoko = extFakto.get('place')
+    res.append ([ koloro , titolo
+        , grFaktoDato , grFaktoLoko
+        , extFaktoDato , extFaktoLoko , ''
+        , False, 'fakto', grFakto.get_handle(), str(extFakto), None, None
+        ])
+  koloro = "white"
+  for extFakto in extFaktoj :
+    extFakTipo = extFakto.get('type')
+    if extFakTipo == 'EPERS_BIRTH' or extFakTipo == 'EPERS_DEATH' or extFakTipo == 'EPERS_BAPTISM' or extFakTipo == 'EPERS_BURIAL' :
+      continue
+    if extFakTipo[:5] == 'EFAM_' :
+      continue
+    extFaktoDato = extFaktoLoko = ''
+    extFaktoDato = utilaGN.extdato_al_formal(extFakto.get('dateLong'))
+    extFaktoLoko = extFakto.get('place')
+    fakTipo = GN_GRAMPS_FAKTOJ.get(extFakto.get('type'))
+    if not fakTipo:
+      fakTipo = extFakto.get('type')
+    titolo = str(EventType(fakTipo))
+    res.append ([ koloro , titolo
+        , '' , ''
+        , extFaktoDato , extFaktoLoko , ''
+        , False, 'fakto', None, str(extFakto), None, None
+        ])
+
+  if len(res) :
+    fakNodo = model.add(['white',_('Faktoj'),'==========','============================','==========','======','',False,'Faktoj',None,None,None,None])
+    for linio in res :
+      model.add( linio,node=fakNodo)
+
 
 
 

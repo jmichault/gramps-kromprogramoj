@@ -336,14 +336,14 @@ class PersonGN(Gramplet):
             db.commit_family(familio, txn)
             db.commit_person(grPatrino, txn)
             db.commit_person(grPersono, txn)
-        elif tipolinio == 'fakto' and linio[10] :
-          extFaktoTipo = linio[10]
+        elif tipolinio == 'fakto' and (linio[10] or '') != '' :
+          extFakto = eval(linio[10])
           grFaktoH = linio[9]
           if grFaktoH :
             event = db.get_event_from_handle(grFaktoH)
-            updFakto(novLokoj, db,txn,grPersono,extPersono,event,extFaktoTipo, None)
+            updFakto(novLokoj, db,txn,grPersono,extPersono,event,extFakto)
           else :
-            event = aldFakto(novLokoj, db,txn,grPersono,extPersono,extFaktoTipo)
+            event = aldFakto(novLokoj, db,txn,grPersono,extPersono,extFakto)
           found = False
           for er in grPersono.get_event_ref_list():
             if er.ref == event.handle:
@@ -476,7 +476,7 @@ class PersonGN(Gramplet):
              and grHandle is None)
          ) :
         cpt += 1
-      elif ( tipolinio == 'fakto' and linio[10] ) :
+      elif ( tipolinio == 'fakto' and (linio[10] or '') != '' ) :
         cpt += 1
     if cpt >0 :
       item = Gtk.MenuItem(label=_('Kopii elekton de Geneanet al gramps'))

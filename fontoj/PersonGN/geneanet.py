@@ -29,11 +29,12 @@ try :
 except :
   pass
 
+from urllib.error import HTTPError
 from urllib.parse import unquote_plus, unquote_to_bytes as unquote
 from urllib.parse import quote, urlencode, urlparse, parse_qs
+from urllib import request
 
 from html import unescape as htmlunescape
-from urllib import request
 
 import json
 from time import sleep

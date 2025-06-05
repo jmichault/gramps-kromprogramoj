@@ -366,26 +366,9 @@ def htmlAlStyled(teksto) :
   teksto = teksto.replace('<br>\n','\n')
   return(convert_to_styled(teksto))
 
-def akFakDetalo(extPersono,extFaktoTipo) :
-  x = extPersono['person'].get('events')
-  if x is None : return None
-  eventoj = x.get('elements')
-  if eventoj is None : return None
-  for event in eventoj :
-    if event['type'] == 'EPERS_'+extFaktoTipo.upper() :
-      return event
-  return None
-  
-
-def updFakto(novLokoj, db, txn, grPersono, extPersono, grEvent, extFaktoTipo, extFakto) :
-  if extFakto is None :
-    extFakto = akFakDetalo(extPersono,extFaktoTipo)
-  if extFakto is not None:
-    dato = extFakto.get('dateLong')
-    loko = extFakto.get('place')
-  else :
-    dato = extPersono['person'].get(extFaktoTipo+'Date')
-    loko = extPersono['person'].get(extFaktoTipo+'Place')
+def updFakto(novLokoj, db, txn, grPersono, extPersono, grEvent, extFakto) :
+  dato = extFakto.get('dateLong')
+  loko = extFakto.get('place')
   if dato :
     grDato = parserEn.parse(dato)
     if grDato :
@@ -399,16 +382,14 @@ def updFakto(novLokoj, db, txn, grPersono, extPersono, grEvent, extFaktoTipo, ex
   db.commit_event(grEvent, txn)
     
 
-def aldFakto(novLokoj, db, txn, grPersono,extPersono,extFaktoTipo) :
+def aldFakto(novLokoj, db, txn, grPersono,extPersono,extFakto) :
   event = Event()
-  extFakto = akFakDetalo(extPersono,extFaktoTipo)
-#import pdb; pdb.set_trace()
   evtType = GN_GRAMPS_FAKTOJ.get(extFakto.get('type'))
   if not evtType:
-    evtType = extFaktoTipo
+    evtType = extFakto.get('type')
   event.set_type( evtType )
   db.add_event(event, txn)
-  updFakto(novLokoj, db, txn, grPersono, extPersono, event, extFaktoTipo, extFakto)
+  updFakto(novLokoj, db, txn, grPersono, extPersono, event, extFakto)
   citation = Citation()
   citation.set_confidence_level(Citation.CONF_LOW)
   attr = SrcAttribute()
