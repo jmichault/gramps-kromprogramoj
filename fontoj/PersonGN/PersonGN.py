@@ -69,7 +69,7 @@ from gramps.gen.datehandler import LANG_TO_PARSER
 parserEn = LANG_TO_PARSER['en']()
 
 if not havLxml or not havProtobuf :
-  teksto=''
+  teksto = _('La geneanet-grampleto havas neplenumitajn dependecojn :\n')
   if not havLxml and not havProtobuf :
     teksto = _('lxml kaj protobuf.')
   elif not havLxml :
@@ -78,7 +78,7 @@ if not havLxml or not havProtobuf :
     teksto = _('protobuf.')
   teksto = teksto + '\n\n' + _('Se vi uzas Debian aŭ Ubuntu, provu:\nsudo apt install python3-lxml python3-pip python3-protobuf')
   teksto = teksto + '\n\n' + _('Se vi uzas fedora, provu:\nsudo dnf install python3-lxml python3-pip python3-protobuf')
-  WarningDialog(_('La geneanet-grampleto havas neplenumitajn dependecojn.')
+  WarningDialog(_('neplenumitajn dependecojn.')
           ,teksto)
 
 from html import unescape
@@ -429,8 +429,10 @@ class PersonGN(Gramplet):
     self.uistate.set_busy_cursor(False)
     self.ButRefresxigi_clicked(None)
     if len(novLokoj) > 0 :
-      WarningDialog(_('\tLa jenaj lokoj estis kreitaj dum la importado,\n vi devus kontroli ilin nun:\n\n')
-         , '\n'.join(['%s : %s' % kv for kv in novLokoj.items()]))
+      teksto = ( _('\tLa jenaj lokoj estis kreitaj dum la importado,\n vi devus kontroli ilin nun:\n\n')
+                      + '\n'.join(['%s : %s' % kv for kv in novLokoj.items()]))
+      WarningDialog(_('lokoj kreitaj !!!')
+         , teksto)
 
   def l_dekstra_klako(self, treeview, event):
     menu = Gtk.Menu()
@@ -584,8 +586,13 @@ class PersonGN(Gramplet):
     self.modelKomp.clear()
 
   def pref_clicked(self, dummy):
+    parent = self.uistate.window
+    for win in Gtk.Window.list_toplevels():
+      if win.is_active():
+        parent = win
+        break
     top = self.top.get_object("PersonGNPrefDialogo")
-    top.set_transient_for(self.uistate.window)
+    top.set_transient_for(parent)
     parent_modal = self.uistate.window.get_modal()
     if parent_modal:
       self.uistate.window.set_modal(False)
@@ -610,7 +617,12 @@ class PersonGN(Gramplet):
     self.TreeRes.hide()
     self.KreiSercxiModel()
     self.top.get_object("PersonGNResRes").set_fixed_height_mode(False)
-    progress = ProgressMeter(_("Geneanet Serĉo"), _trans.gettext('Serĉante'),can_cancel=True,parent=self.uistate.window)
+    parent = self.uistate.window
+    for win in Gtk.Window.list_toplevels():
+      if win.is_active():
+        parent = win
+        break
+    progress = ProgressMeter(_("Geneanet Serĉo"), _trans.gettext('Serĉante'),can_cancel=True,parent=parent)
     self.uistate.set_busy_cursor(True)
     progress.set_pass(_('Serĉante… ') , 12, mode= ProgressMeter.MODE_FRACTION)
     logged = self.gn.logged()
@@ -734,13 +746,19 @@ class PersonGN(Gramplet):
     self.modelRes = ListModel(self.TreeRes, titles,self.SerSelCxangxo)
 
   def ButSercxi_clicked(self, dummy):
+    parent = self.uistate.window
+    for win in Gtk.Window.list_toplevels():
+      if win.is_active():
+        parent = win
+        break
     if not self.Sercxi :
       self.Sercxi = self.top.get_object("PersonGNRes")
-      self.Sercxi.set_transient_for(self.uistate.window)
-      parent_modal = self.uistate.window.get_modal()
-      if parent_modal:
-        self.uistate.window.set_modal(False)
+      self.Sercxi.set_title(_("Geneanet serĉo"))
       self.TreeRes = self.top.get_object("PersonGNResRes")
+    parent_modal = parent.get_modal()
+    if parent_modal:
+      parent.set_modal(False)
+    self.Sercxi.set_transient_for(parent)
     active_handle = self.get_active('Person')
     person = self.dbstate.db.get_person_from_handle(active_handle)
     grNomo = person.primary_name

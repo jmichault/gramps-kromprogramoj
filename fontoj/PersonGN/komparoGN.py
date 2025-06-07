@@ -364,6 +364,29 @@ def kompariGrExt(grPersono,extPersono,db,model):
           , str(extEdzDato) , extEdzNomoj +' ('+extEdzDatoj+')', ''
           , False, 'edzo', edzo_handle ,str(extEdzUrl) , family.handle, str(extParoId)
            ] )
+      # familiaj eventoj (edziĝo, …)
+      koloro = "white"
+      extEdzFaktoj = list()
+      if extEdzUrl is not None :
+        extFaktoj = ((extPersono['person'].get('events') or dict()).get('elements') or list())
+        for ef in extFaktoj :
+          if (  (ef.get('type') or '')[:5] =='EFAM_' 
+                and (ef.get('spouse') or dict()).get('index')
+                     == extFam.get('spouse').get('index')
+                and (ef.get('dateLong') or '')
+                     == (extFam.get('marriageDateLong') or '')
+             ) :
+            extEdzFaktoj.append(ef)
+      for extFakto in extEdzFaktoj :
+        titolo = ''
+        extFaktoDato = ''
+        extValoro = ''
+        model.add( [ koloro ,'  ' + titolo
+                    , '' , ''
+                    , extFaktoDato , extValoro , ''
+                    , False, 'edzoFakto', None ,str(extEdzUrl) , None, str(ef) 
+               ],node=edzo_nodo )
+      # infanoj
       extInfanoj = dict()
       if extFam :
         c=extFam.get('children')
