@@ -34,7 +34,7 @@ msgstr "arbre geneanet %s"
 
 #: PersonGN/ImportoGN.py:493 PersonGN/ImportoGN.py:509 PersonGN/utilaGN.py:52
 msgid "Internet Address"
-msgstr "Interretadreso"
+msgstr "Internetadreso"
 
 #: PersonGN/ImportoGN.py:543
 #, python-format
@@ -55,7 +55,7 @@ msgstr "Geneanet"
 
 #: PersonGN/PersonGN.py:72
 msgid "La geneanet-grampleto havas neplenumitajn dependecojn :\n"
-msgstr "La geneanet-grampleto havas neplenumitajn dependecojn :"
+msgstr "La geneanet-grampleto havas neplenumitajn dependecojn :\n"
 
 #: PersonGN/PersonGN.py:74
 msgid "lxml kaj protobuf."

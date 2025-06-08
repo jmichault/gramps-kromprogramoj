@@ -4,7 +4,7 @@
 "i": "FamilySearch komparo",
 "t": 2,
 "d": "FamilySearch: vergelijk gramps mensen met FS -mensen.",
-"v": "beta 2.0.64",
+"v": "beta 2.0.66",
 "g": "6.0",
 "s": 3,
 "z": "PersonFS.addon.tgz"
@@ -14,7 +14,7 @@
 "i": "Importo de FamilySearch",
 "t": 2,
 "d": "FamilySearch.",
-"v": "beta 2.0.64",
+"v": "beta 2.0.66",
 "g": "6.0",
 "s": 3,
 "z": "PersonFS.addon.tgz"
@@ -24,7 +24,7 @@
 "i": "FS Gramplet",
 "t": 10,
 "d": "interface voor gezinsopdracht",
-"v": "beta 2.0.64",
+"v": "beta 2.0.66",
 "g": "6.0",
 "s": 3,
 "z": "PersonFS.addon.tgz"
@@ -34,7 +34,7 @@
 "i": "Lokpurigado",
 "t": 10,
 "d": "Plaats schoonmaken helpt locaties te complete locaties met OpenStreetMap.",
-"v": "1.0.27",
+"v": "1.0.29",
 "g": "6.0",
 "s": 3,
 "z": "Lokpurigado.addon.tgz",
@@ -45,7 +45,7 @@
 "i": "PersonGN",
 "t": 10,
 "d": "Interface voor Geneanet",
-"v": "beta 0.1.2",
+"v": "beta 0.1.3",
 "g": "6.0",
 "s": 3,
 "z": "PersonGN.addon.tgz"
@@ -55,7 +55,7 @@
 "i": "PlaceFrCog Gramplet",
 "t": 10,
 "d": "Grampet om gemeenten uit de Insee -database te nemen",
-"v": "1.0.41",
+"v": "1.0.43",
 "g": "6.0",
 "s": 3,
 "z": "PlaceFrCog.addon.tgz"
