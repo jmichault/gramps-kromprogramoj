@@ -97,6 +97,12 @@ class Api:
     self.user = False
     self.rights = {}
     try :
+      import certifi
+      import ssl
+      ssl_context = ssl.create_default_context(cafile=certifi.where())
+    except :
+      ssl_context = None
+    try :
       from fake_useragent import UserAgent
       self.headers = {"user-agent": UserAgent().firefox }
     except:
@@ -104,7 +110,8 @@ class Api:
     self.headers.update ( {"content-Type": "application/json;charset=UTF-8"} )
     self.headers.update ( {"DNT": "1"})
     cookie_processor = request.HTTPCookieProcessor()
-    self.opener = request.build_opener(cookie_processor)
+    https_processor = request.HTTPSHandler(context=ssl_context)
+    self.opener = request.build_opener(cookie_processor,https_processor)
 
 
   def urlopen(self, url, data=None, json_data=False, headers=None):
