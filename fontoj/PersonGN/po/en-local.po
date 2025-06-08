@@ -20,7 +20,7 @@ msgstr ""
 #: PersonGN/ImportoGN.py:393 PersonGN/ImportoGN.py:442
 #, python-format
 msgid "okazaĵo importita el la geneanet-dosiero je la %s"
-msgstr "an event imported from the geneanet site at the %s"
+msgstr "event imported from the geneanet site at the %s"
 
 #: PersonGN/ImportoGN.py:429
 #, python-format
@@ -39,7 +39,7 @@ msgstr "Internet Address"
 #: PersonGN/ImportoGN.py:543
 #, python-format
 msgid "persono importita el la geneanet-dosiero je la %s"
-msgstr "a person imported from the geneanet file at the %s"
+msgstr "person imported from the geneanet site at the %s"
 
 #: PersonGN/PersonGN.gpr.py:33
 msgid "Geneanet Gramplet"
