@@ -209,8 +209,8 @@ class PersonGN(Gramplet):
     tipo=self.modelKomp.model.get_value(row, 8)
     if (     tipo != 'edzo'
          and tipo != 'infano' and tipo != 'patro' and tipo != 'patrino'
-         and tipo != 'fakto' 
-         #and tipo != 'fakto' and tipo != 'nomo' and tipo != 'nomo1'
+         and tipo != 'fakto' and tipo != 'edzoFakto' 
+         # and tipo != 'nomo' and tipo != 'nomo1'
          ) :
       self.modelKomp.model.set_value(row, 7, False)
       #OkDialog(_('Pardonu, nur edzaj, eventaj, patraj, nomaj aŭ infanaj linioj povas esti elektitaj.'))
@@ -342,9 +342,9 @@ class PersonGN(Gramplet):
           grFaktoH = linio[9]
           if grFaktoH :
             event = db.get_event_from_handle(grFaktoH)
-            updFakto(novLokoj, db,txn,grPersono,extPersono,event,extFakto)
+            updFakto(novLokoj , db , txn , event , extFakto)
           else :
-            event = aldFakto(novLokoj, db,txn,grPersono,extPersono,extFakto)
+            event = aldFakto(novLokoj, db,txn,extPersono,extFakto)
           found = False
           for er in grPersono.get_event_ref_list():
             if er.ref == event.handle:
@@ -407,7 +407,28 @@ class PersonGN(Gramplet):
             db.commit_event(event, txn)
             familio.add_event_ref(er)
             db.commit_family(familio, txn)
-
+        elif tipolinio == 'edzoFakto' and (linio[9] or '') != '' and (linio[10] or '') != '' :
+          grFamHandle = linio[9]
+          extFamId = int(linio[10])
+          for f in extPersono['person'].get('families') :
+            if f.get('index')==extFamId :
+              extFamilio = f
+              break
+          extEdzo = extFamilio.get('spouse')  # fiche simplifiée du conjoint
+          grFaktoH = linio[11]
+          extFakto = eval(linio[12])
+          if grFaktoH :
+            event = db.get_event_from_handle(grFaktoH)
+            updFakto(novLokoj, db,txn,event,extFakto)
+          else :
+            event = aldFakto(novLokoj, db,txn,extPersono,extFakto)
+            er = EventRef()
+            er.set_role(EventRoleType.PRIMARY)
+            er.set_reference_handle(event.get_handle())
+            db.commit_event(event, txn)
+            familio = db.get_family_from_handle(grFamHandle)
+            familio.add_event_ref(er)
+            db.commit_family(familio, txn)
         elif tipolinio == 'infano' :
           urlInfano = linio[10]
           extInfano = self.getPersono(urlInfano)  # fiche détaillée de l'enfant
@@ -480,6 +501,8 @@ class PersonGN(Gramplet):
          ) :
         cpt += 1
       elif ( tipolinio == 'fakto' and (linio[10] or '') != '' ) :
+        cpt += 1
+      elif ( tipolinio == 'edzoFakto' and (linio[10] or '') != '' ) :
         cpt += 1
     if cpt >0 :
       item = Gtk.MenuItem(label=_('Kopii elekton de Geneanet al gramps'))
@@ -560,12 +583,21 @@ class PersonGN(Gramplet):
     return extPersono
 
   def ButImporti_clicked(self, dummy):
-      self.kopii_al_gramps(None)
+    active_handle = self.get_active('Person')
+    if (active_handle or '') == '' :
+      WarningDialog(_('neniu aktiva persono !!!')
+         , _('Vi devas unue elekti personon!'))
+      return
+    self.kopii_al_gramps(None)
 
   def ButRefresxigi_clicked(self, dummy):
+    active_handle = self.get_active('Person')
+    if (active_handle or '') == '' :
+      WarningDialog(_('neniu aktiva persono !!!')
+         , _('Vi devas unue elekti personon!'))
+      return
     url = self.cbReg.get_active_text()
     extPersono = self.getPersono(url)
-    active_handle = self.get_active('Person')
     grPersono = self.dbstate.db.get_person_from_handle(active_handle)
     self.modelKomp.cid=None
     self.modelKomp.model.set_sort_column_id(-2,0)
@@ -749,6 +781,11 @@ class PersonGN(Gramplet):
     self.modelRes = ListModel(self.TreeRes, titles,self.SerSelCxangxo)
 
   def ButSercxi_clicked(self, dummy):
+    active_handle = self.get_active('Person')
+    if (active_handle or '') == '' :
+      WarningDialog(_('neniu aktiva persono !!!')
+         , _('Vi devas unue elekti personon!'))
+      return
     parent = self.uistate.window
     for win in Gtk.Window.list_toplevels():
       if win.is_active():
@@ -762,7 +799,6 @@ class PersonGN(Gramplet):
     if parent_modal:
       parent.set_modal(False)
     self.Sercxi.set_transient_for(parent)
-    active_handle = self.get_active('Person')
     person = self.dbstate.db.get_person_from_handle(active_handle)
     grNomo = person.primary_name
     self.top.get_object("gn_nomo_eniro").set_text(person.primary_name.get_surname())

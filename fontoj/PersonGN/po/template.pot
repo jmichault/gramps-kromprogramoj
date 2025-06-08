@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-08 10:52+0200\n"
+"POT-Creation-Date: 2025-06-08 15:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,27 +17,26 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: PersonGN/ImportoGN.py:396 PersonGN/ImportoGN.py:468
-#: PersonGN/ImportoGN.py:549 PersonGN/ImportoGN.py:566 PersonGN/utilaGN.py:52
-msgid "Internet Address"
-msgstr ""
-
-#: PersonGN/ImportoGN.py:407 PersonGN/ImportoGN.py:479
+#: PersonGN/ImportoGN.py:393 PersonGN/ImportoGN.py:442
 #, python-format
 msgid "okazaĵo importita el la geneanet-dosiero je la %s"
 msgstr ""
 
-#: PersonGN/ImportoGN.py:452
+#: PersonGN/ImportoGN.py:429
 #, python-format
 msgid "note geneanet %s"
 msgstr ""
 
-#: PersonGN/ImportoGN.py:547
+#: PersonGN/ImportoGN.py:491
 #, python-format
 msgid "arbre geneanet %s"
 msgstr ""
 
-#: PersonGN/ImportoGN.py:576
+#: PersonGN/ImportoGN.py:493 PersonGN/ImportoGN.py:509 PersonGN/utilaGN.py:52
+msgid "Internet Address"
+msgstr ""
+
+#: PersonGN/ImportoGN.py:543
 #, python-format
 msgid "persono importita el la geneanet-dosiero je la %s"
 msgstr ""
@@ -162,84 +161,92 @@ msgstr ""
 msgid "Ĉi tiu individuo jam havas patrinon"
 msgstr ""
 
-#: PersonGN/PersonGN.py:433
+#: PersonGN/PersonGN.py:454
 msgid ""
 "\tLa jenaj lokoj estis kreitaj dum la importado,\n"
 " vi devus kontroli ilin nun:\n"
 "\n"
 msgstr ""
 
-#: PersonGN/PersonGN.py:435
+#: PersonGN/PersonGN.py:456
 msgid "lokoj kreitaj !!!"
 msgstr ""
 
-#: PersonGN/PersonGN.py:450
+#: PersonGN/PersonGN.py:471
 msgid "Kopii json-datumojn al tondujo"
 msgstr ""
 
-#: PersonGN/PersonGN.py:461
+#: PersonGN/PersonGN.py:482
 #, python-format
 msgid "Redakti : %s - %s - %s"
 msgstr ""
 
-#: PersonGN/PersonGN.py:485
+#: PersonGN/PersonGN.py:508
 msgid "Kopii elekton de Geneanet al gramps"
 msgstr ""
 
-#: PersonGN/PersonGN.py:628
+#: PersonGN/PersonGN.py:588 PersonGN/PersonGN.py:596 PersonGN/PersonGN.py:786
+msgid "neniu aktiva persono !!!"
+msgstr ""
+
+#: PersonGN/PersonGN.py:589 PersonGN/PersonGN.py:597 PersonGN/PersonGN.py:787
+msgid "Vi devas unue elekti personon!"
+msgstr ""
+
+#: PersonGN/PersonGN.py:660
 msgid "Geneanet Serĉo"
 msgstr ""
 
-#: PersonGN/PersonGN.py:628
+#: PersonGN/PersonGN.py:660
 msgid "Serĉante"
 msgstr ""
 
-#: PersonGN/PersonGN.py:630
+#: PersonGN/PersonGN.py:662
 msgid "Serĉante… "
 msgstr ""
 
-#: PersonGN/PersonGN.py:661
+#: PersonGN/PersonGN.py:693
 msgid "Eraro: neniuj datumoj."
 msgstr ""
 
-#: PersonGN/PersonGN.py:667
+#: PersonGN/PersonGN.py:699
 msgid "Unable to perform HTML analysis"
 msgstr ""
 
-#: PersonGN/PersonGN.py:674
+#: PersonGN/PersonGN.py:706
 #, python-format
 msgid "Elŝutante personojn… (%s/10)"
 msgstr ""
 
-#: PersonGN/PersonGN.py:735
+#: PersonGN/PersonGN.py:767
 msgid "URL"
 msgstr ""
 
-#: PersonGN/PersonGN.py:736
+#: PersonGN/PersonGN.py:768
 msgid "Sosa"
 msgstr ""
 
-#: PersonGN/PersonGN.py:737
+#: PersonGN/PersonGN.py:769
 msgid "Nomo, antaŭnomo"
 msgstr ""
 
-#: PersonGN/PersonGN.py:738
+#: PersonGN/PersonGN.py:770
 msgid "Naskiĝo"
 msgstr ""
 
-#: PersonGN/PersonGN.py:739
+#: PersonGN/PersonGN.py:771
 msgid "Morto"
 msgstr ""
 
-#: PersonGN/PersonGN.py:740 PersonGN/komparoGN.py:310
+#: PersonGN/PersonGN.py:772 PersonGN/komparoGN.py:310
 msgid "Gepatroj"
 msgstr ""
 
-#: PersonGN/PersonGN.py:741
+#: PersonGN/PersonGN.py:773
 msgid "Nb Inf., Geedzoj"
 msgstr ""
 
-#: PersonGN/PersonGN.py:759
+#: PersonGN/PersonGN.py:796
 msgid "Geneanet serĉo"
 msgstr ""
 
@@ -289,16 +296,16 @@ msgstr ""
 msgid "Esenco"
 msgstr ""
 
-#: PersonGN/komparoGN.py:362 PersonGN/komparoGN.py:434
+#: PersonGN/komparoGN.py:362 PersonGN/komparoGN.py:470
 msgid "Spouse"
 msgstr ""
 
-#: PersonGN/komparoGN.py:411 PersonGN/komparoGN.py:420
-#: PersonGN/komparoGN.py:450
+#: PersonGN/komparoGN.py:447 PersonGN/komparoGN.py:456
+#: PersonGN/komparoGN.py:486
 msgid "Child"
 msgstr ""
 
-#: PersonGN/komparoGN.py:520
+#: PersonGN/komparoGN.py:556
 msgid "Faktoj"
 msgstr ""
 

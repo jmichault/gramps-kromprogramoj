@@ -366,7 +366,7 @@ def htmlAlStyled(teksto) :
   teksto = teksto.replace('<br>\n','\n')
   return(convert_to_styled(teksto))
 
-def updFakto(novLokoj, db, txn, grPersono, extPersono, grEvent, extFakto) :
+def updFakto(novLokoj, db, txn, grEvent, extFakto) :
   dato = extFakto.get('dateLong')
   loko = extFakto.get('place')
   if dato :
@@ -382,39 +382,16 @@ def updFakto(novLokoj, db, txn, grPersono, extPersono, grEvent, extFakto) :
   db.commit_event(grEvent, txn)
     
 
-def aldFakto(novLokoj, db, txn, grPersono,extPersono,extFakto) :
+def aldFakto(novLokoj, db, txn, extPersono,extFakto) :
   event = Event()
   evtType = GN_GRAMPS_FAKTOJ.get(extFakto.get('type'))
   if not evtType:
     evtType = extFakto.get('type')
   event.set_type( evtType )
   db.add_event(event, txn)
-  updFakto(novLokoj, db, txn, grPersono, extPersono, event, extFakto)
-  citation = Citation()
-  citation.set_confidence_level(Citation.CONF_LOW)
-  attr = SrcAttribute()
-  attr.set_type(_("Internet Address"))
-  url = id2url(extPersono)
-  attr.set_value(url)
-  citation.add_attribute(attr)
-  s = extPersono.get('grFonto')
-  if s :
-    citation.set_reference_handle(s.get_handle())
-  db.add_citation(citation,txn)
-  db.commit_citation(citation,txn)
-  n = Note()
-  n.set_type(NoteType(NoteType.CITATION))
+  updFakto(novLokoj, db, txn, event, extFakto)
   teksto = _('okazaĵo importita el la geneanet-dosiero je la %s') % str(Today())
-  src = extFakto.get('src')
-  if src :
-    st = htmlAlStyled(teksto+'<br><br>'+src)
-    n.set_styledtext(st)
-  else :
-    n.set(teksto)
-  db.add_note(n, txn)
-  db.commit_note(n, txn)
-  citation.add_note(n.handle)
-  db.commit_citation(citation,txn)
+  citation = aldCitajxo( db, txn, extPersono, extFakto, teksto)
   event.add_citation(citation.get_handle())
   db.commit_event(event, txn)
   return event
@@ -462,31 +439,8 @@ def aldFaktoj(novLokoj,  db, txn, extPersono, grPerson, progress, gn_notoj, gn_o
         event.add_note(grNoto.handle)
     db.commit_event(event, txn)
     progress.step()
-    citation = Citation()
-    citation.set_confidence_level(Citation.CONF_LOW)
-    attr = SrcAttribute()
-    attr.set_type(_("Internet Address"))
-    url = id2url(extPersono)
-    attr.set_value(url)
-    citation.add_attribute(attr)
-    s = extPersono.get('grFonto')
-    if s :
-      citation.set_reference_handle(s.get_handle())
-    db.add_citation(citation,txn)
-    db.commit_citation(citation,txn)
-    n = Note()
-    n.set_type(NoteType(NoteType.CITATION))
     teksto = _('okazaĵo importita el la geneanet-dosiero je la %s') % str(Today())
-    src = f.get('src')
-    if src :
-      st = htmlAlStyled(teksto+'<br><br>'+src)
-      n.set_styledtext(st)
-    else :
-      n.set(teksto)
-    db.add_note(n, txn)
-    db.commit_note(n, txn)
-    citation.add_note(n.handle)
-    db.commit_citation(citation,txn)
+    citation = aldCitajxo( db, txn, extPersono, f, teksto)
     event.add_citation(citation.get_handle())
     progress.step()
     er = EventRef()
@@ -501,6 +455,78 @@ def aldFaktoj(novLokoj,  db, txn, extPersono, grPerson, progress, gn_notoj, gn_o
     db.commit_person(grPerson, txn)
     progress.step()
 
+def aldCitajxo(db, txn, extPersono, extObjekto , teksto ) :
+  if hasattr(extPersono,'grFonto') :
+    s = extPersono['grFonto']
+  else :
+    # récupération ou création de la source geneanet/arbre
+    db.dbapi.execute("select handle from source where gramps_id=?",['geneanet_%s' % extPersono['person'].get('baseprefix')])
+    datumoj = db.dbapi.fetchone()
+    s = None
+    while datumoj and datumoj[0] :
+      s = db.get_source_from_handle(datumoj[0])
+      break
+      #datumoj = db.dbapi.fetchone()
+    if not s :
+      # récupération ou création du dépôt geneanet :
+      db.dbapi.execute("select handle from repository where name=?",['geneanet'])
+      datumoj = db.dbapi.fetchone()
+      if datumoj and datumoj[0] :
+        rh = datumoj[0]
+      else :
+        r = Repository()
+        r.set_name('geneanet')
+        rtype = RepositoryType()
+        rtype.set((RepositoryType.WEBSITE))
+        r.set_type(rtype)
+        url = Url()
+        url.path = 'https://www.geneanet.org/'
+        url.set_type(UrlType.WEB_HOME)
+        r.add_url(url)
+        db.add_repository(r, txn)
+        db.commit_repository(r,txn)
+        rh = r.handle
+      s = Source()
+      s.gramps_id = 'geneanet_%s' % extPersono['person'].get('baseprefix')
+      s.set_title(_('arbre geneanet %s') % extPersono['person'].get('baseprefix'))
+      attr = SrcAttribute()
+      attr.set_type(_('Internet Address'))
+      attr.set_value('https://gw.geneanet.org/%s' % extPersono['person'].get('baseprefix'))
+      s.add_attribute(attr)
+      if rh :
+        rr = RepoRef()
+        rr.ref = rh
+        rr.set_media_type( SourceMediaType.ELECTRONIC)
+        s.add_repo_reference(rr)
+      db.add_source(s,txn)
+      db.commit_source(s,txn)
+    # on met de coté la source pour la suite :
+    extPersono['grFonto'] = s
+  # création d'une citation
+  citation = Citation()
+  citation.set_confidence_level(Citation.CONF_LOW)
+  attr = SrcAttribute()
+  attr.set_type(_("Internet Address"))
+  url = id2url(extPersono)
+  attr.set_value(url)
+  citation.add_attribute(attr)
+  citation.set_reference_handle(s.get_handle())
+  db.add_citation(citation,txn)
+  db.commit_citation(citation,txn)
+  n = Note()
+  n.set_type(NoteType(NoteType.CITATION))
+  src = extObjekto.get('src')
+  if src :
+    st = htmlAlStyled(teksto+'<br><br>'+src)
+    n.set_styledtext(st)
+  else :
+    n.set(teksto)
+  db.add_note(n, txn)
+  db.commit_note(n, txn)
+  citation.add_note(n.handle)
+  db.commit_citation(citation,txn)
+  return citation
+
 def aldPersono(novLokoj, db, txn, extPersono, progress, gn_notoj, gn_osm) :
   grPerson = Person()
   aldNomoj( db, txn, extPersono, grPerson)
@@ -513,77 +539,9 @@ def aldPersono(novLokoj, db, txn, extPersono, progress, gn_notoj, gn_osm) :
     grPerson.set_gender(Person.UNKNOWN)
   db.add_person(grPerson,txn)
   db.commit_person(grPerson, txn)
-  # récupération ou création du dépôt geneanet :
-  db.dbapi.execute("select handle from repository where name=?",['geneanet'])
-  datumoj = db.dbapi.fetchone()
-  if datumoj and datumoj[0] :
-    rh = datumoj[0]
-  else :
-    r = Repository()
-    r.set_name('geneanet')
-    rtype = RepositoryType()
-    rtype.set((RepositoryType.WEBSITE))
-    r.set_type(rtype)
-    url = Url()
-    url.path = 'https://www.geneanet.org/'
-    url.set_type(UrlType.WEB_HOME)
-    r.add_url(url)
-    db.add_repository(r, txn)
-    db.commit_repository(r,txn)
-    rh = r.handle
   progress.step()
-  # récupération ou création de la source geneanet/arbre
-  db.dbapi.execute("select handle from source where gramps_id=?",['geneanet_%s' % extPersono['person'].get('baseprefix')])
-  datumoj = db.dbapi.fetchone()
-  s = None
-  while datumoj and datumoj[0] :
-    progress.step()
-    s = db.get_source_from_handle(datumoj[0])
-    break
-    #datumoj = db.dbapi.fetchone()
-  if not s :
-    s = Source()
-    s.gramps_id = 'geneanet_%s' % extPersono['person'].get('baseprefix')
-    s.set_title(_('arbre geneanet %s') % extPersono['person'].get('baseprefix'))
-    attr = SrcAttribute()
-    attr.set_type(_('Internet Address'))
-    attr.set_value('https://gw.geneanet.org/%s' % extPersono['person'].get('baseprefix'))
-    s.add_attribute(attr)
-    if rh :
-      rr = RepoRef()
-      rr.ref = rh
-      rr.set_media_type( SourceMediaType.ELECTRONIC)
-      s.add_repo_reference(rr)
-    db.add_source(s,txn)
-    db.commit_source(s,txn)
-  progress.step()
-  # on met de coté la source pour la suite :
-  extPersono['grFonto'] = s
-  # création d'une citation
-  citation = Citation()
-  citation.set_confidence_level(Citation.CONF_LOW)
-  attr = SrcAttribute()
-  attr.set_type(_("Internet Address"))
-  url = id2url(extPersono)
-  attr.set_value(url)
-  citation.add_attribute(attr)
-  citation.set_reference_handle(s.get_handle())
-  db.add_citation(citation,txn)
-  db.commit_citation(citation,txn)
-  progress.step()
-  n = Note()
-  n.set_type(NoteType(NoteType.CITATION))
   teksto = _('persono importita el la geneanet-dosiero je la %s') % str(Today())
-  src = extPersono.get('src')
-  if src :
-    st = htmlAlStyled(teksto+'<br><br>'+src)
-    n.set_styledtext(st)
-  else :
-    n.set(teksto)
-  db.add_note(n, txn)
-  db.commit_note(n, txn)
-  citation.add_note(n.handle)
-  db.commit_citation(citation,txn)
+  citation = aldCitajxo( db, txn, extPersono, extPersono, teksto)
   grPerson.add_citation(citation.get_handle())
   progress.step()
   # ajout des évènements :

@@ -358,7 +358,7 @@ def kompariGrExt(grPersono,extPersono,db,model):
           extFamilioj.remove(f)
           break
         indekso += 1
-      # Ekrano
+      # Familia ekrano
       edzo_nodo = model.add( [ koloro , _trans.gettext('Spouse')
                 , str(geJaro) , edzoNomoj+' ('+grperso_datoj(db, edzo)+')'
           , str(extEdzDato) , extEdzNomoj +' ('+extEdzDatoj+')', ''
@@ -377,14 +377,50 @@ def kompariGrExt(grPersono,extPersono,db,model):
                      == (extFam.get('marriageDateLong') or '')
              ) :
             extEdzFaktoj.append(ef)
-      for extFakto in extEdzFaktoj :
-        titolo = ''
+      for eventref in family.get_event_ref_list() :
+        event = db.get_event_from_handle(eventref.ref)
+        titolo = str(EventType(event.type))
+        grFaktoPriskribo = event.description or ''
+        grFaktoDato = utilaGN.grdato_al_formal(event.date)
+        if event.place and event.place != None :
+          place = db.get_place_from_handle(event.place)
+          grFaktoLoko = _pd.display(db,place)
+        else :
+          grFaktoLoko = ''
+        if grFaktoLoko == '' :
+          grValoro = grFaktoPriskribo
+        else :
+          grValoro = grFaktoPriskribo +' @ '+ grFaktoLoko
+        koloro="yellow"
         extFaktoDato = ''
+        extFakto = None
         extValoro = ''
+        for ef in extEdzFaktoj :
+          if True :
+            koloro="green"
+            extFakto = ef
+            extFaktoDato = utilaGN.extdato_al_formal(extFakto.get('dateLong'))
+            extValoro = extFakto.get('place')
+            extEdzFaktoj.remove(ef)
+            break
+
+        model.add( [ koloro ,'  ' + titolo
+                    , grFaktoDato , grValoro 
+                    , extFaktoDato , extValoro , ''
+                    , False, 'edzoFakto', family.handle ,str(extParoId) , eventref.ref, str(extFakto) 
+               ],node=edzo_nodo )
+
+      for extFakto in extEdzFaktoj :
+        fakTipo = GN_GRAMPS_FAKTOJ.get(extFakto.get('type'))
+        if not fakTipo:
+          fakTipo = extFakto.get('type')
+        titolo = str(EventType(fakTipo))
+        extFaktoDato = utilaGN.extdato_al_formal(extFakto.get('dateLong'))
+        extValoro = extFakto.get('place')
         model.add( [ koloro ,'  ' + titolo
                     , '' , ''
                     , extFaktoDato , extValoro , ''
-                    , False, 'edzoFakto', None ,str(extEdzUrl) , None, str(ef) 
+                    , False, 'edzoFakto', family.handle ,str(extParoId) , None, str(extFakto) 
                ],node=edzo_nodo )
       # infanoj
       extInfanoj = dict()
