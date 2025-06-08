@@ -177,6 +177,7 @@ class PersonGN(Gramplet):
             "on_ButLancxi_clicked"      : self.ButLancxi_clicked,
             "on_CB_Regximo_changed"      : self.CB_Regximo_changed,
             "on_ButRefresxigi_clicked"      : self.ButRefresxigi_clicked,
+            "on_ButImporti_clicked"      : self.ButImporti_clicked,
 	})
     titles_komp = [
         (_('Koloro'), 1, 40,COLOR),
@@ -558,6 +559,8 @@ class PersonGN(Gramplet):
         PersonGN.GnPersonoj.pop(next(iter(PersonGN.GnPersonoj)))
     return extPersono
 
+  def ButImporti_clicked(self, dummy):
+      self.kopii_al_gramps(None)
 
   def ButRefresxigi_clicked(self, dummy):
     url = self.cbReg.get_active_text()

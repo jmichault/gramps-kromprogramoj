@@ -759,7 +759,18 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkButton" id="ButImporti">
+                <property name="label" translatable="yes">Importi elekton</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes">Importi elekton de Geneanet al Gramps.</property>
+                <signal name="clicked" handler="on_ButImporti_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left-attach">11</property>
+                <property name="top-attach">1</property>
+              </packing>
             </child>
             <child>
               <placeholder/>
