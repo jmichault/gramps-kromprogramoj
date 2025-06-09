@@ -29,7 +29,7 @@ try :
 except :
   pass
 
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 from urllib.parse import unquote_plus, unquote_to_bytes as unquote
 from urllib.parse import quote, urlencode, urlparse, parse_qs
 from urllib import request
@@ -121,22 +121,28 @@ class Api:
       data = data.encode('ascii')
     req = request.Request(url,data=data,headers=headers)
     #response = request.urlopen(req, timeout=10)
+    status_code = 403
+    out=b''
     try:
       response = self.opener.open(req, timeout=10)
+      status_code = response.status
       out=response.read()
     except HTTPError as e:
-      # do something
       print('Error code: ', e.code)
     except URLError as e:
-      # do something
       print('Reason: ', e.reason)
-    status_code = response.status
     if status_code == 403 or b'Sign up for free' in out:
       del self.opener
       self.opener = request.build_opener(request.HTTPCookieProcessor())
       req = request.Request(url,data=data,headers=headers)
-      response = self.opener.open(req, timeout=10)
-      out=response.read()
+      try :
+        response = self.opener.open(req, timeout=10)
+        status_code = response.status
+        out=response.read()
+      except HTTPError as e:
+        print(' Error code: ', e.code)
+      except URLError as e:
+        print(' Reason: ', e.reason)
       if b'Sign up for free' in out:
         print("************ Sign up for free in response *************")
     if status_code != 403 :
