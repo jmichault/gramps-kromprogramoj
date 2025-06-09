@@ -5,7 +5,7 @@ It provides the selective Geneanet import and update of a selected person and th
 
 ## For Gramps 6.0:
 Add the path for the Jean Michault’s experimental project on GitHub to enable installation via the [Addon Manager](https://gramps-project.org/wiki/index.php/Gramps_Glossary#addon "Link to Gramps wiki").  
-<https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps60>  
+```https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps60```
 Then search for PersonGN or Geneanet in the Addons tab.
 
 ## For Gramps 5.2:

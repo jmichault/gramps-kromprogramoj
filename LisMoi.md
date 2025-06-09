@@ -6,7 +6,7 @@ greffons pour gramps 5.2 ou 6.0
 * allez à l'onglet «Projets»
   * cliquez sur le bouton + (en bas à gauche), et entrez :
     * «Nom du projet :» : «jmichault» (ou ce que vous voulez)
-    * «URL :» : «<https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps60>»
+    * «URL :» : ```https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps60```
     * cliquez sur «Valider»
     * cochez la case à gauche du nouveau projet pour l'activer.
       Les greffons du projet sont maintenant disponibles dans l'onglet «Greffons»
@@ -18,4 +18,4 @@ greffons pour gramps 5.2 ou 6.0
   * [PersonFS](fontoj/PersonFS/LisezMoi.md) : une interface avec FamilySearch.
   * [PlaceFrCog](fontoj/PlaceFrCog/README.md) : un gramplet pour récupérer les communes française depuis la base INSEE (base COG : Code Officiel Géographique).
   * [Lokpurigado](fontoj/Lokpurigado/LisMoi.md) : une version modifiée de PlaceCleanup qui utilise openstreetmap au lieu de geonames, et qui récupère les codes INSEE au lieu du code postal.
-  * [PersonGN](fontoj/PersonGN/LisezMoi.md) : une interface avec Geneanet.
+  * [PersonGN](fontoj/PersonGN/LisMoi.md) : une interface avec Geneanet.

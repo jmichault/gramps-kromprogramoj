@@ -4,12 +4,12 @@ PersonGN est une extension Gramplet pour la catégorie Personne du logiciel de g
 Elle permet l'importation et la mise à jour sélectives d'une personne sélectionnée et de ses proches parents sur Geneanet.
 
 ## Pour Gramps 6.0 :
-Ajoutez le chemin d'accès au projet expérimental de Jean Michault sur GitHub pour permettre l'installation via le [Gestionnaire des extensions](https://gramps-project.org/wiki/index.php/Gramps_Glossary#addon « Lien vers le wiki Gramps »).
-<https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps60>
+Ajoutez le chemin d'accès au projet expérimental de Jean Michault sur GitHub pour permettre l'installation via le [Gestionnaire des extensions](https://gramps-project.org/wiki/index.php/Gramps_Glossary/fr#addon "Lien vers le wiki Gramps").  
+```https://raw.githubusercontent.com/jmichault/gramps-kromprogramoj/gramps60```
 Recherchez ensuite PersonGN ou Geneanet dans l'onglet Modules complémentaires.
 
 ## Pour Gramps 5.2 :
-Essayez d'utiliser le [Gestionnaire de modules complémentaires](https://gramps-project.org/wiki/index.php/Gramps_Glossary#addon "Lien vers le wiki Gramps") comme avec Gramps 6.0. Si cela ne fonctionne pas, téléchargez l'archive PersonGN.addon.tgz et extrayez le dossier PersonGN dans le dossier gramps52/plugins.
+Essayez d'utiliser le [Gestionnaire de modules complémentaires](https://gramps-project.org/wiki/index.php/Gramps_Glossary/fr#addon "Lien vers le wiki Gramps") comme avec Gramps 6.0. Si cela ne fonctionne pas, téléchargez l'archive PersonGN.addon.tgz et extrayez le dossier PersonGN dans le dossier gramps52/plugins.
 <https://github.com/jmichault/gramps-kromprogramoj/tree/gramps60/download>
 
 # Fonctionnalités principales
