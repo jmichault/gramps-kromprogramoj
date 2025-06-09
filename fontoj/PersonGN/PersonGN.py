@@ -554,7 +554,7 @@ class PersonGN(Gramplet):
     model, iter_ = self.top.get_object("PersonGNResRes").get_selection().get_selected()
     if iter_ :
       lien = 'https://gw.geneanet.org/'+model.get_value(iter_, 0)
-      self.top.get_object("LinkoButonoSercxi").set_label('voir sur geneanet')
+      self.top.get_object("LinkoButonoSercxi").set_label(_('Vidu ĉe Geneanet'))
       self.top.get_object("LinkoButonoSercxi").set_uri(lien)
     else :
       self.top.get_object("LinkoButonoSercxi").set_label('xxxx')
