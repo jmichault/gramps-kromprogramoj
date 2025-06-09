@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gramps-kromprogramoj. 60\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-08 15:36+0200\n"
+"POT-Creation-Date: 2025-06-09 18:39+0200\n"
 "PO-Revision-Date: 2025-05-24 11:36+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -184,6 +184,10 @@ msgstr "Éditer : %s - %s - %s"
 #: PersonGN/PersonGN.py:508
 msgid "Kopii elekton de Geneanet al gramps"
 msgstr "Copier la sélection de Geneanet vers gramps"
+
+#: PersonGN/PersonGN.py:557
+msgid "Vidu ĉe Geneanet"
+msgstr "Voir chez Geneanet"
 
 #: PersonGN/PersonGN.py:588 PersonGN/PersonGN.py:596 PersonGN/PersonGN.py:786
 msgid "neniu aktiva persono !!!"

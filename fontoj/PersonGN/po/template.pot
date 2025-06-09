@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-09 15:30+0200\n"
+"POT-Creation-Date: 2025-06-09 18:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -183,6 +183,10 @@ msgstr ""
 
 #: PersonGN/PersonGN.py:508
 msgid "Kopii elekton de Geneanet al gramps"
+msgstr ""
+
+#: PersonGN/PersonGN.py:557
+msgid "Vidu ĉe Geneanet"
 msgstr ""
 
 #: PersonGN/PersonGN.py:588 PersonGN/PersonGN.py:596 PersonGN/PersonGN.py:786
