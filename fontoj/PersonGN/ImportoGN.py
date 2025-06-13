@@ -389,6 +389,7 @@ def aldFakto(novLokoj, db, txn, extPersono,extFakto) :
     evtType = extFakto.get('type')
   event.set_type( evtType )
   db.add_event(event, txn)
+  db.commit_event(event, txn)
   updFakto(novLokoj, db, txn, event, extFakto)
   teksto = _('okazaĵo importita el la geneanet-dosiero je la %s') % str(Today())
   citation = aldCitajxo( db, txn, extPersono, extFakto, teksto)
@@ -416,6 +417,7 @@ def aldFaktoj(novLokoj,  db, txn, extPersono, grPerson, progress, gn_notoj, gn_o
       if grDato :
         event.set_date_object( grDato )
     db.add_event(event, txn)
+    db.commit_event(event, txn)
     loko = unescape(f.get('place') or '')
     if loko :
       grLoko = akiriLoko(novLokoj, db, txn, loko, gn_osm)

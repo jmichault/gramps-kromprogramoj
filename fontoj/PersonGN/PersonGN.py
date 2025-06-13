@@ -577,6 +577,10 @@ class PersonGN(Gramplet):
       extPersono = PersonGN.GnPersonoj.get(url)
     if extPersono is None :
       extPersono = self.gn.getPerson(x)
+      if extPersono is None : 
+        extPersono = self.gn.getPerson(x)
+      if extPersono is None : 
+        return None
       PersonGN.GnPersonoj[geneanet.id2url(extPersono)] = extPersono
       if len(PersonGN.GnPersonoj) >100 : # ne pas garder plus de 100 personnes en mémoire
         PersonGN.GnPersonoj.pop(next(iter(PersonGN.GnPersonoj)))
@@ -711,6 +715,8 @@ class PersonGN(Gramplet):
         PrevUrl = url
         #print(" url=",url)
         p = self.getPersono(url)
+        if p is None :
+          continue
         sosa=''
         parents = ''
         naissance=''
