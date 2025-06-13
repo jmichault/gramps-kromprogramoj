@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-09 18:39+0200\n"
+"POT-Creation-Date: 2025-06-13 19:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,26 +17,26 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: PersonGN/ImportoGN.py:393 PersonGN/ImportoGN.py:442
+#: PersonGN/ImportoGN.py:394 PersonGN/ImportoGN.py:444
 #, python-format
 msgid "okazaĵo importita el la geneanet-dosiero je la %s"
 msgstr ""
 
-#: PersonGN/ImportoGN.py:429
+#: PersonGN/ImportoGN.py:431
 #, python-format
 msgid "note geneanet %s"
 msgstr ""
 
-#: PersonGN/ImportoGN.py:491
+#: PersonGN/ImportoGN.py:493
 #, python-format
 msgid "arbre geneanet %s"
 msgstr ""
 
-#: PersonGN/ImportoGN.py:493 PersonGN/ImportoGN.py:509 PersonGN/utilaGN.py:52
+#: PersonGN/ImportoGN.py:495 PersonGN/ImportoGN.py:511 PersonGN/utilaGN.py:52
 msgid "Internet Address"
 msgstr ""
 
-#: PersonGN/ImportoGN.py:543
+#: PersonGN/ImportoGN.py:545
 #, python-format
 msgid "persono importita el la geneanet-dosiero je la %s"
 msgstr ""
@@ -189,68 +189,68 @@ msgstr ""
 msgid "Vidu ĉe Geneanet"
 msgstr ""
 
-#: PersonGN/PersonGN.py:588 PersonGN/PersonGN.py:596 PersonGN/PersonGN.py:786
+#: PersonGN/PersonGN.py:592 PersonGN/PersonGN.py:600 PersonGN/PersonGN.py:792
 msgid "neniu aktiva persono !!!"
 msgstr ""
 
-#: PersonGN/PersonGN.py:589 PersonGN/PersonGN.py:597 PersonGN/PersonGN.py:787
+#: PersonGN/PersonGN.py:593 PersonGN/PersonGN.py:601 PersonGN/PersonGN.py:793
 msgid "Vi devas unue elekti personon!"
 msgstr ""
 
-#: PersonGN/PersonGN.py:660
+#: PersonGN/PersonGN.py:664
 msgid "Geneanet Serĉo"
 msgstr ""
 
-#: PersonGN/PersonGN.py:660
+#: PersonGN/PersonGN.py:664
 msgid "Serĉante"
 msgstr ""
 
-#: PersonGN/PersonGN.py:662
+#: PersonGN/PersonGN.py:666
 msgid "Serĉante… "
 msgstr ""
 
-#: PersonGN/PersonGN.py:693
+#: PersonGN/PersonGN.py:697
 msgid "Eraro: neniuj datumoj."
 msgstr ""
 
-#: PersonGN/PersonGN.py:699
+#: PersonGN/PersonGN.py:703
 msgid "Unable to perform HTML analysis"
 msgstr ""
 
-#: PersonGN/PersonGN.py:706
+#: PersonGN/PersonGN.py:710
 #, python-format
 msgid "Elŝutante personojn… (%s/10)"
 msgstr ""
 
-#: PersonGN/PersonGN.py:767
+#: PersonGN/PersonGN.py:773
 msgid "URL"
 msgstr ""
 
-#: PersonGN/PersonGN.py:768
+#: PersonGN/PersonGN.py:774
 msgid "Sosa"
 msgstr ""
 
-#: PersonGN/PersonGN.py:769
+#: PersonGN/PersonGN.py:775
 msgid "Nomo, antaŭnomo"
 msgstr ""
 
-#: PersonGN/PersonGN.py:770
+#: PersonGN/PersonGN.py:776
 msgid "Naskiĝo"
 msgstr ""
 
-#: PersonGN/PersonGN.py:771
+#: PersonGN/PersonGN.py:777
 msgid "Morto"
 msgstr ""
 
-#: PersonGN/PersonGN.py:772 PersonGN/komparoGN.py:310
+#: PersonGN/PersonGN.py:778 PersonGN/komparoGN.py:310
 msgid "Gepatroj"
 msgstr ""
 
-#: PersonGN/PersonGN.py:773
+#: PersonGN/PersonGN.py:779
 msgid "Nb Inf., Geedzoj"
 msgstr ""
 
-#: PersonGN/PersonGN.py:796
+#: PersonGN/PersonGN.py:802
 msgid "Geneanet serĉo"
 msgstr ""
 
