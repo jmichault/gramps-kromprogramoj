@@ -29,7 +29,7 @@ Essayez d'utiliser le [Gestionnaire de modules complémentaires](https://gramps-
 * Open Source : Sous licence GPL 3.0.
 
 # Flux de travail typique
-* Ajoutez le gramplet « Geneanet » à la barre inférieure ou à une vue de catégorie Personne.
+* Ajoutez le gramplet « Geneanet » à la barre inférieure d'une vue de catégorie Personne.
 * Sélectionnez une personne.
 * Cliquez sur le bouton « Rechercher ».
 * PersonGN récupère les données potentiellement correspondantes de Geneanet dans une liste.
