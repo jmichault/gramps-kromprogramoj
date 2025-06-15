@@ -139,6 +139,74 @@ CONFIG.register("preferences.fs_etikedado", '') #
 CONFIG.register("preferences.fs_client_id", '') #
 CONFIG.load()
 
+def get_token(code,vorteco):
+  headers= {"Accept": "application/json"}
+  headers.update ( {"Content-Type": "application/x-www-form-urlencoded"})
+  data = {
+             "grant_type": 'authorization_code',
+             "client_id": appKey,
+             "code": code,
+             "redirect_uri": redirect,
+           }
+  url = 'https://ident.familysearch.org/cis-web/oauth2/v3/token'
+  r = tree._FsSeanco.post_url(url,data,headers)
+  if vorteco and r :
+    print(" étape client_credentials, r="+str(r))
+    print("        , r.text="+r.text)
+  if r :
+    json = r.json()
+    if json and json.get('access_token') :
+      tree._FsSeanco.access_token = r.json()['access_token']
+      print("FamilySearch-ĵetono akirita")
+      tree._FsSeanco.logged = True
+      tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_KONEKTITA
+      return True
+    else:
+      print(" échec de connexion")
+      print("        , r.text="+r.text)
+      tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_PASVORTA_ERARO
+      return False
+  else:
+    print(" échec de connexion")
+    tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_PASVORTA_ERARO
+    return False
+
+def login_selenium(vorteco) :
+  print(" login_selenium")
+  try:
+    import getcode
+  except:
+    return False
+  print(" appel getcode")
+  token = getcode.getcode(PersonFS.fs_sn,PersonFS.fs_pasvorto)
+  print("token="+str(token))
+  if token is not None and token != '' :
+    tree._FsSeanco.access_token = token
+    print("FamilySearch-ĵetono akirita")
+    tree._FsSeanco.logged = True
+    tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_KONEKTITA
+    return True
+  else:
+    print(" échec de connexion")
+    tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_PASVORTA_ERARO
+    return False
+
+def login_browser(vorteco) :
+  if havasMinibrowser:
+    print(" appel minibrowser")
+    from minibrowser import miniBrowser
+  elif havasMinibrowser2:
+    print(" appel minibrowser2")
+    from minibrowser2 import miniBrowser
+  else:
+    return False
+  tree._FsSeanco.logged = False
+  tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_LOGIN
+  # ouvrir une fenêtre de navigation
+  main = miniBrowser(appKey=appKey,redirect=redirect,username=tree._FsSeanco.username)
+  print("code="+main.code)
+  return get_token(main.code,vorteco)
+
 
 class PersonFS(Gramplet):
   """
@@ -171,74 +239,6 @@ class PersonFS(Gramplet):
       lingvo = lingvo[:2]
   if not lingvo :
     lingvo = glocale.language[0]
-
-  def login_selenium(self,vorteco) :
-    print(" login_selenium")
-    try:
-      import getcode
-    except:
-      return False
-    print(" appel getcode")
-    token = getcode.getcode(PersonFS.fs_sn,PersonFS.fs_pasvorto)
-    print("token="+str(token))
-    if token is not None and token != '' :
-      tree._FsSeanco.access_token = token
-      print("FamilySearch-ĵetono akirita")
-      tree._FsSeanco.logged = True
-      tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_KONEKTITA
-      return True
-    else:
-      print(" échec de connexion")
-      tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_PASVORTA_ERARO
-      return False
-
-  def login_browser(self,vorteco) :
-    if havasMinibrowser:
-      print(" appel minibrowser")
-      from minibrowser import miniBrowser
-    elif havasMinibrowser2:
-      print(" appel minibrowser2")
-      from minibrowser2 import miniBrowser
-    else:
-      return False
-    tree._FsSeanco.logged = False
-    tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_LOGIN
-    # ouvrir une fenêtre de navigation
-    main = miniBrowser(appKey=appKey,redirect=redirect,username=tree._FsSeanco.username)
-    print("code="+main.code)
-    return self.get_token(main.code,vorteco)
-
-  def get_token(self,code,vorteco):
-    headers= {"Accept": "application/json"}
-    headers.update ( {"Content-Type": "application/x-www-form-urlencoded"})
-    data = {
-               "grant_type": 'authorization_code',
-               "client_id": appKey,
-               "code": code,
-               "redirect_uri": redirect,
-             }
-    url = 'https://ident.familysearch.org/cis-web/oauth2/v3/token'
-    r = tree._FsSeanco.post_url(url,data,headers)
-    if vorteco and r :
-      print(" étape client_credentials, r="+str(r))
-      print("        , r.text="+r.text)
-    if r :
-      json = r.json()
-      if json and json.get('access_token') :
-        tree._FsSeanco.access_token = r.json()['access_token']
-        print("FamilySearch-ĵetono akirita")
-        tree._FsSeanco.logged = True
-        tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_KONEKTITA
-        return True
-      else:
-        print(" échec de connexion")
-        print("        , r.text="+r.text)
-        tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_PASVORTA_ERARO
-        return False
-    else:
-      print(" échec de connexion")
-      tree._FsSeanco.stato = gedcomx_v1.fs_session.STATO_PASVORTA_ERARO
-      return False
 
 
   def aki_sesio(vokanto,vorteco=5):
@@ -310,11 +310,11 @@ class PersonFS(Gramplet):
           if not tree._FsSeanco.logged :
             tree._FsSeanco.login_openid('a02j000000KTRjpAAH','https://misbach.github.io/fs-auth/index_raw.html')
           #if not tree._FsSeanco.logged :
-          #  self.login_browser(vorteco)
+          #  login_browser(vorteco)
           if not tree._FsSeanco.logged :
-            self.login_selenium(vorteco)
+            login_selenium(vorteco)
           if not tree._FsSeanco.logged :
-            self.login_browser(vorteco)
+            login_browser(vorteco)
       print(" langage session FS = "+tree._FsSeanco.lingvo);
       if tree._FsSeanco.stato == gedcomx_v1.fs_session.STATO_PASVORTA_ERARO :
          WarningDialog(_('Pasvorta erraro. La funkcioj de FamilySearch ne estos disponeblaj.'))
@@ -351,9 +351,9 @@ class PersonFS(Gramplet):
       if not tree._FsSeanco.logged :
         tree._FsSeanco.login_openid('a02j000000KTRjpAAH','https://misbach.github.io/fs-auth/index_raw.html')
       if not tree._FsSeanco.logged :
-        self.login_selenium(0)
+        login_selenium(0)
       if not tree._FsSeanco.logged :
-        self.login_browser(0)
+        login_browser(0)
     if tree._FsSeanco.stato == gedcomx_v1.fs_session.STATO_PASVORTA_ERARO :
       WarningDialog(_('Pasvorta eraro. La funkcioj de FamilySearch ne estos disponeblaj.'))
       return

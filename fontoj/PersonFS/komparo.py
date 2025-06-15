@@ -179,8 +179,13 @@ class FSKomparo(PluginWindows.ToolManagedWindowBatch):
           datemod = int(time.mktime(email.utils.parsedate(r.headers['Last-Modified'])))
         if r and 'Etag' in r.headers :
           etag = r.headers['Etag']
-        PersonFS.PersonFS.fs_Tree.add_persono(fsid)
-        fsPersono = PersonFS.PersonFS.fs_Tree._persons.get(fsid)
+        #print("grDato = %s ; fsDato = %s" % (paro[0] , datemod) )
+        if paro[0] < (datemod or 9999999999) :
+          PersonFS.PersonFS.fs_Tree.add_persono(fsid)
+          fsPersono = PersonFS.PersonFS.fs_Tree._persons.get(fsid)
+        else :
+          fsPersono=(gedcomx_v1.Person._indekso.get(fsid) or gedcomx_v1.Person(id=fsid))
+          PersonFS.PersonFS.fs_Tree._persons[fsid] = fsPersono
       if not fsPersono :
         print (_('FS ID %s ne trovita') % (fsid))
         return
@@ -218,7 +223,9 @@ class FSKomparo(PluginWindows.ToolManagedWindowBatch):
       #progress._ProgressMeter__lbl.set_text(_('Procesante la liston (2/2)')+' %s/%s' % (cnt , nbOrdList))
       pbar.set_text('%d%% (%s/%s)' % (int(100*cnt/nbOrdList),cnt , nbOrdList))
       kompari_paro_p1(paro)
-      kompari_paro_p2(paro)
+      fsPersono = PersonFS.PersonFS.fs_Tree._persons.get(paro[2])
+      if paro[0] < (fsPersono._datemod or 9999999999) :
+        kompari_paro_p2(paro)
       #paroj.append(paro)
       cnt = cnt+1
       #if cnt >= 10 :
