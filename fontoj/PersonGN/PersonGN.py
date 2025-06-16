@@ -175,6 +175,7 @@ class PersonGN(Gramplet):
             "on_ButSercxi_clicked"      : self.ButSercxi_clicked,
             "on_ButAldoni_clicked"      : self.ButAldoni_clicked,
             "on_ButLancxi_clicked"      : self.ButLancxi_clicked,
+            "on_ButPli_clicked"      : self.ButPli_clicked,
             "on_CB_Regximo_changed"      : self.CB_Regximo_changed,
             "on_ButRefresxigi_clicked"      : self.ButRefresxigi_clicked,
             "on_ButImporti_clicked"      : self.ButImporti_clicked,
@@ -652,10 +653,12 @@ class PersonGN(Gramplet):
   def CB_Regximo_changed(self, dummy):
     self.ButRefresxigi_clicked(dummy)
 
-  def ButLancxi_clicked(self, dummy):
+  def FariSercxi(self, pagxo=1):
+    self.lastaPagxo=pagxo
     self.TreeRes.hide()
+    #if pagxo == 1 :
     self.KreiSercxiModel()
-    self.top.get_object("PersonGNResRes").set_fixed_height_mode(False)
+    self.TreeRes.set_fixed_height_mode(False)
     parent = self.uistate.window
     for win in Gtk.Window.list_toplevels():
       if win.is_active():
@@ -691,6 +694,8 @@ class PersonGN(Gramplet):
     if loko :
       mendo += "&place__0__="+quote_plus(loko)
     #print ("Genanet Serĉo : %s." % mendo )
+    if pagxo >1 :
+      mendo += "&page=%s" % pagxo
     r = self.gn.urlopen(mendo)
     progress.step()
     if r == None :
@@ -756,7 +761,15 @@ class PersonGN(Gramplet):
         progress.step()
     self.uistate.set_busy_cursor(False)
     progress.close()
+    #self.TreeRes.set_fixed_height_mode(False)
     self.TreeRes.show()
+    #self.TreeRes.queue_draw()
+
+  def ButLancxi_clicked(self, dummy):
+    self.FariSercxi()
+    
+  def ButPli_clicked(self, dummy):
+    self.FariSercxi(self.lastaPagxo+1)
 
   def ButAldoni_clicked(self, dummy):
     model, iter_ = self.top.get_object("PersonGNResRes").get_selection().get_selected()
