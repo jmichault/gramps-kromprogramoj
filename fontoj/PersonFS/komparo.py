@@ -224,7 +224,7 @@ class FSKomparo(PluginWindows.ToolManagedWindowBatch):
       pbar.set_text('%d%% (%s/%s)' % (int(100*cnt/nbOrdList),cnt , nbOrdList))
       kompari_paro_p1(paro)
       fsPersono = PersonFS.PersonFS.fs_Tree._persons.get(paro[2])
-      if paro[0] < (fsPersono._datemod or 9999999999) :
+      if fsPersono is not None and paro[0] < (fsPersono._datemod or 9999999999) :
         kompari_paro_p2(paro)
       #paroj.append(paro)
       cnt = cnt+1
