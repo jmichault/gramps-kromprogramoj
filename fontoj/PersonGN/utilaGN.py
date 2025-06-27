@@ -48,9 +48,11 @@ def get_fsftid(grObj) :
 def get_url(grObj) :
   if not grObj :
     return None
-  for attr in grObj.get_attribute_list():
-    if attr.get_type() == _('Internet Address'):
-      return attr.get_value()
+  for attr in grObj.get_attribute_list() :
+    if attr.get_type() == _('Internet Address') :
+      url = attr.get_value()
+      if url[0:24] == 'https://gw.geneanet.org/' :
+        return url[24:]
   return None
 
 def get_grevent(db, person, event_type):

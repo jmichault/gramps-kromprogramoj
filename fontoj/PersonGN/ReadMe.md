@@ -37,7 +37,12 @@ Try to use [Addon Manager](https://gramps-project.org/wiki/index.php/Gramps_Glos
 * Select the Person to import for review.
 * Click the “View on Geneanet” link to review the data in a browser;
 * or, click the To Compare button to review the data in the Gramplet.
-* Each row is color coded to indicate the synchronization status: differences, new data, conflicts, or matches
+* Each row is color coded to indicate the synchronization status:
+  * white: there is data in gramps, but no matches found.
+  * yellow (drop-down lines only): there is additional or discrepant data, drop down the list to see details.
+  * green: everything matches
+  * orange: this data has no matches in gramps.
+  * rouge : there is conflict.
 * Select checkboxes for the rows of data to be imported
 * clic “Import selection” button, or “Copy a choice from geneanet to gramps” from the right-click context menu.
 * Data is copied into Gramps, updating the family tree as needed.

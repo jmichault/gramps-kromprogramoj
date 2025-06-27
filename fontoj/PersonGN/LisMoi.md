@@ -31,15 +31,20 @@ Essayez d'utiliser le [Gestionnaire de modules complémentaires](https://gramps-
 # Flux de travail typique
 * Ajoutez le gramplet « Geneanet » à la barre inférieure d'une vue de catégorie Personne.
 * Sélectionnez une personne.
-* Cliquez sur le bouton « Rechercher ».
+* Cliquez sur le bouton « Chercher ».
 * PersonGN récupère les données potentiellement correspondantes de Geneanet dans une liste.
-* Les correspondances potentielles sont affichées sous forme de tableau résumant les faits et les relations.
-* Sélectionnez la personne à importer pour consultation.
-* Cliquez sur le lien « Afficher sur Geneanet » pour consulter les données dans un navigateur ;
+* Les correspondances potentielles sont affichées sous forme d'un tableau résumant les faits et les relations.
+* Sélectionnez la personne à comparer.
+* Cliquez sur le lien « Afficher sur Geneanet » pour consulter la fiche dans un navigateur ;
 * ou cliquez sur le bouton « Comparer » pour consulter les données dans le gramplet.
-* Chaque ligne est codée par couleur pour indiquer l'état de synchronisation : différences, nouvelles données, conflits ou correspondances.
+* Chaque ligne est codée par couleur pour indiquer l'état de synchronisation :
+  * blanc : il y a des données dans gramps, mais sans correspondances trouvées.
+  * jaune (lignes déroulantes uniquement) : il y a des données supplémentaires ou discordantes, déroulez la liste pour voir le détail.
+  * vert : tout correspond
+  * orange : ces données n'ont pas de correspondances dans gramps.
+  * rouge : il y a discordance entre les deux fiches.
 * Cochez les cases des lignes de données à importer.
-* Cliquez sur le bouton « Importer la sélection », ou sur « Copier un choix de Geneanet vers Gramps » dans le menu contextuel accessible par clic droit.
+* Cliquez sur le bouton « Importer la sélection », ou sur « Copier la sélection de Geneanet vers Gramps » dans le menu contextuel accessible par clic droit.
 * Les données sont copiées dans Gramps, mettant à jour l'arbre généalogique si nécessaire.
 
 # Objectif

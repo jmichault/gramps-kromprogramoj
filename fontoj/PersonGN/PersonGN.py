@@ -61,7 +61,7 @@ from gramps.gen.errors import WindowActiveError
 from gramps.gen.lib import Citation, Date, Event, EventRef, EventType, EventRoleType, Name, NameType, NoteType, Person, StyledText, StyledTextTag, StyledTextTagType, Tag, Note
 from gramps.gen.lib import ChildRef, Family
 from gramps.gen.plug import Gramplet, PluginRegister
-from gramps.gui.dialog import OptionDialog, OkDialog , WarningDialog
+from gramps.gui.dialog import QuestionDialog, OkDialog , WarningDialog
 from gramps.gui.editors import EditCitation, EditNote, EditPerson, EditEvent
 from gramps.gui.listmodel import ListModel, NOSORT, COLOR, TOGGLE
 from gramps.gui.utils import ProgressMeter
@@ -89,7 +89,7 @@ except :
 from urllib.parse import urlparse, parse_qs , quote_plus
 import json
 
-from utilaGN import get_grevent
+from utilaGN import get_grevent, get_url
 
 try :
   import geneanet
@@ -169,14 +169,14 @@ class PersonGN(Gramplet):
       self.top.add_from_file(glade_file)
 
     self.res = self.top.get_object("PersonGNTop")
-    self.cbReg = self.top.get_object("CB_Regximo")
+    self.cbUrl = self.top.get_object("CB_Url")
     self.top.connect_signals({
             "on_pref_clicked"      : self.pref_clicked,
             "on_ButSercxi_clicked"      : self.ButSercxi_clicked,
             "on_ButAldoni_clicked"      : self.ButAldoni_clicked,
             "on_ButLancxi_clicked"      : self.ButLancxi_clicked,
             "on_ButPli_clicked"      : self.ButPli_clicked,
-            "on_CB_Regximo_changed"      : self.CB_Regximo_changed,
+            "on_CB_Url_changed"      : self.CB_Url_changed,
             "on_ButRefresxigi_clicked"      : self.ButRefresxigi_clicked,
             "on_ButImporti_clicked"      : self.ButImporti_clicked,
 	})
@@ -204,7 +204,7 @@ class PersonGN(Gramplet):
     return self.res
 
   def toggled(self, path, val=None):
-    url = self.cbReg.get_active_text()
+    url = 'https://gw.geneanet.org/' + self.cbUrl.get_active_text()
     extPersono = self.getPersono(url)
     row = self.modelKomp.model.get_iter((path,))
     tipo=self.modelKomp.model.get_value(row, 8)
@@ -250,6 +250,9 @@ class PersonGN(Gramplet):
       except WindowActiveError:
         pass
 
+  def setOk(self) :
+    self.Ok=True
+
   def kopii_al_gramps(self, treeview):
     #print("kopii_al_gramps")
     self.uistate.set_busy_cursor(True)
@@ -258,7 +261,7 @@ class PersonGN(Gramplet):
     model = self.modelKomp.model
     active_handle = self.get_active('Person')
     grPersono = self.dbstate.db.get_person_from_handle(active_handle)
-    url = self.cbReg.get_active_text()
+    url = 'https://gw.geneanet.org/' + self.cbUrl.get_active_text()
     extPersono = self.getPersono(url)
     if self.dbstate.db.transaction :
       print("??? transaction en cours ???")
@@ -270,11 +273,14 @@ class PersonGN(Gramplet):
        l = [x]
        l.extend(x.iterchildren())
        progress.set_pass(_('Kopiante… ') , mode= ProgressMeter.MODE_ACTIVITY)
+       mem_fh = None    # family_handle mémorisé
        for linio in l :
         progress.step()
+        tipolinio = linio[8]
+        if tipolinio != 'edzoFakto' and tipolinio != 'infano' :
+          mem_fh = None
         if not linio[7] : # si la ligne n'est pas cochée
           continue
-        tipolinio = linio[8]
         if ( (tipolinio == 'nomo' or tipolinio == 'nomo1')
              and linio[5] ) :
           grNomo_str = linio[9]
@@ -380,6 +386,8 @@ class PersonGN(Gramplet):
             familio.set_mother_handle(grPersono.get_handle())
             familio.set_father_handle(grEdzo.get_handle())
           db.commit_family(familio, txn)
+          # répercuter la famille sur les lignes d'enfant
+          mem_fh = familio.handle
           grPersono.add_family_handle(familio.get_handle())
           db.commit_person(grPersono, txn)
           grEdzo.add_family_handle(familio.get_handle())
@@ -433,8 +441,17 @@ class PersonGN(Gramplet):
         elif tipolinio == 'infano' :
           urlInfano = linio[10]
           extInfano = self.getPersono(urlInfano)  # fiche détaillée de l'enfant
-          grInfano = aldPersono(novLokoj, db, txn, extInfano, progress, PersonGN.gn_notoj, PersonGN.gn_osm)
           family_handle = linio[11]
+          if family_handle is None :
+            family_handle = mem_fh # on vient de créer la famille
+          if family_handle is None :
+            self.Ok = False
+            x=QuestionDialog(_("Konfirmo necesa")
+              ,_("Ĉu vi certas, ke vi volas importi infanon\n<b>antaŭ ol importi la edzinon/edzon?</b>")
+                   ,_("Jes, mi scias, kion mi faras."),self.setOk)
+            if self.Ok == False :
+              continue
+          grInfano = aldPersono(novLokoj, db, txn, extInfano, progress, PersonGN.gn_notoj, PersonGN.gn_osm)
           if family_handle:
             familio = db.get_family_from_handle(family_handle)
             childref = ChildRef()
@@ -488,6 +505,9 @@ class PersonGN(Gramplet):
     model = self.modelKomp.model
     # est-ce qu'il y a une ligne cochée copiable vers gramps ?
     cpt = 0
+    # est-ce qu'on a coché un conjoint gramps et un conjoint geneanet qu'on veut comparer ?
+    cptEdzGr = 0
+    cptEdzExt = 0
     for x in model:
      l = [x]
      l.extend(x.iterchildren())
@@ -496,6 +516,10 @@ class PersonGN(Gramplet):
         continue
       tipolinio = linio[8]
       grHandle = linio[9]
+      if (tipolinio=='edzo') and grHandle is None :
+        cptEdzExt += 1
+      if (tipolinio=='edzo') and grHandle is not None :
+        cptEdzGr += 1
       if ( ( (tipolinio == 'patro' or tipolinio=='patrino' or tipolinio=='edzo' or tipolinio=='infano'
              )
              and grHandle is None)
@@ -511,8 +535,36 @@ class PersonGN(Gramplet):
       item.connect("activate",lambda obj: self.kopii_al_gramps(treeview))
       item.show()
       menu.append(item)
+    if cptEdzGr == 1 and cptEdzExt ==1 :
+      item = Gtk.MenuItem(label=_('Kompari infanoj'))
+      item.set_sensitive(1)
+      item.connect("activate",lambda obj: self.kmpInf(treeview))
+      item.show()
+      menu.append(item)
     self.menu = menu
     self.menu.popup(None, None, None, None, event.button, event.time)
+
+  def kmpInf(self, treeview):
+    model = self.modelKomp.model
+    url = 'https://gw.geneanet.org/' + self.cbUrl.get_active_text()
+    extPersono = self.getPersono(url)
+    for x in model:
+     l = [x]
+     l.extend(x.iterchildren())
+     for linio in l :
+      if not linio[7] :
+        continue
+      tipolinio = linio[8]
+      grHandle = linio[9]
+      if (tipolinio=='edzo') and grHandle is None :
+        extFamId = int(linio[12])
+        for f in extPersono['person'].get('families') :
+          if f.get('index')==extFamId :
+            extFamilio = f
+            break
+      if (tipolinio=='edzo') and grHandle is not None :
+        grEdzH = grHandle
+    f['_grEdzHandle'] = grEdzH
 
   def redakti(self, treeview):
     (model, iter_) = treeview.get_selection().get_selected()
@@ -596,12 +648,17 @@ class PersonGN(Gramplet):
     self.kopii_al_gramps(None)
 
   def ButRefresxigi_clicked(self, dummy):
+    self.modelKomp.clear()
     active_handle = self.get_active('Person')
     if (active_handle or '') == '' :
       WarningDialog(_('neniu aktiva persono !!!')
          , _('Vi devas unue elekti personon!'))
       return
-    url = self.cbReg.get_active_text()
+    url = self.cbUrl.get_active_text()
+    if url is None or url == '' :
+      return
+    url = 'https://gw.geneanet.org/' + url
+    print("url=%s"%url)
     extPersono = self.getPersono(url)
     grPersono = self.dbstate.db.get_person_from_handle(active_handle)
     self.modelKomp.cid=None
@@ -621,9 +678,36 @@ class PersonGN(Gramplet):
       return True
     return False
 
+  def db_changed(self):
+    self.active_changed('')
+
+
   def active_changed(self,handle) :
-    self.cbReg.clear()
+    self.cbUrl.insert_text(0,'')
+    self.cbUrl.set_active(0)
+    self.cbUrl.remove_all()
     self.modelKomp.clear()
+    # on ajoute dans cbUrl les sources geneanet déjà citées
+    active_handle = self.get_active('Person')
+    grPersono = self.dbstate.db.get_person_from_handle(active_handle)
+    urls = set()
+    for ch in grPersono.get_all_citation_lists() :
+      cit = self.dbstate.db.get_citation_from_handle(ch)
+      url = get_url(cit)
+      if url is not None :
+        urls.add(url)
+    for evt_ref in grPersono.get_event_ref_list() or list() :
+      event = self.dbstate.db.get_event_from_handle(evt_ref.ref)
+      for ch in event.get_citation_list():
+        cit = self.dbstate.db.get_citation_from_handle(ch)
+        url = get_url(cit)
+        if url is not None :
+          urls.add(url)
+    if len(urls) >0 :
+      self.cbUrl.insert_text(0,'')
+    for url in urls :
+      self.cbUrl.insert_text(-1,url)
+    self.cbUrl.set_active(0)
 
   def pref_clicked(self, dummy):
     parent = self.uistate.window
@@ -650,7 +734,7 @@ class PersonGN(Gramplet):
       CONFIG.set("preferences.gn_notoj", str(PersonGN.gn_notoj))
       CONFIG.save()
 
-  def CB_Regximo_changed(self, dummy):
+  def CB_Url_changed(self, dummy):
     self.ButRefresxigi_clicked(dummy)
 
   def FariSercxi(self, pagxo=1):
@@ -774,12 +858,20 @@ class PersonGN(Gramplet):
   def ButAldoni_clicked(self, dummy):
     model, iter_ = self.top.get_object("PersonGNResRes").get_selection().get_selected()
     if iter_ :
-      lien = 'https://gw.geneanet.org/'+model.get_value(iter_, 0)
+      lien = model.get_value(iter_, 0)
       active_handle = self.get_active('Person')
       grPersono = self.dbstate.db.get_person_from_handle(active_handle)
       self.Sercxi.hide()
-      self.cbReg.insert_text(0,lien)
-      self.cbReg.set_active(0)
+      # on crée notre liste, et on y ajoute les liens de la combobox
+      s = {'',lien}
+      for c in self.cbUrl.get_model() :
+        s.add(c[0])
+      l = sorted(s)
+      self.cbUrl.remove_all()
+      for x in l :
+        self.cbUrl.insert_text(-1,x)
+      index = l.index(lien)
+      self.cbUrl.set_active(index)
 
   def KreiSercxiModel(self) :
     titles = [  

@@ -111,18 +111,17 @@ def FaktoKomp(db, grPersono, extPersono, grEvent , extFaktoTipo ) :
   extFaktoLoko = extPersono['person'].get(extFaktoTipo+'Place')
   if grFakto is None and extFaktoDato == '' and extFaktoLoko is None :
     return None
-  if grEvent == EventType.BIRTH or grEvent == EventType.DEATH :
-    koloro = "red"
-  else:
-    koloro = "orange"
-  if (grFaktoDato == extFaktoDato) :
-    koloro = "green"
   if grFaktoDato == '' and grFaktoLoko == '' and extFaktoDato == '' and extFaktoLoko == '' :
     return None
-  if extFaktoDato == '' and grFaktoDato != '':
-    koloro = "yellow"
-  if grFaktoDato == '' and extFaktoDato != '':
-    koloro = "yellow3"
+  koloro = "white"
+  if grFakto is None and extFakto != '' :
+    koloro = "orange"
+  if grFaktoDato != '' and (grFaktoDato == extFaktoDato) :
+    koloro = "green"
+  if extFaktoDato != '' and grFaktoDato != extFaktoDato :
+    koloro = "red"
+  if extFaktoLoko != '' and grFaktoLoko == '' :
+    koloro = "red"
 
   return ( koloro , titolo
         , grFaktoDato , grFaktoLoko
@@ -241,9 +240,13 @@ def GepKomp(db, grPersono, extPersono ) :
   if extFather :
     ext_patro_nomo = extFather.get('lastname')+', '+extFather.get('firstname')
     extPatUrl = geneanet.id2url(extFather)
-  koloro = "orange"
+  koloro = "white"
   if father_name.upper() == ext_patro_nomo.upper() :
     koloro = "green"
+  if father is None and extFather is not None :
+    koloro = "orange"
+  if father is not None and extFather is not None and father_name.upper() != ext_patro_nomo.upper() :
+    koloro = "red"
   if father is not None or extFather is not None :
     res.append ( [ koloro , _trans.gettext('Father')
         , grperso_datoj(db, father) , ' ' + father_name 
@@ -255,9 +258,13 @@ def GepKomp(db, grPersono, extPersono ) :
   if extMother :
     ext_patrino_nomo = extMother.get('lastname')+', '+extMother.get('firstname')
     extMatUrl = geneanet.id2url(extMother)
-  koloro = "orange"
+  koloro = "white"
   if mother_name.upper() == ext_patrino_nomo.upper() :
     koloro = "green"
+  if mother is None and extMother is not None :
+    koloro = "orange"
+  if mother is not None and extMother is not None and mother_name.upper() != ext_patrino_nomo.upper() :
+    koloro = "red"
   if mother is not None or extMother is not None :
     res.append ( [ koloro , _trans.gettext('Mother')
         , grperso_datoj(db, mother) , ' ' + mother_name 
@@ -273,7 +280,6 @@ def kompariGrExt(grPersono,extPersono,db,model):
   res = SeksoKomp(grPersono, extPersono)
   if res:
     listres.append(res)
-    if res[0] != "green" : ext_Esenco = True
   resNomoj = NomojKomp(grPersono, extPersono)
   if resNomoj :
     if resNomoj[0][0] != "green" : ext_Esenco = True
@@ -281,32 +287,34 @@ def kompariGrExt(grPersono,extPersono,db,model):
   res = FaktoKomp(db, grPersono, extPersono, EventType.BIRTH , "birth") 
   if res:
     listres.append(res)
-    if res[0] != "green" : ext_Esenco = True
   res = FaktoKomp(db, grPersono, extPersono, EventType.BAPTISM , "baptism") 
   if res:
     listres.append(res)
-    if res[0] != "green" : ext_Esenco = True
   res = FaktoKomp(db, grPersono, extPersono, EventType.DEATH , "death") 
   if res:
     listres.append(res)
-    if res[0] != "green" : ext_Esenco = True
   res = FaktoKomp(db, grPersono, extPersono, EventType.BURIAL , "burial") 
   if res:
     listres.append(res)
-    if res[0] != "green" : ext_Esenco = True
   if len(listres) :
-    if ext_Esenco:
-      esenco_nodo = model.add(['red',_('Esenco'),'==========','============================','==========','','',False,'Esenco',None,None,None,None]  )
-    else:
-      esenco_nodo = model.add(['green',_('Esenco'),'==========','============================','==========','','',False,'Esenco',None,None,None,None]  )
+    koloro = 'green'
+    for linio in listres:
+      if linio[0]=='red' or linio[0]=='orange' :
+        koloro = 'yellow'
+      elif koloro=='green' and linio[0]!='green' :
+        koloro = 'white'
+    esenco_nodo = model.add([koloro,_('Esenco'),'==========','============================','==========','','',False,'Esenco',None,None,None,None]  )
     for linio in listres:
       model.add( linio,node=esenco_nodo)
   # parents
   listres = GepKomp(db, grPersono, extPersono )
-  if len(listres) :
-    koloro=listres[0][0]
-    if koloro == 'green' and len(listres)>1 :
-      koloro=listres[1][0]
+  if len(listres)>0 :
+    koloro = 'green'
+    for linio in listres:
+      if linio[0]=='red' or linio[0]=='orange' :
+        koloro = 'yellow'
+      elif koloro=='green' and linio[0]!='green' :
+        koloro = 'white'
     gepatroj_nodo = model.add([koloro,_('Gepatroj'),'==========','============================','==========','','',False,'Gepatroj',None,None,None,None]  )
     for linio in listres:
       model.add( linio,node=gepatroj_nodo)
@@ -316,7 +324,7 @@ def kompariGrExt(grPersono,extPersono,db,model):
   for family_handle in grPersono.get_family_handle_list():
     family = db.get_family_from_handle(family_handle)
     if family :
-      koloro = "yellow"
+      edzKoloro = "blank"
       if family.mother_handle == grPersono.handle :
         edzo_handle = family.father_handle
       elif family.father_handle == grPersono.handle :
@@ -346,26 +354,21 @@ def kompariGrExt(grPersono,extPersono,db,model):
         tmpEdzDato = f.get('marriageDate') or ''
         tmpDato = parserEn.parse(tmpEdzDato)
         extEdzJaro = tmpDato.get_year()
-        if (geJaro>0 and geJaro == extEdzJaro) \
-          or (extEdzNomo.upper() == edzoNomo.upper() ) :
+        if ( (geJaro>0 and geJaro == extEdzJaro) 
+            or (extEdzNomo.upper() == edzoNomo.upper())
+            or (f.get('_grEdzHandle') == edzo_handle ) ) :
           extEdzDato = extEdzJaro
           extEdzUrl = geneanet.id2url(f['spouse'])
           extParoId = f.get('index')
           extEdzDatoj = extperso_datoj(f['spouse'])
           extEdzNomoj = (f['spouse'].get('lastname') or '?') +', '+(f['spouse'].get('firstname') or '?')
           extFam = f
-          koloro = "green"
+          edzKoloro = "green"
           extFamilioj.remove(f)
           break
         indekso += 1
-      # Familia ekrano
-      edzo_nodo = model.add( [ koloro , _trans.gettext('Spouse')
-                , str(geJaro) , edzoNomoj+' ('+grperso_datoj(db, edzo)+')'
-          , str(extEdzDato) , extEdzNomoj +' ('+extEdzDatoj+')', ''
-          , False, 'edzo', edzo_handle ,str(extEdzUrl) , family.handle, str(extParoId)
-           ] )
+      listres = list()
       # familiaj eventoj (edziĝo, …)
-      koloro = "white"
       extEdzFaktoj = list()
       if extEdzUrl is not None :
         extFaktoj = ((extPersono['person'].get('events') or dict()).get('elements') or list())
@@ -378,6 +381,7 @@ def kompariGrExt(grPersono,extPersono,db,model):
              ) :
             extEdzFaktoj.append(ef)
       for eventref in family.get_event_ref_list() :
+        koloro = "white"
         event = db.get_event_from_handle(eventref.ref)
         titolo = str(EventType(event.type))
         grFaktoPriskribo = event.description or ''
@@ -391,37 +395,42 @@ def kompariGrExt(grPersono,extPersono,db,model):
           grValoro = grFaktoPriskribo
         else :
           grValoro = grFaktoPriskribo +' @ '+ grFaktoLoko
-        koloro="yellow"
         extFaktoDato = ''
         extFakto = None
         extValoro = ''
         for ef in extEdzFaktoj :
-          if True :
+          tipo = GN_GRAMPS_FAKTOJ.get(ef.get('type'))
+          if not tipo:
+            tipo = ef.get('type')
+          if str(EventType(tipo)) == titolo :
             koloro="green"
             extFakto = ef
             extFaktoDato = utilaGN.extdato_al_formal(extFakto.get('dateLong'))
+            if extFaktoDato != grFaktoDato :
+              koloro="red"
             extValoro = extFakto.get('place')
             extEdzFaktoj.remove(ef)
             break
 
-        model.add( [ koloro ,'  ' + titolo
+        listres.append( [ koloro ,'  ' + titolo
                     , grFaktoDato , grValoro 
                     , extFaktoDato , extValoro , ''
                     , False, 'edzoFakto', family.handle ,str(extParoId) , eventref.ref, str(extFakto) 
-               ],node=edzo_nodo )
+               ] )
 
       for extFakto in extEdzFaktoj :
+        koloro="orange"
         fakTipo = GN_GRAMPS_FAKTOJ.get(extFakto.get('type'))
         if not fakTipo:
           fakTipo = extFakto.get('type')
         titolo = str(EventType(fakTipo))
         extFaktoDato = utilaGN.extdato_al_formal(extFakto.get('dateLong'))
         extValoro = extFakto.get('place')
-        model.add( [ koloro ,'  ' + titolo
+        listres.append( [ koloro ,'  ' + titolo
                     , '' , ''
                     , extFaktoDato , extValoro , ''
                     , False, 'edzoFakto', family.handle ,str(extParoId) , None, str(extFakto) 
-               ],node=edzo_nodo )
+               ] )
       # infanoj
       extInfanoj = dict()
       if extFam :
@@ -429,12 +438,12 @@ def kompariGrExt(grPersono,extPersono,db,model):
         if c :
           extInfanoj=c.copy()
       for child_ref in family.get_child_ref_list():
+        koloro = "white"
         infano = db.get_person_from_handle(child_ref.ref)
         infanoNomo = infano.primary_name
         infanoANomo = infano.primary_name.first_name
         extInfano = extInfanoUrl = extParoId = None
         extInfDatoj = extInfNomoj = ''
-        koloro = "yellow"
         for c in extInfanoj :
           tmpANomo = c.get('firstname')
           if tmpANomo.upper() == infanoANomo.upper() :
@@ -444,25 +453,40 @@ def kompariGrExt(grPersono,extPersono,db,model):
             extInfano = c
             extInfanoj.remove(c)
         extNomo = ''
-        model.add( [ koloro ,'    '+ _trans.gettext('Child')
+        listres.append( [ koloro ,'    '+ _trans.gettext('Child')
                 , grperso_datoj(db, infano) , infanoNomo.get_surname() + ', ' + infanoNomo.first_name
                 , extInfDatoj, extInfNomoj , ''
           , False, 'infano', child_ref.ref  ,str(extInfanoUrl), family.handle, str(extParoId)
-           ],node=edzo_nodo )
+           ] )
+      koloro = "orange"
       for c in extInfanoj :
         extInfDatoj = extperso_datoj(c)
         extInfNomoj = (c.get('lastname') or '?')+', '+(c.get('firstname') or '?')
         extInfUrl = geneanet.id2url(c)
-        model.add( [ koloro ,'    '+ _trans.gettext('Child')
+        listres.append( [ koloro ,'    '+ _trans.gettext('Child')
                 , '' , ''
                 , extInfDatoj, extInfNomoj , ''
           , False, 'infano', None  ,str(extInfUrl), family.handle, str(extParoId)
-           ] ,node=edzo_nodo)
+           ] )
+      if edzKoloro == 'green' :
+        for linio in listres :
+          if linio[0] =='orange' or linio[0] =='red' :
+            edzKoloro = 'yellow'
+          elif edzKoloro=='green' and linio[0]!='green' :
+            edzKoloro = 'white'
+      # Familia ekrano
+      edzo_nodo = model.add( [ edzKoloro , _trans.gettext('Spouse')
+                , str(geJaro) , edzoNomoj+' ('+grperso_datoj(db, edzo)+')'
+          , str(extEdzDato) , extEdzNomoj +' ('+extEdzDatoj+')', ''
+          , False, 'edzo', edzo_handle ,str(extEdzUrl) , family.handle, str(extParoId)
+           ] )
+      for linio in listres :
+        model.add(linio,node=edzo_nodo )
 
   # Ekrano de Geneanet familioj
   extFamIndekso = 0
   for f in extFamilioj :
-    koloro = "yellow"
+    koloro = "orange"
     extEdzUrl = geneanet.id2url(f['spouse'])
     extParoId = f.get('index')
     extEdzDatoj = (f['spouse'].get('marriageDate') or '/?')+ ' - ' + (f['spouse'].get('marriageDate') or '/?')
@@ -492,8 +516,8 @@ def kompariGrExt(grPersono,extPersono,db,model):
   res = list()
   grFaktoj = grPersono.event_ref_list
   extFaktoj = ((extPersono['person'].get('events') or dict()).get('elements') or list()).copy()
-  koloro = "white"
   for grFaktoRef in grFaktoj :
+    koloro = "white"
     if int(grFaktoRef.get_role()) != EventRoleType.PRIMARY:
       continue
     grFakto = db.get_event_from_handle(grFaktoRef.ref)
@@ -505,16 +529,13 @@ def kompariGrExt(grPersono,extPersono,db,model):
     grFaktoId = utilaGN.get_fsftid(grFakto)
     if grFakto.place and grFakto.place != None :
       place = db.get_place_from_handle(grFakto.place)
-      #grFaktoLoko = place.name.value
       grFaktoLoko = _pd.display(db,place)
     else :
       grFaktoLoko = ''
-    # FARINDAĴO : norma loknomo
     if grFaktoLoko == '' :
       grValoro = grFaktoPriskribo
     else :
       grValoro = grFaktoPriskribo +' @ '+ grFaktoLoko
-    koloro="yellow"
     extFakto = dict()
     for ef in extFaktoj :
       efDato = utilaGN.extdato_al_formal(ef.get('dateLong'))
@@ -525,6 +546,7 @@ def kompariGrExt(grPersono,extPersono,db,model):
         koloro="green"
         extFakto = ef
         extFaktoj.remove(ef)
+        break
     extFaktoDato = utilaGN.extdato_al_formal(extFakto.get('dateLong'))
     extFaktoLoko = extFakto.get('place')
     res.append ([ koloro , titolo
@@ -532,7 +554,7 @@ def kompariGrExt(grPersono,extPersono,db,model):
         , extFaktoDato , extFaktoLoko , ''
         , False, 'fakto', grFakto.get_handle(), str(extFakto), None, None
         ])
-  koloro = "white"
+  koloro = "orange"
   for extFakto in extFaktoj :
     extFakTipo = extFakto.get('type')
     if extFakTipo == 'EPERS_BIRTH' or extFakTipo == 'EPERS_DEATH' or extFakTipo == 'EPERS_BAPTISM' or extFakTipo == 'EPERS_BURIAL' :
@@ -553,7 +575,13 @@ def kompariGrExt(grPersono,extPersono,db,model):
         ])
 
   if len(res) :
-    fakNodo = model.add(['white',_('Faktoj'),'==========','============================','==========','======','',False,'Faktoj',None,None,None,None])
+    koloro = 'green'
+    for linio in res:
+      if linio[0]=='red' or linio[0]=='orange' :
+        koloro = 'yellow'
+      elif koloro=='green' and linio[0]!='green' :
+        koloro = 'white'
+    fakNodo = model.add([koloro,_('Faktoj'),'==========','============================','==========','======','',False,'Faktoj',None,None,None,None])
     for linio in res :
       model.add( linio,node=fakNodo)
 
