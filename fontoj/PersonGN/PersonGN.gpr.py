@@ -40,7 +40,7 @@ register(GRAMPLET,
          gramplet_title=_("Geneanet"),
          detached_width = 500,
          detached_height = 500,
-         version = '1.0.0',
+         version = '1.0.1',
          gramps_target_version= major_version,
          navtypes=["Person"],
          )

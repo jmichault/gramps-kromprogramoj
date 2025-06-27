@@ -45,7 +45,7 @@
 "i": "PersonGN",
 "t": 10,
 "d": "interface pour Geneanet",
-"v": "beta 0.1.7",
+"v": "1.0.1",
 "g": "6.0",
 "s": 3,
 "z": "PersonGN.addon.tgz"
