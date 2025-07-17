@@ -17,16 +17,19 @@
 # GNU Ĝenerala Publika Permesilo por pliaj detaloj.
 #
 # Vi devus esti ricevinta kopion de la Ĝenerala Publika Permesilo de GNU
-# kune kun ĉi tiu programo; se ne, skribu al 
+# kune kun ĉi tiu programo; se ne, skribu al
 # Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
-
-#------------------------------------------------------------------------
-#
-# Geneanet Gramplet
-#
-#------------------------------------------------------------------------
+"""
+"------------------------------------------------------------------------
+"
+" Geneanet Gramplet
+"
+"------------------------------------------------------------------------
+"""
 from gramps.version import major_version
+# just for pylint :
+from gramps.gen.plug._pluginreg import GRAMPLET,_,STABLE,register
 
 register(GRAMPLET,
          id = "PersonGN",
@@ -44,4 +47,3 @@ register(GRAMPLET,
          gramps_target_version= major_version,
          navtypes=["Person"],
          )
-

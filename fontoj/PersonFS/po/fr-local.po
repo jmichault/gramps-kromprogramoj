@@ -505,12 +505,12 @@ msgstr "Personn: Pip non trouvé."
 #: PersonFS/instdep.py:71
 #, python-format
 msgid "dependeco %s ne trovita"
-msgstr "La dépendance% n'est pas trouvée"
+msgstr "La dépendance %s n'est pas trouvée"
 
 #: PersonFS/instdep.py:74
 #, python-format
 msgid "dependeco %s instalita, versio %s"
-msgstr "Dépendance%s installée, version%s"
+msgstr "Dépendance %s installée, version %s"
 
 #: PersonFS/komparo.py:71
 msgid "FamilySearch Komparo Opcionoj"

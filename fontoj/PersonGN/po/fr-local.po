@@ -55,7 +55,7 @@ msgstr "Geneanet"
 
 #: PersonGN/PersonGN.py:72
 msgid "La geneanet-grampleto havas neplenumitajn dependecojn :\n"
-msgstr "Le Geneanet Graccet a des dépendances non pavées: \n"
+msgstr "Le Gramplet Geneanet des dépendances insatisfaites : \n"
 
 #: PersonGN/PersonGN.py:74
 msgid "lxml kaj protobuf."
@@ -277,12 +277,12 @@ msgstr "Personn: Pip non trouvé."
 #: PersonGN/instdepGN.py:71
 #, python-format
 msgid "dependeco %s ne trovita"
-msgstr "La dépendance% n'est pas trouvée"
+msgstr "La dépendance %s n'est pas trouvée"
 
 #: PersonGN/instdepGN.py:74
 #, python-format
 msgid "dependeco %s instalita, versio %s"
-msgstr "Dépendance%s installée, version%s"
+msgstr "Dépendance %s installée, version %s"
 
 #: PersonGN/komparoGN.py:49 PersonGN/komparoGN.py:58
 msgid "male"

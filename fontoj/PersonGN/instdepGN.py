@@ -1,12 +1,30 @@
+#!/usr/bin/env python
+# coding: utf-8
+#
+# Gramplet - PersonGN (interfaco por GeneaNet)
+#
+# Kopirajto © 2025 Jean Michault
+# Licenco «GPL-3.0-or-later»
+#
+# Ĉi tiu programo estas libera programaro; vi povas redistribui ĝin kaj/aŭ modifi
+# ĝi laŭ la kondiĉoj de la Ĝenerala Publika Permesilo de GNU kiel eldonita de
+# la Free Software Foundation; ĉu versio 3 de la Licenco, aŭ
+# (laŭ via elekto) ajna posta versio.
+#
+# Ĉi tiu programo estas distribuata kun la espero, ke ĝi estos utila,
+# sed SEN AJN GARANTIO; sen eĉ la implicita garantio de
+# KOMERCEBLECO aŭ TAĜECO POR APARTA CELO. Vidu la
+# GNU Ĝenerala Publika Permesilo por pliaj detaloj.
+#
+# Vi devus esti ricevinta kopion de la Ĝenerala Publika Permesilo de GNU
+# kune kun ĉi tiu programo; se ne, skribu al
+# Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
 """  modulo ebliganta vin instali dependecojn per pip 
-  pylint options :
-         --indent-string "  " 
-         --function-naming-style 'camelCase' 
-         --const-naming-style='PascalCase'
 """
 
 try:
-  from importlib.metadata import version
+  from importlib.metadata import version,PackageNotFoundError
   from importlib import invalidate_caches
   import pip
   HavPip=True
@@ -16,6 +34,7 @@ try :
   from packaging.version import parse
 except ImportError:
   def parse(versio) :
+    """ alternative simple parse function """
     x = versio.split('.')
     res = 0
     if len(x)>=1 :
@@ -26,15 +45,8 @@ except ImportError:
       res += int(x[2])
     return res
 
-from gramps.gen.const import GRAMPS_LOCALE as glocale
-try:
-    _trans = glocale.get_addon_translator(__file__)
-except ValueError:
-    _trans = glocale.translation
-_ = _trans.gettext
-
-
 from gramps.gen.const import LIB_PATH
+from gn_constants import _
 
 def instDep(modulo,versio):
   """ instDep provas instali dependecon kiel argumenton """
@@ -42,37 +54,42 @@ def instDep(modulo,versio):
   if not HavPip:
     print( _("PersonGN : pip ne trovita."))
     return False
-  if parse(pip.__version__) >= parse('23.1') :
-    pipHavBreak = True
-  else :
-    pipHavBreak = False
+  pipHavBreak = bool(parse(pip.__version__) >= parse('23.1'))
   try:
-    v_0 = version(modulo)
-  except Exception:
-    v_0="0.0.0"
-  if parse(v_0) < parse(versio) :
+    v0 = version(modulo)
+  except (ValueError,PackageNotFoundError):
+    v0="0.0.0"
+  if parse(v0) < parse(versio) :
     print (f'dependeco {modulo} ne trovita aŭ < {versio}')
     if pipHavBreak :
       pip.main(['install', '--target', LIB_PATH, '--upgrade', '--break-system-packages', modulo])
       invalidate_caches()
-      v = version(modulo)
+      try:
+        v = version(modulo)
+      except (ValueError,PackageNotFoundError):
+        v="0.0.0"
       if parse(v) < parse(versio) :
-        pip.main(['install', '--target', LIB_PATH, '--upgrade', '--break-system-packages', modulo,'--only-binary',':all:'])
+        pip.main(['install', '--target', LIB_PATH, '--upgrade'
+                 , '--break-system-packages', modulo,'--only-binary',':all:'])
         invalidate_caches()
     else :
       pip.main(['install', '--target', LIB_PATH, '--upgrade', modulo])
       invalidate_caches()
-      v = version(modulo)
+      try:
+        v = version(modulo)
+      except (ValueError,PackageNotFoundError):
+        v="0.0.0"
       if parse(v) < parse(versio) :
         pip.main(['install', '--target', LIB_PATH, '--upgrade', modulo,'--only-binary',':all:'])
         invalidate_caches()
-    v = version(modulo)
+    try:
+      v = version(modulo)
+    except (ValueError,PackageNotFoundError):
+      v="0.0.0"
     if parse(v) < parse(versio) :
       print( _("dependeco %s ne trovita") % modulo )
       return False
-    else :
-      print( _("dependeco %s instalita, versio %s") % (modulo , v))
-      return True
-  else:
-    #print( _("dependeco %s trovita, versio %s") % (modulo , v_0))
+    print( _("dependeco %s instalita, versio %s") % (modulo , v))
     return True
+  #print( _("dependeco %s trovita, versio %s") % (modulo , v0))
+  return True

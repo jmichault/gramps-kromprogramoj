@@ -17,21 +17,20 @@
 # GNU Ĝenerala Publika Permesilo por pliaj detaloj.
 #
 # Vi devus esti ricevinta kopion de la Ĝenerala Publika Permesilo de GNU
-# kune kun ĉi tiu programo; se ne, skribu al 
+# kune kun ĉi tiu programo; se ne, skribu al
 # Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
-
 """
 GeneaNet Gramplet.
 """
 
-#---
-import instdepGN
-# dépendances obligatoires :
-havLxml = instdepGN.instDep('lxml','0.1.1')
-havProtobuf = instdepGN.instDep('protobuf','6.31.1')
-# dépendances facultatives :
-instdepGN.instDep('fake_useragent','0.1.1')
+from html import unescape
+import json
+from urllib.parse import urlparse, parse_qs, quote_plus
+import locale
+import os
+import xml.etree.ElementTree as ET
+from ast import literal_eval
 
 #-------------------------------------------------------------------------
 #
@@ -48,57 +47,57 @@ from gi.repository import Gtk, Gdk
 from gramps.gen.db import DbTxn
 from gramps.gen.config import config
 from gramps.gen.const import GRAMPS_LOCALE as glocale
-try:
-    _trans = glocale.get_addon_translator(__file__)
-except ValueError:
-    _trans = glocale.translation
-_ = _trans.gettext
-from gramps.gen.constfunc import win
-from gramps.gen.datehandler import get_date
-from gramps.gen.display.name import displayer as name_displayer
 from gramps.gen.display.place import displayer as _pd
 from gramps.gen.errors import WindowActiveError
-from gramps.gen.lib import Citation, Date, Event, EventRef, EventType, EventRoleType, Name, NameType, NoteType, Person, StyledText, StyledTextTag, StyledTextTagType, Tag, Note
-from gramps.gen.lib import ChildRef, Family
-from gramps.gen.plug import Gramplet, PluginRegister
-from gramps.gui.dialog import QuestionDialog, OkDialog , WarningDialog
-from gramps.gui.editors import EditCitation, EditNote, EditPerson, EditEvent
+from gramps.gen.lib import Event, EventRef, EventType, EventRoleType
+from gramps.gen.lib import ChildRef, Family, Person
+from gramps.gen.plug import Gramplet
+from gramps.gui.dialog import QuestionDialog, OkDialog, WarningDialog
+from gramps.gui.editors import EditCitation, EditMedia, EditNote, EditPerson, EditEvent
 from gramps.gui.listmodel import ListModel, NOSORT, COLOR, TOGGLE
 from gramps.gui.utils import ProgressMeter
 from gramps.gen.datehandler import LANG_TO_PARSER
-parserEn = LANG_TO_PARSER['en']()
 
-if not havLxml or not havProtobuf :
-  teksto = _('La geneanet-grampleto havas neplenumitajn dependecojn :\n')
-  if not havLxml and not havProtobuf :
-    teksto = _('lxml kaj protobuf.')
-  elif not havLxml :
-    teksto = _('lxml.')
-  else :
-    teksto = _('protobuf.')
-  teksto = teksto + '\n\n' + _('Se vi uzas Debian aŭ Ubuntu, provu:\nsudo apt install python3-lxml python3-pip python3-protobuf')
-  teksto = teksto + '\n\n' + _('Se vi uzas fedora, provu:\nsudo dnf install python3-lxml python3-pip python3-protobuf')
-  WarningDialog(_('neplenumitajn dependecojn.')
-          ,teksto)
-
-from html import unescape
-try :
-  from lxml import html
-except :
-  pass
-from urllib.parse import urlparse, parse_qs , quote_plus
-import json
-
-from utilaGN import get_grevent, get_url
-
-try :
-  import geneanet
-except :
-  pass
+#-----------
+import instdepGN
+from utilaGN import getGrevent, getUrl, getBirth
 from komparoGN import kompariGrExt
 from ImportoGN import aldPersono, akiriLoko, aldFakto, updFakto
+from gn_constants import _
+#-----------
 
+# dépendances obligatoires :
+HavLxml = instdepGN.instDep('lxml', '0.1.1')
+HavProtobuf = instdepGN.instDep('protobuf', '6.31.1')
+# dépendances facultatives :
+instdepGN.instDep('fake_useragent', '0.1.1')
 
+parserEn = LANG_TO_PARSER['en']()
+
+if not HavLxml or not HavProtobuf:
+  wTeksto = _('La geneanet-grampleto havas neplenumitajn dependecojn :\n')
+  if not HavLxml and not HavProtobuf:
+    wTeksto = _('lxml kaj protobuf.')
+  elif not HavLxml:
+    wTeksto = _('lxml.')
+  else:
+    wTeksto = _('protobuf.')
+  wTeksto = wTeksto + '\n\n' + _('Se vi uzas Debian aŭ Ubuntu, provu:\n"\
+                               "sudo apt install python3-lxml python3-pip python3-protobuf')
+  wTeksto = wTeksto + '\n\n' + _('Se vi uzas fedora, provu:\n"\
+                               "sudo dnf install python3-lxml python3-pip python3-protobuf')
+  WarningDialog(_('neplenumitajn dependecojn.')
+                , wTeksto)
+
+try:
+  from lxml import html
+except ImportError:
+  pass
+
+try:
+  import geneanet
+except ImportError:
+  pass
 
 #-------------------------------------------------------------------------
 #
@@ -106,567 +105,549 @@ from ImportoGN import aldPersono, akiriLoko, aldFakto, updFakto
 #
 #-------------------------------------------------------------------------
 
-GRAMPLET_CONFIG_NAME = "PersonGN"
-CONFIG = config.register_manager(GRAMPLET_CONFIG_NAME)
+GrampletConfigName = "PersonGN"
+CONFIG = config.register_manager(GrampletConfigName)
 # salutnomo kaj pasvorto por FamilySearch
-CONFIG.register("preferences.gn_osm", '')
 CONFIG.register("preferences.gn_notoj", '')
 CONFIG.load()
-
 
 #from objbrowser import browse ;browse(locals())
 #import pdb; pdb.set_trace()
 
+
 class PersonGN(Gramplet):
-  lingvo = None
-  Sercxi = None
-  modelRes = None
-  GnPersonoj = dict() # pour mémoriser les résultats de getPerson
+  """ classe principale du Gramplet """
+  sercxi = None
+  model_res = None
+  GnPersonoj = {}  # pour mémoriser les résultats de get_persono
   # préférences :
-  gn_osm = (CONFIG.get("preferences.gn_osm") == 'True' )
-  gn_notoj = (CONFIG.get("preferences.gn_notoj") == 'True' )
+  gn_notoj = CONFIG.get("preferences.gn_notoj") == 'True'
   try:
-      lingvo = config.get('preferences.place-lang')
+    lingvo = config.get('preferences.place-lang')
   except AttributeError:
-      fmt = config.get('preferences.place-format')
-      pf = _pd.get_formats()[fmt]
-      lingvo = pf.language
+    lingvo = _pd.get_formats()[config.get('preferences.place-format')].language
   if len(lingvo) != 2:
-      lingvo = lingvo[:2]
-  if not lingvo :
-    lingvo = glocale.language[0]
+    lingvo = lingvo[:2] or glocale.language[0]
+  gn = geneanet.Api()
 
-  def init(self):
+  def __init__(self, gui):
+    Gramplet.__init__(self, gui)
+    self.top = None
+    self.lasta_pagxo = None
+    self.ok = None
+    self.model_komp = None
+    self.cb_url = None
+
+#  def init(self):
     """
-    " kreas GUI 
+    " kreas GUI
     """
-    self.gui.WIDGET = self.krei_gui()
-    self.gui.get_container_widget().remove(self.gui.textview)
-    self.gui.get_container_widget().add_with_viewport(self.gui.WIDGET)
-    self.gui.WIDGET.show_all()
-    self.gn = geneanet.Api()
+    self._krei_gui()
 
-
-  def krei_gui(self):
+  def _krei_gui(self):
     """
     " kreas GUI interfacon.
     """
-    import locale,gettext, os
     self.top = Gtk.Builder()
     self.top.set_translation_domain("addon")
     base = os.path.dirname(__file__)
-    glade_file = base + os.sep + "PersonGN.glade"
-    if os.name == 'win32' or os.name == 'nt' :
-      import xml.etree.ElementTree as ET
-      xtree = ET.parse(glade_file)
-      for node in xtree.iter() :
-        if 'translatable' in node.attrib :
+    gladeFile = base + os.sep + "PersonGN.glade"
+    if os.name in ( 'win32', 'nt'):
+      xtree = ET.parse(gladeFile)
+      for node in xtree.iter():
+        if 'translatable' in node.attrib:
           node.text = _(node.text)
-      xml_text = ET.tostring(xtree.getroot(),encoding='unicode',method='xml')
-      self.top.add_from_string(xml_text)
+      xmlText = ET.tostring(xtree.getroot(), encoding='unicode', method='xml')
+      self.top.add_from_string(xmlText)
     else:
       locale.bindtextdomain("addon", base + "/locale")
-      self.top.add_from_file(glade_file)
+      self.top.add_from_file(gladeFile)
 
-    self.res = self.top.get_object("PersonGNTop")
-    self.cbUrl = self.top.get_object("CB_Url")
-    self.top.connect_signals({
-            "on_pref_clicked"      : self.pref_clicked,
-            "on_ButSercxi_clicked"      : self.ButSercxi_clicked,
-            "on_ButAldoni_clicked"      : self.ButAldoni_clicked,
-            "on_ButLancxi_clicked"      : self.ButLancxi_clicked,
-            "on_ButPli_clicked"      : self.ButPli_clicked,
-            "on_CB_Url_changed"      : self.CB_Url_changed,
-            "on_ButRefresxigi_clicked"      : self.ButRefresxigi_clicked,
-            "on_ButImporti_clicked"      : self.ButImporti_clicked,
-	})
-    titles_komp = [
-        (_('Koloro'), 1, 40,COLOR),
-        ( _('Propreco'), 2, 100),
-        ( _('Dato'), 3, 120),
+    res = self.top.get_object("PersonGNTop")
+    self.cb_url = self.top.get_object("CB_Url")
+    self.top.connect_signals({  # pylint: disable=no-member ; (pylint bug #6352)
+        "on_pref_clicked": self.pref_clicked,
+        "on_ButSercxi_clicked": self.butsercxi_clicked,
+        "on_ButAldoni_clicked": self.butaldoni_clicked,
+        "on_ButLancxi_clicked": self.butlancxi_clicked,
+        "on_ButPli_clicked": self.butpli_clicked,
+        "on_CB_Url_changed": self.cb_url_changed,
+        "on_ButRefresxigi_clicked": self.butrefresxigi_clicked,
+        "on_ButImporti_clicked": self.butimporti_clicked,
+    })
+    titlesKomp = [
+        (_('Koloro'), 1, 40, COLOR),
+        (_('Propreco'), 2, 100),
+        (_('Dato'), 3, 120),
         (_('Gramps Valoro'), 4, 300),
         (_('GN Dato'), 5, 120),
         (_('GN Valoro'), 6, 300),
         (' ', NOSORT, 1),
-        ('x', 8, 5, TOGGLE,True,self.toggled),
+        ('x', 8, 5, TOGGLE, True, self.toggled),
         (_('xTipo'), NOSORT, 0),
         (_('xGr'), NOSORT, 0),
         (_('xGn'), NOSORT, 0),
         (_('xGr2'), NOSORT, 0),
         (_('xGn2'), NOSORT, 0),
-     ]
-    self.propKomp = self.top.get_object("propKomp")
-    self.modelKomp = ListModel(self.propKomp, titles_komp, list_mode="tree"
-                 ,event_func=self.l_duobla_klako
-                 ,right_click=self.l_dekstra_klako)
+    ]
+    propKomp = self.top.get_object("propKomp")
+    self.model_komp = ListModel(
+        propKomp,
+        titlesKomp,
+        list_mode="tree",
+        event_func=self.l_duobla_klako,
+        right_click=self.l_dekstra_klako)
 
+    self.gui.WIDGET = res
+    self.gui.get_container_widget().remove(self.gui.textview)
+    self.gui.get_container_widget().add_with_viewport(self.gui.WIDGET)
+    self.gui.WIDGET.show_all()
 
-    return self.res
-
-  def toggled(self, path, val=None):
-    url = 'https://gw.geneanet.org/' + self.cbUrl.get_active_text()
-    extPersono = self.getPersono(url)
-    row = self.modelKomp.model.get_iter((path,))
-    tipo=self.modelKomp.model.get_value(row, 8)
-    if (     tipo != 'edzo'
-         and tipo != 'infano' and tipo != 'patro' and tipo != 'patrino'
-         and tipo != 'fakto' and tipo != 'edzoFakto' 
-         # and tipo != 'nomo' and tipo != 'nomo1'
-         ) :
-      self.modelKomp.model.set_value(row, 7, False)
-      #OkDialog(_('Pardonu, nur edzaj, eventaj, patraj, nomaj aŭ infanaj linioj povas esti elektitaj.'))
+  def toggled(self, path, _val=None):
+    """ url changée """
+    row = self.model_komp.model.get_iter((path,))
+    tipo = self.model_komp.model.get_value(row, 8)
+    if tipo not in ('edzo', 'infano', 'patro', 'patrino', 'fakto', 'edzoFakto'):
+      self.model_komp.model.set_value(row, 7, False)
       OkDialog(_('Pardonu, nur edzaj, eventaj, patraj, aŭ infanaj linioj povas esti elektitaj.'))
-      #print("  toggled:tipo="+str(tipo))
 
   def l_duobla_klako(self, treeview):
-    (model, iter_) = treeview.get_selection().get_selected()
-    if not iter_:
+    """ double clic sur une ligne """
+    (model, _iter) = treeview.get_selection().get_selected()
+    if not _iter:
       return
-    tipo=model.get_value(iter_, 8)
-    handle = model.get_value(iter_, 9)
-    if ( handle
-         and ( tipo == 'infano' or tipo == 'patro'
-            or tipo == 'patrino' or tipo == 'edzo')) :
+    tipo = model.get_value(_iter, 8)
+    handle = model.get_value(_iter, 9)
+    if handle and tipo in ('infano', 'patro', 'patrino', 'edzo'):
       self.uistate.set_active(handle, 'Person')
-    elif ( handle
-         and (tipo == 'fakto' or tipo == 'edzoFakto')) :
+    elif handle and tipo in ('fakto', 'edzoFakto'):
       event = self.dbstate.db.get_event_from_handle(handle)
       try:
         EditEvent(self.dbstate, self.uistate, [], event)
       except WindowActiveError:
         pass
-    elif ( handle
-         and (tipo == 'NotoP' or tipo == 'NotoF' )) :
-      noto = self.dbstate.db.get_note_from_handle(model.get_value(iter_, 10))
+    elif handle and tipo in('NotoP', 'NotoF'):
+      noto = self.dbstate.db.get_note_from_handle(model.get_value(_iter, 10))
       try:
         EditNote(self.dbstate, self.uistate, [], noto)
       except WindowActiveError:
         pass
-    elif ( handle
-         and (tipo == 'Fonto' )) :
+    elif (handle and (tipo == 'Fonto')):
       cit = self.dbstate.db.get_citation_from_handle(handle)
       try:
         EditCitation(self.dbstate, self.uistate, [], cit)
       except WindowActiveError:
         pass
 
-  def setOk(self) :
-    self.Ok=True
+  def set_ok(self):
+    """ positionne le flag OK pour savoir quel bouton a été choisi """
+    self.ok = True
 
-  def kopii_al_gramps(self, treeview):
-    #print("kopii_al_gramps")
+  def _kopii_al_gramps(self, _treeview):
+    """ copier la sélection vers gramps """
     self.uistate.set_busy_cursor(True)
-    progress = ProgressMeter(_("Geneanet Kopio"), _('Kopio'),can_cancel=True,parent=self.uistate.window)
-    progress.set_pass(_('Kopiante… ') , mode= ProgressMeter.MODE_ACTIVITY)
-    model = self.modelKomp.model
-    active_handle = self.get_active('Person')
-    grPersono = self.dbstate.db.get_person_from_handle(active_handle)
-    url = 'https://gw.geneanet.org/' + self.cbUrl.get_active_text()
-    extPersono = self.getPersono(url)
-    if self.dbstate.db.transaction :
+    progress = ProgressMeter(_("Geneanet Kopio"), _('Kopio')
+                  , can_cancel=True, parent=self.uistate.window)
+    progress.set_pass(_('Kopiante… '), mode=ProgressMeter.MODE_ACTIVITY)
+    model = self.model_komp.model
+    activeHandle = self.get_active('Person')
+    grPersono = self.dbstate.db.get_person_from_handle(activeHandle)
+    url = 'https://gw.geneanet.org/' + self.cb_url.get_active_text()
+    extPersono = self._get_persono(url)
+    if self.dbstate.db.transaction:
       print("??? transaction en cours ???")
       self.dbstate.db.transaction_commit(self.dbstate.db.transaction)
     db = self.dbstate.db
-    novLokoj = dict()
+    novLokoj = {}
     with DbTxn(_("kopii al gramps"), db) as txn:
       for x in model:
-       l = [x]
-       l.extend(x.iterchildren())
-       progress.set_pass(_('Kopiante… ') , mode= ProgressMeter.MODE_ACTIVITY)
-       mem_fh = None    # family_handle mémorisé
-       for linio in l :
-        progress.step()
-        tipolinio = linio[8]
-        if tipolinio != 'edzoFakto' and tipolinio != 'infano' :
-          mem_fh = None
-        if not linio[7] : # si la ligne n'est pas cochée
-          continue
-        if ( (tipolinio == 'nomo' or tipolinio == 'nomo1')
-             and linio[5] ) :
-          grNomo_str = linio[9]
-          print(_("nomimporto ankoraŭ ne efektivigita_"))
-          #ImportoGN.aldNomo(db, txn, fsNomo, grPersono)
-        elif tipolinio == 'patro' :
-          extPatro = extPersono['person']['father']  # fiche simplifiée du père
-          urlPatro = geneanet.id2url(extPatro)
-          extPatro = self.getPersono(urlPatro)  # fiche détaillée du père
-          grPatro = aldPersono(novLokoj, db, txn, extPatro, progress, PersonGN.gn_notoj, PersonGN.gn_osm)
-          family_handle = grPersono.get_main_parents_family_handle()
-          if family_handle:
-            familio = db.get_family_from_handle(family_handle)
-            father_handle = familio.get_father_handle()
-            if father_handle:
-              OkDialog(_('Ĉi tiu persono jam havas patron'))
-              continue
-            familio.set_father_handle(grPatro.get_handle())
-            grPatro.add_family_handle(familio.get_handle())
-            db.commit_family(familio, txn)
-            db.commit_person(grPatro, txn)
-          else :
+        l = [x]
+        l.extend(x.iterchildren())
+        progress.set_pass(_('Kopiante… '), mode=ProgressMeter.MODE_ACTIVITY)
+        memFH = None  # familioHandle mémorisé
+        for linio in l:
+          progress.step()
+          tipolinio = linio[8]
+          if tipolinio not in ('edzoFakto', 'infano'):
+            memFH = None
+          if not linio[7]:  # si la ligne n'est pas cochée
+            continue
+          if tipolinio in ('nomo', 'nomo1') and linio[5]:
+            print(_("nomimporto ankoraŭ ne efektivigita_"))
+          elif tipolinio == 'patro':
+            extPatro = extPersono['person']['father']  # fiche simplifiée du père
+            urlPatro = geneanet.id2url(extPatro)
+            extPatro = self._get_persono(urlPatro)  # fiche détaillée du père
+            grPatro = aldPersono(novLokoj, db, txn, extPatro, progress, PersonGN.gn_notoj)
+            familioHandle = grPersono.get_main_parents_family_handle()
+            if familioHandle:
+              familio = db.get_family_from_handle(familioHandle)
+              patroHandle = familio.get_father_handle()
+              if patroHandle:
+                OkDialog(_('Ĉi tiu persono jam havas patron'))
+                continue
+              familio.set_father_handle(grPatro.get_handle())
+              grPatro.add_family_handle(familio.get_handle())
+              db.commit_family(familio, txn)
+              db.commit_person(grPatro, txn)
+            else:
+              familio = Family()
+              familio.set_father_handle(grPatro.get_handle())
+              db.add_family(familio, txn)
+              db.commit_family(familio, txn)
+              grPatro.add_family_handle(familio.get_handle())
+              childref = ChildRef()
+              childref.set_reference_handle(activeHandle)
+              familio.add_child_ref(childref)
+              grPersono.add_parent_family_handle(familio.get_handle())
+              db.commit_family(familio, txn)
+              db.commit_person(grPatro, txn)
+              db.commit_person(grPersono, txn)
+          elif tipolinio == 'patrino':
+            extPatrino = extPersono['person']['mother']  # fiche simplifiée de la mère
+            urlPatrino = geneanet.id2url(extPatrino)
+            extPatrino = self._get_persono(urlPatrino)  # fiche détaillée de la mère
+            grPatrino = aldPersono(novLokoj, db, txn, extPatrino, progress, PersonGN.gn_notoj)
+            familioHandle = grPersono.get_main_parents_family_handle()
+            if familioHandle:
+              familio = db.get_family_from_handle(familioHandle)
+              patrinoHandle = familio.get_mother_handle()
+              if patrinoHandle:
+                OkDialog(_('Ĉi tiu individuo jam havas patrinon'))
+                continue
+              familio.set_mother_handle(grPatrino.get_handle())
+              grPatrino.add_family_handle(familio.get_handle())
+              db.commit_family(familio, txn)
+              db.commit_person(grPatrino, txn)
+            else:
+              familio = Family()
+              familio.set_mother_handle(grPatrino.get_handle())
+              db.add_family(familio, txn)
+              db.commit_family(familio, txn)
+              grPatrino.add_family_handle(familio.get_handle())
+              childref = ChildRef()
+              childref.set_reference_handle(activeHandle)
+              familio.add_child_ref(childref)
+              grPersono.add_parent_family_handle(familio.get_handle())
+              db.commit_family(familio, txn)
+              db.commit_person(grPatrino, txn)
+              db.commit_person(grPersono, txn)
+          elif tipolinio == 'fakto' and (linio[10] or '') != '':
+            extFakto = literal_eval(linio[10])
+            grFaktoH = linio[9]
+            if grFaktoH:
+              event = db.get_event_from_handle(grFaktoH)
+              updFakto(novLokoj, db, txn, event, extFakto)
+            else:
+              event = aldFakto(novLokoj, db, txn, extPersono, extFakto)
+            found = False
+            for er in grPersono.get_event_ref_list():
+              if er.ref == event.handle:
+                found = True
+                break
+            if not found:
+              er = EventRef()
+              er.set_role(EventRoleType.PRIMARY)
+              er.set_reference_handle(event.get_handle())
+              self.dbstate.db.commit_event(event, txn)
+              grPersono.add_event_ref(er)
+            if event.type == EventType.BIRTH:
+              grPersono.set_birth_ref(er)
+            elif event.type == EventType.DEATH:
+              grPersono.set_death_ref(er)
+          elif tipolinio == 'edzo' and linio[12] :
+            extFamId = int(linio[12])
+            for f in extPersono['person'].get('families'):
+              if f.get('index') == extFamId:
+                extFamilio = f
+                break
+            extEdzo = extFamilio.get('spouse')  # fiche simplifiée du conjoint
+            urlEdzo = geneanet.id2url(extEdzo)
+            extEdzo = self._get_persono(urlEdzo)  # fiche détaillée du conjoint
+            grEdzo = aldPersono(novLokoj, db, txn, extEdzo, progress, PersonGN.gn_notoj)
             familio = Family()
-            familio.set_father_handle(grPatro.get_handle())
             db.add_family(familio, txn)
+            if grPersono.get_gender() == Person.MALE:
+              familio.set_father_handle(grPersono.get_handle())
+              familio.set_mother_handle(grEdzo.get_handle())
+            else:
+              familio.set_mother_handle(grPersono.get_handle())
+              familio.set_father_handle(grEdzo.get_handle())
             db.commit_family(familio, txn)
-            grPatro.add_family_handle(familio.get_handle())
-            childref = ChildRef()
-            childref.set_reference_handle(active_handle)
-            familio.add_child_ref(childref)
-            grPersono.add_parent_family_handle(familio.get_handle())
-            db.commit_family(familio, txn)
-            db.commit_person(grPatro, txn)
+            # répercuter la famille sur les lignes d'enfant
+            memFH = familio.handle
+            grPersono.add_family_handle(familio.get_handle())
             db.commit_person(grPersono, txn)
-        elif tipolinio == 'patrino' :
-          extPatrino = extPersono['person']['mother']  # fiche simplifiée de la mère
-          urlPatrino = geneanet.id2url(extPatrino)
-          extPatrino = self.getPersono(urlPatrino)  # fiche détaillée de la mère
-          grPatrino = aldPersono(novLokoj, db, txn, extPatrino, progress, PersonGN.gn_notoj, PersonGN.gn_osm)
-          family_handle = grPersono.get_main_parents_family_handle()
-          if family_handle:
-            familio = db.get_family_from_handle(family_handle)
-            mother_handle = familio.get_mother_handle()
-            if mother_handle:
-              OkDialog(_('Ĉi tiu individuo jam havas patrinon'))
-              continue
-            familio.set_mother_handle(grPatrino.get_handle())
-            grPatrino.add_family_handle(familio.get_handle())
-            db.commit_family(familio, txn)
-            db.commit_person(grPatrino, txn)
-          else :
-            familio = Family()
-            familio.set_mother_handle(grPatrino.get_handle())
-            db.add_family(familio, txn)
-            db.commit_family(familio, txn)
-            grPatrino.add_family_handle(familio.get_handle())
-            childref = ChildRef()
-            childref.set_reference_handle(active_handle)
-            familio.add_child_ref(childref)
-            grPersono.add_parent_family_handle(familio.get_handle())
-            db.commit_family(familio, txn)
-            db.commit_person(grPatrino, txn)
-            db.commit_person(grPersono, txn)
-        elif tipolinio == 'fakto' and (linio[10] or '') != '' :
-          extFakto = eval(linio[10])
-          grFaktoH = linio[9]
-          if grFaktoH :
-            event = db.get_event_from_handle(grFaktoH)
-            updFakto(novLokoj , db , txn , event , extFakto)
-          else :
-            event = aldFakto(novLokoj, db,txn,extPersono,extFakto)
-          found = False
-          for er in grPersono.get_event_ref_list():
-            if er.ref == event.handle:
-              found = True
-              break
-          if not found:
-            er = EventRef()
-            er.set_role(EventRoleType.PRIMARY)
-            er.set_reference_handle(event.get_handle())
-            self.dbstate.db.commit_event(event, txn)
-            grPersono.add_event_ref(er)
-          if event.type == EventType.BIRTH :
-            grPersono.set_birth_ref(er)
-          elif event.type == EventType.DEATH :
-            grPersono.set_death_ref(er)
-        elif tipolinio == 'edzo' and linio[12] :
-          extFamId = int(linio[12])
-          for f in extPersono['person'].get('families') :
-            if f.get('index')==extFamId :
-              extFamilio = f
-              break
-          extEdzo = extFamilio.get('spouse')  # fiche simplifiée du conjoint
-          urlEdzo = geneanet.id2url(extEdzo)
-          extEdzo = self.getPersono(urlEdzo)  # fiche détaillée du conjoint
-          grEdzo = aldPersono(novLokoj, db, txn, extEdzo, progress, PersonGN.gn_notoj, PersonGN.gn_osm)
-          familio = Family()
-          db.add_family(familio, txn)
-          if grPersono.get_gender() == Person.MALE :
-            familio.set_father_handle(grPersono.get_handle())
-            familio.set_mother_handle(grEdzo.get_handle())
-          else :
-            familio.set_mother_handle(grPersono.get_handle())
-            familio.set_father_handle(grEdzo.get_handle())
-          db.commit_family(familio, txn)
-          # répercuter la famille sur les lignes d'enfant
-          mem_fh = familio.handle
-          grPersono.add_family_handle(familio.get_handle())
-          db.commit_person(grPersono, txn)
-          grEdzo.add_family_handle(familio.get_handle())
-          db.commit_person(grEdzo, txn)
-          if ((extFamilio.get('marriageDateLong') or '') != '' 
-             or (extFamilio.get('marriagePlace') or '') != '' ):
-            event = Event()
-            dato = extFamilio.get('marriageDateLong')
-            if dato :
-              grDato = parserEn.parse(dato)
-              if grDato :
-                event.set_date_object( grDato )
-            loko = unescape(extFamilio.get('marriagePlace') or '')
-            if loko != '' :
-              grLoko = akiriLoko(novLokoj, db, txn, loko, PersonGN.gn_osm)
-              event.set_place_handle(grLoko.handle)
-            if extFamilio.get('marriageType') == "MARRIED" :
-              event.set_type(EventType.MARRIAGE)
-            else :
-              print("type de mariage à traiter : %s" % extFamilio.get('marriageType'))
-            db.add_event(event, txn)
-            db.commit_event(event, txn)
-            er = EventRef()
-            er.set_role(EventRoleType.PRIMARY)
-            er.set_reference_handle(event.get_handle())
-            db.commit_event(event, txn)
-            familio.add_event_ref(er)
-            db.commit_family(familio, txn)
-        elif tipolinio == 'edzoFakto' and (linio[9] or '') != '' and (linio[10] or '') != '' :
-          grFamHandle = linio[9]
-          extFamId = int(linio[10])
-          for f in extPersono['person'].get('families') :
-            if f.get('index')==extFamId :
-              extFamilio = f
-              break
-          extEdzo = extFamilio.get('spouse')  # fiche simplifiée du conjoint
-          grFaktoH = linio[11]
-          extFakto = eval(linio[12])
-          if grFaktoH :
-            event = db.get_event_from_handle(grFaktoH)
-            updFakto(novLokoj, db,txn,event,extFakto)
-          else :
-            event = aldFakto(novLokoj, db,txn,extPersono,extFakto)
-            er = EventRef()
-            er.set_role(EventRoleType.PRIMARY)
-            er.set_reference_handle(event.get_handle())
-            db.commit_event(event, txn)
-            familio = db.get_family_from_handle(grFamHandle)
-            familio.add_event_ref(er)
-            db.commit_family(familio, txn)
-        elif tipolinio == 'infano' :
-          urlInfano = linio[10]
-          extInfano = self.getPersono(urlInfano)  # fiche détaillée de l'enfant
-          family_handle = linio[11]
-          if family_handle is None :
-            family_handle = mem_fh # on vient de créer la famille
-          if family_handle is None :
-            self.Ok = False
-            x=QuestionDialog(_("Konfirmo necesa")
-              ,_("Ĉu vi certas, ke vi volas importi infanon\n<b>antaŭ ol importi la edzinon/edzon?</b>")
-                   ,_("Jes, mi scias, kion mi faras."),self.setOk)
-            if self.Ok == False :
-              continue
-          grInfano = aldPersono(novLokoj, db, txn, extInfano, progress, PersonGN.gn_notoj, PersonGN.gn_osm)
-          if family_handle:
-            familio = db.get_family_from_handle(family_handle)
-            childref = ChildRef()
-            childref.set_reference_handle(grInfano.get_handle())
-            familio.add_child_ref(childref)
-            db.commit_family(familio, txn)
-            grInfano.add_parent_family_handle(family_handle)
-            db.commit_person(grInfano, txn)
-        else :
-          print(" import de %s pas encore implémenté_" % tipolinio)
-      db.commit_person(grPersono,txn)
+            grEdzo.add_family_handle(familio.get_handle())
+            db.commit_person(grEdzo, txn)
+            if ((extFamilio.get('marriageDateLong') or '') != '' or
+                (extFamilio.get('marriagePlace') or '') != ''):
+              event = Event()
+              dato = extFamilio.get('marriageDateLong')
+              if dato:
+                grDato = parserEn.parse(dato)
+                if grDato:
+                  event.set_date_object(grDato)
+              loko = unescape(extFamilio.get('marriagePlace') or '')
+              if loko != '':
+                grLoko = akiriLoko(novLokoj, db, txn, loko)
+                event.set_place_handle(grLoko.handle)
+              if extFamilio.get('marriageType') == "MARRIED":
+                event.set_type(EventType.MARRIAGE)
+              else:
+                print(f"type de mariage à traiter : {extFamilio.get('marriageType')}")
+              db.add_event(event, txn)
+              db.commit_event(event, txn)
+              er = EventRef()
+              er.set_role(EventRoleType.PRIMARY)
+              er.set_reference_handle(event.get_handle())
+              db.commit_event(event, txn)
+              familio.add_event_ref(er)
+              db.commit_family(familio, txn)
+          elif tipolinio == 'edzoFakto' and (linio[9] or '') != '' and (linio[10] or '') != '':
+            grFamHandle = linio[9]
+            extFamId = int(linio[10])
+            for f in extPersono['person'].get('families'):
+              if f.get('index') == extFamId:
+                extFamilio = f
+                break
+            extEdzo = extFamilio.get('spouse')  # fiche simplifiée du conjoint
+            grFaktoH = linio[11]
+            extFakto = literal_eval(linio[12])
+            if grFaktoH:
+              event = db.get_event_from_handle(grFaktoH)
+              updFakto(novLokoj, db, txn, event, extFakto)
+            else:
+              event = aldFakto(novLokoj, db, txn, extPersono, extFakto)
+              er = EventRef()
+              er.set_role(EventRoleType.PRIMARY)
+              er.set_reference_handle(event.get_handle())
+              db.commit_event(event, txn)
+              familio = db.get_family_from_handle(grFamHandle)
+              familio.add_event_ref(er)
+              db.commit_family(familio, txn)
+          elif tipolinio == 'infano':
+            urlInfano = linio[10]
+            extInfano = self._get_persono(urlInfano)  # fiche détaillée de l'enfant
+            familioHandle = linio[11]
+            if familioHandle is None:
+              familioHandle = memFH  # on vient de créer la famille
+            if familioHandle is None:
+              self.ok = False
+              x = QuestionDialog(_("Konfirmo necesa")
+                      , _("Ĉu vi certas, ke vi volas importi infanon\n"\
+                          "<b>antaŭ ol importi la edzinon/edzon?</b>")
+                      , _("Jes, mi scias, kion mi faras."), self.set_ok)
+              if not self.ok:
+                continue
+            grInfano = aldPersono(novLokoj, db, txn, extInfano, progress, PersonGN.gn_notoj)
+            if familioHandle:
+              familio = db.get_family_from_handle(familioHandle)
+              childref = ChildRef()
+              childref.set_reference_handle(grInfano.get_handle())
+              familio.add_child_ref(childref)
+              db.commit_family(familio, txn)
+              grInfano.add_parent_family_handle(familioHandle)
+              db.commit_person(grInfano, txn)
+          else:
+            print(f" import de {tipolinio} pas encore implémenté…")
+      db.commit_person(grPersono, txn)
       db.transaction_commit(txn)
     db.enable_signals()
     progress.close()
     self.uistate.set_busy_cursor(False)
-    self.ButRefresxigi_clicked(None)
-    if len(novLokoj) > 0 :
-      teksto = ( _('\tLa jenaj lokoj estis kreitaj dum la importado,\n vi devus kontroli ilin nun:\n\n')
-                      + '\n'.join(['%s : %s' % kv for kv in novLokoj.items()]))
+    self.butrefresxigi_clicked(None)
+    if len(novLokoj) > 0:
+      teksto = (
+          _('\tLa jenaj lokoj estis kreitaj dum la importado,\n vi devus kontroli ilin nun:\n\n')
+           + '\n'.join([f'{k} : {v}'  for k,v in novLokoj.items()]))
       WarningDialog(_('lokoj kreitaj !!!')
-         , teksto)
+                    , teksto)
 
   def l_dekstra_klako(self, treeview, event):
+    """ clic droit : afficher le menu """
     menu = Gtk.Menu()
     menu.set_reserve_toggle_size(False)
-    (model, iter_) = treeview.get_selection().get_selected()
-    if iter_:
-      tipo=model.get_value(iter_, 8)
-      handle = model.get_value(iter_, 9)
-      extUrl = model.get_value(iter_, 10)
-      if ( extUrl
-         and (    tipo == 'infano' or tipo == 'patro'
-               or tipo == 'patrino' or tipo == 'edzo'
-            )) :
+    (model, _iter) = treeview.get_selection().get_selected()
+    if _iter:
+      tipo = model.get_value(_iter, 8)
+      handle = model.get_value(_iter, 9)
+      extUrl = model.get_value(_iter, 10)
+      if extUrl and tipo ('infano', 'patro', 'patrino', 'edzo'):
         item = Gtk.MenuItem(label=_('Kopii json-datumojn al tondujo'))
         item.set_sensitive(1)
-        item.connect("activate",lambda obj: self.kopiijson(treeview))
+        item.connect("activate", lambda obj: self.kopiijson(treeview))
         item.show()
         menu.append(item)
-      if ( handle
-         and (    tipo == 'infano' or tipo == 'patro'
-               or tipo == 'patrino' or tipo == 'edzo'
-               or tipo == 'fakto' or tipo == 'edzoFakto'
-               or tipo == 'Bildo'
-            )) :
-        item = Gtk.MenuItem(label=_('Redakti : %s - %s - %s')% (model.get_value(iter_,1),model.get_value(iter_,2),model.get_value(iter_,3)))
+      if handle and tipo in ('infano', 'patro', 'patrino', 'edzo', 'fakto', 'edzoFakto', 'Bildo'):
+        item = Gtk.MenuItem(label=_('Redakti : %s - %s - %s') % (model.get_value(_iter, 1)
+                   , model.get_value(_iter, 2), model.get_value(_iter, 3)))
         item.set_sensitive(1)
-        item.connect("activate",lambda obj: self.redakti(treeview))
+        item.connect("activate", lambda obj: self.redakti(treeview))
         item.show()
         menu.append(item)
-    model = self.modelKomp.model
-    # est-ce qu'il y a une ligne cochée copiable vers gramps ?
-    cpt = 0
-    # est-ce qu'on a coché un conjoint gramps et un conjoint geneanet qu'on veut comparer ?
-    cptEdzGr = 0
-    cptEdzExt = 0
-    for x in model:
-     l = [x]
-     l.extend(x.iterchildren())
-     for linio in l :
-      if not linio[7] :
-        continue
-      tipolinio = linio[8]
-      grHandle = linio[9]
-      if (tipolinio=='edzo') and grHandle is None :
-        cptEdzExt += 1
-      if (tipolinio=='edzo') and grHandle is not None :
-        cptEdzGr += 1
-      if ( ( (tipolinio == 'patro' or tipolinio=='patrino' or tipolinio=='edzo' or tipolinio=='infano'
-             )
-             and grHandle is None)
-         ) :
-        cpt += 1
-      elif ( tipolinio == 'fakto' and (linio[10] or '') != '' ) :
-        cpt += 1
-      elif ( tipolinio == 'edzoFakto' and (linio[10] or '') != '' ) :
-        cpt += 1
-    if cpt >0 :
+    cpt = cptEdzGr = cptEdzExt = 0
+    for x in self.model_komp.model:
+      l = [x]
+      l.extend(x.iterchildren())
+      for linio in l:
+        if not linio[7]:
+          continue
+        tipolinio = linio[8]
+        grHandle = linio[9]
+        if (tipolinio == 'edzo') and grHandle is None:
+          cptEdzExt += 1
+        if (tipolinio == 'edzo') and grHandle is not None:
+          cptEdzGr += 1
+        if ( (tipolinio in ('patro', 'patrino', 'edzo', 'infano') and grHandle is None)
+            or (tipolinio == 'fakto' and (linio[10] or '') != '')):
+          cpt += 1
+        elif (tipolinio == 'edzoFakto' and (linio[10] or '') != ''):
+          cpt += 1
+    if cpt > 0:
       item = Gtk.MenuItem(label=_('Kopii elekton de Geneanet al gramps'))
       item.set_sensitive(1)
-      item.connect("activate",lambda obj: self.kopii_al_gramps(treeview))
+      item.connect("activate", lambda obj: self._kopii_al_gramps(treeview))
       item.show()
       menu.append(item)
-    if cptEdzGr == 1 and cptEdzExt ==1 :
+    if cptEdzGr == 1 and cptEdzExt == 1:
       item = Gtk.MenuItem(label=_('Kompari infanoj'))
       item.set_sensitive(1)
-      item.connect("activate",lambda obj: self.kmpInf(treeview))
+      item.connect("activate", lambda obj: self.kmp_inf(treeview))
       item.show()
       menu.append(item)
-    self.menu = menu
-    self.menu.popup(None, None, None, None, event.button, event.time)
+    menu.popup(None, None, None, None, event.button, event.time)
 
-  def kmpInf(self, treeview):
-    model = self.modelKomp.model
-    url = 'https://gw.geneanet.org/' + self.cbUrl.get_active_text()
-    extPersono = self.getPersono(url)
+  def kmp_inf(self, _treeview):
+    """ on considère les deux conjoints comme identique pour comparer les enfants """
+    model = self.model_komp.model
+    url = 'https://gw.geneanet.org/' + self.cb_url.get_active_text()
+    extPersono = self._get_persono(url)
+    extFamilio = {}
+    grEdzH = None
     for x in model:
-     l = [x]
-     l.extend(x.iterchildren())
-     for linio in l :
-      if not linio[7] :
-        continue
-      tipolinio = linio[8]
-      grHandle = linio[9]
-      if (tipolinio=='edzo') and grHandle is None :
-        extFamId = int(linio[12])
-        for f in extPersono['person'].get('families') :
-          if f.get('index')==extFamId :
-            extFamilio = f
-            break
-      if (tipolinio=='edzo') and grHandle is not None :
-        grEdzH = grHandle
-    f['_grEdzHandle'] = grEdzH
-
+      l = [x]
+      l.extend(x.iterchildren())
+      for linio in l:
+        if not linio[7]:
+          continue
+        tipolinio = linio[8]
+        grHandle = linio[9]
+        if (tipolinio == 'edzo') and grHandle is None:
+          extFamId = int(linio[12])
+          for f in extPersono['person'].get('families'):
+            if f.get('index') == extFamId:
+              extFamilio = f
+              break
+        if (tipolinio == 'edzo') and grHandle is not None:
+          grEdzH = grHandle
+    extFamilio['_grEdzHandle'] = grEdzH
   def redakti(self, treeview):
-    (model, iter_) = treeview.get_selection().get_selected()
-    if not iter_:
+    """ on édite l'une des lignes """
+    (model, _iter) = treeview.get_selection().get_selected()
+    if not _iter:
       return
-    tipo=model.get_value(iter_, 8)
-    handle = model.get_value(iter_, 9)
-    if not handle :
+    tipo = model.get_value(_iter, 8)
+    handle = model.get_value(_iter, 9)
+    if not handle:
       return
-    if ( tipo == 'infano' or tipo == 'patro'
-            or tipo == 'patrino' or tipo == 'edzo') :
+    if tipo in ('infano', 'patro', 'patrino', 'edzo'):
       person = self.dbstate.db.get_person_from_handle(handle)
       try:
         EditPerson(self.dbstate, self.uistate, [], person)
       except WindowActiveError:
         pass
-    elif (tipo == 'fakto' or tipo == 'edzoFakto') :
+    elif tipo in('fakto', 'edzoFakto'):
       event = self.dbstate.db.get_event_from_handle(handle)
       try:
         EditEvent(self.dbstate, self.uistate, [], event)
       except WindowActiveError:
         pass
-    elif (tipo == 'Bildo' ) :
+    elif tipo == 'Bildo':
       m = self.dbstate.db.get_media_from_handle(handle)
       try:
-        EditMedia(self.dbstate, self.uistate, [],m)
+        EditMedia(self.dbstate, self.uistate, [], m)
       except WindowActiveError:
         pass
 
   def kopiijson(self, treeview):
-    (model, iter_) = treeview.get_selection().get_selected()
-    if not iter_:
+    """ copier le json de la personne dans le presse-papiers """
+    (model, _iter) = treeview.get_selection().get_selected()
+    if not _iter:
       return
-    tipo=model.get_value(iter_, 8)
-    extUrl = model.get_value(iter_, 10)
-    extPersono = self.getPersono(extUrl)
-    self.uistate.window.get_clipboard(Gdk.SELECTION_CLIPBOARD).set_text(json.dumps(extPersono, indent=2, default = str), -1)
+    extUrl = model.get_value(_iter, 10)
+    extPersono = self._get_persono(extUrl)
+    self.uistate.window.get_clipboard(Gdk.SELECTION_CLIPBOARD).set_text(
+        json.dumps(extPersono, indent=2, default=str), -1)
 
-  def SerSelCxangxo(self, dummy):
-    model, iter_ = self.top.get_object("PersonGNResRes").get_selection().get_selected()
-    if iter_ :
-      lien = 'https://gw.geneanet.org/'+model.get_value(iter_, 0)
+  def ser_sel_cxango(self, _dummy):
+    """ traitement de sélection d'une ligne de résultat """
+    model, _iter = self.top.get_object("PersonGNResRes").get_selection().get_selected()
+    if _iter:
+      lien = 'https://gw.geneanet.org/' + model.get_value(_iter, 0)
       self.top.get_object("LinkoButonoSercxi").set_label(_('Vidu ĉe Geneanet'))
       self.top.get_object("LinkoButonoSercxi").set_uri(lien)
-    else :
+    else:
       self.top.get_object("LinkoButonoSercxi").set_label('xxxx')
       self.top.get_object("LinkoButonoSercxi").set_uri('https://www.geneanet.org/')
 
-  def getPersono(self, url) :
+  def _get_persono(self, url):
+    """ chargement d'une fiche geneanet """
     extPersono = PersonGN.GnPersonoj.get(url)
-    if extPersono is None :
+    if extPersono is None:
       tmp = urlparse(url)
       q = parse_qs(tmp.query)
-      x=dict()
-      x['tree']= tmp.path[1:]
-      if 'n' in q :
-        x['n']=q['n'][0]
-      if 'p' in q :
-        x['p']=q['p'][0]
-      if 'oc' in q :
-        x['oc']=int(q['oc'][0])
-      url=geneanet.id2url(x)
+      x = {}
+      x['tree'] = tmp.path[1:]
+      if 'n' in q:
+        x['n'] = q['n'][0]
+      if 'p' in q:
+        x['p'] = q['p'][0]
+      if 'oc' in q:
+        x['oc'] = int(q['oc'][0])
+      url = geneanet.id2url(x)
       extPersono = PersonGN.GnPersonoj.get(url)
-    if extPersono is None :
-      extPersono = self.gn.getPerson(x)
-      if extPersono is None : 
-        extPersono = self.gn.getPerson(x)
-      if extPersono is None : 
+    if extPersono is None:
+      extPersono = PersonGN.gn.get_person(x)
+      if extPersono is None:
+        extPersono = PersonGN.gn.get_person(x)
+      if extPersono is None:
         return None
       PersonGN.GnPersonoj[geneanet.id2url(extPersono)] = extPersono
-      if len(PersonGN.GnPersonoj) >100 : # ne pas garder plus de 100 personnes en mémoire
+      if len(PersonGN.GnPersonoj) > 100:  # ne pas garder plus de 100 personnes en mémoire
         PersonGN.GnPersonoj.pop(next(iter(PersonGN.GnPersonoj)))
     return extPersono
 
-  def ButImporti_clicked(self, dummy):
-    active_handle = self.get_active('Person')
-    if (active_handle or '') == '' :
+  def butimporti_clicked(self, _dummy):
+    """ import de geneanet vers gramps """
+    activeHandle = self.get_active('Person')
+    if (activeHandle or '') == '':
       WarningDialog(_('neniu aktiva persono !!!')
-         , _('Vi devas unue elekti personon!'))
+                    , _('Vi devas unue elekti personon!'))
       return
-    self.kopii_al_gramps(None)
+    self._kopii_al_gramps(None)
 
-  def ButRefresxigi_clicked(self, dummy):
-    self.modelKomp.clear()
-    active_handle = self.get_active('Person')
-    if (active_handle or '') == '' :
+  def butrefresxigi_clicked(self, _dummy):
+    """ rafraîchissement de la comparaison """
+    self.model_komp.clear()
+    activeHandle = self.get_active('Person')
+    if (activeHandle or '') == '':
       WarningDialog(_('neniu aktiva persono !!!')
-         , _('Vi devas unue elekti personon!'))
+                    , _('Vi devas unue elekti personon!'))
       return
-    url = self.cbUrl.get_active_text()
-    if url is None or url == '' :
+    url = self.cb_url.get_active_text()
+    if url is None or url == '':
       return
     url = 'https://gw.geneanet.org/' + url
-    print("url=%s"%url)
-    extPersono = self.getPersono(url)
-    grPersono = self.dbstate.db.get_person_from_handle(active_handle)
-    self.modelKomp.cid=None
-    self.modelKomp.model.set_sort_column_id(-2,0)
-    self.modelKomp.clear()
-    if active_handle:
+    print(f"url={url}")
+    extPersono = self._get_persono(url)
+    grPersono = self.dbstate.db.get_person_from_handle(activeHandle)
+    self.model_komp.cid = None
+    self.model_komp.model.set_sort_column_id(-2, 0)
+    self.model_komp.clear()
+    if activeHandle:
       self.set_has_data(True)
-      kompariGrExt(grPersono , extPersono , self.dbstate.db , self.modelKomp)
+      kompariGrExt(grPersono, extPersono, self.dbstate.db, self.model_komp)
     else:
       self.set_has_data(False)
 
@@ -681,35 +662,35 @@ class PersonGN(Gramplet):
   def db_changed(self):
     self.active_changed('')
 
-
-  def active_changed(self,handle) :
-    self.cbUrl.insert_text(0,'')
-    self.cbUrl.set_active(0)
-    self.cbUrl.remove_all()
-    self.modelKomp.clear()
-    # on ajoute dans cbUrl les sources geneanet déjà citées
-    active_handle = self.get_active('Person')
-    grPersono = self.dbstate.db.get_person_from_handle(active_handle)
+  def active_changed(self, handle):
+    self.cb_url.insert_text(0, '')
+    self.cb_url.set_active(0)
+    self.cb_url.remove_all()
+    self.model_komp.clear()
+    # on ajoute dans cb_url les sources geneanet déjà citées
+    activeHandle = self.get_active('Person')
+    grPersono = self.dbstate.db.get_person_from_handle(activeHandle)
     urls = set()
-    for ch in grPersono.get_all_citation_lists() :
+    for ch in grPersono.get_all_citation_lists():
       cit = self.dbstate.db.get_citation_from_handle(ch)
-      url = get_url(cit)
-      if url is not None :
+      url = getUrl(cit)
+      if url is not None:
         urls.add(url)
-    for evt_ref in grPersono.get_event_ref_list() or list() :
-      event = self.dbstate.db.get_event_from_handle(evt_ref.ref)
+    for evtRef in grPersono.get_event_ref_list() or []:
+      event = self.dbstate.db.get_event_from_handle(evtRef.ref)
       for ch in event.get_citation_list():
         cit = self.dbstate.db.get_citation_from_handle(ch)
-        url = get_url(cit)
-        if url is not None :
+        url = getUrl(cit)
+        if url is not None:
           urls.add(url)
-    if len(urls) >0 :
-      self.cbUrl.insert_text(0,'')
-    for url in urls :
-      self.cbUrl.insert_text(-1,url)
-    self.cbUrl.set_active(0)
+    if len(urls) > 0:
+      self.cb_url.insert_text(0, '')
+    for url in urls:
+      self.cb_url.insert_text(-1, url)
+    self.cb_url.set_active(0)
 
-  def pref_clicked(self, dummy):
+  def pref_clicked(self, _dummy):
+    """ lancement du dialogue des préférences """
     parent = self.uistate.window
     for win in Gtk.Window.list_toplevels():
       if win.is_active():
@@ -717,257 +698,244 @@ class PersonGN(Gramplet):
         break
     top = self.top.get_object("PersonGNPrefDialogo")
     top.set_transient_for(parent)
-    parent_modal = self.uistate.window.get_modal()
-    if parent_modal:
+    parentModal = self.uistate.window.get_modal()
+    if parentModal:
       self.uistate.window.set_modal(False)
-    gn_osm = self.top.get_object("gn_osm")
-    gn_osm.set_active(PersonGN.gn_osm)
-    gn_notoj = self.top.get_object("gn_notoj")
-    gn_notoj.set_active(PersonGN.gn_notoj)
+    gnNotoj = self.top.get_object("gn_notoj")
+    gnNotoj.set_active(PersonGN.gn_notoj)
     top.show()
     res = top.run()
     top.hide()
-    if res == -3: 
-      PersonGN.gn_osm = gn_osm.get_active()
-      CONFIG.set("preferences.gn_osm", str(PersonGN.gn_osm))
-      PersonGN.gn_notoj = gn_notoj.get_active()
+    if res == -3:
+      PersonGN.gn_notoj = gnNotoj.get_active()
       CONFIG.set("preferences.gn_notoj", str(PersonGN.gn_notoj))
       CONFIG.save()
 
-  def CB_Url_changed(self, dummy):
-    self.ButRefresxigi_clicked(dummy)
+  def cb_url_changed(self, dummy):
+    """ nouvelle url choisie """
+    self.butrefresxigi_clicked(dummy)
 
-  def FariSercxi(self, pagxo=1):
-    self.lastaPagxo=pagxo
-    self.TreeRes.hide()
-    #if pagxo == 1 :
-    self.KreiSercxiModel()
-    self.TreeRes.set_fixed_height_mode(False)
-    parent = self.uistate.window
-    for win in Gtk.Window.list_toplevels():
-      if win.is_active():
-        parent = win
-        break
-    progress = ProgressMeter(_("Geneanet Serĉo"), _trans.gettext('Serĉante'),can_cancel=True,parent=parent)
-    self.uistate.set_busy_cursor(True)
-    progress.set_pass(_('Serĉante… ') , 12, mode= ProgressMeter.MODE_FRACTION)
-    logged = self.gn.logged()
-    progress.step()
-    mendo = "https://www.geneanet.org/fonds/individus/?go=1&categories_1__arbres__=arbres&categories_2__arbres%23utilisateur__=arbres%23utilisateur"
+  def _konstrui_mendo(self,pagxo):
+    mendo = "https://www.geneanet.org/fonds/individus/?go=1&categories_1__arbres__=arbres"\
+            "&categories_2__arbres%23utilisateur__=arbres%23utilisateur"
     grNomo = self.top.get_object("gn_nomo_eniro").get_text()
-    if grNomo :
-      mendo = mendo + "&nom=%s" % quote_plus(grNomo)
+    if grNomo:
+      mendo = mendo + "&nom=" + quote_plus(grNomo)
     grANomo = self.top.get_object("gn_anomo_eniro").get_text()
-    if grANomo :
-      mendo = mendo + "&prenom=%s" % quote_plus(grANomo)
+    if grANomo:
+      mendo = mendo + "&prenom=" + quote_plus(grANomo)
     sekso = self.top.get_object("gn_sekso_eniro").get_text()
-    if sekso :
+    if sekso:
       if sekso[0] == 'M':
         mendo += "&sexe=1"
       elif sekso[0] == 'F':
         mendo += "&sexe=2"
     dato1 = self.top.get_object("gn_dato1").get_text()
     dato2 = self.top.get_object("gn_dato2").get_text()
-    if dato1 and dato2 :
-      mendo = mendo + "&type_periode=between&from="+quote_plus(dato1)+"&to="+quote_plus(dato2)
-    elif dato1 :
-      mendo = mendo + "&type_periode=after&from="+dato1
-    elif dato2 :
-      mendo = mendo + "&type_periode=before&from=&to"+dato2
+    if dato1 and dato2:
+      mendo = mendo + "&type_periode=between&from=" + quote_plus(dato1) + "&to=" + quote_plus(dato2)
+    elif dato1:
+      mendo = mendo + "&type_periode=after&from=" + dato1
+    elif dato2:
+      mendo = mendo + "&type_periode=before&from=&to" + dato2
     loko = self.top.get_object("gn_loko_eniro").get_text()
-    if loko :
-      mendo += "&place__0__="+quote_plus(loko)
-    #print ("Genanet Serĉo : %s." % mendo )
-    if pagxo >1 :
-      mendo += "&page=%s" % pagxo
-    r = self.gn.urlopen(mendo)
+    if loko:
+      mendo += "&place__0__=" + quote_plus(loko)
+    if pagxo > 1:
+      mendo += f"&page={pagxo}"
+    return mendo
+
+  def _analizi_url(self,url):
+    """ analyse une ligne de résultat et l'affiche """
+    p = self._get_persono(url)
+    if p is None:
+      return
+    sosa = ''
+    parents = ''
+    naissance = ''
+    deces = ''
+    conjoints = ''
+    if 'person' in p:
+      nom = (p['person'].get('lastname') or '?') + ' ' + (p['person'].get('firstname') or '?')
+      if 'sosa' in p['person'] and p['person']['sosa'] == 'SOSA':
+        sosa = p['person'].get('sosaNb') or 'X'
+      if 'father' in p['person']:
+        parents = ((p['person']['father'].get('lastname') or '?') + ' ' +
+                   (p['person']['father'].get('firstname') or '?'))
+      if 'mother' in p['person']:
+        parents += ('\n' + (p['person']['mother'].get('lastname') or '?') + ' ' +
+                    (p['person']['mother'].get('firstname') or '?'))
+      if 'birthDate' in p['person']:
+        naissance = p['person']['birthDate']
+      if 'birthPlace' in p['person']:
+        naissance += '\n' + p['person']['birthPlace']
+      if 'deathDate' in p['person']:
+        deces = p['person']['deathDate']
+      if 'deathPlace' in p['person']:
+        deces += '\n' + p['person']['deathPlace']
+      if 'families' in p['person']:
+        for f in p['person']['families']:
+          if 'children' in f:
+            nbInfanoj = len(f['children'])
+          else:
+            nbInfanoj = 0
+          if 'spouse' in f:
+            if conjoints != '':
+              conjoints += "\n"
+              sosa += "\n"
+            sp = f['spouse']
+            conjoints += (
+                str(nbInfanoj) + ', ' + (sp.get('lastname') or '?') + ' ' +
+                (sp.get('firstname') or '?'))
+    else:
+      nom = (p.get('n') or '?') + ' ' + (p.get('p') or '?')
+    self.model_res.add((url.removeprefix('https://gw.geneanet.org/'), sosa, nom, naissance,
+                       deces, parents, conjoints))
+
+  def _analizi_tabelo(self,tableau,progress):
+    linio = 1
+    prevUrl = None
+    for r in tableau:
+      if progress.get_cancelled():
+        break
+      progress.set_header(_('Elŝutante personojn… (%s/10)') % linio)
+      linio += 1
+      url = r.xpath('attribute::href')[0]
+      if url == prevUrl:
+        continue
+      prevUrl = url
+      self._analizi_url(url)
+      progress.step()
+
+  def _fari_sercxi(self, pagxo=1):
+    """ exécution de la recherche """
+    self.lasta_pagxo = pagxo
+    treeRes = self.top.get_object("PersonGNResRes")
+    treeRes.hide()
+    self.krei_sercxi_model()
+    treeRes.set_fixed_height_mode(False)
+    parent = self.uistate.window
+    for win in Gtk.Window.list_toplevels():
+      if win.is_active():
+        parent = win
+        break
+    progress = ProgressMeter(_("Geneanet Serĉo"), _('Serĉante')
+               , can_cancel=True, parent=parent)
+    self.uistate.set_busy_cursor(True)
+    progress.set_pass(_('Serĉante… '), 12, mode=ProgressMeter.MODE_FRACTION)
     progress.step()
-    if r == None :
+    r = PersonGN.gn.urlopen(self._konstrui_mendo(pagxo))
+    progress.step()
+    if r is None:
       print(_('Eraro: neniuj datumoj.'))
-    else :
-      #print("réception ok")
+    else:
       try:
         tree = html.fromstring(r.decode('utf-8'))
-      except:
-        print(_("Unable to perform HTML analysis"))
+      except (TypeError,ValueError,html.etree.ParseError, html.etree.ParserError) as e:
+        print(_(f"Unable to perform HTML analysis. {e}"))
       tableau = tree.xpath('//div[@id="table-resultats"]//a')
-      linio = 1
-      PrevUrl = None
-      for r in tableau :
-        if progress.get_cancelled():
-          break;
-        progress.set_header(_('Elŝutante personojn… (%s/10)') % linio )
-        linio += 1
-        url = r.xpath('attribute::href')[0]
-        if url == PrevUrl :
-          continue
-        PrevUrl = url
-        #print(" url=",url)
-        p = self.getPersono(url)
-        if p is None :
-          continue
-        sosa=''
-        parents = ''
-        naissance=''
-        deces=''
-        conjoints=''
-        if 'person' in p :
-          nom = ( p['person'].get('lastname') or '?') + ' ' + ( p['person'].get('firstname') or '?')
-          if 'sosa' in p['person'] and p['person']['sosa']=='SOSA' :
-            sosa = p['person'].get('sosaNb') or 'X'
-          if 'father' in p['person'] :
-            parents = ( p['person']['father'].get('lastname') or '?' ) + ' ' + ( p['person']['father'].get('firstname') or '?')
-          if 'mother' in p['person'] :
-            parents += '\n' + ( p['person']['mother'].get('lastname') or '?' ) + ' ' + ( p['person']['mother'].get('firstname') or '?')
-          if 'birthDate' in p['person'] :
-            naissance = p['person']['birthDate']
-          if 'birthPlace' in p['person'] :
-            naissance += '\n'+ p['person']['birthPlace']
-          if 'deathDate' in p['person'] :
-            deces = p['person']['deathDate']
-          if 'deathPlace' in p['person'] :
-            deces += '\n'+ p['person']['deathPlace']
-          if 'families' in p['person'] :
-            for f in p['person']['families'] :
-              if 'children' in f :
-                nbInfanoj = len(f['children'])
-              else :
-                nbInfanoj = 0
-              if 'spouse' in f :
-                if conjoints != '' :
-                  conjoints +="\n"
-                  sosa +="\n"
-                sp = f['spouse']
-                conjoints += str(nbInfanoj) + ', ' + ( sp.get('lastname') or '?' ) + ' ' + ( sp.get('firstname') or '?' )
-        else :
-          nom = ( p.get('n') or '?' ) +' ' + ( p.get('p') or '?' )
-        self.modelRes.add( (url.removeprefix('https://gw.geneanet.org/'),sosa,nom,naissance,deces,parents,conjoints));
-        progress.step()
+      self._analizi_tabelo(tableau,progress)
     self.uistate.set_busy_cursor(False)
     progress.close()
-    #self.TreeRes.set_fixed_height_mode(False)
-    self.TreeRes.show()
-    #self.TreeRes.queue_draw()
+    treeRes.show()
 
-  def ButLancxi_clicked(self, dummy):
-    self.FariSercxi()
-    
-  def ButPli_clicked(self, dummy):
-    self.FariSercxi(self.lastaPagxo+1)
+  def butlancxi_clicked(self, _dummy):
+    """ affichage de la page de résultats suivante """
+    self._fari_sercxi()
 
-  def ButAldoni_clicked(self, dummy):
-    model, iter_ = self.top.get_object("PersonGNResRes").get_selection().get_selected()
-    if iter_ :
-      lien = model.get_value(iter_, 0)
-      active_handle = self.get_active('Person')
-      grPersono = self.dbstate.db.get_person_from_handle(active_handle)
-      self.Sercxi.hide()
+  def butpli_clicked(self, _dummy):
+    """ page suivante """
+    self._fari_sercxi(self.lasta_pagxo + 1)
+
+  def butaldoni_clicked(self, _dummy):
+    """ on lance la comparaison """
+    model, _iter = self.top.get_object("PersonGNResRes").get_selection().get_selected()
+    if _iter:
+      lien = model.get_value(_iter, 0)
+      self.sercxi.hide()
       # on crée notre liste, et on y ajoute les liens de la combobox
-      s = {'',lien}
-      for c in self.cbUrl.get_model() :
+      s = {'', lien}
+      for c in self.cb_url.get_model():
         s.add(c[0])
       l = sorted(s)
-      self.cbUrl.remove_all()
-      for x in l :
-        self.cbUrl.insert_text(-1,x)
+      self.cb_url.remove_all()
+      for x in l:
+        self.cb_url.insert_text(-1, x)
       index = l.index(lien)
-      self.cbUrl.set_active(index)
+      self.cb_url.set_active(index)  # rendre la ligne active va lancer la comparaison
 
-  def KreiSercxiModel(self) :
-    titles = [  
-                (_trans.gettext('URL'), 1, 80),
-                (_trans.gettext('Sosa'), 2, 40),
-                (_('Nomo, antaŭnomo'), 3, 200),
-                (_trans.gettext('Naskiĝo'), 4, 250),
-                (_trans.gettext('Morto'), 5, 250),
-                (_trans.gettext('Gepatroj'), 6, 250),
-                (_trans.gettext('Nb Inf., Geedzoj'), 7, 250),
-             ]
-    self.TreeRes.set_model(None)
-    if self.modelRes :
-      self.modelRes.clear()
-      del self.modelRes
-    for col in self.TreeRes.get_columns() :
-      self.TreeRes.remove_column(col)
-    self.modelRes = ListModel(self.TreeRes, titles,self.SerSelCxangxo)
+  def krei_sercxi_model(self):
+    """ création du modèle de données pour l'affichage des résultats """
+    titles = [
+        (_('URL'), 1, 80),
+        (_('Sosa'), 2, 40),
+        (_('Nomo, antaŭnomo'), 3, 200),
+        (_('Naskiĝo'), 4, 250),
+        (_('Morto'), 5, 250),
+        (_('Gepatroj'), 6, 250),
+        (_('Nb Inf., Geedzoj'), 7, 250),
+    ]
+    treeRes = self.top.get_object("PersonGNResRes")
+    treeRes.set_model(None)
+    if self.model_res:
+      self.model_res.clear()
+      del self.model_res
+    for col in treeRes.get_columns():
+      treeRes.remove_column(col)
+    self.model_res = ListModel(treeRes, titles, self.ser_sel_cxango)
 
-  def ButSercxi_clicked(self, dummy):
-    active_handle = self.get_active('Person')
-    if (active_handle or '') == '' :
+  def _sercxi_ini_tekstoj(self,person):
+    """ initialise les champs de la recherche """
+    self.top.get_object("gn_nomo_eniro").set_text(person.primary_name.get_surname())
+    self.top.get_object("gn_anomo_eniro").set_text(person.primary_name.first_name)
+    if person.get_gender() == Person.MALE:
+      self.top.get_object("gn_sekso_eniro").set_text('M')
+    elif person.get_gender() == Person.FEMALE:
+      self.top.get_object("gn_sekso_eniro").set_text('F')
+    grBirth = getBirth(self.dbstate.db, person)
+    if grBirth and grBirth.date and not grBirth.date.is_empty():
+      self.top.get_object("gn_dato1").set_text("{grBirth.date.get_year()}")
+    else:
+      self.top.get_object("gn_dato1").set_text('')
+    grDeath = getGrevent(self.dbstate.db, person, EventType(EventType.DEATH))
+    if grDeath is None or grDeath.date is None or grDeath.date.is_empty():
+      grDeath = getGrevent(self.dbstate.db, person, EventType(EventType.BURIAL))
+    if grDeath is None or grDeath.date is None or grDeath.date.is_empty():
+      grDeath = getGrevent(self.dbstate.db, person, EventType(EventType.CREMATION))
+    if grDeath and grDeath.date and not grDeath.date.is_empty():
+      self.top.get_object("gn_dato2").set_text("{grDeath.date.get_year()}")
+    else:
+      self.top.get_object("gn_dato2").set_text('')
+
+    if grBirth and grBirth.place and grBirth.place != '':
+      place = self.dbstate.db.get_place_from_handle(grBirth.place)
+      self.top.get_object("gn_loko_eniro").set_text(place.name.value)
+    else:
+      self.top.get_object("gn_loko_eniro").set_text('')
+
+  def butsercxi_clicked(self, _dummy):
+    """ lancement d'une recherche """
+    activeHandle = self.get_active('Person')
+    if (activeHandle or '') == '':
       WarningDialog(_('neniu aktiva persono !!!')
-         , _('Vi devas unue elekti personon!'))
+                    , _('Vi devas unue elekti personon!'))
       return
     parent = self.uistate.window
     for win in Gtk.Window.list_toplevels():
       if win.is_active():
         parent = win
         break
-    if not self.Sercxi :
-      self.Sercxi = self.top.get_object("PersonGNRes")
-      self.Sercxi.set_title(_("Geneanet serĉo"))
-      self.TreeRes = self.top.get_object("PersonGNResRes")
-    parent_modal = parent.get_modal()
-    if parent_modal:
+    if not self.sercxi:
+      self.sercxi = self.top.get_object("PersonGNRes")
+      self.sercxi.set_title(_("Geneanet serĉo"))
+    parentModal = parent.get_modal()
+    if parentModal:
       parent.set_modal(False)
-    self.Sercxi.set_transient_for(parent)
-    person = self.dbstate.db.get_person_from_handle(active_handle)
-    grNomo = person.primary_name
-    self.top.get_object("gn_nomo_eniro").set_text(person.primary_name.get_surname())
-    self.top.get_object("gn_anomo_eniro").set_text(person.primary_name.first_name)
-    if person.get_gender() == Person.MALE :
-      self.top.get_object("gn_sekso_eniro").set_text('M')
-    elif person.get_gender() == Person.FEMALE :
-      self.top.get_object("gn_sekso_eniro").set_text('F')
-    grBirth = get_grevent(self.dbstate.db, person, EventType(EventType.BIRTH))
-    if grBirth == None or grBirth.date == None or grBirth.date.is_empty() :
-      grBirth = get_grevent(self.dbstate.db, person, EventType(EventType.CHRISTEN))
-    if grBirth == None or grBirth.date == None or grBirth.date.is_empty() :
-      grBirth = get_grevent(self.dbstate.db, person, EventType(EventType.ADULT_CHRISTEN))
-    if grBirth == None or grBirth.date == None or grBirth.date.is_empty() :
-      grBirth = get_grevent(self.dbstate.db, person, EventType(EventType.BAPTISM))
-    if grBirth and grBirth.date and not grBirth.date.is_empty() :
-      naskoDato = str(grBirth.date)
-      if len(naskoDato) >0 and naskoDato[0] == 'A' : naskoDato = naskoDato[1:]
-      elif len(naskoDato) >0 and naskoDato[0] == '/' : naskoDato = naskoDato[1:]
-      posSep = naskoDato.find('/')
-      if posSep > 1 : naskoDato = naskoDato[:posSep]
-      posSep = naskoDato.find('-')
-      if posSep > 1 : naskoDato = naskoDato[:posSep]
-      posSep = naskoDato.find(' ')
-      if posSep > 1 : naskoDato = naskoDato[posSep+1:]
-      self.top.get_object("gn_dato1").set_text( naskoDato)
-      #self.top.get_object("gn_dato1").set_text( str(grBirth.date.year()))
-    else:
-      self.top.get_object("gn_dato1").set_text( '')
-
-    grDeath = get_grevent(self.dbstate.db, person, EventType(EventType.DEATH))
-    if grDeath == None or grDeath.date == None or grDeath.date.is_empty() :
-      grDeath = get_grevent(self.dbstate.db, person, EventType(EventType.BURIAL))
-    if grDeath == None or grDeath.date == None or grDeath.date.is_empty() :
-      grDeath = get_grevent(self.dbstate.db, person, EventType(EventType.CREMATION))
-    if grDeath and grDeath.date and not grDeath.date.is_empty() :
-      mortoDato = str(grDeath.date)
-      if len(mortoDato) >0 and mortoDato[0] == 'A' : mortoDato = mortoDato[1:]
-      if len(mortoDato) >0 and mortoDato[0] == '/' : mortoDato = mortoDato[1:]
-      posSep = mortoDato.find('/')
-      if posSep > 1 : mortoDato = mortoDato[:posSep]
-      posSep = mortoDato.find('-')
-      if posSep > 1 : mortoDato = mortoDato[:posSep]
-      self.top.get_object("gn_dato2").set_text( mortoDato)
-    else:
-      self.top.get_object("gn_dato2").set_text( '')
-
-    if grBirth and grBirth.place and grBirth.place != None :
-      place = self.dbstate.db.get_place_from_handle(grBirth.place)
-      self.top.get_object("gn_loko_eniro").set_text( place.name.value)
-    else :
-      self.top.get_object("gn_loko_eniro").set_text( '')
-
-    self.ButLancxi_clicked(None)
-    self.Sercxi.show()
-    res = self.Sercxi.run()
-    #print ("res = " + str(res))
-    self.Sercxi.hide()
-    #"""
+    self.sercxi.set_transient_for(parent)
+    person = self.dbstate.db.get_person_from_handle(activeHandle)
+    self._sercxi_ini_tekstoj(person)
+    self.butlancxi_clicked(None)
+    self.sercxi.show()
+    self.sercxi.run()
+    self.sercxi.hide()
     return
-

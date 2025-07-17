@@ -1,0 +1,13 @@
+[BASIC]
+const-naming-style=PascalCase
+function-naming-style=camelCase
+module-naming-style=any
+variable-naming-style=camelCase
+
+extension-pkg-allow-list=lxml
+
+[FORMAT]
+indent-string='  '
+
+[DESIGN]
+max-statements=75

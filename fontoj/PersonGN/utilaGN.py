@@ -17,149 +17,106 @@
 # GNU Ĝenerala Publika Permesilo por pliaj detaloj.
 #
 # Vi devus esti ricevinta kopion de la Ĝenerala Publika Permesilo de GNU
-# kune kun ĉi tiu programo; se ne, skribu al 
+# kune kun ĉi tiu programo; se ne, skribu al
 # Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
+"""  module avec diverses fonctions utiles
+"""
 
-from gramps.gen.db import DbTxn
-from gramps.gen.lib import Attribute, EventRoleType, Date, SrcAttribute
+from gramps.gen.lib import EventRoleType, EventType, Date
 from gramps.gen.lib.date import gregorian
-from gramps.gui.dialog import WarningDialog, QuestionDialog2
-
-from gramps.gen.const import GRAMPS_LOCALE as glocale
-
-try:
-    _trans = glocale.get_addon_translator(__file__)
-except ValueError:
-    _trans = glocale.translation
-_ = _trans.gettext
 from gramps.gen.datehandler import LANG_TO_PARSER
+
+from gn_constants import _
+
 parserEn = LANG_TO_PARSER['en']()
 
-
-def get_fsftid(grObj) :
-  if not grObj :
-    return ''
-  for attr in grObj.get_attribute_list():
-    if attr.get_type() == '_FSFTID':
-      return attr.get_value()
-  return ''
-
-def get_url(grObj) :
-  if not grObj :
+def getUrl(gr_obj) :
+  """
+  " renvoie l'url geneanet de l'objet, sans le préfixe 'https://gw.geneanet.org/'
+  """
+  if not gr_obj :
     return None
-  for attr in grObj.get_attribute_list() :
+  for attr in gr_obj.get_attribute_list() :
     if attr.get_type() == _('Internet Address') :
       url = attr.get_value()
       if url[0:24] == 'https://gw.geneanet.org/' :
         return url[24:]
   return None
 
-def get_grevent(db, person, event_type):
+def getBirth(db, person):
+  """ renvoie la date de naissance, ou à défaut de baptême """
+  grBirth = getGrevent(db, person, EventType(EventType.BIRTH))
+  if grBirth is None or grBirth.date is None or grBirth.date.is_empty():
+    grBirth = getGrevent(db, person, EventType(EventType.CHRISTEN))
+  if grBirth is None or grBirth.date is None or grBirth.date.is_empty():
+    grBirth = getGrevent(db, person, EventType(EventType.ADULT_CHRISTEN))
+  if grBirth is None or grBirth.date is None or grBirth.date.is_empty():
+    grBirth = getGrevent(db, person, EventType(EventType.BAPTISM))
+  return grBirth
+
+def getGrevent(db, person, event_type):
   """
   " Liveras la unuan gramps eventon de la donita tipo.
   """
   if not person:
     return None
-  for event_ref in person.get_event_ref_list():
-    if int(event_ref.get_role()) == EventRoleType.PRIMARY:
-      event = db.get_event_from_handle(event_ref.ref)
+  for eventRef in person.get_event_ref_list():
+    if int(eventRef.get_role()) == EventRoleType.PRIMARY:
+      event = db.get_event_from_handle(eventRef.ref)
       if event.get_type() == event_type:
         return event
   return None
 
-def grdato_al_formal( dato) :
+def formatiDato(jaro,monato,tago):
+  """ formate la date à YYYY-MM-DD, en ignorant le jour et/ou le mois si pas renseignés """
+  if jaro < 0 :
+    res = '-'
+  else :
+    res = '+'
+  if jaro > 0 :
+    res = res + f"{jaro:04d}"
+    if monato > 0 :
+      res = res + f"-{monato:02d}"
+      if tago > 0 :
+        res = res + f"-{tago:02d}"
+  return res
+
+
+
+def grdatoAlFormal( dato) :
   """
   " konvertas gramps-daton al «formal» dato
-  "   «formal» dato : <https://github.com/FamilySearch/gedcomx/blob/master/specifications/date-format-specification.md>
+  "   «formal» dato :
+  "<https://github.com/FamilySearch/gedcomx/blob/master/specifications/date-format-specification.md>
   """
   if dato is None :
-    return None;
+    return None
   res=''
   gdato = gregorian(dato)
   if gdato.modifier == Date.MOD_ABOUT :
     res = 'A'
-  elif gdato.modifier == Date.MOD_BEFORE:
+  if gdato.modifier == Date.MOD_BEFORE:
     res = '/'
-  if gdato.dateval[Date._POS_YR] < 0 :
-    res = res + '-'
-  else :
-    res = res + '+'
-  if gdato.dateval[Date._POS_DAY] > 0 :
-    val = "%04d-%02d-%02d" % (
-                gdato.dateval[Date._POS_YR], gdato.dateval[Date._POS_MON],
-                gdato.dateval[Date._POS_DAY])
-  elif gdato.dateval[Date._POS_MON] > 0 :
-    val = "%04d-%02d" % (
-                gdato.dateval[Date._POS_YR], gdato.dateval[Date._POS_MON])
-  elif gdato.dateval[Date._POS_YR] > 0 :
-    val = "%04d" % ( gdato.dateval[Date._POS_YR] )
-  else :
+  if gdato.get_year() != 0:
+    res = res + formatiDato(gdato.get_year(),gdato.get_month(),gdato.get_day())
+  else:
     res = gdato.text
-    val=''
-  res = res+val
   if gdato.modifier == Date.MOD_AFTER:
     res = res + '/'
   if gdato.modifier == Date.MOD_RANGE:
     res = res + '/'
-    if gdato.dateval[Date._POS_RYR] < 0 :
+    if gdato.get_stop_year() < 0 :
       res = res + '-'
     else :
       res = res + '+'
-    if gdato.dateval[Date._POS_RDAY] > 0 :
-      val = "%04d-%02d-%02d" % (
-                gdato.dateval[Date._POS_RYR], gdato.dateval[Date._POS_RMON],
-                gdato.dateval[Date._POS_RDAY])
-    elif gdato.dateval[Date._POS_RMON] > 0 :
-      val = "%04d-%02d" % (
-                gdato.dateval[Date._POS_RYR], gdato.dateval[Date._POS_RMON])
-    elif gdato.dateval[Date._POS_RYR] > 0 :
-      val = "%04d" % ( gdato.dateval[Date._POS_RYR] )
-    else:
-      val = ''
-    res = res+val
+    res = res + formatiDato(gdato.get_stop_year(),gdato.get_stop_month(),gdato.get_stop_day())
   # FARINDAĴOJ : range ?  estimate ? calculate ? heure ?
-  
   return res
 
-def extdato_al_formal(dato) :
+def extdatoAlFormal(dato) :
+  """ convertit une date externe (geneanet) en date formal(familySearch) """
   if dato is None:
     return ''
   grDato = parserEn.parse(dato)
-  return grdato_al_formal( grDato)
-"""
-  splt = dato.split(' ')
-  if len(splt) == 3 :
-    res = '+'+splt[2]
-    match splt[1]:
-     case 'Jan.':
-      res += '-01'
-     case 'Feb.':
-      res += '-02'
-     case 'Mar.':
-      res += '-03'
-     case 'Apr.':
-      res += '-04'
-     case 'May.':
-      res += '-05'
-     case 'Jun.':
-      res += '-06'
-     case 'Jul.':
-      res += '-07'
-     case 'Aug.':
-      res += '-08'
-     case 'Sep.':
-      res += '-09'
-     case 'Oct.':
-      res += '-10'
-     case 'Nov.':
-      res += '-11'
-     case 'Dec.':
-      res += '-12'
-     case _:
-      res += '-'+splt[2]
-    res += '-'+splt[0]
-    return res
-  else:
-    return dato
-"""
+  return grdatoAlFormal( grDato)
