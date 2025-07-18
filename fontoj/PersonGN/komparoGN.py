@@ -26,7 +26,7 @@
 
 from gramps.gen.display.name import displayer as name_displayer
 from gramps.gen.display.place import displayer as _pd
-from gramps.gen.lib import Date, Event, EventRoleType, EventType, Person
+from gramps.gen.lib import Date, EventRoleType, EventType, Person
 from gramps.gen.const import GRAMPS_LOCALE as glocale
 from gramps.gen.datehandler import LANG_TO_PARSER
 

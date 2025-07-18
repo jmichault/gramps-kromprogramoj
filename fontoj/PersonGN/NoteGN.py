@@ -76,7 +76,7 @@ token_specification = [
 TokRegex = '|'.join(f'(?P<{pair[0]}>{pair[1]})' for pair in token_specification)
 
 def _convertPart1(data):
-  prev = 0
+  prev = chunkpos = 0
   chunks = []
   styText = StyledText(data)
   for mo in re.finditer(html_charref, styText.get_string()):

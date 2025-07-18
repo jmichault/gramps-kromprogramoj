@@ -315,13 +315,13 @@ class Api:
         person_id['n'] = personGraph['nodesAsc'][0]['person']['n']
         person_id['oc'] = personGraph['nodesAsc'][0]['person']['occ']
       else:
-        return {'error': 'could not find that person'}
+        return {'error': 'could not find that person'},None
       media = self.list_media(person_id)
     elif 'i' in person_id:
       person_id['i'] = int(person_id['i'])
       media, person_id = self.list_media(person_id, return_person_id=True)
     else:
-      return {'error': 'missing person identifier'}
+      return {'error': 'missing person identifier'},None
     return ( media, person_id)
 
   def get_person(self, person_id):
@@ -330,6 +330,8 @@ class Api:
     if not tree:
       return {'error': 'missing tree'}
     (media,person_id) = self._get_graph(tree,person_id)
+    if not person_id:
+      return media
 
     person = self._arbre_api('person', {'tree': tree, 'index': person_id['i']})
     personReturn = {

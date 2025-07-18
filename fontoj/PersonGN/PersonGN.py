@@ -630,7 +630,6 @@ class PersonGN(Gramplet):
     if url is None or url == '':
       return
     url = 'https://gw.geneanet.org/' + url
-    print(f"url={url}")
     extPersono = self._get_persono(url)
     grPersono = self.dbstate.db.get_person_from_handle(activeHandle)
     self.model_komp.cid = None
@@ -740,10 +739,13 @@ class PersonGN(Gramplet):
   def _analizi_url(self,url):
     """ analyse une ligne de résultat et l'affiche """
     p = self._get_persono(url)
-    if p is None:
+    if not p:
       return
     parents = ''
     conjoints = ''
+    sosa = ''
+    naissance = ''
+    deces = ''
     if 'person' in p:
       nom = (p['person'].get('lastname') or '?') + ' ' + (p['person'].get('firstname') or '?')
       sosa = p['person'].get('sosaNb') or ''
@@ -892,7 +894,11 @@ class PersonGN(Gramplet):
 
     if grBirth and grBirth.place and grBirth.place != '':
       place = self.dbstate.db.get_place_from_handle(grBirth.place)
-      self.top.get_object("gn_loko_eniro").set_text(place.name.value)
+      posv = place.name.value.find(',')
+      if posv > 3 :
+        self.top.get_object("gn_loko_eniro").set_text(place.name.value[:posv])
+      else:
+        self.top.get_object("gn_loko_eniro").set_text(place.name.value)
     else:
       self.top.get_object("gn_loko_eniro").set_text('')
 
