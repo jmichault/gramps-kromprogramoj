@@ -26,9 +26,7 @@ GeneaNet Gramplet : fonctions d'import
 
 #-------------------------------------------------------------------------
 
-from html import unescape
 import pickle
-from urllib.parse import unquote
 
 from gramps.gen.lib import Citation, Event, EventRef, EventRoleType, EventType, Name, NameType
 from gramps.gen.lib import Note, NoteType, Person, Place, PlaceName, PlaceRef, RepoRef
@@ -220,68 +218,26 @@ def aldFakto(nov_lokoj, db, txn, ext_persono, ext_fakto):
   db.commit_event(event, txn)
   return event
 
-
-def aldFaktoj(nov_lokoj, db, txn, ext_persono, gr_persono, progress, gn_notoj):
-  """ ajoute les évènements de ext_persono à gr_persono """
-  faktoj = ext_persono['person'].get('events')
-  if faktoj is None or len(faktoj) == 0 or faktoj.get('elements') is None:
-    return
-  for f in faktoj.get('elements'):
-    if f.get('type') == "EFAM_MARRIAGE":
-      continue
-    progress.step()
-    event = Event()
-    evtType = GN_GRAMPS_FAKTOJ.get(unquote(f.get('type')))
-    if not evtType:
-      evtType = unquote(f.get('name'))
-    #print("ajout évènement %s" % evtType)
-    event.set_type(evtType)
-    dato = f.get('dateLong')
-    if dato:
-      grDato = parserEn.parse(dato)
-      if grDato:
-        event.set_date_object(grDato)
-    db.add_event(event, txn)
-    db.commit_event(event, txn)
-    loko = unescape(f.get('place') or '')
-    if loko:
-      grLoko = akiriLoko(nov_lokoj, db, txn, loko)
-      event.set_place_handle(grLoko.handle)
-      db.commit_event(event, txn)
-    progress.step()
-    noto = f.get('note')
-    if noto:
-      #print("   note evt :%s" % noto)
-      grNoto = Note()
-      grNoto.set_type(NoteType(_('note geneanet %s') % ext_persono['person'].get('baseprefix')))
-      st = htmlAlStyled(noto)
-      grNoto.set_styledtext(st)
-      if f.get('type') == "EPERS_OCCUPATION":
-        # on prend la première ligne de la note comme description
-        teksto = grNoto.get()  # texte sans formatage
-        event.set_description(teksto.splitlines(keepends=False)[0])
-      if gn_notoj:
-        db.add_note(grNoto, txn)
-        db.commit_note(grNoto, txn)
-        event.add_note(grNoto.handle)
-    db.commit_event(event, txn)
-    progress.step()
-    teksto = _('okazaĵo importita el la geneanet-dosiero je la %s') % str(Today())
-    citation = aldCitajxo(db, txn, ext_persono, f, teksto)
-    event.add_citation(citation.get_handle())
-    progress.step()
-    er = EventRef()
-    er.set_role(EventRoleType.PRIMARY)
-    er.set_reference_handle(event.get_handle())
-    db.commit_event(event, txn)
-    gr_persono.add_event_ref(er)
-    if event.type == EventType.BIRTH:
-      gr_persono.set_birth_ref(er)
-    elif event.type == EventType.DEATH:
-      gr_persono.set_death_ref(er)
-    db.commit_person(gr_persono, txn)
-    progress.step()
-
+def _akiDeponejo(db, txn):
+  """ récupération ou création du dépôt geneanet : """
+  db.dbapi.execute("select handle from repository where name=?", ['geneanet'])
+  datumoj = db.dbapi.fetchone()
+  if datumoj and datumoj[0]:
+    rh = datumoj[0]
+  else:
+    r = Repository()
+    r.set_name('geneanet')
+    rtype = RepositoryType()
+    rtype.set((RepositoryType.WEBSITE))
+    r.set_type(rtype)
+    url = Url()
+    url.path = 'https://www.geneanet.org/'
+    url.set_type(UrlType.WEB_HOME)
+    r.add_url(url)
+    db.add_repository(r, txn)
+    db.commit_repository(r, txn)
+    rh = r.handle
+  return rh
 
 def aldCitajxo(db, txn, ext_persono, ext_objekto, teksto):
   """ crée une citation """
@@ -299,23 +255,6 @@ def aldCitajxo(db, txn, ext_persono, ext_objekto, teksto):
       #datumoj = db.dbapi.fetchone()
     if not s:
       # récupération ou création du dépôt geneanet :
-      db.dbapi.execute("select handle from repository where name=?", ['geneanet'])
-      datumoj = db.dbapi.fetchone()
-      if datumoj and datumoj[0]:
-        rh = datumoj[0]
-      else:
-        r = Repository()
-        r.set_name('geneanet')
-        rtype = RepositoryType()
-        rtype.set((RepositoryType.WEBSITE))
-        r.set_type(rtype)
-        url = Url()
-        url.path = 'https://www.geneanet.org/'
-        url.set_type(UrlType.WEB_HOME)
-        r.add_url(url)
-        db.add_repository(r, txn)
-        db.commit_repository(r, txn)
-        rh = r.handle
       s = Source()
       s.gramps_id = f'geneanet_{basePrefix}'
       s.set_title(_(f'arbre geneanet {basePrefix}'))
@@ -323,11 +262,10 @@ def aldCitajxo(db, txn, ext_persono, ext_objekto, teksto):
       attr.set_type(_('Internet Address'))
       attr.set_value(f"https://gw.geneanet.org/{basePrefix}")
       s.add_attribute(attr)
-      if rh:
-        rr = RepoRef()
-        rr.ref = rh
-        rr.set_media_type(SourceMediaType.ELECTRONIC)
-        s.add_repo_reference(rr)
+      rr = RepoRef()
+      rr.ref = _akiDeponejo(db, txn)
+      rr.set_media_type(SourceMediaType.ELECTRONIC)
+      s.add_repo_reference(rr)
       db.add_source(s, txn)
       db.commit_source(s, txn)
     # on met de coté la source pour la suite :
@@ -357,25 +295,76 @@ def aldCitajxo(db, txn, ext_persono, ext_objekto, teksto):
   db.commit_citation(citation, txn)
   return citation
 
+class Importi:
+  """ classe chargé de l'import des données geneanet dans gramps """
+  def __init__(self,db,txn,progress,gn_notoj):
+    self.db = db
+    self.txn = txn
+    self.progress = progress
+    self.gn_notoj = gn_notoj
 
-def aldPersono(nov_lokoj, db, txn, ext_persono, progress, gn_notoj):
-  """ ajout de la personne ext_persono dans gramps """
-  grPerson = Person()
-  aldNomoj(ext_persono, grPerson)
-  s = ext_persono['person'].get('sex')
-  if s == 'MALE':
-    grPerson.set_gender(Person.MALE)
-  elif s == 'FEMALE':
-    grPerson.set_gender(Person.FEMALE)
-  else:
-    grPerson.set_gender(Person.UNKNOWN)
-  db.add_person(grPerson, txn)
-  db.commit_person(grPerson, txn)
-  progress.step()
-  teksto = _('persono importita el la geneanet-dosiero je la %s') % str(Today())
-  citation = aldCitajxo(db, txn, ext_persono, ext_persono, teksto)
-  grPerson.add_citation(citation.get_handle())
-  progress.step()
-  # ajout des évènements :
-  aldFaktoj(nov_lokoj, db, txn, ext_persono, grPerson, progress, gn_notoj)
-  return grPerson
+  def ald_persono(self, nov_lokoj, ext_persono):
+    """ ajout de la personne ext_persono dans gramps """
+    grPerson = Person()
+    aldNomoj(ext_persono, grPerson)
+    s = ext_persono['person'].get('sex')
+    if s == 'MALE':
+      grPerson.set_gender(Person.MALE)
+    elif s == 'FEMALE':
+      grPerson.set_gender(Person.FEMALE)
+    else:
+      grPerson.set_gender(Person.UNKNOWN)
+    self.db.add_person(grPerson, self.txn)
+    self.db.commit_person(grPerson, self.txn)
+    self.progress.step()
+    teksto = _('persono importita el la geneanet-dosiero je la %s') % str(Today())
+    citation = aldCitajxo(self.db, self.txn, ext_persono, ext_persono, teksto)
+    grPerson.add_citation(citation.get_handle())
+    self.progress.step()
+    # ajout des évènements :
+    self.ald_faktoj(nov_lokoj, ext_persono, grPerson)
+    return grPerson
+
+  def ald_faktoj(self, nov_lokoj, ext_persono, gr_persono):
+    """ ajoute les évènements de ext_persono à gr_persono """
+    faktoj = ext_persono['person'].get('events')
+    if faktoj is None or len(faktoj) == 0 or faktoj.get('elements') is None:
+      return
+    for f in faktoj.get('elements'):
+      if f.get('type') == "EFAM_MARRIAGE":
+        continue
+      self.progress.step()
+      event = aldFakto(nov_lokoj, self.db, self.txn, ext_persono, f)
+      self.progress.step()
+      noto = f.get('note')
+      if noto:
+        #print("   note evt :%s" % noto)
+        grNoto = Note()
+        grNoto.set_type(NoteType(_('note geneanet %s') % ext_persono['person'].get('baseprefix')))
+        st = htmlAlStyled(noto)
+        grNoto.set_styledtext(st)
+        if f.get('type') == "EPERS_OCCUPATION":
+          # on prend la première ligne de la note comme description
+          teksto = grNoto.get()  # texte sans formatage
+          event.set_description(teksto.splitlines(keepends=False)[0])
+        if self.gn_notoj:
+          self.db.add_note(grNoto, self.txn)
+          self.db.commit_note(grNoto, self.txn)
+          event.add_note(grNoto.handle)
+      self.db.commit_event(event, self.txn)
+      self.progress.step()
+      teksto = _('okazaĵo importita el la geneanet-dosiero je la %s') % str(Today())
+      citation = aldCitajxo(self.db, self.txn, ext_persono, f, teksto)
+      event.add_citation(citation.get_handle())
+      self.progress.step()
+      er = EventRef()
+      er.set_role(EventRoleType.PRIMARY)
+      er.set_reference_handle(event.get_handle())
+      self.db.commit_event(event, self.txn)
+      gr_persono.add_event_ref(er)
+      if event.type == EventType.BIRTH:
+        gr_persono.set_birth_ref(er)
+      elif event.type == EventType.DEATH:
+        gr_persono.set_death_ref(er)
+      self.db.commit_person(gr_persono, self.txn)
+      self.progress.step()

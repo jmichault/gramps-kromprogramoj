@@ -33,16 +33,12 @@ import xml.etree.ElementTree as ET
 from ast import literal_eval
 
 #-------------------------------------------------------------------------
-#
 # GTK modules
-#
 #-------------------------------------------------------------------------
 from gi.repository import Gtk, Gdk
 
 #------------------------------------------------------------------------
-#
 # Gramps modules
-#
 #------------------------------------------------------------------------
 from gramps.gen.db import DbTxn
 from gramps.gen.config import config
@@ -61,8 +57,8 @@ from gramps.gen.datehandler import LANG_TO_PARSER
 #-----------
 import instdepGN
 from utilaGN import getGrevent, getUrl, getBirth
-from komparoGN import kompariGrExt
-from ImportoGN import aldPersono, akiriLoko, aldFakto, updFakto
+from komparoGN import Kompari
+from ImportoGN import akiriLoko, aldFakto, updFakto, Importi
 from gn_constants import _
 #-----------
 
@@ -93,16 +89,13 @@ try:
   from lxml import html
 except ImportError:
   pass
-
 try:
   import geneanet
 except ImportError:
   pass
 
 #-------------------------------------------------------------------------
-#
 # configuration
-#
 #-------------------------------------------------------------------------
 
 GrampletConfigName = "PersonGN"
@@ -110,10 +103,6 @@ CONFIG = config.register_manager(GrampletConfigName)
 # salutnomo kaj pasvorto por FamilySearch
 CONFIG.register("preferences.gn_notoj", '')
 CONFIG.load()
-
-#from objbrowser import browse ;browse(locals())
-#import pdb; pdb.set_trace()
-
 
 class PersonGN(Gramplet):
   """ classe principale du Gramplet """
@@ -139,15 +128,11 @@ class PersonGN(Gramplet):
     self.cb_url = None
 
 #  def init(self):
-    """
-    " kreas GUI
-    """
+    """ kreas GUI """
     self._krei_gui()
 
   def _krei_gui(self):
-    """
-    " kreas GUI interfacon.
-    """
+    """ kreas GUI interfacon.  """
     self.top = Gtk.Builder()
     self.top.set_translation_domain("addon")
     base = os.path.dirname(__file__)
@@ -260,6 +245,7 @@ class PersonGN(Gramplet):
     db = self.dbstate.db
     novLokoj = {}
     with DbTxn(_("kopii al gramps"), db) as txn:
+      importi = Importi(db,txn,progress,PersonGN.gn_notoj)
       for x in model:
         l = [x]
         l.extend(x.iterchildren())
@@ -278,7 +264,7 @@ class PersonGN(Gramplet):
             extPatro = extPersono['person']['father']  # fiche simplifiée du père
             urlPatro = geneanet.id2url(extPatro)
             extPatro = self._get_persono(urlPatro)  # fiche détaillée du père
-            grPatro = aldPersono(novLokoj, db, txn, extPatro, progress, PersonGN.gn_notoj)
+            grPatro = importi.ald_persono(novLokoj, extPatro)
             familioHandle = grPersono.get_main_parents_family_handle()
             if familioHandle:
               familio = db.get_family_from_handle(familioHandle)
@@ -307,7 +293,7 @@ class PersonGN(Gramplet):
             extPatrino = extPersono['person']['mother']  # fiche simplifiée de la mère
             urlPatrino = geneanet.id2url(extPatrino)
             extPatrino = self._get_persono(urlPatrino)  # fiche détaillée de la mère
-            grPatrino = aldPersono(novLokoj, db, txn, extPatrino, progress, PersonGN.gn_notoj)
+            grPatrino = importi.ald_persono(novLokoj, extPatrino)
             familioHandle = grPersono.get_main_parents_family_handle()
             if familioHandle:
               familio = db.get_family_from_handle(familioHandle)
@@ -364,7 +350,7 @@ class PersonGN(Gramplet):
             extEdzo = extFamilio.get('spouse')  # fiche simplifiée du conjoint
             urlEdzo = geneanet.id2url(extEdzo)
             extEdzo = self._get_persono(urlEdzo)  # fiche détaillée du conjoint
-            grEdzo = aldPersono(novLokoj, db, txn, extEdzo, progress, PersonGN.gn_notoj)
+            grEdzo = importi.ald_persono(novLokoj, extEdzo)
             familio = Family()
             db.add_family(familio, txn)
             if grPersono.get_gender() == Person.MALE:
@@ -440,7 +426,7 @@ class PersonGN(Gramplet):
                       , _("Jes, mi scias, kion mi faras."), self.set_ok)
               if not self.ok:
                 continue
-            grInfano = aldPersono(novLokoj, db, txn, extInfano, progress, PersonGN.gn_notoj)
+            grInfano = importi.ald_persono(novLokoj, extInfano)
             if familioHandle:
               familio = db.get_family_from_handle(familioHandle)
               childref = ChildRef()
@@ -471,35 +457,38 @@ class PersonGN(Gramplet):
     (model, _iter) = treeview.get_selection().get_selected()
     if _iter:
       tipo = model.get_value(_iter, 8)
-      handle = model.get_value(_iter, 9)
-      extUrl = model.get_value(_iter, 10)
-      if extUrl and tipo ('infano', 'patro', 'patrino', 'edzo'):
+      if (model.get_value(_iter, 10)
+           and tipo in ('infano', 'patro', 'patrino', 'edzo')):
         item = Gtk.MenuItem(label=_('Kopii json-datumojn al tondujo'))
         item.set_sensitive(1)
         item.connect("activate", lambda obj: self.kopiijson(treeview))
         item.show()
         menu.append(item)
-      if handle and tipo in ('infano', 'patro', 'patrino', 'edzo', 'fakto', 'edzoFakto', 'Bildo'):
+      if (model.get_value(_iter, 9)
+           and tipo in ('infano', 'patro', 'patrino', 'edzo', 'fakto', 'edzoFakto', 'Bildo')):
         item = Gtk.MenuItem(label=_('Redakti : %s - %s - %s') % (model.get_value(_iter, 1)
                    , model.get_value(_iter, 2), model.get_value(_iter, 3)))
         item.set_sensitive(1)
         item.connect("activate", lambda obj: self.redakti(treeview))
         item.show()
         menu.append(item)
+    # est-ce qu'il y a une ligne cochée copiable vers gramps ?
+    # est-ce qu'on a coché un conjoint gramps et un conjoint geneanet qu'on veut comparer ?
     cpt = cptEdzGr = cptEdzExt = 0
     for x in self.model_komp.model:
-      l = [x]
+      l=[x]
       l.extend(x.iterchildren())
+      #import pdb; pdb.set_trace()
       for linio in l:
         if not linio[7]:
           continue
         tipolinio = linio[8]
         grHandle = linio[9]
-        if (tipolinio == 'edzo') and grHandle is None:
+        if (tipolinio == 'edzo') and not grHandle:
           cptEdzExt += 1
-        if (tipolinio == 'edzo') and grHandle is not None:
+        if (tipolinio == 'edzo') and grHandle:
           cptEdzGr += 1
-        if ( (tipolinio in ('patro', 'patrino', 'edzo', 'infano') and grHandle is None)
+        if ( (tipolinio in ('patro', 'patrino', 'edzo', 'infano') and not grHandle)
             or (tipolinio == 'fakto' and (linio[10] or '') != '')):
           cpt += 1
         elif (tipolinio == 'edzoFakto' and (linio[10] or '') != ''):
@@ -533,15 +522,17 @@ class PersonGN(Gramplet):
           continue
         tipolinio = linio[8]
         grHandle = linio[9]
-        if (tipolinio == 'edzo') and grHandle is None:
+        if (tipolinio == 'edzo') and not grHandle:
           extFamId = int(linio[12])
           for f in extPersono['person'].get('families'):
             if f.get('index') == extFamId:
               extFamilio = f
               break
-        if (tipolinio == 'edzo') and grHandle is not None:
+        if (tipolinio == 'edzo') and grHandle:
           grEdzH = grHandle
     extFamilio['_grEdzHandle'] = grEdzH
+    self.butrefresxigi_clicked(None)
+
   def redakti(self, treeview):
     """ on édite l'une des lignes """
     (model, _iter) = treeview.get_selection().get_selected()
@@ -647,7 +638,8 @@ class PersonGN(Gramplet):
     self.model_komp.clear()
     if activeHandle:
       self.set_has_data(True)
-      kompariGrExt(grPersono, extPersono, self.dbstate.db, self.model_komp)
+      k = Kompari(grPersono, extPersono, self.dbstate.db, self.model_komp)
+      k.kompari_gr_ext()
     else:
       self.set_has_data(False)
 
@@ -750,35 +742,26 @@ class PersonGN(Gramplet):
     p = self._get_persono(url)
     if p is None:
       return
-    sosa = ''
     parents = ''
-    naissance = ''
-    deces = ''
     conjoints = ''
     if 'person' in p:
       nom = (p['person'].get('lastname') or '?') + ' ' + (p['person'].get('firstname') or '?')
-      if 'sosa' in p['person'] and p['person']['sosa'] == 'SOSA':
-        sosa = p['person'].get('sosaNb') or 'X'
+      sosa = p['person'].get('sosaNb') or ''
       if 'father' in p['person']:
         parents = ((p['person']['father'].get('lastname') or '?') + ' ' +
                    (p['person']['father'].get('firstname') or '?'))
       if 'mother' in p['person']:
         parents += ('\n' + (p['person']['mother'].get('lastname') or '?') + ' ' +
                     (p['person']['mother'].get('firstname') or '?'))
-      if 'birthDate' in p['person']:
-        naissance = p['person']['birthDate']
+      naissance = p['person'].get('birthDate') or ''
       if 'birthPlace' in p['person']:
         naissance += '\n' + p['person']['birthPlace']
-      if 'deathDate' in p['person']:
-        deces = p['person']['deathDate']
+      deces = p['person'].get('deathDate') or ''
       if 'deathPlace' in p['person']:
         deces += '\n' + p['person']['deathPlace']
       if 'families' in p['person']:
         for f in p['person']['families']:
-          if 'children' in f:
-            nbInfanoj = len(f['children'])
-          else:
-            nbInfanoj = 0
+          nbInfanoj = len(f.get('children') or '')
           if 'spouse' in f:
             if conjoints != '':
               conjoints += "\n"
@@ -894,7 +877,7 @@ class PersonGN(Gramplet):
       self.top.get_object("gn_sekso_eniro").set_text('F')
     grBirth = getBirth(self.dbstate.db, person)
     if grBirth and grBirth.date and not grBirth.date.is_empty():
-      self.top.get_object("gn_dato1").set_text("{grBirth.date.get_year()}")
+      self.top.get_object("gn_dato1").set_text(f"{grBirth.date.get_year()}")
     else:
       self.top.get_object("gn_dato1").set_text('')
     grDeath = getGrevent(self.dbstate.db, person, EventType(EventType.DEATH))
@@ -903,7 +886,7 @@ class PersonGN(Gramplet):
     if grDeath is None or grDeath.date is None or grDeath.date.is_empty():
       grDeath = getGrevent(self.dbstate.db, person, EventType(EventType.CREMATION))
     if grDeath and grDeath.date and not grDeath.date.is_empty():
-      self.top.get_object("gn_dato2").set_text("{grDeath.date.get_year()}")
+      self.top.get_object("gn_dato2").set_text(f"{grDeath.date.get_year()}")
     else:
       self.top.get_object("gn_dato2").set_text('')
 

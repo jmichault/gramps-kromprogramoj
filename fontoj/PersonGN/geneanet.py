@@ -253,14 +253,15 @@ class Api:
     resMsg = opts.get('resMsg') or actions[req][2]
     data = None
     if reqMsg:
-      if mode == 'read':
-        message = getattr(api_saisie_read_pb2, reqMsg)
-      elif mode == 'stats':
-        message = getattr(api_stats_pb2, reqMsg)
-      elif mode == 'write' or not mode:
-        message = getattr(api_saisie_write_pb2, reqMsg)
-      else:
-        return {'error': 'unknown api'}
+      match mode:
+        case 'read':
+          message = getattr(api_saisie_read_pb2, reqMsg)
+        case 'stats':
+          message = getattr(api_stats_pb2, reqMsg)
+        case 'write':
+          message = getattr(api_saisie_write_pb2, reqMsg)
+        case _:
+          return {'error': 'unknown api'}
       data = message()
     tree = params['tree']
     del params['tree']
@@ -287,17 +288,8 @@ class Api:
       response.ParseFromString(resp)
     return MessageToDict(response)
 
-  def get_person(self, person_id):
-    """ renvoie le json de la personne """
-    if 'tree' in person_id:
-      tree = person_id['tree']
-    elif self.user:
-      tree = self.user
-    else:
-      return {'error': 'missing tree'}
+  def _get_graph(self, tree, person_id):
     media = False
-    if 'i' in person_id:
-      person_id['i'] = int(person_id['i'])
     if 'n' in person_id and 'p' in person_id:
       params = {
           'tree': tree,
@@ -306,10 +298,7 @@ class Api:
           'nb_asc': 1,
           'nb_desc': 1
       }
-      if 'oc' in person_id:
-        params['identifier_person.oc'] = person_id['oc']
-      else:
-        params['identifier_person.oc'] = 0
+      params['identifier_person.oc'] = person_id.get('oc') or 0
       personGraph = self._arbre_api('graph_v2', params)
       if personGraph:
         person_id['i'] = personGraph['nodesAsc'][0]['person']['index']
@@ -320,19 +309,27 @@ class Api:
             'nb_asc': 1,
             'nb_desc': 1
         })
-        if personGraph:
-          person_id['p'] = personGraph['nodesAsc'][0]['person']['p']
-          person_id['n'] = personGraph['nodesAsc'][0]['person']['n']
-          person_id['oc'] = personGraph['nodesAsc'][0]['person']['occ']
-        else:
+        if not personGraph:
           return {'error': 'could not find that person'}
+        person_id['p'] = personGraph['nodesAsc'][0]['person']['p']
+        person_id['n'] = personGraph['nodesAsc'][0]['person']['n']
+        person_id['oc'] = personGraph['nodesAsc'][0]['person']['occ']
       else:
         return {'error': 'could not find that person'}
       media = self.list_media(person_id)
     elif 'i' in person_id:
+      person_id['i'] = int(person_id['i'])
       media, person_id = self.list_media(person_id, return_person_id=True)
     else:
       return {'error': 'missing person identifier'}
+    return ( media, person_id)
+
+  def get_person(self, person_id):
+    """ renvoie le json de la personne """
+    tree = person_id.get('tree') or self.user
+    if not tree:
+      return {'error': 'missing tree'}
+    (media,person_id) = self._get_graph(tree,person_id)
 
     person = self._arbre_api('person', {'tree': tree, 'index': person_id['i']})
     personReturn = {
@@ -352,25 +349,24 @@ class Api:
       families = []
       fam = False
       editPerson = None
-      if 'families' in person:
-        for fam in person['families']:
-          family = self._arbre_api('edit_family', {
-              'tree': tree,
-              'index_person': person_id['i'],
-              'index_family': fam['index']
-          })
-          if not 'family' in family:
-            continue
-          families.append(family['family'])
-          for p in ('father', 'mother'):
-            if families[-1][p]['index'] == person_id['i']:
-              editPerson = families[-1][p]
-            families[-1][p] = families[-1][p]['index']
-          if 'children' in families[-1]:
-            for e in range(len(families[-1]['children'])):
-              families[-1]['children'][e] = families[-1]['children'][e]['index']
-      if editPerson is None:
-        editPerson = self._arbre_api('edit_person', {'tree': tree, 'index': person_id['i']})
+      for fam in person.get('families') or []:
+        family = self._arbre_api('edit_family', {
+            'tree': tree,
+            'index_person': person_id['i'],
+            'index_family': fam['index']
+        })
+        if not 'family' in family:
+          continue
+        families.append(family['family'])
+        for p in ('father', 'mother'):
+          if families[-1][p]['index'] == person_id['i']:
+            editPerson = families[-1][p]
+          families[-1][p] = families[-1][p]['index']
+        if 'children' in families[-1]:
+          for e in range(len(families[-1]['children'])):
+            families[-1]['children'][e] = families[-1]['children'][e]['index']
+      editPerson = (editPerson
+                   or self._arbre_api('edit_person', {'tree': tree, 'index': person_id['i']}))
       personReturn['person_edit'] = editPerson
       personReturn['families'] = families
     return personReturn
@@ -396,100 +392,108 @@ class Api:
       return [media, person_id]
     return media
 
+  def _get_registre(self, m, rep):
+    l = m['link'].split('/registres/view/')[1].split('?')[0].split('/')
+    a = self.urlopen('https://www.geneanet.org/registres/api/images/' + l[0] +
+                       '?min_page=0&max_page=9999').decode('utf-8')
+    if len(l) > 1:
+      b = a[int(l[1]) - 1]
+    else:
+      b = a[0]
+    cmd = [
+          'python3', 'dezoomify.py', '-b', 'https://www.geneanet.org' + b['image_base_url'],
+          rep + '/media/' + str(m['id']) + '.' + str(m['part_id']) + '.jpg'
+      ]
+    subprocess.call(cmd)
+
+  def _get_acte(self, m, rep):
+    """ récupère les actes """
+    a = self.urlopen(m['link']).decode('utf-8')
+    if 'pagination' in a:
+      b = a.split('data-img-url="')[1].split('"', 1)[0]
+      cmd = [
+          'python3', 'dezoomify.py', '-b',
+          'https://www.geneanet.org' + unquote(b).decode('UTF-8'),
+          rep + '/media/' + str(m['id']) + '.1.jpg'
+      ]
+      subprocess.call(cmd)
+      numpages = int(
+          a.split('<div class="pagination-documents" ')[1].split('</div>',
+                                                                 1)[0].split('href="')[-1].split(
+                                                                     '"', 1)[0].split('?p=')[1])
+      for p in range(1, numpages):
+        b = self.urlopen(m['link'] + '?p=' +
+                             str(p + 1)).text.split('data-img-url="')[1].split('"', 1)[0]
+        cmd = [
+            'python3', 'dezoomify.py', '-b',
+            'https://www.geneanet.org' + unquote(b).decode('UTF-8'),
+            rep + '/media/' + str(m['id']) + '.' + str(p + 1) + '.jpg'
+        ]
+        subprocess.call(cmd)
+    else:
+      b = a.split('data-img-url="')[1].split('"', 1)[0]
+      cmd = [
+          'python3', 'dezoomify.py', '-b',
+          'https://www.geneanet.org' + unquote(b).decode('UTF-8'),
+          rep + '/media/' + str(m['id']) + '.jpg'
+      ]
+      subprocess.call(cmd)
+
   def get_media(self, m, rep):
     """ charge les media de l'arbre
     "   m = dict des media (id, type, link)
     "   rep = dossier de base, dans lequel on a le sous-dossier media
     """
-    if m['type'] == 'monument':
-      a = self.urlopen('https://www.geneanet.org/cimetieres/images/depots/' +
+    match m['type']:
+      case 'monument':
+        a = self.urlopen('https://www.geneanet.org/cimetieres/images/depots/' +
                        str(m['id'])).decode('utf-8')
-      for b in a:
-        request.urlretrieve(
+        for b in a:
+          request.urlretrieve(
             'https://www.geneanet.org/public/img/cimetieres/pictures/' + b['path'] + '/normal.jpg',
             rep + '/media/' + b['path'].rsplit('/', 1)[1] + '.jpg')
-    elif m['type'] == 'blason':
-      request.urlretrieve('https:' + m['src'].replace('/medium.', '/normal.'),
+      case 'blason':
+        request.urlretrieve('https:' + m['src'].replace('/medium.', '/normal.'),
                   rep + '/media/blason.' + str(m['id']) + '.jpg')
-    elif m['type'] == 'registre':
-      l = m['link'].split('/registres/view/')[1].split('?')[0].split('/')
-      a = self.urlopen('https://www.geneanet.org/registres/api/images/' + l[0] +
-                       '?min_page=0&max_page=9999').decode('utf-8')
-      if len(l) > 1:
-        b = a[int(l[1]) - 1]
-      else:
-        b = a[0]
-      cmd = [
-          'python3', 'dezoomify.py', '-b', 'https://www.geneanet.org' + b['image_base_url'],
-          rep + '/media/' + str(m['id']) + '.' + str(m['part_id']) + '.jpg'
-      ]
-      subprocess.call(cmd)
-    elif m['type'] == 'acte':
-      a = self.urlopen(m['link']).decode('utf-8')
-      if 'pagination' in a:
-        z = a.split('data-img-url="')[1].split('"', 1)[0]
-        cmd = [
-            'python3', 'dezoomify.py', '-b',
-            'https://www.geneanet.org' + unquote(z).decode('UTF-8'),
-            rep + '/media/' + str(m['id']) + '.1.jpg'
-        ]
-        subprocess.call(cmd)
-        numpages = int(
-            a.split('<div class="pagination-documents" ')[1].split('</div>',
-                                                                   1)[0].split('href="')[-1].split(
-                                                                       '"', 1)[0].split('?p=')[1])
-        for p in range(1, numpages):
-          z = self.urlopen(m['link'] + '?p=' +
-                               str(p + 1)).text.split('data-img-url="')[1].split('"', 1)[0]
-          cmd = [
-              'python3', 'dezoomify.py', '-b',
-              'https://www.geneanet.org' + unquote(z).decode('UTF-8'),
-              rep + '/media/' + str(m['id']) + '.' + str(p + 1) + '.jpg'
-          ]
-          subprocess.call(cmd)
-      else:
-        z = a.split('data-img-url="')[1].split('"', 1)[0]
-        cmd = [
-            'python3', 'dezoomify.py', '-b',
-            'https://www.geneanet.org' + unquote(z).decode('UTF-8'),
-            rep + '/media/' + str(m['id']) + '.jpg'
-        ]
-        subprocess.call(cmd)
-    elif m['type'] == 'bibliotheque':
-      print('https:' + m['link'])
-      req = request.Request('https:' + m['link'] , method = 'HEAD')
-      docUrl = self.opener.open(req, timeout=10)
-      #docUrl = urlparse(self.session.head('https:' + m['link'], allow_redirects=True).url)
-      q = parse_qs(docUrl.query)
-      print(m)
-      print(docUrl)
-      print(q)
-    elif m['type'] == 'memlieux_resident':
-      pass
-    elif m['type'] == 'vuesdhier':
-      request.urlretrieve('https:' + m['src'], rep + '/media/' + str(m['id']) + '.jpg')
-    else:
-      try:
-        uri = rep + '/media/' + str(m['id']) + '.json'
-        if not exists(uri):
-          deposit = self.get_deposit(m['id'])
-          with open(uri, 'w', encoding="utf-8") as f:
-            json.dump(deposit, f, indent=2)
-          for p in deposit['views']:
-            uri = rep + '/media/' + str(p['id']) + '.' + p['files']['normal'].rsplit(
+      case 'registre':
+        self._get_registre( m, rep)
+      case 'acte':
+        self._get_acte( m, rep)
+      case 'bibliotheque':
+        print('https:' + m['link'])
+        a = request.Request('https:' + m['link'] , method = 'HEAD')
+        docUrl = self.opener.open(a, timeout=10)
+        #docUrl = urlparse(self.session.head('https:' + m['link'], allow_redirects=True).url)
+        b = parse_qs(docUrl.query)
+        print(m)
+        print(docUrl)
+        print(b)
+      case 'memlieux_resident':
+        pass
+      case 'vuesdhier':
+        request.urlretrieve('https:' + m['src'], rep + '/media/' + str(m['id']) + '.jpg')
+      case _:
+        try:
+          uri = rep + '/media/' + str(m['id']) + '.json'
+          if not exists(uri):
+            deposit = self.get_deposit(m['id'])
+            with open(uri, 'w', encoding="utf-8") as f:
+              json.dump(deposit, f, indent=2)
+            for p in deposit['views']:
+              uri = rep + '/media/' + str(p['id']) + '.' + p['files']['normal'].rsplit(
                 '?', 1)[0].rsplit('.', 1)[1]
-            request.urlretrieve('https://gw.geneanet.org' + p['files']['normal'], uri)
-            refs = self.get_deposit_ref(m['id'], p['id'])
-            if refs != []:
-              with open( f"{rep}/media/{str(m['id'])}.references.json"
+              request.urlretrieve('https://gw.geneanet.org' + p['files']['normal'], uri)
+              refs = self.get_deposit_ref(m['id'], p['id'])
+              if refs != []:
+                with open( f"{rep}/media/{str(m['id'])}.references.json"
                          , 'w', encoding="utf-8") as f:
-                json.dump(refs, f, indent=2)
-            links = self.get_deposit_links(m['id'], p['id'])
-            if links != []:
-              with open(rep + '/media/' + str(m['id']) + '.links.json', 'w', encoding="utf-8") as f:
-                json.dump(links, f, indent=2)
-      except Exception:
-        print(sys.exc_info()[0],
+                  json.dump(refs, f, indent=2)
+              links = self.get_deposit_links(m['id'], p['id'])
+              if links != []:
+                with open(f"{rep}/media/{str(m['id'])}.links.json", 'w', encoding="utf-8") as f:
+                  json.dump(links, f, indent=2)
+        except (ValueError,TypeError,FileNotFoundError,IOError):
+          print(sys.exc_info()[0],
               'Deposit: https://www.geneanet.org/media/api/deposits/' + str(m['id']) + ' ')
 
   def get_deposit(self, deposit_id):
@@ -543,54 +547,6 @@ class Api:
       return datetime.fromisoformat(
           revisionsPage.split('<td id="date_0"  v="')[1].split('">', 1)[0])
     return False
-
-  def get_history(self, tree, limit=0, media=False, wiz=False):
-    """ renvoie l'historique de l'arbre """
-    # TODO: media history
-    nb = min(limit, 200)
-    mediaStr = ''
-    if media:
-      mediaStr = '&action=medias'
-    wizStr = ''
-    if wiz:
-      wizStr = '&wiz=' + wiz
-    hist = []
-    page = 1
-    posStr = ''
-    while True:
-      #print(page)
-      table, trail = self.urlopen('https://gw.geneanet.org/' + tree + '?lang=en&m=HIST&k=' +
-                                  str(nb) + mediaStr + wizStr + posStr +
-                                  '&ajax=1').decode('utf-8').split("</table>")
-      pos = trail.split('name="pos" value="')[1].split('">', 1)[0]
-      table = table.split('<tr>\n<th>')[1].split('" >\n<td>\n')
-      header = table.pop(0).split('<th>')
-      header=[f'{x.split('</th>')[0]}' for x in header]
-      for x in table:
-        mod = x.split('</td>\n</tr>')[0].split('</td>\n<td>')
-        if header[0] == "History":
-          mod.pop(0)
-        #mod[0] = dateparser.parse(mod[0])
-        mod[0] = datetime.fromisoformat(mod[0])
-        ids = mod[1].strip()
-        if '<a href' in ids:
-          url, name = ids.split('<a href="')[1].split('</a>')[0].split('">')
-          tmp = parse_qs(urlparse(url).query)
-
-          mod[1] = [name, {k: tmp[k][0] for k in ['p', 'n', 'oc'] if k in tmp}]
-        else:
-          mod[1] = [ids]
-        mod[2] = mod[2].split('">')[1].split('</a>')[0]
-        hist.append(mod)
-      page += 1
-      if pos == '0':
-        break
-      if isinstance(limit, int) and page > limit > 0:
-        break
-      if isinstance(limit, datetime) and mod[0] < limit:
-        break
-      posStr = '&pos=' + pos
-    return hist
 
   def get_available_trees(self):
     """ renvoie la liste des arbres auxquels l'utilisateur a accès (nécessite d'être connecté) """

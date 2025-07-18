@@ -75,26 +75,9 @@ token_specification = [
     ('UNKNWN',  r'<[^<]*?>'), ]
 TokRegex = '|'.join(f'(?P<{pair[0]}>{pair[1]})' for pair in token_specification)
 
-def convertToStyled(data):
-  """
-  This scans incoming notes for possible html.  It converts a select few
-  tags into StyledText and removes the rest of the tags.  Notes of this
-  type occur in data from FTM and ancestry.com.  Result is a much
-  cleaner note.
-
-  @param data: a string of text possibly containg html
-  @type data: str
-
-  """
+def _convertPart1(data):
   prev = 0
-  chunkpos = 0
   chunks = []
-  italics = []
-  bolds = []
-  unders = []
-  links = []
-  reds = []
-  bldpos = -1
   styText = StyledText(data)
   for mo in re.finditer(html_charref, styText.get_string()):
     out = html_replace_charref(mo)
@@ -107,101 +90,121 @@ def convertToStyled(data):
       chunkpos += (inStart - prev + len(out))
     prev = inEnd
   chunks.append(styText.get_string()[prev:])
-
   styText = StyledText().join(chunks)
-  prev = 0
-  chunkpos = 0
+  return styText
+
+def convertToStyled(data):
+  """
+  This scans incoming notes for possible html.  It converts a select few
+  tags into StyledText and removes the rest of the tags.  Notes of this
+  type occur in data from FTM and ancestry.com.  Result is a much
+  cleaner note.
+
+  @param data: a string of text possibly containg html
+  @type data: str
+  """
+  tags = { 'italics': [],
+           'bolds': [],
+           'unders': [],
+           'links': [],
+           'reds': [],
+         }
+  bldpos = -1
+  styText = _convertPart1(data)
+  prev = chunkpos = 0
   chunks = []
   for mo in re.finditer(TokRegex, styText.get_string(), flags=re.DOTALL | re.I ):
-    kind = mo.lastgroup
-    stTxt = mo.group(kind)
+    stTxt = mo.group(mo.lastgroup)
     inStart = mo.start()
     inEnd = mo.end()
-    if kind in ('SKIP', 'TABLE'):
-      if prev != inStart:
-        chunks.append(styText.get_string()[prev:inStart])
-        chunkpos += (inStart - prev)
-    elif kind == 'PARAEND':
-      chunks.append(styText.get_string()[prev:inStart] + '\n')
-      chunkpos += (inStart - prev + 1)
-    elif kind == 'ITALIC':
-      chunks.append(styText.get_string()[prev:inStart] +
-                    styText.get_string()[(inStart + 3):inEnd])
-      newpos = chunkpos - prev + inEnd - 3
-      italics.append((chunkpos + inStart - prev, newpos))
-      chunkpos = newpos
-    elif kind == 'BOLD':
-      chunks.append(styText.get_string()[prev:inStart] +
-                    styText.get_string()[(inStart + 3):inEnd])
-      newpos = chunkpos - prev + inEnd - 3
-      bolds.append((chunkpos + inStart - prev, newpos))
-      chunkpos = newpos
-    elif kind == 'UNDER':
-      chunks.append(styText.get_string()[prev:inStart] +
-                    styText.get_string()[(inStart + 3):inEnd])
-      newpos = chunkpos - prev + inEnd - 3
-      unders.append((chunkpos + inStart - prev, newpos))
-      chunkpos = newpos
-    elif kind == 'HTTP':      # HTTP found
-      stTxt = mo.group('HTTP')
-      oldpos = chunkpos + inStart - prev
-      chunks.append(styText.get_string()[prev:inStart] + stTxt)
-      chunkpos += (inStart - prev + len(stTxt))
-      stTxt = stTxt.rstrip(' .:)')
-      newpos = oldpos + len(stTxt)
-      links.append((stTxt, oldpos, newpos))
-    elif kind == 'HREF':      # HREF found
-      stTxt = mo.group('HREFT')
-      lkTxt = mo.group('HREFL')
-      # fix up relative links emmitted by ancestry.com
-      if(lkTxt.startswith("/search/dbextra") or
-               lkTxt.startswith("/handler/domain")):
-        lkTxt = "http://search.ancestry.com" + lkTxt
-      oldpos = chunkpos + inStart - prev
-      # if tag (minus any trailing '.') is substring of link
-      if stTxt[0:-1] in lkTxt:
-        stTxt = lkTxt   # just use the link
-      else:                 # use link and tag
-        stTxt = " " + lkTxt + " (" + stTxt + ")"
-      newpos = oldpos + len(stTxt)
-      chunks.append(styText.get_string()[prev:inStart] + stTxt)
-      chunkpos += (inStart - prev + len(stTxt))
-      links.append((lkTxt, oldpos, newpos))
-    elif kind in ('TBLCELL', 'TBLHDRC'):  # Table cell break
-      chunks.append(styText.get_string()[prev:inStart] + ':  ')
-      chunkpos += (inStart - prev + 3)
-    elif kind == 'TBLHDRB':      # header start
-      if prev != inStart:
-        chunks.append(styText.get_string()[prev:inStart])
-        chunkpos += (inStart - prev)
-      bldpos = chunkpos
-    elif kind == 'TBLHDRE':      # Header end
-      if bldpos == -1:
-        if prev != inStart:
-          chunks.append(styText.get_string()[prev:inEnd])
-          newpos = chunkpos - prev + inEnd
-          reds.append((chunkpos + inStart - prev, newpos))
-          chunkpos = newpos
-        print('Invalid table header, no start tag found')
-      else:
+    match mo.lastgroup:
+      case 'SKIP' | 'TABLE':
         if prev != inStart:
           chunks.append(styText.get_string()[prev:inStart])
           chunkpos += (inStart - prev)
-        bolds.append((bldpos, chunkpos))
-        bldpos = -1
-    elif kind == 'UNKNWN':
-      chunks.append(styText.get_string()[prev:inEnd])
-      newpos = chunkpos - prev + inEnd
-      reds.append((chunkpos + inStart - prev, newpos))
-      chunkpos = newpos
-      print('Unexpected or unimplemented HTML tag', stTxt)
-    else:
-      print("shouldn't get here")
-
+      case 'PARAEND':
+        chunks.append(styText.get_string()[prev:inStart] + '\n')
+        chunkpos += (inStart - prev + 1)
+      case 'ITALIC':
+        chunks.append(styText.get_string()[prev:inStart] +
+                    styText.get_string()[(inStart + 3):inEnd])
+        oldpos = chunkpos + inStart - prev
+        chunkpos = chunkpos - prev + inEnd - 3
+        tags['italics'].append((oldpos, chunkpos))
+      case 'BOLD':
+        chunks.append(styText.get_string()[prev:inStart] +
+                    styText.get_string()[(inStart + 3):inEnd])
+        oldpos = chunkpos + inStart - prev
+        chunkpos = chunkpos - prev + inEnd - 3
+        tags['bolds'].append((oldpos, chunkpos))
+      case 'UNDER':
+        chunks.append(styText.get_string()[prev:inStart] +
+                    styText.get_string()[(inStart + 3):inEnd])
+        oldpos = chunkpos + inStart - prev
+        chunkpos = chunkpos - prev + inEnd - 3
+        tags['unders'].append((oldpos, chunkpos))
+      case 'HTTP':      # HTTP found
+        stTxt = mo.group('HTTP')
+        oldpos = chunkpos + inStart - prev
+        chunks.append(styText.get_string()[prev:inStart] + stTxt)
+        chunkpos += (inStart - prev + len(stTxt))
+        stTxt = stTxt.rstrip(' .:)')
+        tags['links'].append((stTxt, oldpos, oldpos + len(stTxt)))
+      case 'HREF':      # HREF found
+        stTxt = mo.group('HREFT')
+        lkTxt = mo.group('HREFL')
+        # fix up relative links emmitted by ancestry.com
+        if(lkTxt.startswith("/search/dbextra") or
+               lkTxt.startswith("/handler/domain")):
+          lkTxt = "http://search.ancestry.com" + lkTxt
+        oldpos = chunkpos + inStart - prev
+        # if tag (minus any trailing '.') is substring of link
+        if stTxt[0:-1] in lkTxt:
+          stTxt = lkTxt   # just use the link
+        else:                 # use link and tag
+          stTxt = " " + lkTxt + " (" + stTxt + ")"
+        chunks.append(styText.get_string()[prev:inStart] + stTxt)
+        chunkpos += (inStart - prev + len(stTxt))
+        tags['links'].append((lkTxt, oldpos, oldpos + len(stTxt)))
+      case 'TBLCELL' | 'TBLHDRC':  # Table cell break
+        chunks.append(styText.get_string()[prev:inStart] + ':  ')
+        chunkpos += (inStart - prev + 3)
+      case 'TBLHDRB':      # header start
+        if prev != inStart:
+          chunks.append(styText.get_string()[prev:inStart])
+          chunkpos += (inStart - prev)
+        bldpos = chunkpos
+      case 'TBLHDRE':      # Header end
+        if bldpos == -1:
+          if prev != inStart:
+            chunks.append(styText.get_string()[prev:inEnd])
+            oldpos = chunkpos + inStart - prev
+            chunkpos = chunkpos - prev + inEnd
+            tags['reds'].append((oldpos, chunkpos))
+          print('Invalid table header, no start tag found')
+        else:
+          if prev != inStart:
+            chunks.append(styText.get_string()[prev:inStart])
+            chunkpos += (inStart - prev)
+          tags['bolds'].append((bldpos, chunkpos))
+          bldpos = -1
+      case 'UNKNWN':
+        chunks.append(styText.get_string()[prev:inEnd])
+        oldpos = chunkpos + inStart - prev
+        chunkpos = chunkpos - prev + inEnd
+        tags['reds'].append((oldpos, chunkpos))
+        print('Unexpected or unimplemented HTML tag', stTxt)
+      case _:
+        print("shouldn't get here")
     prev = inEnd
   chunks.append(styText.get_string()[prev:])
-
   result = StyledText().join(chunks)
+  return StyledText(result.get_string()
+           , tagMerge(result.get_tags()
+           , _concatTags(tags['links'],tags['italics'],tags['bolds'],tags['unders'],tags['reds']) ))
+
+def _concatTags(links,italics,bolds,unders,reds):
+  """ concatenate all tags """
   tags = []
   for link in links:
     tags.append(StyledTextTag(StyledTextTagType.LINK, link[0],
@@ -217,16 +220,16 @@ def convertToStyled(data):
   if reds:
     tags.append(StyledTextTag(StyledTextTagType.HIGHLIGHT, '#FFFF00',
                                   reds))
-  return StyledText(result.get_string(), tagMerge(result.get_tags(), tags))
+  return tags
 
 
-def tagMerge(old_tags, tag_list):
-  """ merge tags ? """
+def _tagEnumerate(old_tags, tag_list):
+  """ first set for merge : enumerate all tags """
   styles = {}  # key:name  value:quad
   outstyles = {}  # key:tuple(name, value), value:list(ranges)
   tags = []
-  for (prior, tags) in enumerate((old_tags, tag_list)):
-    for tag in tags:
+  for (prior, _tags) in enumerate((old_tags, tag_list)):
+    for tag in _tags:
       if tag.name.value not in styles:
         styles[tag.name.value] = []
       outRange = outstyles.get((tag.name.value, tag.value))
@@ -237,11 +240,16 @@ def tagMerge(old_tags, tag_list):
         # quad: Value, priority, Start or Stop, True if Stop
         quads.append((tag.value, prior, rang[0], False))
         quads.append((tag.value, prior, rang[1], True))
+  return styles,outstyles,tags
 
+def tagMerge(old_tags, tag_list):
+  """ merge tags """
+  (styles,outstyles,tags) = _tagEnumerate(old_tags, tag_list)
   for tagname, quads in styles.items():
     quads.sort(key=lambda quad: quad[2])  # sort by start/stop index
     # start, end are current range
-    start = value = prior = None
+    start = value = None
+    prior = 0
     # open_low; list of low priority open (nested) values
     # open_high; list of high priority open (nested) values
     openst = [[], []]
@@ -261,28 +269,32 @@ def tagMerge(old_tags, tag_list):
           value = quad[0]
           prior = quad[1]
           start = quad[2]
-      else:  # we have an end
-        if start is None:  # end with no start
-          continue
-        if quad[0] == value:  # current finished
-          outstyles[(tagname, value)].append((start, quad[2]))
-          if openst[1]:  # high priority nested to restart
-            value = openst[1].pop()
-            prior = 1
-            start = quad[2]
-          elif openst[0]:  # low priority nested to restart
-            value = openst[0].pop()
-            prior = 0
-            start = quad[2]
-          else:  # no nest to restart, just close out
-            start = value = prior = None
-        else:  # clear out overlap
-          try:
-            openst[quad[1]].remove(quad[0])
-          except ValueError:
-            pass
-          continue
-    end = None
+        continue
+      # we have a end
+      if start is None:  # end with no start
+        continue
+      if quad[0] == value:  # current finished
+        outstyles[(tagname, value)].append((start, quad[2]))
+        start = value = prior = None
+        if openst[1]:  # high priority nested to restart
+          value = openst[1].pop()
+          prior = 1
+          start = quad[2]
+        elif openst[0]:  # low priority nested to restart
+          value = openst[0].pop()
+          prior = 0
+          start = quad[2]
+      else:  # clear out overlap
+        try:
+          openst[quad[1]].remove(quad[0])
+        except ValueError:
+          pass
+        continue
+  return _doMerge(outstyles,tags)
+
+def _doMerge(outstyles,tags):
+  """ all is prepared in outstyles : do final merge """
+  end = None
   msg = ("Bad Style range!  Do not save, "
          "if you do your db will be corrupted.")
   for ((name, value), ranges) in outstyles.items():
@@ -306,10 +318,18 @@ def tagMerge(old_tags, tag_list):
   return tags
 
 if __name__ == '__main__':
-  print(convertToStyled('<p>\
-<a href="http://archives.marne.fr/ark:/86869/a011310543788e2DmVt/1/113" target="_blank">http://archives.marne.fr/ark:/86869/a011310543788e2DmVt/1/113</a><br>\
-<br>\
-Stanislas, né à 03h00.<br>\
-fils de Louis Charles Desbordes, boucher, signe.<br>\
-et de Marie Madeleine Éléonore Brémond.\
-</p>'))
+  Html='<p>'\
+       '<a href="http://archives.marne.fr/ark:/86869/a011310543788e2DmVt/1/113" target="_blank">'\
+       'un_premier_lien</a><br>'\
+       '<br>'\
+       'Stanislas, <b>né</b> à 03h00.<br>'\
+       '<a href="http://archives.marne.fr/ark:/86869/a011310543788e2DmVt/1/114" target="_blank">'\
+       '<b>deuxième</b> lien</a><br>'\
+       'fils de <b>Louis <i>Charles</b> Desbordes</i>, boucher, signe.<br>'\
+       'et de Marie Madeleine Éléonore Brémond.'\
+       '</p>'
+  Converted = convertToStyled(Html)
+  print(Converted)
+  for t in Converted.get_tags() :
+    print(t.name)
+    print(t.value,t.ranges)

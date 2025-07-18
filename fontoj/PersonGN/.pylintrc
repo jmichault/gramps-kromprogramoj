@@ -1,13 +1,17 @@
 [BASIC]
+# j'aime pas les noms tout en majuscule, donc constantes en PascalCase
 const-naming-style=PascalCase
+# je préfère camelCase plutôt que snake_case pour les fonctions et les variables
 function-naming-style=camelCase
-module-naming-style=any
 variable-naming-style=camelCase
+# je nomme mes modules comme ça me chante !
+module-naming-style=any
 
 extension-pkg-allow-list=lxml
+
+# code généré par protoc, à ignorer :
+ignore-paths=geneanet_pb
 
 [FORMAT]
 indent-string='  '
 
-[DESIGN]
-max-statements=75
