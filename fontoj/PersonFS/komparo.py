@@ -149,6 +149,7 @@ class FSKomparo(PluginWindows.ToolManagedWindowBatch):
           pOrdList.append([datumoj[0],handle,fsid])
       else:
         pOrdList.append([0,handle,fsid])
+    # on trie sur la date
     def akiUnua(ero):
       return ero[0]
     pOrdList.sort(key=akiUnua)
@@ -166,6 +167,10 @@ class FSKomparo(PluginWindows.ToolManagedWindowBatch):
       etag = None
       if fsid in PersonFS.PersonFS.fs_Tree._persons:
         fsPersono = PersonFS.PersonFS.fs_Tree._persons.get(fsid)
+      if not fsPersono :
+        fsPersono=(gedcomx_v1.Person._indekso.get(fsid) or gedcomx_v1.Person(id=fsid))
+        fsPersono.id = fsid
+        PersonFS.PersonFS.fs_Tree._persons[fsid]=fsPersono
       if not fsPersono or not hasattr(fsPersono,'_last_modified') or not fsPersono._last_modified :
         mendo = "/platform/tree/persons/"+fsid
         r = tree._FsSeanco.head_url( mendo )
@@ -181,10 +186,14 @@ class FSKomparo(PluginWindows.ToolManagedWindowBatch):
           etag = r.headers['Etag']
         #print("grDato = %s ; fsDato = %s" % (paro[0] , datemod) )
         if paro[0] < (datemod or 9999999999) :
+          # la personne a été modifiée sur FS depuis la dernière comparaison, on la charge
           PersonFS.PersonFS.fs_Tree.add_persono(fsid)
           fsPersono = PersonFS.PersonFS.fs_Tree._persons.get(fsid)
         else :
+          # la personne n'a pas été modifiée sur familySearch 
+          # on ne la charge pas pour l'instant, on va juste garder sa date de dernière modif.
           fsPersono=(gedcomx_v1.Person._indekso.get(fsid) or gedcomx_v1.Person(id=fsid))
+          fsPersono.id = fsid
           PersonFS.PersonFS.fs_Tree._persons[fsid] = fsPersono
       if not fsPersono :
         print (_('FS ID %s ne trovita') % (fsid))
@@ -224,8 +233,15 @@ class FSKomparo(PluginWindows.ToolManagedWindowBatch):
       pbar.set_text('%d%% (%s/%s)' % (int(100*cnt/nbOrdList),cnt , nbOrdList))
       kompari_paro_p1(paro)
       fsPersono = PersonFS.PersonFS.fs_Tree._persons.get(paro[2])
-      if fsPersono is not None and paro[0] < (fsPersono._datemod or 9999999999) :
+      if fsPersono is None:
+        print(f"  fsid pas trouvé pour : {paro}")
+      #elif paro[0] < (fsPersono._datemod or 9999999999) :
+      else:
         kompari_paro_p2(paro)
+      #else:
+      #  print(f"  ??? paire pas traitée : {paro} fsp={fsPersono}")
+      #  if fsPersono:
+      #    print(f"        datemod={fsPersono._datemod or 0} ")
       #paroj.append(paro)
       cnt = cnt+1
       #if cnt >= 10 :
@@ -601,6 +617,28 @@ def aldEdzKomp(db, grPersono, fsPerso) :
   """
   grFamilioj = grPersono.get_family_handle_list()
   fsEdzoj = fsPerso._paroj.copy()
+  # ajouter dans fsEdzoj les familles manquantes, qui sont dans familiesAsParent
+  if fsPerso.display :
+    for f in fsPerso.display.familiesAsParent :
+      if f.parent1 is None or f.parent2 is None :
+        continue
+      trovita = False
+      for f2 in fsEdzoj :
+        if f2.person1 is None or f2.person2 is None :
+          continue
+        if f2.person1.resourceId == f.parent1.resourceId and f2.person2.resourceId == f.parent2.resourceId :
+          trovita = True
+          break
+        if f2.person1.resourceId == f.parent2.resourceId and f2.person1.resourceId == f.parent2.resourceId :
+          trovita = True
+          break
+      if trovita == False :
+        f2 = gedcomx_v1.Relationship()
+        f2.person1 = gedcomx_v1.ResourceReference()
+        f2.person2 = gedcomx_v1.ResourceReference()
+        f2.person1.resourceId = f.parent1.resourceId
+        f2.person2.resourceId = f.parent2.resourceId
+        fsEdzoj.add(f2)
   fsInfanoj = fsPerso._infanojCP.copy()
   fsid = fsPerso.id
   res = list()
@@ -965,7 +1003,15 @@ def kompariFsGr(fsPersono,grPersono,db,model=None,dupdok=False):
   if (model == None and hasattr(fsPersono,'_datmod')
       and dbPersono.stat_dato > fsPersono._datmod
       and dbPersono.stat_dato > grPersono.change):
+    # rien n'a changé depuis la dernière comparaison
+    print(f"  individu {fsPerson.fsid} pas changé")
+    if db.transaction :
+      dbPersono.stat_dato = int(time.time())
+      dbPersono.commit(transaction)
     return
+  if not fsPersono.identifiers and fsPersono.id:
+    print(f"chargement de {fsPersono.id}")
+    PersonFS.PersonFS.fs_Tree.add_persono(fsPersono.id)
   if fsPersono.id :
     dbPersono.fsid = fsPersono.id
   FS_Familio=FS_Esenco=FS_Nomo=FS_Fakto=FS_Gepatro=FS_Dup=FS_Dok=False

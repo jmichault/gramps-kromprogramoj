@@ -1008,7 +1008,6 @@ class PersonFS(Gramplet):
             importilo.edz = False
           importilo.refresxigxo = False
           importilo.importi(self, fsid)
-          print(" infano FS --> gramps")
       self.dbstate.db.commit_person(grPersono,txn)
       self.dbstate.db.transaction_commit(txn)
     self.ButRefresxigi_clicked(None)
@@ -1251,7 +1250,7 @@ class PersonFS(Gramplet):
     self.modelKomp.cid=None
     self.modelKomp.model.set_sort_column_id(-2,0)
     self.modelKomp.clear()
-    if active_handle:
+    if active_handle and PersonFS.fs_Tree:
       self.kompariFs(active_handle,True)
       self.set_has_data(self.get_has_data(active_handle))
     else:
@@ -1554,7 +1553,9 @@ class PersonFS(Gramplet):
     for entry in datumoj["entries"] :
       #print (entry.get("id")+ ";  score = "+str(entry.get("score")))
       fsId = entry.get("id")
-      data=entry["content"]["gedcomx"]
+      data = (entry.get("content") or {}).get("gedcomx") or {}
+      if not data:
+        PersonFS.fs_TreeSercxo.add_persono(fsId)
       # bizare, FamilySearch ne uzas gedcomx-formaton
       #gedcomx.maljsonigi(PersonFS.fs_TreeSercxo, data )
       if "places" in data:

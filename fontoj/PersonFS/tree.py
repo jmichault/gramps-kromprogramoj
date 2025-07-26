@@ -123,6 +123,11 @@ class Tree(gedcomx_v1.Gedcomx):
         for paro in fsPersono._paroj :
           if paro.person1 : rels |= {paro.person1.resourceId}
           if paro.person2 : rels |= {paro.person2.resourceId}
+      # ajouter les familles sans union, qui ne sont que dans familiesAsParent
+      if fsPersono.display :
+        for paro in fsPersono.display.familiesAsParent :
+          if paro.parent1 : rels |= {paro.parent1.resourceId}
+          if paro.parent2 : rels |= {paro.parent2.resourceId}
     rels.difference_update(fids)
     self.add_persons(rels)
     return set(filter(None, rels))
