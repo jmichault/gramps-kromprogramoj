@@ -143,7 +143,7 @@ class Api:
       out = response.read()
     except HTTPError as e:
       print('HTTPError loading %s code: %s ', (url, e.code))
-    except (URLError,UnicodeEncodeError) as e:
+    except (URLError,UnicodeEncodeError,TimeoutError) as e:
       print(f'{e.__class__.__name__} loading {url} reason: {e.reason}')
     if statusCode == 403 or b'Sign up for free' in out:
       del self.opener

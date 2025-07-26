@@ -329,7 +329,7 @@ class Kompari:
                   node=edzoNodo)
 
   def _komp_familioj(self):
-    extFamilioj = self.ext_persono['person'].get('families').copy()
+    extFamilioj = (self.ext_persono['person'].get('families') or {}).copy()
     for familyHandle in self.gr_persono.get_family_handle_list():
       family = self.db.get_family_from_handle(familyHandle)
       if family:

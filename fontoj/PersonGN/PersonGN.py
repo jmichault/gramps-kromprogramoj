@@ -120,14 +120,14 @@ class PersonGN(Gramplet):
   gn = geneanet.Api()
 
   def __init__(self, gui):
-    Gramplet.__init__(self, gui)
     self.top = None
     self.lasta_pagxo = None
     self.ok = None
     self.model_komp = None
     self.cb_url = None
+    Gramplet.__init__(self, gui)
 
-#  def init(self):
+  def init(self):
     """ kreas GUI """
     self._krei_gui()
 
@@ -654,6 +654,8 @@ class PersonGN(Gramplet):
     self.active_changed('')
 
   def active_changed(self, handle):
+    if not hasattr(self,'cb_url'):
+      return
     self.cb_url.insert_text(0, '')
     self.cb_url.set_active(0)
     self.cb_url.remove_all()
