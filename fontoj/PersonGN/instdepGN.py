@@ -89,7 +89,7 @@ def instDep(modulo,versio):
     if parse(v) < parse(versio) :
       print( _("dependeco %s ne trovita") % modulo )
       return False
-    print( _("dependeco %s instalita, versio %s") % (modulo , v))
+    print( _(f"dependeco %{modulo} instalita, versio %{v}") % (modulo , v))
     return True
   #print( _("dependeco %s trovita, versio %s") % (modulo , v0))
   return True

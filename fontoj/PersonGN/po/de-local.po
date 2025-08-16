@@ -1,4 +1,4 @@
-# Hebrew translations for gramps-kromprogramoj. package.
+# German translations for gramps-kromprogramoj. package.
 # Copyright (C) 2025 THE gramps-kromprogramoj.'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the gramps-kromprogramoj. package.
 # Automatically generated, 2025.
@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: gramps-kromprogramoj. 60\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-16 16:18+0200\n"
-"PO-Revision-Date: 2025-05-24 11:37+0200\n"
+"PO-Revision-Date: 2025-08-16 16:18+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
-"Language: he\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,29 +20,29 @@ msgstr ""
 #: PersonGN/ImportoGN.py:215 PersonGN/ImportoGN.py:356
 #, python-format
 msgid "okazaĵo importita el la geneanet-dosiero je la %s"
-msgstr "אירוע המיובא מקובץ GeneAnet ב- %s"
+msgstr "ein Ereignis, das aus der Geneanet -Datei im %s importiert wurde"
 
 #: PersonGN/ImportoGN.py:262 PersonGN/ImportoGN.py:277 PersonGN/utilaGN.py:41
 msgid "Internet Address"
-msgstr "כתובת מרשתת"
+msgstr "Internetadresse"
 
 #: PersonGN/ImportoGN.py:320
 #, python-format
 msgid "persono importita el la geneanet-dosiero je la %s"
-msgstr "אדם המיובא מקובץ GeneAnet ב- %s"
+msgstr "Eine Person, die aus der Geneanet -Datei im %s importiert wurde"
 
 #: PersonGN/ImportoGN.py:343
 #, python-format
 msgid "note geneanet %s"
-msgstr "הערה geneanet %s"
+msgstr "Hinweis Geneanet %s"
 
 #: PersonGN/PersonGN.gpr.py:36
 msgid "Geneanet Gramplet"
-msgstr "Geneanet Gramplet"
+msgstr "Geneanet -Grammplet"
 
 #: PersonGN/PersonGN.gpr.py:37
 msgid "interfaco por Geneanet"
-msgstr "ממשק לגניאנט"
+msgstr "Schnittstelle für Geneanet"
 
 #: PersonGN/PersonGN.gpr.py:43
 msgid "Geneanet"
@@ -50,15 +50,15 @@ msgstr "Geneanet"
 
 #: PersonGN/PersonGN.py:74
 msgid "La geneanet-grampleto havas neplenumitajn dependecojn :\n"
-msgstr "ל- Geneanet Graccet יש תלות לא סלולה: \n"
+msgstr "Das Geneanet Graccet hat unerfüllte Abhängigkeiten: \n"
 
 #: PersonGN/PersonGN.py:76
 msgid "lxml kaj protobuf."
-msgstr "LXML ו- Protobuf."
+msgstr "LXML und Protobuf."
 
 #: PersonGN/PersonGN.py:78
 msgid "lxml."
-msgstr "LXML."
+msgstr "lxml."
 
 #: PersonGN/PersonGN.py:80
 msgid "protobuf."
@@ -67,50 +67,50 @@ msgstr "Protobuf."
 #: PersonGN/PersonGN.py:81
 msgid "Se vi uzas Debian aŭ Ubuntu, provu:\n\"                               \"sudo apt install python3-lxml python3-pip python3-protobuf"
 msgstr ""
-"אם אתה משתמש בדביאן או באובונטו, נסה: \n"
+"Wenn Sie Debian oder Ubuntu verwenden, versuchen Sie: \n"
 " \"                               \"sudo apt install python3-lxml python3-pip python3-protobuf"
 
 #: PersonGN/PersonGN.py:83
 msgid "Se vi uzas fedora, provu:\n\"                               \"sudo dnf install python3-lxml python3-pip python3-protobuf"
 msgstr ""
-"אם אתה משתמש ב- Fedora, נסה: \n"
+"Wenn Sie Fedora verwenden, versuchen Sie: \n"
 " \"                               \"sudo dnf install python3-lxml python3-pip python3-protobuf"
 
 #: PersonGN/PersonGN.py:85
 msgid "neplenumitajn dependecojn."
-msgstr "תלות שלא מולאו."
+msgstr "unerfüllte Abhängigkeiten."
 
 #: PersonGN/PersonGN.py:164
 msgid "Koloro"
-msgstr "צבע"
+msgstr "Farbe"
 
 #: PersonGN/PersonGN.py:165
 msgid "Propreco"
-msgstr "תקינות"
+msgstr "Eigenschaft"
 
 #: PersonGN/PersonGN.py:166
 msgid "Dato"
-msgstr "תאריך"
+msgstr "Datum"
 
 #: PersonGN/PersonGN.py:167
 msgid "Gramps Valoro"
-msgstr "ערך בגרמפס"
+msgstr "Gramps Inhalt"
 
 #: PersonGN/PersonGN.py:168
 msgid "GN Dato"
-msgstr "תאריך GN"
+msgstr "GN -Datum"
 
 #: PersonGN/PersonGN.py:169
 msgid "GN Valoro"
-msgstr "ערך GN"
+msgstr "GN -Wert"
 
 #: PersonGN/PersonGN.py:172
 msgid "xTipo"
-msgstr "xסוג"
+msgstr "xTyp"
 
 #: PersonGN/PersonGN.py:173
 msgid "xGr"
-msgstr "xgr"
+msgstr "xGr"
 
 #: PersonGN/PersonGN.py:174
 msgid "xGn"
@@ -118,7 +118,7 @@ msgstr "Xgn"
 
 #: PersonGN/PersonGN.py:175
 msgid "xGr2"
-msgstr "xgr2"
+msgstr "xGr2"
 
 #: PersonGN/PersonGN.py:176
 msgid "xGn2"
@@ -126,208 +126,208 @@ msgstr "Xgn2"
 
 #: PersonGN/PersonGN.py:197
 msgid "Pardonu, nur edzaj, eventaj, patraj, aŭ infanaj linioj povas esti elektitaj."
-msgstr "סליחה, ניתן לבחור רק בעל, אירוע, אבה או קווי ילדים."
+msgstr "Entschuldigung, nur Ehemann, Event, väterliche oder Kinderlinien können ausgewählt werden."
 
 #: PersonGN/PersonGN.py:234
 msgid "Geneanet Kopio"
-msgstr "עותק GeneAnet"
+msgstr "Geneanet -Kopie"
 
 #: PersonGN/PersonGN.py:234
 msgid "Kopio"
-msgstr "לְהַעְתִיק"
+msgstr "Kopie"
 
 #: PersonGN/PersonGN.py:236 PersonGN/PersonGN.py:252
 msgid "Kopiante… "
-msgstr "העתקה ..."
+msgstr "Kopieren ..."
 
 #: PersonGN/PersonGN.py:247
 msgid "kopii al gramps"
-msgstr "העתקה לגרמפס"
+msgstr "Nach Gramps kopieren"
 
 #: PersonGN/PersonGN.py:262
 msgid "nomimporto ankoraŭ ne efektivigita_"
-msgstr "Nomompporto עדיין לא מיושם_"
+msgstr "Die Namenssteuer wurde noch nicht implementiert_"
 
 #: PersonGN/PersonGN.py:273
 msgid "Ĉi tiu persono jam havas patron"
-msgstr "לאדם הזה כבר יש אב"
+msgstr "Diese Person hat bereits einen Vater"
 
 #: PersonGN/PersonGN.py:302
 msgid "Ĉi tiu individuo jam havas patrinon"
-msgstr "לאדם הזה יש כבר אמא"
+msgstr "Diese Person hat bereits eine Mutter"
 
 #: PersonGN/PersonGN.py:423
 msgid "Konfirmo necesa"
-msgstr "אישור נדרש"
+msgstr "Bestätigung erforderlich"
 
 #: PersonGN/PersonGN.py:424
 msgid "Ĉu vi certas, ke vi volas importi infanon\n<b>antaŭ ol importi la edzinon/edzon?</b>"
 msgstr ""
-"האם אתה בטוח שאתה רוצה לייבא ילד \n"
-" <b> לפני ייבוא האישה/הבעל? </b>"
+"Sind Sie sicher, dass Sie ein Kind \n"
+" <b> importieren möchten, bevor Sie die Frau/den Ehemann importieren? </b>"
 
 #: PersonGN/PersonGN.py:426
 msgid "Jes, mi scias, kion mi faras."
-msgstr "כן, אני יודע מה אני עושה."
+msgstr "Ja, ich weiß, was ich tue."
 
 #: PersonGN/PersonGN.py:448
 msgid "\tLa jenaj lokoj estis kreitaj dum la importado,\n vi devus kontroli ilin nun:\n\n"
 msgstr ""
-"\tla המקומות הבאים נוצרו במהלך היבוא, \n"
-" כדאי לבדוק אותם עכשיו: \n"
+"\tla folgende Stellen wurden während des Imports erstellt, \n"
+" Sie sollten sie jetzt überprüfen: \n"
 " \n"
 
 #: PersonGN/PersonGN.py:450
 msgid "lokoj kreitaj !!!"
-msgstr "מקומות נוצרו !!!"
+msgstr "Orte geschaffen !!!"
 
 #: PersonGN/PersonGN.py:462
 msgid "Kopii json-datumojn al tondujo"
-msgstr "העתק נתוני JSON ללוח"
+msgstr "Kopieren Sie JSON -Daten in die Zwischenablage"
 
 #: PersonGN/PersonGN.py:469
 #, python-format
 msgid "Redakti : %s - %s - %s"
-msgstr "עריכה: %s - %s - %s"
+msgstr "Bearbeite: %s - %s - %s"
 
 #: PersonGN/PersonGN.py:497
 msgid "Kopii elekton de Geneanet al gramps"
-msgstr "העתק בחירה מג'נאנט לגרמפים"
+msgstr "Kopieren Sie eine Auswahl von Geneanet zu Gramps"
 
 #: PersonGN/PersonGN.py:503
 msgid "Kompari infanoj"
-msgstr "השווה ילדים"
+msgstr "Vergleiche Kinder"
 
 #: PersonGN/PersonGN.py:579
 msgid "Vidu ĉe Geneanet"
-msgstr "ראה ב- GeneAnet"
+msgstr "Siehe bei Geneanet"
 
 #: PersonGN/PersonGN.py:616 PersonGN/PersonGN.py:626 PersonGN/PersonGN.py:911
 msgid "neniu aktiva persono !!!"
-msgstr "אין אדם פעיל !!!"
+msgstr "Keine aktive Person !!!"
 
 #: PersonGN/PersonGN.py:617 PersonGN/PersonGN.py:627 PersonGN/PersonGN.py:912
 msgid "Vi devas unue elekti personon!"
-msgstr "תחילה עליכם לבחור אדם!"
+msgstr "Sie müssen zuerst eine Person auswählen!"
 
 #: PersonGN/PersonGN.py:788
 #, python-format
 msgid "Elŝutante personojn… (%s/10)"
-msgstr "הורדת אנשים ... (%s/10)"
+msgstr "Leute herunterladen ... (%s/10)"
 
 #: PersonGN/PersonGN.py:809
 msgid "Geneanet Serĉo"
-msgstr "חיפוש GeneAnet"
+msgstr "Geneanet -Suche"
 
 #: PersonGN/PersonGN.py:809
 msgid "Serĉante"
-msgstr "בחיפוש אחר"
+msgstr "Auf der Suche nach"
 
 #: PersonGN/PersonGN.py:812
 msgid "Serĉante… "
-msgstr "מחפש ..."
+msgstr "Auf der Suche nach ..."
 
 #: PersonGN/PersonGN.py:817
 msgid "Eraro: neniuj datumoj."
-msgstr "שגיאה: אין נתונים."
+msgstr "Fehler: Keine Daten vorhanden."
 
 #: PersonGN/PersonGN.py:857
 msgid "URL"
-msgstr "מען URL"
+msgstr "URL"
 
 #: PersonGN/PersonGN.py:858
 msgid "Sosa"
-msgstr "סוסה"
+msgstr "Sosa"
 
 #: PersonGN/PersonGN.py:859
 msgid "Nomo, antaŭnomo"
-msgstr "שם משפחה, שם פרטי"
+msgstr "Nachname, Vorname"
 
 #: PersonGN/PersonGN.py:860
 msgid "Naskiĝo"
-msgstr "הוּלֶדֶת"
+msgstr "Geburt"
 
 #: PersonGN/PersonGN.py:861
 msgid "Morto"
-msgstr "מָוֶת"
+msgstr "Tod"
 
 #: PersonGN/PersonGN.py:862 PersonGN/komparoGN.py:290
 msgid "Gepatroj"
-msgstr "הורים"
+msgstr "Eltern"
 
 #: PersonGN/PersonGN.py:863
 msgid "Nb Inf., Geedzoj"
-msgstr "Nb inf., בני זוג"
+msgstr "NB Inf., Ehepartner"
 
 #: PersonGN/PersonGN.py:921
 msgid "Geneanet serĉo"
-msgstr "חיפוש GeneAnet"
+msgstr "Geneanet -Suche"
 
 #: PersonGN/instdepGN.py:55
 msgid "PersonGN : pip ne trovita."
-msgstr "אישי: PIP לא נמצא."
+msgstr "PersonGN: pip nicht gefunden."
 
 #: PersonGN/instdepGN.py:90
 #, python-format
 msgid "dependeco %s ne trovita"
-msgstr "תלות %לא נמצאה"
+msgstr "Abhängigkeit %s nicht gefunden"
 
 #: PersonGN/komparoGN.py:54 PersonGN/komparoGN.py:63
 msgid "male"
-msgstr "זכר"
+msgstr "männlich"
 
 #: PersonGN/komparoGN.py:56 PersonGN/komparoGN.py:65
 msgid "female"
-msgstr "נקבה"
+msgstr "weiblich"
 
 #: PersonGN/komparoGN.py:58 PersonGN/komparoGN.py:59
 msgid "unknown"
-msgstr "לא ידוע"
+msgstr "unbekannt"
 
 #: PersonGN/komparoGN.py:69
 msgid "Sekso:"
-msgstr "מגדר:"
+msgstr "Geschlecht:"
 
 #: PersonGN/komparoGN.py:88
 msgid "Name"
-msgstr "שם"
+msgstr "Name"
 
 #: PersonGN/komparoGN.py:251
 msgid "Father"
-msgstr "אב"
+msgstr "Vater"
 
 #: PersonGN/komparoGN.py:253
 msgid "Mother"
-msgstr "אם"
+msgstr "Mutter"
 
 #: PersonGN/komparoGN.py:308 PersonGN/komparoGN.py:490
 msgid "Spouse"
-msgstr "זוגאי"
+msgstr "Ehepartner(in)"
 
 #: PersonGN/komparoGN.py:324 PersonGN/komparoGN.py:463
 #: PersonGN/komparoGN.py:476
 msgid "Child"
-msgstr "צאצא"
+msgstr "Kind"
 
 #: PersonGN/komparoGN.py:559
 msgid "Faktoj"
-msgstr "נתונים"
+msgstr "Fakten"
 
 #: PersonGN/komparoGN.py:584
 msgid "Esenco"
-msgstr "מהות"
+msgstr "Lebensdaten"
 
 #: PersonGN/PersonGN.glade:57
 msgid "PersonGN Preferoj"
-msgstr "העדפות אישיות"
+msgstr "Personn Vorlieben"
 
 #: PersonGN/PersonGN.glade:94
 msgid "Uzi OpenStreetMap"
-msgstr "השתמש ב- OpenStreetMap"
+msgstr "Verwenden Sie OpenStreetMap"
 
 #: PersonGN/PersonGN.glade:107
 msgid "Importi notoj"
-msgstr "יבוא הערות"
+msgstr "Notizen importieren"
 
 #: PersonGN/PersonGN.glade:163
 msgid "xxxx-xxx"
@@ -335,115 +335,60 @@ msgstr "xxxx-xxx"
 
 #: PersonGN/PersonGN.glade:180
 msgid "Kompari"
-msgstr "להשוות"
+msgstr "Vergleichen"
 
 #: PersonGN/PersonGN.glade:216
 msgid "Nomo :"
-msgstr "שם משפחה:"
+msgstr "Name:"
 
 #: PersonGN/PersonGN.glade:237
 msgid "Antaŭnomo :"
-msgstr "שם פרטי:"
+msgstr "Vorname:"
 
 #: PersonGN/PersonGN.glade:258
 msgid "Sekso :"
-msgstr "מגדר:"
+msgstr "Geschlecht:"
 
 #: PersonGN/PersonGN.glade:279
 msgid "Dato inter :"
-msgstr "תאריך בין:"
+msgstr "Datum zwischen:"
 
 #: PersonGN/PersonGN.glade:300
 msgid "Loko :"
-msgstr "מקום:"
+msgstr "Ort:"
 
 #: PersonGN/PersonGN.glade:321
 msgid "kaj"
-msgstr "וכן"
+msgstr "Und"
 
 #: PersonGN/PersonGN.glade:340
 msgid "Lanĉi"
-msgstr "שיגור"
+msgstr "Start"
 
 #: PersonGN/PersonGN.glade:353
 msgid "sekva paĝo"
-msgstr "העמוד הבא"
+msgstr "Nächste Seite"
 
 #: PersonGN/PersonGN.glade:517
 msgid "URL :  "
-msgstr "כתובת אתר:"
+msgstr "URL:"
 
 #: PersonGN/PersonGN.glade:526
 msgid "Serĉi"
-msgstr "חיפוש"
+msgstr "Suche"
 
 #: PersonGN/PersonGN.glade:555
 msgid "Importi elekton"
-msgstr "יבוא בחירה"
+msgstr "Wahl der Import"
 
 #: PersonGN/PersonGN.glade:559
 msgid "Importi elekton de Geneanet al Gramps."
-msgstr "יבוא בחירה מג'נאנט לגרמפים."
+msgstr "Importieren Sie eine Wahl von Geneanet bis Gramps."
 
 #: PersonGN/PersonGN.glade:593
 msgid "refreŝigi"
-msgstr "רענון"
+msgstr "aktualisieren"
 
 #: PersonGN/PersonGN.glade:620 PersonGN/PersonGN.glade:632
 msgid "          "
-msgstr ""
-
-#, python-format
-#~ msgid "dependeco %s instalita, versio %s"
-#~ msgstr "תלות %s הותקנה, גרסה %s"
-
-#, python-format
-#~ msgid "arbre geneanet %s"
-#~ msgstr "arbre geneanet %s"
-
-#~ msgid ""
-#~ "Se vi uzas Debian aŭ Ubuntu, provu:\n"
-#~ "sudo apt install python3-lxml python3-pip python3-protobuf"
-#~ msgstr ""
-#~ "אם אתה משתמש בדביאן או באובונטו, נסה: \n"
-#~ "sudo apt התקן python3-lxml python3-pip python3-protobuf"
-
-#~ msgid ""
-#~ "Se vi uzas fedora, provu:\n"
-#~ "sudo dnf install python3-lxml python3-pip python3-protobuf"
-#~ msgstr ""
-#~ "אם אתה משתמש ב- Fedora, נסה: \n"
-#~ "sudo dnf התקן python3-lxml python3-pip python3-protobuf"
-
-#~ msgid "Unable to perform HTML analysis"
-#~ msgstr "לא ניתן לבצע ניתוח HTML"
-
-#~ msgid "Statuso de esencaj informoj (precipa nomo/antaŭnomo, sekso, datoj de naskiĝo kaj morto)"
-#~ msgstr "מצב מידע חיוני (שם/שם פרטי, מגדר, תאריכי לידה ופטירה)"
-
-#~ msgid "Statuso de familiaj ligoj (gepatroj, geedzoj, infanoj)"
-#~ msgstr "מצב  קשרי משפחה (הורים, זוגאים, צאצאים)"
-
-#~ msgid "Statuso de eventoj"
-#~ msgstr "מצב אירועים"
-
-#~ msgid "Statuso de dokumentoj"
-#~ msgstr "מצב מסמכים"
-
-#~ msgid "Statuso de duploj"
-#~ msgstr "מצב עותקים"
-
-#~ msgid "  "
-#~ msgstr "[null,null,eo"
-
-#~ msgid "La geneanet-grampleto havas neplenumitajn dependecojn."
-#~ msgstr "לחסד הגנאנט יש תלות שלא ממולאות."
-
-#~ msgid "Pardonu, nur edzaj, patraj, aŭ infanaj linioj povas esti elektitaj."
-#~ msgstr "סליחה, ניתן לבחור רק נישואין, אבהות או קווי ילדים."
-
-#~ msgid "PersonGN"
-#~ msgstr "אישי"
-
-#~ msgid "Konservi mian pasvorton, mi konscias pri la riskoj."
-#~ msgstr "שמור את הסיסמה שלי, אני מודע לסיכונים."
+msgstr "\tla folgende Stellen wurden während des Imports erstellt, \n"

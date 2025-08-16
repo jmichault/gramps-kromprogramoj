@@ -1,4 +1,4 @@
-# Esperanto translations for gramps-kromprogramoj. package.
+# German translations for gramps-kromprogramoj. package.
 # Copyright (C) 2025 THE gramps-kromprogramoj.'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the gramps-kromprogramoj. package.
 # Automatically generated, 2025.
@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: gramps-kromprogramoj. 60\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-16 22:08+0200\n"
-"PO-Revision-Date: 2025-05-30 11:27+0200\n"
+"PO-Revision-Date: 2025-08-16 19:26+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
-"Language: eo\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,97 +19,97 @@ msgstr ""
 
 #: PlaceFrCog/placefrcog.gpr.py:31
 msgid "Lokoj : Franca Oficiala Geografia Kodo"
-msgstr "Lokoj : Franca Oficiala Geografia Kodo"
+msgstr "Orte: Französischer offizieller geografischer Code"
 
 #: PlaceFrCog/placefrcog.gpr.py:32
 msgid "Gramplet por preni municipojn de la datumbazo Insee"
-msgstr "Gramplet por preni municipojn de la datumbazo Insee"
+msgstr "Gramplet, um Gemeinden aus der Insee -Datenbank zu nehmen"
 
 #: PlaceFrCog/placefrcog.gpr.py:38
 msgid "Fr COG"
-msgstr "Fr COG"
+msgstr "FR COG"
 
 #: PlaceFrCog/placefrcog.py:96
 msgid "Enigu la INSEE-numeron de la komunumo: (aŭ plurajn nombrojn apartigitajn per spacoj)"
-msgstr "Enigu la INSEE-numeron de la komunumo: (aŭ plurajn nombrojn apartigitajn per spacoj)"
+msgstr "Geben Sie die Insee -Nummer der Community ein: (oder mehrere Zahlen, die durch Räume getrennt sind)"
 
 #: PlaceFrCog/placefrcog.py:101
 msgid "Ŝargi per kodo"
-msgstr "Ŝargi per kodo"
+msgstr "Mit Code laden"
 
 #: PlaceFrCog/placefrcog.py:106
 msgid "Ŝargi per kodo (anstataŭe)"
-msgstr "Ŝargi per kodo (anstataŭe)"
+msgstr "Laden Sie mit Code (stattdessen)"
 
 #: PlaceFrCog/placefrcog.py:113
 msgid "Enigu la nomon de la komunumo:"
-msgstr "Enigu la nomon de la komunumo:"
+msgstr "Geben Sie den Namen der Community ein:"
 
 #: PlaceFrCog/placefrcog.py:118
 msgid "Ŝarĝi per nomo"
-msgstr "Ŝarĝi per nomo"
+msgstr "Laden Sie mit Namen"
 
 #: PlaceFrCog/placefrcog.py:123
 msgid "Ŝarĝi per nomo (anstataŭe)"
-msgstr "Ŝarĝi per nomo (anstataŭe)"
+msgstr "Laden Sie nach Namen (stattdessen)"
 
 #: PlaceFrCog/placefrcog.py:159 PlaceFrCog/placefrcog.py:258
 #, python-format
 msgid "Ĝisdatigo de loko kun INSEE-id %s"
-msgstr "Ĝisdatigo de loko kun INSEE-id %s"
+msgstr "Update von Ort mit Insee id %s"
 
 #: PlaceFrCog/placefrcog.py:183 PlaceFrCog/placefrcog.py:247
 msgid "Ekzistanta kodo"
-msgstr "Ekzistanta kodo"
+msgstr "Vorhandener Code"
 
 #: PlaceFrCog/placefrcog.py:183 PlaceFrCog/placefrcog.py:247
 msgid "Ĉi tiu kodo jam ekzistas en la datumbazo."
-msgstr "Ĉi tiu kodo jam ekzistas en la datumbazo."
+msgstr "Dieser Code ist bereits in der Datenbank vorhanden."
 
 #: PlaceFrCog/placefrcog.py:193
 #, python-format
 msgid "Aldono de loko kun INSEE-id %s"
-msgstr "Aldono de loko kun INSEE-id %s"
+msgstr "Hinzufügen von Platz mit Insee-id %s"
 
 #: PlaceFrCog/placefrcog.py:222
 msgid "Nekonato nomo"
-msgstr "Nekonato nomo"
+msgstr "Unbekannter Name"
 
 #: PlaceFrCog/placefrcog.py:222
 msgid "Ĉi tiu nomo ne estis trovita en la INSEE-datumbazo: "
-msgstr "Ĉi tiu nomo ne estis trovita en la INSEE-datumbazo:"
+msgstr "Dieser Name wurde in der Insee -Datenbank nicht gefunden:"
 
 #: PlaceFrCog/placefrcog.py:229
 #, python-format
 msgid "%d rezultoj"
-msgstr "%d rezultoj"
+msgstr "%d Ergebnisse"
 
 #: PlaceFrCog/placefrcog.py:229
 #, python-format
 msgid "Unua rezulto :\n\t%s ; kodo=%s. \n\n\t\tImporti ?\n"
 msgstr ""
-"Unua rezulto :\n"
-"\t%s ; kodo=%s. \n"
-"\n"
-"\t\tImporti ?\n"
+"Erstes Ergebnis: \n"
+" \t%s; Code =%s. \n"
+" \n"
+" \t \timport? \n"
 
 #: PlaceFrCog/placefrcog.py:230
 msgid "Jes, Importi"
-msgstr "Jes, Importi"
+msgstr "Ja, zum Import"
 
 #: PlaceFrCog/placefrcog.py:230
 msgid "Venonta"
-msgstr "Venonta"
+msgstr "Nächste"
 
 #: PlaceFrCog/placefrcog.py:254 PlaceFrCog/placefrcog.py:384
 msgid "Nekonata kodo"
-msgstr "Nekonata kodo"
+msgstr "Unbekannter Code"
 
 #: PlaceFrCog/placefrcog.py:254 PlaceFrCog/placefrcog.py:384
 msgid "Ĉi tiu kodo ne estis trovita en la INSEE-datumbazo: "
-msgstr "Ĉi tiu kodo ne estis trovita en la INSEE-datumbazo:"
+msgstr "Dieser Code wurde in der Insee -Datenbank nicht gefunden:"
 
 #: PlaceFrCog/placefrcog.py:293
 #, python-format
 msgid "Aldono de loko %s"
-msgstr "Aldono de loko %s"
+msgstr "Hinzufügen von Place %s"

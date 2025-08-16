@@ -797,7 +797,7 @@ class PersonFS(Gramplet):
           fsTP.persons.add(fsP)
         elif (tipolinio == 'Bildo' ) :
           pass
-     # FARINDAĴO : gepatroj, infanoj,…
+     # FARINDAĴO : gepatroj, Bildoj
 
     if len(fsTP.persons) >0 :
       peto = gedcomx_v1.jsonigi(fsTP)
@@ -814,9 +814,9 @@ class PersonFS(Gramplet):
         print(" res.status_code="+str(res.status_code))
         print (res.headers)
         print (res.text)
-    if len(fsTP.persons) >0 or len(fsTR.relationships) >0 :
+    if len(fsTP.persons) >0 or len(fsTR.relationships) >0 or len(fsTR.childAndParentsRelationships) >0 :
       self.ButRefresxigi_clicked(None)
-    
+
   def ligi(self, treeview):
     print("ligi")
     nbElek = 0

@@ -892,7 +892,7 @@ def aldAliajFaktojKomp(db, person, fsPerso ) :
     if int(grFakto.get_role()) != EventRoleType.PRIMARY:
       continue
     event = db.get_event_from_handle(grFakto.ref)
-    if event.type == EventType.BIRTH or event.type == EventType.DEATH or event.type == EventType.BAPTISM or event.type == EventType.BURIAL :
+    if event.type in (EventType.BIRTH , EventType.DEATH , EventType.BAPTISM , EventType.BURIAL , EventType.CHRISTEN):
       continue
     titolo = str(EventType(event.type))
     grFaktoPriskribo = event.description or ''
@@ -965,7 +965,8 @@ def aldAliajFaktojKomp(db, person, fsPerso ) :
         ] )
   koloro = "yellow3"
   for fsFakto in fsFaktoj :
-    if fsFakto.type == "http://gedcomx.org/Birth" or fsFakto.type == "http://gedcomx.org/Baptism" or fsFakto.type == "http://gedcomx.org/Death" or fsFakto.type == "http://gedcomx.org/Burial" :
+    if fsFakto.type in ("http://gedcomx.org/Birth" , "http://gedcomx.org/Baptism" 
+        ,"http://gedcomx.org/Death","http://gedcomx.org/Burial","http://gedcomx.org/Christening"):
       continue
     gedTag = GEDCOMX_GRAMPS_FAKTOJ.get(unquote(fsFakto.type))
     if not gedTag:
@@ -1034,6 +1035,9 @@ def kompariFsGr(fsPersono,grPersono,db,model=None,dupdok=False):
   if res: listres.append(res)
   if res and res[0] != "green" : FS_Esenco = True
   res = FaktoKomp(db, grPersono, fsPersono, EventType.BAPTISM , "http://gedcomx.org/Baptism")
+  if res: listres.append(res)
+  if res and res[0] != "green" : FS_Esenco = True
+  res = FaktoKomp(db, grPersono, fsPersono, EventType.CHRISTEN , "http://gedcomx.org/Christening")
   if res: listres.append(res)
   if res and res[0] != "green" : FS_Esenco = True
   res = FaktoKomp(db, grPersono, fsPersono, EventType.DEATH , "http://gedcomx.org/Death") 

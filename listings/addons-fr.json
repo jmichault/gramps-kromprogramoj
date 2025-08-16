@@ -4,7 +4,7 @@
 "i": "FamilySearch komparo",
 "t": 2,
 "d": "FamilySearch : comparer les personnes de gramps avec celles de FamilySearch.",
-"v": "beta 2.0.69",
+"v": "beta 2.0.70",
 "g": "6.0",
 "s": 3,
 "z": "PersonFS.addon.tgz"
@@ -14,7 +14,7 @@
 "i": "Importo de FamilySearch",
 "t": 2,
 "d": "FamilySearch.",
-"v": "beta 2.0.69",
+"v": "beta 2.0.70",
 "g": "6.0",
 "s": 3,
 "z": "PersonFS.addon.tgz"
@@ -24,7 +24,7 @@
 "i": "FS Gramplet",
 "t": 10,
 "d": "interface pour FamilySearch",
-"v": "beta 2.0.69",
+"v": "beta 2.0.70",
 "g": "6.0",
 "s": 3,
 "z": "PersonFS.addon.tgz"
@@ -34,28 +34,18 @@
 "i": "Lokpurigado",
 "t": 10,
 "d": "Le nettoyage du lieu aide \u00e0 compl\u00e9ter les emplacements \u00e0 l'aide d'OpenStreetMap.",
-"v": "1.0.30",
+"v": "1.0.31",
 "g": "6.0",
 "s": 3,
 "z": "Lokpurigado.addon.tgz",
 "h": "Addon:Lokpurigado"
 },
 {
-"n": "Gramplet Geneanet",
-"i": "PersonGN",
-"t": 10,
-"d": "interface pour Geneanet",
-"v": "1.0.1",
-"g": "6.0",
-"s": 3,
-"z": "PersonGN.addon.tgz"
-},
-{
 "n": "Lieux : Code Officiel G\u00e9ographique fran\u00e7ais",
 "i": "PlaceFrCog Gramplet",
 "t": 10,
 "d": "Gramplet pour r\u00e9cup\u00e9rer les communes de la base Insee",
-"v": "1.0.44",
+"v": "1.0.45",
 "g": "6.0",
 "s": 3,
 "z": "PlaceFrCog.addon.tgz"
