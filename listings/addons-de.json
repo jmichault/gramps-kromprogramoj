@@ -1,0 +1,63 @@
+[
+{
+"n": "FamilySearch: Vergleichen",
+"i": "FamilySearch komparo",
+"t": 2,
+"d": "FamilySearch: Vergleiche Gramps Einträge with FS Einträgen.",
+"v": "beta 2.0.69",
+"g": "6.0",
+"s": 3,
+"z": "PersonFS.addon.tgz"
+},
+{
+"n": "Importieren von FamilySearch Daten",
+"i": "Importo de FamilySearch",
+"t": 2,
+"d": "FamilySearch.",
+"v": "beta 2.0.69",
+"g": "6.0",
+"s": 3,
+"z": "PersonFS.addon.tgz"
+},
+{
+"n": "PersonFS",
+"i": "FS Gramplet",
+"t": 10,
+"d": "Schnittstelle zu FamilySearch",
+"v": "beta 2.0.69",
+"g": "6.0",
+"s": 3,
+"z": "PersonFS.addon.tgz"
+},
+{
+"n": "Ortsbereinigung",
+"i": "Lokpurigado",
+"t": 10,
+"d": "Ortsbereinigung hilft, Orte mit OpenStreetMap zu vervollständigen.",
+"v": "1.0.30",
+"g": "6.0",
+"s": 3,
+"z": "Lokpurigado.addon.tgz",
+"h": "Addon:Lokpurigado"
+},
+{
+"n": "Geneanet Gramplet",
+"i": "PersonGN",
+"t": 10,
+"d": "Schnitstelle zu geneanet",
+"v": "1.0.1",
+"g": "6.0",
+"s": 3,
+"z": "PersonGN.addon.tgz"
+},
+{
+"n": "Orte: Französischer offizieller geografischer Code",
+"i": "PlaceFrCog Gramplet",
+"t": 10,
+"d": "Gramplet zum Übernehmen von Gemeinden aus der INSEE-Datenbank",
+"v": "1.0.44",
+"g": "6.0",
+"s": 3,
+"z": "PlaceFrCog.addon.tgz"
+}
+]
