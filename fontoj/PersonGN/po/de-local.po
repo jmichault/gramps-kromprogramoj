@@ -391,4 +391,4 @@ msgstr "aktualisieren"
 
 #: PersonGN/PersonGN.glade:620 PersonGN/PersonGN.glade:632
 msgid "          "
-msgstr "\tla folgende Stellen wurden während des Imports erstellt, \n"
+msgstr "          "

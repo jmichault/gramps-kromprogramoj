@@ -392,28 +392,3 @@ msgstr "refresh"
 #: PersonGN/PersonGN.glade:620 PersonGN/PersonGN.glade:632
 msgid "          "
 msgstr "          "
-
-#, python-format
-#~ msgid "dependeco %s instalita, versio %s"
-#~ msgstr "dependence %s installed, version %s"
-
-#, python-format
-#~ msgid "arbre geneanet %s"
-#~ msgstr "geneanet tree %s"
-
-#~ msgid ""
-#~ "Se vi uzas Debian aŭ Ubuntu, provu:\n"
-#~ "sudo apt install python3-lxml python3-pip python3-protobuf"
-#~ msgstr ""
-#~ "If you are using Debian or Ubuntu, try: \n"
-#~ "sudo apt install python3-lxml python3-pip python3-protobuf"
-
-#~ msgid ""
-#~ "Se vi uzas fedora, provu:\n"
-#~ "sudo dnf install python3-lxml python3-pip python3-protobuf"
-#~ msgstr ""
-#~ "If you are using Fedora, try: \n"
-#~ "sudo dnf install python3-lxml python3-pip python3-protobuf"
-
-#~ msgid "Unable to perform HTML analysis"
-#~ msgstr "Unable to perform html analysis"

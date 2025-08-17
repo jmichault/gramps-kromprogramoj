@@ -629,7 +629,7 @@ msgstr "PERSONFS Preferências"
 msgid "Alklakante la Apliki-Butonon, mi konsentas\nPersonFS ŝatus scii viajn bazajn FamilySearch-profilinformojn kaj alirdatenojn pri viaj prapatroj de la FamilySearch genealogia arbo.\nPersonFS uzos ĉi tiujn informojn konforme al iliaj respektivaj servokondiĉoj kaj privatecaj politikoj.\n"
 msgstr ""
 "Ao clicar no botão do aplicativo, eu concordo que os \n"
-"personfs gostariam de conhecer suas informações básicas de perfil familiar e acesso a namoro sobre seus ancestrais da árvore genealógica da FamilySearch."
+"personfs gostariam de conhecer suas informações básicas de perfil familiar e acesso a namoro sobre seus ancestrais da árvore genealógica da FamilySearch.\n"
 
 #: PersonFS/PersonFS.glade:171
 msgid "FamilySearch identeco :"

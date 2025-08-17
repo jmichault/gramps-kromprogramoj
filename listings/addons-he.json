@@ -1,30 +1,10 @@
 [
 {
-"n": "FamilySearch: \u05d4\u05e9\u05d5\u05d5\u05d0\u05d4",
-"i": "FamilySearch komparo",
-"t": 2,
-"d": "FamilySearch: \u05d4\u05e9\u05d5\u05d5\u05d0\u05d4 \u05d1\u05d9\u05df \u05d0\u05e0\u05e9\u05d9\u05dd \u05d1\u05d2\u05e8\u05d0\u05de\u05e4\u05e1 \u05dc\u05d0\u05e0\u05e9\u05d9\u05dd \u05d1\u05beFS.",
-"v": "beta 2.0.70",
-"g": "6.0",
-"s": 3,
-"z": "PersonFS.addon.tgz"
-},
-{
-"n": "FamilySearch \u05d9\u05d1\u05d5\u05d0 \u05e0\u05ea\u05d5\u05e0\u05d9\u05dd",
-"i": "Importo de FamilySearch",
-"t": 2,
-"d": "FamilySearch.",
-"v": "beta 2.0.70",
-"g": "6.0",
-"s": 3,
-"z": "PersonFS.addon.tgz"
-},
-{
 "n": "PersonFS",
 "i": "FS Gramplet",
 "t": 10,
 "d": "\u05de\u05e0\u05e9\u05e7 FamilySearch",
-"v": "beta 2.0.70",
+"v": "beta 2.0.71",
 "g": "6.0",
 "s": 3,
 "z": "PersonFS.addon.tgz"
@@ -34,11 +14,21 @@
 "i": "Lokpurigado",
 "t": 10,
 "d": "\u05e0\u05d9\u05e7\u05d5\u05d9 \u05de\u05e7\u05d5\u05dd \u05e2\u05d5\u05d6\u05e8 \u05dc\u05d4\u05e9\u05dc\u05d9\u05dd \u05e4\u05e8\u05d8\u05d9\u05dd \u05e2\u05dc \u05d4\u05de\u05e7\u05d5\u05dd \u05d1\u05d0\u05de\u05e6\u05e2\u05d5\u05ea OpenStreetMap.",
-"v": "1.0.31",
+"v": "1.0.32",
 "g": "6.0",
 "s": 3,
 "z": "Lokpurigado.addon.tgz",
 "h": "Addon:Lokpurigado"
+},
+{
+"n": "Geneanet Gramplet",
+"i": "PersonGN",
+"t": 10,
+"d": "interfaco por Geneanet",
+"v": "1.0.3",
+"g": "6.0",
+"s": 3,
+"z": "PersonGN.addon.tgz"
 },
 {
 "n": "\u05de\u05e7\u05d5\u05de\u05d5\u05ea: \u05e7\u05d5\u05d3 \u05d2\u05d9\u05d0\u05d5\u05d2\u05e8\u05e4\u05d9 \u05d4\u05e8\u05e9\u05de\u05d9 \u05d4\u05e6\u05e8\u05e4\u05ea\u05d9",

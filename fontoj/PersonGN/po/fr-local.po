@@ -392,29 +392,5 @@ msgstr "rafraîchir"
 
 #: PersonGN/PersonGN.glade:620 PersonGN/PersonGN.glade:632
 msgid "          "
-msgstr "\tles lieux suivants ont été créés pendant l'importation,\n"
+msgstr "          "
 
-#, python-format
-#~ msgid "dependeco %s instalita, versio %s"
-#~ msgstr "Dépendance %s installée, version %s"
-
-#, python-format
-#~ msgid "arbre geneanet %s"
-#~ msgstr "arbre geneanet %s"
-
-#~ msgid ""
-#~ "Se vi uzas Debian aŭ Ubuntu, provu:\n"
-#~ "sudo apt install python3-lxml python3-pip python3-protobuf"
-#~ msgstr ""
-#~ "Si vous utilisez Debian ou Ubuntu, essayez: \n"
-#~ "sudo apt install python3-lxml python3-pip python3-protobuf"
-
-#~ msgid ""
-#~ "Se vi uzas fedora, provu:\n"
-#~ "sudo dnf install python3-lxml python3-pip python3-protobuf"
-#~ msgstr ""
-#~ "Si vous utilisez fedora, essayez: \n"
-#~ "sudo dnf install python3-lxml python3-pip python3-protobuf"
-
-#~ msgid "Unable to perform HTML analysis"
-#~ msgstr "Impossible d'analyser le code HTML"

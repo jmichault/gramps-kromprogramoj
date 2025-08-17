@@ -27,7 +27,7 @@ msgstr "Lokpurigado helpas kompletigi lokojn uzante OpenStreetMap."
 
 #: Lokpurigado/lokpurigado.py:251
 msgid "\nNeniu kongruo\ntrovita"
-msgstr "Neniu kongruotrovita"
+msgstr "\nNeniu kongruo\ntrovita"
 
 #: Lokpurigado/lokpurigado.py:252
 msgid "Trovi"
@@ -57,7 +57,7 @@ msgstr "Provu ŝanĝi la titolon aŭ uzu la butonon \"Redakti\" por permane komp
 #: Lokpurigado/lokpurigado.py:312
 #, python-format
 msgid "\n%s\nOpenStreetMap\nKongruecoj"
-msgstr "%sOpenStreetMapKongruecoj"
+msgstr "\n%s\nOpenStreetMap\nKongruecoj"
 
 #: Lokpurigado/lokpurigado.py:313 Lokpurigado/lokpurigado.glade:814
 msgid "Elekti"

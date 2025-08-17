@@ -29,7 +29,7 @@
 """
 from gramps.version import major_version
 # just for pylint :
-from gramps.gen.plug._pluginreg import GRAMPLET,_,STABLE,register
+from gramps.gen.plug._pluginreg import GRAMPLET,_,STABLE
 
 register(GRAMPLET,
          id = "PersonGN",
@@ -43,7 +43,8 @@ register(GRAMPLET,
          gramplet_title=_("Geneanet"),
          detached_width = 500,
          detached_height = 500,
-         version = '1.0.2',
+         version = '1.0.3',
          gramps_target_version= major_version,
          navtypes=["Person"],
+         include_in_listing = True,
          )

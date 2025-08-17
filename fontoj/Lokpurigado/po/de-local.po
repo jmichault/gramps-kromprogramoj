@@ -27,7 +27,7 @@ msgstr "Platzieren Sie die Reinigung hilft den Standorten mit OpenStreetmap zu v
 
 #: Lokpurigado/lokpurigado.py:251
 msgid "\nNeniu kongruo\ntrovita"
-msgstr "Kompatibilität \ncrovit"
+msgstr "\nKeine Übereinstimmung\n gefunden."
 
 #: Lokpurigado/lokpurigado.py:252
 msgid "Trovi"
