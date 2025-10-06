@@ -299,8 +299,13 @@ class Api:
           'nb_desc': 1
       }
       params['identifier_person.oc'] = person_id.get('oc') or 0
-      personGraph = self._arbre_api('graph_v2', params)
-      if personGraph:
+      personGraph = self._arbre_api('graph_v2', params.copy())
+      if personGraph and not 'nodesAsc' in personGraph:
+        # on fait un deuxième essai en ré-initialisant la connexion
+        del self.opener
+        self.opener = request.build_opener(request.HTTPCookieProcessor())
+        personGraph = self._arbre_api('graph_v2', params)
+      if personGraph and 'nodesAsc' in personGraph:
         person_id['i'] = personGraph['nodesAsc'][0]['person']['index']
       elif 'i' in person_id:
         personGraph = self._arbre_api('graph_v2', {
@@ -309,7 +314,7 @@ class Api:
             'nb_asc': 1,
             'nb_desc': 1
         })
-        if not personGraph:
+        if not personGraph or not 'nodesAsc' in personGraph:
           return {'error': 'could not find that person'}
         person_id['p'] = personGraph['nodesAsc'][0]['person']['p']
         person_id['n'] = personGraph['nodesAsc'][0]['person']['n']
