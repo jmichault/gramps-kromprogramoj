@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-16 16:18+0200\n"
+"POT-Creation-Date: 2025-10-19 17:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -202,11 +202,11 @@ msgstr ""
 msgid "Vidu ĉe Geneanet"
 msgstr ""
 
-#: PersonGN/PersonGN.py:616 PersonGN/PersonGN.py:626 PersonGN/PersonGN.py:911
+#: PersonGN/PersonGN.py:616 PersonGN/PersonGN.py:626 PersonGN/PersonGN.py:913
 msgid "neniu aktiva persono !!!"
 msgstr ""
 
-#: PersonGN/PersonGN.py:617 PersonGN/PersonGN.py:627 PersonGN/PersonGN.py:912
+#: PersonGN/PersonGN.py:617 PersonGN/PersonGN.py:627 PersonGN/PersonGN.py:914
 msgid "Vi devas unue elekti personon!"
 msgstr ""
 
@@ -227,39 +227,39 @@ msgstr ""
 msgid "Serĉante… "
 msgstr ""
 
-#: PersonGN/PersonGN.py:817
+#: PersonGN/PersonGN.py:819
 msgid "Eraro: neniuj datumoj."
 msgstr ""
 
-#: PersonGN/PersonGN.py:857
+#: PersonGN/PersonGN.py:859
 msgid "URL"
 msgstr ""
 
-#: PersonGN/PersonGN.py:858
+#: PersonGN/PersonGN.py:860
 msgid "Sosa"
 msgstr ""
 
-#: PersonGN/PersonGN.py:859
+#: PersonGN/PersonGN.py:861
 msgid "Nomo, antaŭnomo"
 msgstr ""
 
-#: PersonGN/PersonGN.py:860
+#: PersonGN/PersonGN.py:862
 msgid "Naskiĝo"
 msgstr ""
 
-#: PersonGN/PersonGN.py:861
+#: PersonGN/PersonGN.py:863
 msgid "Morto"
 msgstr ""
 
-#: PersonGN/PersonGN.py:862 PersonGN/komparoGN.py:290
+#: PersonGN/PersonGN.py:864 PersonGN/komparoGN.py:293
 msgid "Gepatroj"
 msgstr ""
 
-#: PersonGN/PersonGN.py:863
+#: PersonGN/PersonGN.py:865
 msgid "Nb Inf., Geedzoj"
 msgstr ""
 
-#: PersonGN/PersonGN.py:921
+#: PersonGN/PersonGN.py:923
 msgid "Geneanet serĉo"
 msgstr ""
 
@@ -288,32 +288,32 @@ msgstr ""
 msgid "Sekso:"
 msgstr ""
 
-#: PersonGN/komparoGN.py:88
+#: PersonGN/komparoGN.py:91
 msgid "Name"
 msgstr ""
 
-#: PersonGN/komparoGN.py:251
+#: PersonGN/komparoGN.py:254
 msgid "Father"
 msgstr ""
 
-#: PersonGN/komparoGN.py:253
+#: PersonGN/komparoGN.py:256
 msgid "Mother"
 msgstr ""
 
-#: PersonGN/komparoGN.py:308 PersonGN/komparoGN.py:490
+#: PersonGN/komparoGN.py:311 PersonGN/komparoGN.py:493
 msgid "Spouse"
 msgstr ""
 
-#: PersonGN/komparoGN.py:324 PersonGN/komparoGN.py:463
-#: PersonGN/komparoGN.py:476
+#: PersonGN/komparoGN.py:327 PersonGN/komparoGN.py:466
+#: PersonGN/komparoGN.py:479
 msgid "Child"
 msgstr ""
 
-#: PersonGN/komparoGN.py:559
+#: PersonGN/komparoGN.py:562
 msgid "Faktoj"
 msgstr ""
 
-#: PersonGN/komparoGN.py:584
+#: PersonGN/komparoGN.py:589
 msgid "Esenco"
 msgstr ""
 
@@ -385,10 +385,14 @@ msgstr ""
 msgid "Importi elekton de Geneanet al Gramps."
 msgstr ""
 
-#: PersonGN/PersonGN.glade:593
+#: PersonGN/PersonGN.glade:571
 msgid "refreŝigi"
 msgstr ""
 
-#: PersonGN/PersonGN.glade:620 PersonGN/PersonGN.glade:632
+#: PersonGN/PersonGN.glade:598 PersonGN/PersonGN.glade:610
 msgid "          "
+msgstr ""
+
+#: PersonGN/PersonGN.glade:627 PersonGN/PersonGN.glade:634
+msgid " "
 msgstr ""
