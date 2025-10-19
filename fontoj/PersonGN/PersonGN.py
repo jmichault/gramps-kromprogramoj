@@ -812,8 +812,10 @@ class PersonGN(Gramplet):
     progress.set_pass(_('Serĉante… '), 12, mode=ProgressMeter.MODE_FRACTION)
     progress.step()
     r = PersonGN.gn.urlopen(self._konstrui_mendo(pagxo))
+    if r == b'': # deuxième essai
+      r = PersonGN.gn.urlopen(self._konstrui_mendo(pagxo))
     progress.step()
-    if r is None:
+    if r is None or r == b'':
       print(_('Eraro: neniuj datumoj.'))
     else:
       try:

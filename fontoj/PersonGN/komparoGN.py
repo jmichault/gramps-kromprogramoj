@@ -77,8 +77,11 @@ class Kompari:
   def _nomoj_komp(self, gr_persono, ext_persono, listres):
     """ comparaison des noms """
     grNomo = gr_persono.primary_name
-    extNomo = ext_persono['person'].get('lastname')
-    extANomo = ext_persono['person'].get('firstname')
+    ext = ext_persono.get('person')
+    if ext is None:
+      return
+    extNomo = ext.get('lastname')
+    extANomo = ext.get('firstname')
     koloro = "red"
     if ((grNomo.get_surname().upper() == extNomo.upper()) and
         (grNomo.first_name.upper() == extANomo.upper())):
@@ -563,6 +566,8 @@ class Kompari:
 
   def kompari_gr_ext(self):
     """ effectue la comparaison """
+    if self.ext_persono.get('person') is None:
+      return
     # Komparo de esenca eroj
     listres = []
     listres = self._sekso_komp(self.gr_persono, self.ext_persono, listres)
