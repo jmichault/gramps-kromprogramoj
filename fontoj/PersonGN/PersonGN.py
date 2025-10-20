@@ -813,6 +813,7 @@ class PersonGN(Gramplet):
     progress.step()
     r = PersonGN.gn.urlopen(self._konstrui_mendo(pagxo))
     if r == b'': # deuxième essai
+      PersonGN.gn.reinit()
       r = PersonGN.gn.urlopen(self._konstrui_mendo(pagxo))
     progress.step()
     if r is None or r == b'':

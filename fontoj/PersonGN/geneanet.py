@@ -129,6 +129,10 @@ class Api:
     httpsProcessor = request.HTTPSHandler(context=SslContext)
     self.opener = request.build_opener(cookieProcessor, httpsProcessor)
 
+  def reinit(self):
+    del self.opener
+    self.opener = request.build_opener(request.HTTPCookieProcessor())
+
   def urlopen(self, url, data=None, headers=None):
     """ chargement d'une url """
     headers = headers or Headers
@@ -145,9 +149,8 @@ class Api:
       print('HTTPError loading %s code: %s ', (url, e.code))
     except (URLError,UnicodeEncodeError,TimeoutError) as e:
       print(f'{e.__class__.__name__} loading {url} reason: {e.reason}')
-    if statusCode == 403 or b'Sign up for free' in out:
-      del self.opener
-      self.opener = request.build_opener(request.HTTPCookieProcessor())
+    if statusCode == 403 or b'Sign up for free' in out or b'button-register' in out:
+      self.reinit()
       req = request.Request(url, data=data, headers=headers)
       try:
         response = self.opener.open(req, timeout=10)
@@ -159,7 +162,7 @@ class Api:
         print('URLError loading %s reason: %s ', (url, e.reason))
       except UnicodeEncodeError as e:
         print('UnicodeError loading %s reason: %s ', (url, e.reason))
-      if b'Sign up for free' in out:
+      if b'Sign up for free' in out or b'button-register' in out:
         print("************ Sign up for free in response *************")
     if statusCode != 403:
       return out
@@ -302,8 +305,7 @@ class Api:
       personGraph = self._arbre_api('graph_v2', params.copy())
       if personGraph and not 'nodesAsc' in personGraph:
         # on fait un deuxième essai en ré-initialisant la connexion
-        del self.opener
-        self.opener = request.build_opener(request.HTTPCookieProcessor())
+        self.reinit()
         personGraph = self._arbre_api('graph_v2', params)
       if personGraph and 'nodesAsc' in personGraph:
         person_id['i'] = personGraph['nodesAsc'][0]['person']['index']
