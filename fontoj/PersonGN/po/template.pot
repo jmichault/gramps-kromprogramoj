@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-19 17:32+0200\n"
+"POT-Creation-Date: 2025-10-20 17:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -202,11 +202,11 @@ msgstr ""
 msgid "Vidu ĉe Geneanet"
 msgstr ""
 
-#: PersonGN/PersonGN.py:616 PersonGN/PersonGN.py:626 PersonGN/PersonGN.py:913
+#: PersonGN/PersonGN.py:616 PersonGN/PersonGN.py:626 PersonGN/PersonGN.py:914
 msgid "neniu aktiva persono !!!"
 msgstr ""
 
-#: PersonGN/PersonGN.py:617 PersonGN/PersonGN.py:627 PersonGN/PersonGN.py:914
+#: PersonGN/PersonGN.py:617 PersonGN/PersonGN.py:627 PersonGN/PersonGN.py:915
 msgid "Vi devas unue elekti personon!"
 msgstr ""
 
@@ -227,39 +227,39 @@ msgstr ""
 msgid "Serĉante… "
 msgstr ""
 
-#: PersonGN/PersonGN.py:819
+#: PersonGN/PersonGN.py:820
 msgid "Eraro: neniuj datumoj."
 msgstr ""
 
-#: PersonGN/PersonGN.py:859
+#: PersonGN/PersonGN.py:860
 msgid "URL"
 msgstr ""
 
-#: PersonGN/PersonGN.py:860
+#: PersonGN/PersonGN.py:861
 msgid "Sosa"
 msgstr ""
 
-#: PersonGN/PersonGN.py:861
+#: PersonGN/PersonGN.py:862
 msgid "Nomo, antaŭnomo"
 msgstr ""
 
-#: PersonGN/PersonGN.py:862
+#: PersonGN/PersonGN.py:863
 msgid "Naskiĝo"
 msgstr ""
 
-#: PersonGN/PersonGN.py:863
+#: PersonGN/PersonGN.py:864
 msgid "Morto"
 msgstr ""
 
-#: PersonGN/PersonGN.py:864 PersonGN/komparoGN.py:293
+#: PersonGN/PersonGN.py:865 PersonGN/komparoGN.py:293
 msgid "Gepatroj"
 msgstr ""
 
-#: PersonGN/PersonGN.py:865
+#: PersonGN/PersonGN.py:866
 msgid "Nb Inf., Geedzoj"
 msgstr ""
 
-#: PersonGN/PersonGN.py:923
+#: PersonGN/PersonGN.py:924
 msgid "Geneanet serĉo"
 msgstr ""
 
