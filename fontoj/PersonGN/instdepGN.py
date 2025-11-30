@@ -23,6 +23,11 @@
 """  modulo ebliganta vin instali dependecojn per pip 
 """
 
+import sys
+#import pdb; pdb.set_trace()
+from gramps.gen.const import LIB_PATH
+from gn_constants import _
+
 try:
   from importlib.metadata import version,PackageNotFoundError
   from importlib import invalidate_caches
@@ -30,6 +35,20 @@ try:
   HavPip=True
 except ImportError:
   HavPip=False
+  try:
+    import ensurepip
+    ensurepip.bootstrap()
+    from gramps.gui.dialog import WarningDialog
+    WarningDialog(_('"pip" instalado.')
+                , _("pip ĵus instaliĝis,\nbonvolu rekomenci Gramps por ke la dependeca instalado povu okazi."))
+    # import pdb; pdb.set_trace()
+    # le code ci-dessous ne marche pas, pourquoi ?
+    invalidate_caches()
+    import pip
+    HavPip=True
+  except ImportError:
+    HavPip=False
+
 try :
   from packaging.version import parse
 except ImportError:
@@ -45,8 +64,6 @@ except ImportError:
       res += int(x[2])
     return res
 
-from gramps.gen.const import LIB_PATH
-from gn_constants import _
 
 def instDep(modulo,versio):
   """ instDep provas instali dependecon kiel argumenton """
@@ -55,6 +72,7 @@ def instDep(modulo,versio):
     print( _("PersonGN : pip ne trovita."))
     return False
   pipHavBreak = bool(parse(pip.__version__) >= parse('23.1'))
+  sys.path.insert(1,LIB_PATH)
   try:
     v0 = version(modulo)
   except (ValueError,PackageNotFoundError):
@@ -89,7 +107,7 @@ def instDep(modulo,versio):
     if parse(v) < parse(versio) :
       print( _("dependeco %s ne trovita") % modulo )
       return False
-    print( _(f"dependeco %{modulo} instalita, versio %{v}") % (modulo , v))
+    print( _(f"dependeco {modulo} instalita, versio {v}") )
     return True
   #print( _("dependeco %s trovita, versio %s") % (modulo , v0))
   return True

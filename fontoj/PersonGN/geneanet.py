@@ -24,6 +24,13 @@
 " gramplet Geneanet : fonctions pour accéder à geneanet en utilisant les API protobuf
 """
 
+import sys
+from gramps.gen.const import LIB_PATH
+# gramps mets LIB_PATH à la fin de sys.path, il faut l'avoir juste après le chemin du gramplet
+# sinon on risque de récupérer une mauvaise version de protobuf
+sys.path.insert(1,LIB_PATH)
+
+#import pdb; pdb.set_trace()
 try:
   from google.protobuf.json_format import MessageToDict
   from google.protobuf.message import DecodeError
@@ -31,7 +38,6 @@ try:
 except ImportError:
   pass
 
-import sys
 from os.path import exists
 from urllib.error import HTTPError, URLError
 from urllib.parse import unquote_to_bytes as unquote

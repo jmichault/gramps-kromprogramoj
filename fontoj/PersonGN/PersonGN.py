@@ -56,10 +56,6 @@ from gramps.gen.datehandler import LANG_TO_PARSER
 
 #-----------
 import instdepGN
-from utilaGN import getGrevent, getUrl, getBirth
-from komparoGN import Kompari
-from ImportoGN import akiriLoko, aldFakto, updFakto, Importi
-from gn_constants import _
 #-----------
 
 # dépendances obligatoires :
@@ -67,6 +63,11 @@ HavLxml = instdepGN.instDep('lxml', '0.1.1')
 HavProtobuf = instdepGN.instDep('protobuf', '6.31.1')
 # dépendances facultatives :
 instdepGN.instDep('fake_useragent', '0.1.1')
+
+from utilaGN import getGrevent, getUrl, getBirth
+from komparoGN import Kompari
+from ImportoGN import akiriLoko, aldFakto, updFakto, Importi
+from gn_constants import _
 
 parserEn = LANG_TO_PARSER['en']()
 
