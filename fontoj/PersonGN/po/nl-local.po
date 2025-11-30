@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gramps-kromprogramoj. 60\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-16 16:18+0200\n"
+"POT-Creation-Date: 2025-11-30 19:06+0100\n"
 "PO-Revision-Date: 2025-05-24 11:37+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -48,226 +48,234 @@ msgstr "Interface voor Geneanet"
 msgid "Geneanet"
 msgstr "Geneanet"
 
-#: PersonGN/PersonGN.py:74
+#: PersonGN/PersonGN.py:75
 msgid "La geneanet-grampleto havas neplenumitajn dependecojn :\n"
 msgstr "De Geneanet Graccet heeft onverharde afhankelijkheden: \n"
 
-#: PersonGN/PersonGN.py:76
+#: PersonGN/PersonGN.py:77
 msgid "lxml kaj protobuf."
 msgstr "LXML en Protobuf."
 
-#: PersonGN/PersonGN.py:78
+#: PersonGN/PersonGN.py:79
 msgid "lxml."
 msgstr "LXML."
 
-#: PersonGN/PersonGN.py:80
+#: PersonGN/PersonGN.py:81
 msgid "protobuf."
 msgstr "protobuf."
 
-#: PersonGN/PersonGN.py:81
+#: PersonGN/PersonGN.py:82
 msgid "Se vi uzas Debian aŭ Ubuntu, provu:\n\"                               \"sudo apt install python3-lxml python3-pip python3-protobuf"
 msgstr ""
 "Als u Debian of Ubuntu gebruikt, probeer dan: \n"
 " \"                               \"sudo apt install python3-lxml python3-pip python3-protobuf"
 
-#: PersonGN/PersonGN.py:83
+#: PersonGN/PersonGN.py:84
 msgid "Se vi uzas fedora, provu:\n\"                               \"sudo dnf install python3-lxml python3-pip python3-protobuf"
 msgstr ""
 "Als u Fedora gebruikt, probeer dan: \n"
 " \"                               \"sudo dnf install python3-lxml python3-pip python3-protobuf"
 
-#: PersonGN/PersonGN.py:85
+#: PersonGN/PersonGN.py:86
 msgid "neplenumitajn dependecojn."
 msgstr "onvervulde afhankelijkheden."
 
-#: PersonGN/PersonGN.py:164
+#: PersonGN/PersonGN.py:165
 msgid "Koloro"
 msgstr "Kleur"
 
-#: PersonGN/PersonGN.py:165
+#: PersonGN/PersonGN.py:166
 msgid "Propreco"
 msgstr "Eigenaardigheid"
 
-#: PersonGN/PersonGN.py:166
+#: PersonGN/PersonGN.py:167
 msgid "Dato"
 msgstr "Datum"
 
-#: PersonGN/PersonGN.py:167
+#: PersonGN/PersonGN.py:168
 msgid "Gramps Valoro"
 msgstr "Gramps waarde"
 
-#: PersonGN/PersonGN.py:168
+#: PersonGN/PersonGN.py:169
 msgid "GN Dato"
 msgstr "GN -datum"
 
-#: PersonGN/PersonGN.py:169
+#: PersonGN/PersonGN.py:170
 msgid "GN Valoro"
 msgstr "GN -waarde"
 
-#: PersonGN/PersonGN.py:172
+#: PersonGN/PersonGN.py:173
 msgid "xTipo"
 msgstr "xTipo"
 
-#: PersonGN/PersonGN.py:173
+#: PersonGN/PersonGN.py:174
 msgid "xGr"
 msgstr "xGr"
 
-#: PersonGN/PersonGN.py:174
+#: PersonGN/PersonGN.py:175
 msgid "xGn"
 msgstr "XGN"
 
-#: PersonGN/PersonGN.py:175
+#: PersonGN/PersonGN.py:176
 msgid "xGr2"
 msgstr "xGr2"
 
-#: PersonGN/PersonGN.py:176
+#: PersonGN/PersonGN.py:177
 msgid "xGn2"
 msgstr "XGN2"
 
-#: PersonGN/PersonGN.py:197
+#: PersonGN/PersonGN.py:198
 msgid "Pardonu, nur edzaj, eventaj, patraj, aŭ infanaj linioj povas esti elektitaj."
 msgstr "Sorry, alleen echtgenoot, evenement, vaderlijke of kinderlijnen kunnen worden gekozen."
 
-#: PersonGN/PersonGN.py:234
+#: PersonGN/PersonGN.py:235
 msgid "Geneanet Kopio"
 msgstr "Geneanet kopie"
 
-#: PersonGN/PersonGN.py:234
+#: PersonGN/PersonGN.py:235
 msgid "Kopio"
 msgstr "Kopiëren"
 
-#: PersonGN/PersonGN.py:236 PersonGN/PersonGN.py:252
+#: PersonGN/PersonGN.py:237 PersonGN/PersonGN.py:253
 msgid "Kopiante… "
 msgstr "Kopiëren ..."
 
-#: PersonGN/PersonGN.py:247
+#: PersonGN/PersonGN.py:248
 msgid "kopii al gramps"
 msgstr "kopieer naar gramps"
 
-#: PersonGN/PersonGN.py:262
+#: PersonGN/PersonGN.py:263
 msgid "nomimporto ankoraŭ ne efektivigita_"
 msgstr "Nomompporto nog niet geïmplementeerd_"
 
-#: PersonGN/PersonGN.py:273
+#: PersonGN/PersonGN.py:274
 msgid "Ĉi tiu persono jam havas patron"
 msgstr "Deze persoon heeft al een vader"
 
-#: PersonGN/PersonGN.py:302
+#: PersonGN/PersonGN.py:303
 msgid "Ĉi tiu individuo jam havas patrinon"
 msgstr "Deze persoon heeft al een moeder"
 
-#: PersonGN/PersonGN.py:423
+#: PersonGN/PersonGN.py:424
 msgid "Konfirmo necesa"
 msgstr "Bevestiging vereist"
 
-#: PersonGN/PersonGN.py:424
+#: PersonGN/PersonGN.py:425
 msgid "Ĉu vi certas, ke vi volas importi infanon\n<b>antaŭ ol importi la edzinon/edzon?</b>"
 msgstr ""
 "Weet u zeker dat u een kind wilt importeren \n"
 " <b> voordat u de vrouw/echtgenoot importeert? </b>"
 
-#: PersonGN/PersonGN.py:426
+#: PersonGN/PersonGN.py:427
 msgid "Jes, mi scias, kion mi faras."
 msgstr "Ja, ik weet wat ik doe."
 
-#: PersonGN/PersonGN.py:448
+#: PersonGN/PersonGN.py:449
 msgid "\tLa jenaj lokoj estis kreitaj dum la importado,\n vi devus kontroli ilin nun:\n\n"
 msgstr ""
 "\tla volgende plaatsen zijn gemaakt tijdens de import, \n"
 " U moet ze nu controleren: \n"
 " \n"
 
-#: PersonGN/PersonGN.py:450
+#: PersonGN/PersonGN.py:451
 msgid "lokoj kreitaj !!!"
 msgstr "Plaatsen gecreëerd !!!"
 
-#: PersonGN/PersonGN.py:462
+#: PersonGN/PersonGN.py:463
 msgid "Kopii json-datumojn al tondujo"
 msgstr "Kopieer JSON -gegevens naar klembord"
 
-#: PersonGN/PersonGN.py:469
+#: PersonGN/PersonGN.py:470
 #, python-format
 msgid "Redakti : %s - %s - %s"
 msgstr "EDIT: %s - %s- %s"
 
-#: PersonGN/PersonGN.py:497
+#: PersonGN/PersonGN.py:498
 msgid "Kopii elekton de Geneanet al gramps"
 msgstr "Kopieer een keuze van Geneanet naar Gramps"
 
-#: PersonGN/PersonGN.py:503
+#: PersonGN/PersonGN.py:504
 msgid "Kompari infanoj"
 msgstr "Vergelijk kinderen"
 
-#: PersonGN/PersonGN.py:579
+#: PersonGN/PersonGN.py:580
 msgid "Vidu ĉe Geneanet"
 msgstr "Zie bij Geneanet"
 
-#: PersonGN/PersonGN.py:616 PersonGN/PersonGN.py:626 PersonGN/PersonGN.py:911
+#: PersonGN/PersonGN.py:617 PersonGN/PersonGN.py:627 PersonGN/PersonGN.py:915
 msgid "neniu aktiva persono !!!"
 msgstr "Geen actieve persoon !!!"
 
-#: PersonGN/PersonGN.py:617 PersonGN/PersonGN.py:627 PersonGN/PersonGN.py:912
+#: PersonGN/PersonGN.py:618 PersonGN/PersonGN.py:628 PersonGN/PersonGN.py:916
 msgid "Vi devas unue elekti personon!"
 msgstr "Je moet eerst een persoon kiezen!"
 
-#: PersonGN/PersonGN.py:788
+#: PersonGN/PersonGN.py:789
 #, python-format
 msgid "Elŝutante personojn… (%s/10)"
 msgstr "Mensen downloaden ... (%S/10)"
 
-#: PersonGN/PersonGN.py:809
+#: PersonGN/PersonGN.py:810
 msgid "Geneanet Serĉo"
 msgstr "Geneanet zoeken"
 
-#: PersonGN/PersonGN.py:809
+#: PersonGN/PersonGN.py:810
 msgid "Serĉante"
 msgstr "Op zoek naar"
 
-#: PersonGN/PersonGN.py:812
+#: PersonGN/PersonGN.py:813
 msgid "Serĉante… "
 msgstr "Op zoek naar ..."
 
-#: PersonGN/PersonGN.py:817
+#: PersonGN/PersonGN.py:821
 msgid "Eraro: neniuj datumoj."
 msgstr "Fout: geen gegevens."
 
-#: PersonGN/PersonGN.py:857
+#: PersonGN/PersonGN.py:861
 msgid "URL"
 msgstr "URL"
 
-#: PersonGN/PersonGN.py:858
+#: PersonGN/PersonGN.py:862
 msgid "Sosa"
 msgstr "Sosa"
 
-#: PersonGN/PersonGN.py:859
+#: PersonGN/PersonGN.py:863
 msgid "Nomo, antaŭnomo"
 msgstr "Naam voornaam"
 
-#: PersonGN/PersonGN.py:860
+#: PersonGN/PersonGN.py:864
 msgid "Naskiĝo"
 msgstr "Geboorte"
 
-#: PersonGN/PersonGN.py:861
+#: PersonGN/PersonGN.py:865
 msgid "Morto"
 msgstr "Dood"
 
-#: PersonGN/PersonGN.py:862 PersonGN/komparoGN.py:290
+#: PersonGN/PersonGN.py:866 PersonGN/komparoGN.py:293
 msgid "Gepatroj"
 msgstr "Ouders"
 
-#: PersonGN/PersonGN.py:863
+#: PersonGN/PersonGN.py:867
 msgid "Nb Inf., Geedzoj"
 msgstr "Nb inf., Echtgenoten"
 
-#: PersonGN/PersonGN.py:921
+#: PersonGN/PersonGN.py:925
 msgid "Geneanet serĉo"
 msgstr "Geneanet zoeken"
 
-#: PersonGN/instdepGN.py:55
+#: PersonGN/instdepGN.py:42
+msgid "\"pip\" instalado."
+msgstr "\"pip\"-installatie."
+
+#: PersonGN/instdepGN.py:43
+msgid "pip ĵus instaliĝis,\nbonvolu rekomenci Gramps por ke la dependeca instalado povu okazi."
+msgstr "pip zojuist geïnstalleerd,start Gramps opnieuw zodat de afhankelijkheidsinstallatie kan plaatsvinden."
+
+#: PersonGN/instdepGN.py:72
 msgid "PersonGN : pip ne trovita."
 msgstr "Persoon: Pip niet gevonden."
 
-#: PersonGN/instdepGN.py:90
+#: PersonGN/instdepGN.py:108
 #, python-format
 msgid "dependeco %s ne trovita"
 msgstr "Afhankelijkheid %s niet gevonden"
@@ -288,32 +296,32 @@ msgstr "onbekend"
 msgid "Sekso:"
 msgstr "Seks:"
 
-#: PersonGN/komparoGN.py:88
+#: PersonGN/komparoGN.py:91
 msgid "Name"
 msgstr "Naam"
 
-#: PersonGN/komparoGN.py:251
+#: PersonGN/komparoGN.py:254
 msgid "Father"
 msgstr "Vader"
 
-#: PersonGN/komparoGN.py:253
+#: PersonGN/komparoGN.py:256
 msgid "Mother"
 msgstr "Moeder"
 
-#: PersonGN/komparoGN.py:308 PersonGN/komparoGN.py:490
+#: PersonGN/komparoGN.py:311 PersonGN/komparoGN.py:493
 msgid "Spouse"
 msgstr "Partner"
 
-#: PersonGN/komparoGN.py:324 PersonGN/komparoGN.py:463
-#: PersonGN/komparoGN.py:476
+#: PersonGN/komparoGN.py:327 PersonGN/komparoGN.py:466
+#: PersonGN/komparoGN.py:479
 msgid "Child"
 msgstr "Kind"
 
-#: PersonGN/komparoGN.py:559
+#: PersonGN/komparoGN.py:562
 msgid "Faktoj"
 msgstr "Feiten"
 
-#: PersonGN/komparoGN.py:584
+#: PersonGN/komparoGN.py:589
 msgid "Esenco"
 msgstr "Essence"
 
@@ -385,10 +393,14 @@ msgstr "Importkeuze"
 msgid "Importi elekton de Geneanet al Gramps."
 msgstr "Importeer een keuze van Geneanet naar Gramps."
 
-#: PersonGN/PersonGN.glade:593
+#: PersonGN/PersonGN.glade:571
 msgid "refreŝigi"
 msgstr "opfrissen"
 
-#: PersonGN/PersonGN.glade:620 PersonGN/PersonGN.glade:632
+#: PersonGN/PersonGN.glade:598 PersonGN/PersonGN.glade:610
 msgid "          "
 msgstr "          "
+
+#: PersonGN/PersonGN.glade:627 PersonGN/PersonGN.glade:634
+msgid " "
+msgstr " "
