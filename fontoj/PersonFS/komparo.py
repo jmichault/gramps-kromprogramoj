@@ -313,18 +313,19 @@ def FaktoKomp(db, person, fsPerso, grEvent , fsFact ) :
     fsFaktoDato = str(fsFakto.date)
   if fsFakto and fsFakto.place :
     fsFaktoLoko = fsFakto.place.original or ''
-  if grEvent == EventType.BIRTH or grEvent == EventType.DEATH :
-    koloro = "red"
-  else:
-    koloro = "orange"
-  if (grFaktoDato == fsFaktoDato) :
-    koloro = "green"
   if grFaktoDato == '' and grFaktoLoko == '' and fsFaktoDato == '' and fsFaktoLoko == '' :
     return None
+  koloro = "green"
+  if grFakto_handle is None and fsFakto_id is not None :
+    koloro = "orange"
+  if grFakto_handle is not None and fsFakto_id is None :
+    koloro = "orange"
   if fsFaktoDato == '' and grFaktoDato != '':
     koloro = "yellow"
   if grFaktoDato == '' and fsFaktoDato != '':
     koloro = "yellow3"
+  if koloro != "green" and ( grEvent == EventType.BIRTH or grEvent == EventType.DEATH ) :
+    koloro = "red"
   return ( koloro , titolo
         , grFaktoDato , grFaktoLoko
         , fsFaktoDato , fsFaktoLoko , ''
