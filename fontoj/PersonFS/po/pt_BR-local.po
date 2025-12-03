@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gramps-kromprogramoj. 60\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-16 22:07+0200\n"
+"POT-Creation-Date: 2025-12-03 18:04+0100\n"
 "PO-Revision-Date: 2025-08-16 19:00+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -240,19 +240,19 @@ msgstr "Interface para o FamilySearch"
 msgid "FS"
 msgstr "Fs"
 
-#: PersonFS/PersonFS.gpr.py:49
+#: PersonFS/PersonFS.gpr.py:50
 msgid "Importo de FamilySearch datumoj"
 msgstr "Importar dados de pesquisa em família"
 
-#: PersonFS/PersonFS.gpr.py:50
+#: PersonFS/PersonFS.gpr.py:51
 msgid "FamilySearch."
 msgstr "FamilySearch."
 
-#: PersonFS/PersonFS.gpr.py:63
+#: PersonFS/PersonFS.gpr.py:65
 msgid "FamilySearch : kompari"
 msgstr "FamilySearch: Compare"
 
-#: PersonFS/PersonFS.gpr.py:64
+#: PersonFS/PersonFS.gpr.py:66
 msgid "FamilySearch : kompari gramps personojn kun FS personojn."
 msgstr "FamilySearch: Compare Gramps com pessoas com FS."
 
@@ -379,7 +379,7 @@ msgstr "Gramps URL"
 msgid "FS URL"
 msgstr "FS URL"
 
-#: PersonFS/PersonFS.py:1202 PersonFS/komparo.py:1203 PersonFS/utila.py:187
+#: PersonFS/PersonFS.py:1202 PersonFS/komparo.py:1204 PersonFS/utila.py:187
 msgid "FamilySearch etikedoj"
 msgstr "Tags de pesquisa em família"
 
@@ -421,7 +421,7 @@ msgid "Neniuj verŝajnaj duplikatoj por la persono %s trovita de la retejo \"Fam
 msgstr "Não há duplicações prováveis para a pessoa que %s encontrou no site \"FamilySearch\"."
 
 #: PersonFS/PersonFS.py:1787 PersonFS/PersonFS.py:1884
-#: PersonFS/PersonFS.py:2020 PersonFS/komparo.py:112 PersonFS/komparo.py:1051
+#: PersonFS/PersonFS.py:2020 PersonFS/komparo.py:112 PersonFS/komparo.py:1052
 msgid "Ne konektita al FamilySearch"
 msgstr "Não conectado ao FamilySearch"
 
@@ -545,45 +545,45 @@ msgstr "desconhecido"
 msgid "Sekso:"
 msgstr "Sexo:"
 
-#: PersonFS/komparo.py:341 PersonFS/komparo.py:357 PersonFS/komparo.py:364
+#: PersonFS/komparo.py:342 PersonFS/komparo.py:358 PersonFS/komparo.py:365
 msgid "Name"
 msgstr "Nome"
 
-#: PersonFS/komparo.py:514
+#: PersonFS/komparo.py:515
 msgid "Father"
 msgstr "Pai"
 
-#: PersonFS/komparo.py:527
+#: PersonFS/komparo.py:528
 msgid "Mother"
 msgstr "Mãe"
 
-#: PersonFS/komparo.py:585 PersonFS/komparo.py:604 PersonFS/komparo.py:688
-#: PersonFS/komparo.py:849
+#: PersonFS/komparo.py:586 PersonFS/komparo.py:605 PersonFS/komparo.py:689
+#: PersonFS/komparo.py:850
 msgid "Spouse"
 msgstr "Cônjuge"
 
-#: PersonFS/komparo.py:811 PersonFS/komparo.py:828 PersonFS/komparo.py:865
-#: PersonFS/komparo.py:880
+#: PersonFS/komparo.py:812 PersonFS/komparo.py:829 PersonFS/komparo.py:866
+#: PersonFS/komparo.py:881
 msgid "Child"
 msgstr "Filho"
 
-#: PersonFS/komparo.py:1058 PersonFS/komparo.py:1060 PersonFS/komparo.py:1062
+#: PersonFS/komparo.py:1059 PersonFS/komparo.py:1061 PersonFS/komparo.py:1063
 msgid "Esenco"
 msgstr "Essência"
 
-#: PersonFS/komparo.py:1072 PersonFS/komparo.py:1074 PersonFS/komparo.py:1076
+#: PersonFS/komparo.py:1073 PersonFS/komparo.py:1075 PersonFS/komparo.py:1077
 msgid "Aliaj nomoj"
 msgstr "Outros nomes"
 
-#: PersonFS/komparo.py:1087 PersonFS/komparo.py:1089 PersonFS/komparo.py:1091
+#: PersonFS/komparo.py:1088 PersonFS/komparo.py:1090 PersonFS/komparo.py:1092
 msgid "Gepatroj"
 msgstr "Pais"
 
-#: PersonFS/komparo.py:1101 PersonFS/komparo.py:1103 PersonFS/komparo.py:1105
+#: PersonFS/komparo.py:1102 PersonFS/komparo.py:1104 PersonFS/komparo.py:1106
 msgid "Familioj"
 msgstr "Famílias"
 
-#: PersonFS/komparo.py:1115 PersonFS/komparo.py:1117 PersonFS/komparo.py:1119
+#: PersonFS/komparo.py:1116 PersonFS/komparo.py:1118 PersonFS/komparo.py:1120
 msgid "Faktoj"
 msgstr "Fatos"
 
