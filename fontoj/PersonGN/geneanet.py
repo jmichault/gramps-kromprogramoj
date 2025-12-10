@@ -131,13 +131,11 @@ class Api:
     self.rights = {}
     Headers.update({"content-Type": "application/json;charset=UTF-8"})
     Headers.update({"DNT": "1"})
-    cookieProcessor = request.HTTPCookieProcessor()
-    httpsProcessor = request.HTTPSHandler(context=SslContext)
-    self.opener = request.build_opener(cookieProcessor, httpsProcessor)
+    self.opener = request.build_opener(request.HTTPCookieProcessor(),request.HTTPSHandler(context=SslContext))
 
   def reinit(self):
     del self.opener
-    self.opener = request.build_opener(request.HTTPCookieProcessor())
+    self.opener = request.build_opener(request.HTTPCookieProcessor(),request.HTTPSHandler(context=SslContext))
 
   def urlopen(self, url, data=None, headers=None):
     """ chargement d'une url """
