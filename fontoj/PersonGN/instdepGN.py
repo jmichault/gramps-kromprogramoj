@@ -23,31 +23,35 @@
 """  modulo ebliganta vin instali dependecojn per pip 
 """
 
+import platform
 import sys
 #import pdb; pdb.set_trace()
 from gramps.gen.const import LIB_PATH
 from gn_constants import _
 
-try:
-  from importlib.metadata import version,PackageNotFoundError
-  from importlib import invalidate_caches
-  import pip
-  HavPip=True
-except ImportError:
+if platform.system() == 'Darwin':
   HavPip=False
+else:
   try:
-    import ensurepip
-    ensurepip.bootstrap()
-    from gramps.gui.dialog import WarningDialog
-    WarningDialog(_('"pip" instalado.')
-                , _("pip ĵus instaliĝis,\nbonvolu rekomenci Gramps por ke la dependeca instalado povu okazi."))
-    # import pdb; pdb.set_trace()
-    # le code ci-dessous ne marche pas, pourquoi ?
-    invalidate_caches()
+    from importlib.metadata import version,PackageNotFoundError
+    from importlib import invalidate_caches
     import pip
     HavPip=True
   except ImportError:
     HavPip=False
+    try:
+      import ensurepip
+      ensurepip.bootstrap()
+      from gramps.gui.dialog import WarningDialog
+      WarningDialog(_('"pip" instalado.')
+                  , _("pip ĵus instaliĝis,\nbonvolu rekomenci Gramps por ke la dependeca instalado povu okazi."))
+      # import pdb; pdb.set_trace()
+      # le code ci-dessous ne marche pas, pourquoi ?
+      invalidate_caches()
+      import pip
+      HavPip=True
+    except ImportError:
+      HavPip=False
 
 try :
   from packaging.version import parse
