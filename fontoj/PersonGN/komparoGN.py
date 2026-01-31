@@ -459,8 +459,10 @@ class Kompari:
           extInfDatoj = extInfNomoj = ''
           for c in extInfanoj:
             tmpANomo = c.get('firstname')
-            nomo1 = unicodedata.normalize('NFD',tmpANomo.upper()).encode('ascii', 'ignore')
-            nomo2 = unicodedata.normalize('NFD',infanoANomo.upper()).encode('ascii', 'ignore')
+            nomo1 = tmpANomo.replace('-',' ')
+            nomo1 = unicodedata.normalize('NFD',nomo1.upper()).encode('ascii', 'ignore')
+            nomo2 = infanoANomo.replace('-',' ')
+            nomo2 = unicodedata.normalize('NFD',nomo2.upper()).encode('ascii', 'ignore')
             if nomo1 == nomo2 :
               koloro = "green"
               extInfDatoj = self.ext_persono_datoj(c)
