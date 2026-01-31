@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-10 18:17+0100\n"
+"POT-Creation-Date: 2026-01-31 19:19+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -251,7 +251,7 @@ msgstr ""
 msgid "Morto"
 msgstr ""
 
-#: PersonGN/PersonGN.py:866 PersonGN/komparoGN.py:293
+#: PersonGN/PersonGN.py:866 PersonGN/komparoGN.py:295
 msgid "Gepatroj"
 msgstr ""
 
@@ -282,48 +282,48 @@ msgstr ""
 msgid "dependeco %s ne trovita"
 msgstr ""
 
-#: PersonGN/komparoGN.py:54 PersonGN/komparoGN.py:63
+#: PersonGN/komparoGN.py:56 PersonGN/komparoGN.py:65
 msgid "male"
 msgstr ""
 
-#: PersonGN/komparoGN.py:56 PersonGN/komparoGN.py:65
+#: PersonGN/komparoGN.py:58 PersonGN/komparoGN.py:67
 msgid "female"
 msgstr ""
 
-#: PersonGN/komparoGN.py:58 PersonGN/komparoGN.py:59
+#: PersonGN/komparoGN.py:60 PersonGN/komparoGN.py:61
 msgid "unknown"
 msgstr ""
 
-#: PersonGN/komparoGN.py:69
+#: PersonGN/komparoGN.py:71
 msgid "Sekso:"
 msgstr ""
 
-#: PersonGN/komparoGN.py:91
+#: PersonGN/komparoGN.py:93
 msgid "Name"
 msgstr ""
 
-#: PersonGN/komparoGN.py:254
+#: PersonGN/komparoGN.py:256
 msgid "Father"
 msgstr ""
 
-#: PersonGN/komparoGN.py:256
+#: PersonGN/komparoGN.py:258
 msgid "Mother"
 msgstr ""
 
-#: PersonGN/komparoGN.py:311 PersonGN/komparoGN.py:493
+#: PersonGN/komparoGN.py:313 PersonGN/komparoGN.py:497
 msgid "Spouse"
 msgstr ""
 
-#: PersonGN/komparoGN.py:327 PersonGN/komparoGN.py:466
-#: PersonGN/komparoGN.py:479
+#: PersonGN/komparoGN.py:329 PersonGN/komparoGN.py:470
+#: PersonGN/komparoGN.py:483
 msgid "Child"
 msgstr ""
 
-#: PersonGN/komparoGN.py:562
+#: PersonGN/komparoGN.py:566
 msgid "Faktoj"
 msgstr ""
 
-#: PersonGN/komparoGN.py:589
+#: PersonGN/komparoGN.py:593
 msgid "Esenco"
 msgstr ""
 
