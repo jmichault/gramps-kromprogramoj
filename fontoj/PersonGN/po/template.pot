@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-31 19:19+0100\n"
+"POT-Creation-Date: 2026-01-31 22:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -310,20 +310,20 @@ msgstr ""
 msgid "Mother"
 msgstr ""
 
-#: PersonGN/komparoGN.py:313 PersonGN/komparoGN.py:497
+#: PersonGN/komparoGN.py:313 PersonGN/komparoGN.py:499
 msgid "Spouse"
 msgstr ""
 
-#: PersonGN/komparoGN.py:329 PersonGN/komparoGN.py:470
-#: PersonGN/komparoGN.py:483
+#: PersonGN/komparoGN.py:329 PersonGN/komparoGN.py:472
+#: PersonGN/komparoGN.py:485
 msgid "Child"
 msgstr ""
 
-#: PersonGN/komparoGN.py:566
+#: PersonGN/komparoGN.py:568
 msgid "Faktoj"
 msgstr ""
 
-#: PersonGN/komparoGN.py:593
+#: PersonGN/komparoGN.py:595
 msgid "Esenco"
 msgstr ""
 
