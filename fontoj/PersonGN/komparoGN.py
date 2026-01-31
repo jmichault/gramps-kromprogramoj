@@ -24,6 +24,8 @@
 "  gramplet PersonGN : fonctions de comparaison
 """
 
+import unicodedata
+
 from gramps.gen.display.name import displayer as name_displayer
 from gramps.gen.display.place import displayer as _pd
 from gramps.gen.lib import Date, EventRoleType, EventType, Person
@@ -457,7 +459,9 @@ class Kompari:
           extInfDatoj = extInfNomoj = ''
           for c in extInfanoj:
             tmpANomo = c.get('firstname')
-            if tmpANomo.upper() == infanoANomo.upper():
+            nomo1 = unicodedata.normalize('NFD',tmpANomo.upper()).encode('ascii', 'ignore')
+            nomo2 = unicodedata.normalize('NFD',infanoANomo.upper()).encode('ascii', 'ignore')
+            if nomo1 == nomo2 :
               koloro = "green"
               extInfDatoj = self.ext_persono_datoj(c)
               extInfNomoj = (c.get('lastname') or '?') + ', ' + (c.get('firstname') or '?')
