@@ -743,6 +743,7 @@ class FsAlGr:
     self.notoj = False
     self.fontoj = False
     self.vorteco = 0
+    self.tree_id = "GLOBAL"
     self.aldonaPersono = False
     self.refresxigxo = True
   def aldPersono(self, db, txn, fsPersono):
@@ -836,6 +837,8 @@ class FsAlGr:
     if not PersonFS.PersonFS.aki_sesio(vokanto,self.vorteco):
       WarningDialog(_('Ne konekta al FamilySearch'))
       return
+    set_trees_id(self.vorteco, self.tree_id)
+
     if not utila.fs_gr :
       utila.konstrui_fs_gr(vokanto,progress,11)
     #if not tree._FsSeanco:
@@ -1197,6 +1200,9 @@ class FSImportoOpcionoj(MenuToolOptions):
     self.__gui_notoj = BooleanOption(_("Aldoni notoj"), False)
     self.__gui_notoj.set_help(_("Aldoni notoj"))
     menu.add_option(category_name, "gui_notoj", self.__gui_notoj)
+    self.__gui_tree = StringOption(_("Tree ID"), "GLOBAL")
+    self.__gui_tree.set_help(_("FamilySearch tree ID"))
+    menu.add_option(category_name, "gui_tree", self.__gui_tree)
     self.__gui_vort = NumberOption(_("Vorteco"), 0, 0, 3)
     self.__gui_vort.set_help(_("Vorteca nivelo de 0 (minimuma) ĝis 3 (tre vorta)"))
     menu.add_option(category_name, "gui_vort", self.__gui_vort)
@@ -1208,6 +1214,27 @@ class FSImportoOpcionoj(MenuToolOptions):
     if PersonFS.PersonFS.FSID :
       self.handler.options_dict['FS_ID'] = PersonFS.PersonFS.FSID
     return
+
+def set_trees_id(vorteco, tree_id="GLOBAL"):
+  url = "https://api.familysearch.org/platform/trees/current"
+  payload = {
+    "trees": [
+      {
+        "id": tree_id
+      }
+    ]
+  }
+  print("Set trees ID request: "+json.dumps(payload))
+  headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json, */*"
+  }
+  r = tree._FsSeanco.post_url(url, json.dumps(payload), headers)
+  if vorteco:
+    print(f"Set trees ID response: {r.status_code} - {r.text}")
+    r = tree._FsSeanco.get_url(url, headers)
+    print(f"Get current tree response: {r.status_code} - {r.text}")
+  return True
 
 class FSImporto(PluginWindows.ToolManagedWindowBatch):
   """
@@ -1259,6 +1286,7 @@ class FSImporto(PluginWindows.ToolManagedWindowBatch):
     importilo.edz = menu.get_option_by_name('gui_edz').get_value()
     importilo.notoj = menu.get_option_by_name('gui_notoj').get_value()
     importilo.fontoj = menu.get_option_by_name('gui_fontoj').get_value()
+    importilo.tree_id = menu.get_option_by_name('gui_tree').get_value()
     importilo.nereimporti = menu.get_option_by_name('gui_nereimporti').get_value()
     importilo.vorteco = menu.get_option_by_name('gui_vort').get_value()
 
