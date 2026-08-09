@@ -81,16 +81,20 @@ class Tree(gedcomx_v1.Gedcomx):
     """add individuals to the family tree
     :param fids: an iterable of fid
     """
-    async def sxargi_personoj(loop,fids):
+#    async def sxargi_personoj(loop,fids):
+    async def sxargi_personoj(fids):
+      loop = asyncio.get_running_loop()
       farindajxoj = set()
       for fid in fids :
-        if fid not in self._persons.keys() :
+#        if fid not in self._persons.keys() :
+        if fid not in self._persons:
           farindajxoj.add(loop.run_in_executor(None,self.add_persono,fid))
       for farindajxo in farindajxoj :
         await farindajxo
         
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete( sxargi_personoj(loop,fids))
+#    loop = asyncio.get_event_loop()
+#    loop.run_until_complete( sxargi_personoj(loop,fids))
+    asyncio.run(sxargi_personoj(fids))
 
     for fid in fids :
       if fid in gedcomx_v1.Person._indekso :
