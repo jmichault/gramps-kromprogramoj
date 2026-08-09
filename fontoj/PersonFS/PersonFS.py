@@ -66,7 +66,7 @@ except ValueError:
 _ = _trans.gettext
 
 import instdep
-instdep.instDep('gedcomx_v1','1.0.24')
+instdep.instDep('gedcomx_v1','1.0.25')
 instdep.instDep('requests','0.0.1')
 
 if not win() :
