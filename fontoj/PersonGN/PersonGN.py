@@ -255,7 +255,7 @@ class PersonGN(Gramplet):
         for linio in l:
           progress.step()
           tipolinio = linio[8]
-          if tipolinio not in ('edzoFakto', 'infano'):
+          if tipolinio not in ('edzo', 'infano'):
             memFH = None
           if not linio[7]:  # si la ligne n'est pas cochée
             continue
@@ -417,9 +417,9 @@ class PersonGN(Gramplet):
             urlInfano = linio[10]
             extInfano = self._get_persono(urlInfano)  # fiche détaillée de l'enfant
             familioHandle = linio[11]
-            if familioHandle is None:
+            if familioHandle is None or familioHandle == '' :
               familioHandle = memFH  # on vient de créer la famille
-            if familioHandle is None:
+            if familioHandle is None or familioHandle == '' :
               self.ok = False
               x = QuestionDialog(_("Konfirmo necesa")
                       , _("Ĉu vi certas, ke vi volas importi infanon\n"\
