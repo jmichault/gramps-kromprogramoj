@@ -27,6 +27,7 @@ GeneaNet Gramplet : fonctions d'import
 #-------------------------------------------------------------------------
 
 import pickle
+import html
 
 from gramps.gen.lib import Citation, Event, EventRef, EventRoleType, EventType, Name, NameType
 from gramps.gen.lib import Note, NoteType, Person, Place, PlaceName, PlaceRef, RepoRef
@@ -123,6 +124,7 @@ def akiriLoko(nov_lokoj, db, txn, nomo):
   #print("akiriLoko : %s" % nomo)
   if nomo is None or nomo.strip() == '':
     return None
+  nomo = html.unescape(nomo)
   # le format de lieu recommandé par geneanet est :
   #    «[Lieu-dit, paroisse, abréviation] - Commune, code ville (INSEE ou postal - facultatif)
   #     , Sous-région (Département), Région (facultatif), Pays»
