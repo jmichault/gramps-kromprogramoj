@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 22:00+0200\n"
+"POT-Creation-Date: 2026-10-29 19:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,21 +17,32 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: PersonGN/ImportoGN.py:217 PersonGN/ImportoGN.py:358
+#: PersonGN/ImportoGN.py:176
+msgid "importo geneanet"
+msgstr ""
+
+#: PersonGN/ImportoGN.py:177
+#, python-brace-format
+msgid ""
+"loko importita el la geneanet-dosiero je la {0}.\n"
+"{1}"
+msgstr ""
+
+#: PersonGN/ImportoGN.py:225 PersonGN/ImportoGN.py:366
 #, python-format
 msgid "okazaĵo importita el la geneanet-dosiero je la %s"
 msgstr ""
 
-#: PersonGN/ImportoGN.py:264 PersonGN/ImportoGN.py:279 PersonGN/utilaGN.py:41
+#: PersonGN/ImportoGN.py:272 PersonGN/ImportoGN.py:287 PersonGN/utilaGN.py:41
 msgid "Internet Address"
 msgstr ""
 
-#: PersonGN/ImportoGN.py:322
+#: PersonGN/ImportoGN.py:330
 #, python-format
 msgid "persono importita el la geneanet-dosiero je la %s"
 msgstr ""
 
-#: PersonGN/ImportoGN.py:345
+#: PersonGN/ImportoGN.py:353
 #, python-format
 msgid "note geneanet %s"
 msgstr ""
@@ -186,8 +197,8 @@ msgid "Kopii json-datumojn al tondujo"
 msgstr ""
 
 #: PersonGN/PersonGN.py:470
-#, python-format
-msgid "Redakti : %s - %s - %s"
+#, python-brace-format
+msgid "Redakti : {0} - {1} - {2}"
 msgstr ""
 
 #: PersonGN/PersonGN.py:498

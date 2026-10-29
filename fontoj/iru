@@ -1,3 +1,10 @@
+# script pour gérer les mises à jour des binaires et des traductions
+# utilisation : iru x greffons langues
+#    x : L  : que les langues
+#        D  : que les binaires
+#        LD : les deux
+#    greffons : liste des greffons à traiter (ex. : "PersonFS PersonGN")
+#    langues :
 GREFFONS="Lokpurigado  PersonFS PersonGN PlaceFrCog"
 LINGVOJ="eo de fr nl en he pt_BR"
 GRPATH="../../gramps"
@@ -19,7 +26,10 @@ if [ $# -gt 0 ] ; then
    IRU_L=1
    IRU_D=1
  fi
+else
+ echo ' usage : ./iru L|D|LD "liste_des_greffons" "liste_des_langues"'
 fi
+
 
 if [ $# -gt 1 ] ; then
   GREFFONS="$2"

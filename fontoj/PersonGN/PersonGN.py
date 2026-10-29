@@ -467,7 +467,7 @@ class PersonGN(Gramplet):
         menu.append(item)
       if (model.get_value(_iter, 9)
            and tipo in ('infano', 'patro', 'patrino', 'edzo', 'fakto', 'edzoFakto', 'Bildo')):
-        item = Gtk.MenuItem(label=_('Redakti : %s - %s - %s') % (model.get_value(_iter, 1)
+        item = Gtk.MenuItem(label=_('Redakti : {0} - {1} - {2}').format(model.get_value(_iter, 1)
                    , model.get_value(_iter, 2), model.get_value(_iter, 3)))
         item.set_sensitive(1)
         item.connect("activate", lambda obj: self.redakti(treeview))

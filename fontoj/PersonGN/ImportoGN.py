@@ -172,6 +172,14 @@ def akiriLoko(nov_lokoj, db, txn, nomo):
       loko.add_placeref(placeref)
     db.add_place(loko, txn)
     db.commit_place(loko, txn)
+    grNoto = Note()
+    grNoto.set_type(NoteType(_('importo geneanet')))
+    teksto = _('loko importita el la geneanet-dosiero je la {0}.\n{1}').format(str(Today()),nomo)
+    grNoto.set(teksto)
+    db.add_note(grNoto, txn)
+    db.commit_note(grNoto, txn)
+    loko.add_note(grNoto.handle)
+    db.commit_place(loko, txn)
     nov_lokoj[loko.gramps_id] = nomo
     break
   return loko

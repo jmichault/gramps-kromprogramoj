@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gramps-kromprogramoj. 60\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-30 19:06+0100\n"
+"POT-Creation-Date: 2026-10-29 19:07+0100\n"
 "PO-Revision-Date: 2025-05-24 11:37+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -18,21 +18,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: PersonGN/ImportoGN.py:215 PersonGN/ImportoGN.py:356
+#: PersonGN/ImportoGN.py:176
+msgid "importo geneanet"
+msgstr "importar geneanet"
+
+#: PersonGN/ImportoGN.py:177
+#, python-brace-format
+msgid "loko importita el la geneanet-dosiero je la {0}.\n{1}"
+msgstr "localização importada do arquivo geneanet em {0}.{1}"
+
+#: PersonGN/ImportoGN.py:225 PersonGN/ImportoGN.py:366
 #, python-format
 msgid "okazaĵo importita el la geneanet-dosiero je la %s"
 msgstr "um evento importado do arquivo geneanet no %s"
 
-#: PersonGN/ImportoGN.py:262 PersonGN/ImportoGN.py:277 PersonGN/utilaGN.py:41
+#: PersonGN/ImportoGN.py:272 PersonGN/ImportoGN.py:287 PersonGN/utilaGN.py:41
 msgid "Internet Address"
 msgstr "Editor de endereço de Internet"
 
-#: PersonGN/ImportoGN.py:320
+#: PersonGN/ImportoGN.py:330
 #, python-format
 msgid "persono importita el la geneanet-dosiero je la %s"
 msgstr "uma pessoa importada do arquivo geneanet no %s"
 
-#: PersonGN/ImportoGN.py:343
+#: PersonGN/ImportoGN.py:353
 #, python-format
 msgid "note geneanet %s"
 msgstr "Observe a geneanet %s"
@@ -187,9 +196,9 @@ msgid "Kopii json-datumojn al tondujo"
 msgstr "Copie dados JSON para a área de transferência"
 
 #: PersonGN/PersonGN.py:470
-#, python-format
-msgid "Redakti : %s - %s - %s"
-msgstr "Editar: %s - %s - %s"
+#, python-brace-format
+msgid "Redakti : {0} - {1} - {2}"
+msgstr "Editar: {0} - {1} - {2}"
 
 #: PersonGN/PersonGN.py:498
 msgid "Kopii elekton de Geneanet al gramps"
@@ -252,7 +261,7 @@ msgstr "Aniversário"
 msgid "Morto"
 msgstr "Morte"
 
-#: PersonGN/PersonGN.py:866 PersonGN/komparoGN.py:293
+#: PersonGN/PersonGN.py:866 PersonGN/komparoGN.py:295
 msgid "Gepatroj"
 msgstr "Pais"
 
@@ -264,65 +273,65 @@ msgstr "Nb inf., Cônjuges"
 msgid "Geneanet serĉo"
 msgstr "Pesquisa de geneanet"
 
-#: PersonGN/instdepGN.py:42
+#: PersonGN/instdepGN.py:46
 msgid "\"pip\" instalado."
 msgstr "instalação \"pip\"."
 
-#: PersonGN/instdepGN.py:43
+#: PersonGN/instdepGN.py:47
 msgid "pip ĵus instaliĝis,\nbonvolu rekomenci Gramps por ke la dependeca instalado povu okazi."
 msgstr "pip acabou de ser instalado,por favor reinicie o Gramps para que a instalação da dependência possa ocorrer."
 
-#: PersonGN/instdepGN.py:72
+#: PersonGN/instdepGN.py:76
 msgid "PersonGN : pip ne trovita."
 msgstr "Personn: pip não encontrado."
 
-#: PersonGN/instdepGN.py:108
+#: PersonGN/instdepGN.py:112
 #, python-format
 msgid "dependeco %s ne trovita"
 msgstr "Dependência %s não encontrado"
 
-#: PersonGN/komparoGN.py:54 PersonGN/komparoGN.py:63
+#: PersonGN/komparoGN.py:56 PersonGN/komparoGN.py:65
 msgid "male"
 msgstr "masculino"
 
-#: PersonGN/komparoGN.py:56 PersonGN/komparoGN.py:65
+#: PersonGN/komparoGN.py:58 PersonGN/komparoGN.py:67
 msgid "female"
 msgstr "feminino"
 
-#: PersonGN/komparoGN.py:58 PersonGN/komparoGN.py:59
+#: PersonGN/komparoGN.py:60 PersonGN/komparoGN.py:61
 msgid "unknown"
 msgstr "desconhecido"
 
-#: PersonGN/komparoGN.py:69
+#: PersonGN/komparoGN.py:71
 msgid "Sekso:"
 msgstr "Sexo:"
 
-#: PersonGN/komparoGN.py:91
+#: PersonGN/komparoGN.py:93
 msgid "Name"
 msgstr "Nome"
 
-#: PersonGN/komparoGN.py:254
+#: PersonGN/komparoGN.py:256
 msgid "Father"
 msgstr "Pai"
 
-#: PersonGN/komparoGN.py:256
+#: PersonGN/komparoGN.py:258
 msgid "Mother"
 msgstr "Mãe"
 
-#: PersonGN/komparoGN.py:311 PersonGN/komparoGN.py:493
+#: PersonGN/komparoGN.py:313 PersonGN/komparoGN.py:499
 msgid "Spouse"
 msgstr "Cônjuge"
 
-#: PersonGN/komparoGN.py:327 PersonGN/komparoGN.py:466
-#: PersonGN/komparoGN.py:479
+#: PersonGN/komparoGN.py:329 PersonGN/komparoGN.py:472
+#: PersonGN/komparoGN.py:485
 msgid "Child"
 msgstr "Filho"
 
-#: PersonGN/komparoGN.py:562
+#: PersonGN/komparoGN.py:568
 msgid "Faktoj"
 msgstr "Fatos"
 
-#: PersonGN/komparoGN.py:589
+#: PersonGN/komparoGN.py:595
 msgid "Esenco"
 msgstr "Essência"
 
@@ -404,4 +413,13 @@ msgstr "          "
 
 #: PersonGN/PersonGN.glade:627 PersonGN/PersonGN.glade:634
 msgid " "
-msgstr ""
+msgstr " "
+
+#~ msgid ""
+#~ "loko importita el la geneanet-dosiero je la {}.\n"
+#~ "{}"
+#~ msgstr "local importado do arquivo geneanet em {}.{}"
+
+#, python-format
+#~ msgid "Redakti : %s - %s - %s"
+#~ msgstr "Editar: %s - %s - %s"
